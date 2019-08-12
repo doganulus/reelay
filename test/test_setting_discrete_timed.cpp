@@ -223,7 +223,7 @@ TEST_CASE( "Boolean Operations" ) {
 
 TEST_CASE( "Untimed Temporal Operations" ) {
 
-    SECTION( "Always" ) {
+    SECTION( "Past Always" ) {
 
         std::vector<input_t> sequence = std::vector<input_t>();
        
@@ -252,7 +252,7 @@ TEST_CASE( "Untimed Temporal Operations" ) {
         CHECK(result2 == expected2);
     }
 
-    SECTION( "Once" ) {
+    SECTION( "Past Sometime" ) {
 
         std::vector<input_t> sequence = std::vector<input_t>();
        
