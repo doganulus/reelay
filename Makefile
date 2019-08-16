@@ -65,7 +65,7 @@ antlr4-clean:
 	rm -rf $(ANTLR4_TL_HEADERS)
 
 apps:
-	$(CXX) $(CXXFLAGS) apps/mtl/main.cpp -o apps/mtl/reelay-mtl $(INCLUDE_FLAGS) $(LIB_FLAGS)
+	$(CXX) $(CXXFLAGS) apps/mtl/rymtl.cpp -o bin/rymtl $(INCLUDE_FLAGS) $(LIB_FLAGS)
 
 test: test_main
 
