@@ -9,51 +9,47 @@
 #pragma once
 
 #include "vector"
-#include "reelay/networks/basic_structure.hpp"
+
 #include "reelay/interval_set.hpp"
+#include "reelay/networks/basic_structure.hpp"
 
 namespace reelay {
 namespace discrete_timed_setting {
 
-template<typename X, typename T>
-struct past_always_bounded : public discrete_timed_state<X, bool, T>
-{
-    using time_t = T;
-    using input_t = X;
-    using output_t = bool;
+template <typename X, typename T>
+struct past_always_bounded : public discrete_timed_state<X, bool, T> {
+  using time_t = T;
+  using input_t = X;
+  using output_t = bool;
 
-    using node_t = discrete_timed_node<output_t, time_t>;
-    using state_t = discrete_timed_state<input_t, output_t, time_t>;
+  using node_t = discrete_timed_node<output_t, time_t>;
+  using state_t = discrete_timed_state<input_t, output_t, time_t>;
 
-    using node_ptr_t = std::shared_ptr<node_t>;
-    using state_ptr_t = std::shared_ptr<state_t>;
+  using node_ptr_t = std::shared_ptr<node_t>;
+  using state_ptr_t = std::shared_ptr<state_t>;
 
-    using interval = reelay::interval<time_t>;
-    using interval_set = reelay::interval_set<time_t>;
+  using interval = reelay::interval<time_t>;
+  using interval_set = reelay::interval_set<time_t>;
 
-    interval_set value =  interval_set(); //true
+  interval_set value = interval_set();  // true
 
-    node_ptr_t first;
+  node_ptr_t first;
 
-    time_t lbound = 0;
-    time_t ubound = 0;
+  time_t lbound = 0;
+  time_t ubound = 0;
 
-    past_always_bounded(std::vector<node_ptr_t> args, time_t l, time_t u) : first(args[0]), lbound(l), ubound(u) {}
+  past_always_bounded(std::vector<node_ptr_t> args, time_t l, time_t u)
+      : first(args[0]), lbound(l), ubound(u) {}
 
-    void update(const input_t &args, time_t now)
-    {
-        if (not first->output(now))
-        {
-            value = value.add(interval::closed(now + lbound, now + ubound));
-            value = value - interval_set(interval::right_open(0, now));
-        }
+  void update(const input_t& args, time_t now) {
+    if (not first->output(now)) {
+      value = value.add(interval::closed(now + lbound, now + ubound));
+      value = value - interval_set(interval::right_open(0, now));
     }
+  }
 
-    output_t output(time_t now)
-    {
-        return not boost::icl::contains(value, now);
-    }
+  output_t output(time_t now) { return not boost::icl::contains(value, now); }
 };
 
-} // namespace discrete_timed_setting
-} // namespace reelay
+}  // namespace discrete_timed_setting
+}  // namespace reelay

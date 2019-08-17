@@ -10,41 +10,31 @@
 
 #include "reelay/networks/basic_structure.hpp"
 
-namespace reelay
-{
+namespace reelay {
 
-template <
-    typename input_t,
-    typename output_t>
-struct untimed_network : untimed_state<input_t, output_t>
-{
-    using input_type = input_t;
-    using output_type = output_t;
+template <typename input_t, typename output_t>
+struct untimed_network : untimed_state<input_t, output_t> {
+  using input_type = input_t;
+  using output_type = output_t;
 
-    using node_type = untimed_node<output_t>;
-    using state_type = untimed_state<input_t, output_t>;
+  using node_type = untimed_node<output_t>;
+  using state_type = untimed_state<input_t, output_t>;
 
-    using type = untimed_network<input_t, output_t>;
+  using type = untimed_network<input_t, output_t>;
 
-    std::shared_ptr<node_type> output_node;
-    std::vector<std::shared_ptr<state_type>> states;
+  std::shared_ptr<node_type> output_node;
+  std::vector<std::shared_ptr<state_type>> states;
 
-    untimed_network(
-        std::shared_ptr<node_type> n,
-        std::vector<std::shared_ptr<state_type>> ss)
-        : output_node(n), states(ss) {}
+  untimed_network(std::shared_ptr<node_type> n,
+                  std::vector<std::shared_ptr<state_type>> ss)
+      : output_node(n), states(ss) {}
 
-    void update(const input_t &args) override
-    {
-        for (const auto &state : this->states)
-        {
-            state->update(args);
-        }
+  void update(const input_t &args) override {
+    for (const auto &state : this->states) {
+      state->update(args);
     }
-    output_t output() override
-    {
-        return this->output_node->output();
-    }
+  }
+  output_t output() override { return this->output_node->output(); }
 };
 
-} //namespace reelay
+} // namespace reelay

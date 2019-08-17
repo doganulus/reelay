@@ -15,25 +15,23 @@
 namespace reelay {
 namespace untimed_setting {
 
-template<typename X>
-struct conjunction : public untimed_node<bool>
-{
-    using input_t = X;
-    using output_t = bool;
-    
-    using node_t = untimed_node<output_t>;
-    using node_ptr_t = std::shared_ptr<node_t>;
+template <typename X>
+struct conjunction : public untimed_node<bool> {
+  using input_t = X;
+  using output_t = bool;
 
-    std::vector<node_ptr_t> args;
+  using node_t = untimed_node<output_t>;
+  using node_ptr_t = std::shared_ptr<node_t>;
 
-    conjunction(std::vector<node_ptr_t> nodeptrs) : args(nodeptrs) {}
+  std::vector<node_ptr_t> args;
 
-    output_t output()
-    {
-        return std::all_of(args.cbegin(), args.cend(),
-            [](node_ptr_t arg) { return arg->output(); });
-    }
+  conjunction(std::vector<node_ptr_t> nodeptrs) : args(nodeptrs) {}
+
+  output_t output() {
+    return std::all_of(args.cbegin(), args.cend(),
+                       [](node_ptr_t arg) { return arg->output(); });
+  }
 };
 
-} // namespace untimed_setting
-} // namespace reelay
+}  // namespace untimed_setting
+}  // namespace reelay

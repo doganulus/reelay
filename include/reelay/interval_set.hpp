@@ -19,4 +19,4 @@ using interval = boost::icl::interval<T>;
 template <class T>
 using interval_set = boost::icl::interval_set<T>;
 
-}
+}  // namespace reelay

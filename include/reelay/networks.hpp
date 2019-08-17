@@ -9,6 +9,6 @@
 #pragma once
 
 #include "reelay/networks/basic_structure.hpp"
-#include "reelay/networks/untimed_network.hpp"
-#include "reelay/networks/discrete_timed_network.hpp"
 #include "reelay/networks/dense_timed_network.hpp"
+#include "reelay/networks/discrete_timed_network.hpp"
+#include "reelay/networks/untimed_network.hpp"

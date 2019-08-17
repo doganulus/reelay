@@ -8,8 +8,9 @@
 
 #pragma once
 
-#include "vector"
 #include "memory"
+#include "vector"
+
 
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/networks/discrete_timed_network.hpp"
@@ -17,30 +18,27 @@
 namespace reelay {
 namespace discrete_timed_setting {
 
-template<typename X, typename T>
-struct conjunction : public discrete_timed_node<bool, T>
-{
-    using time_t = T;
-    using input_t = X;
-    using output_t = bool;
+template <typename X, typename T>
+struct conjunction : public discrete_timed_node<bool, T> {
+  using time_t = T;
+  using input_t = X;
+  using output_t = bool;
 
-    using node_t = discrete_timed_node<output_t, time_t>;
-    using state_t = discrete_timed_state<input_t, output_t, time_t>;
+  using node_t = discrete_timed_node<output_t, time_t>;
+  using state_t = discrete_timed_state<input_t, output_t, time_t>;
 
-    using node_ptr_t = std::shared_ptr<node_t>;
-    using state_ptr_t = std::shared_ptr<state_t>;
+  using node_ptr_t = std::shared_ptr<node_t>;
+  using state_ptr_t = std::shared_ptr<state_t>;
 
-    std::vector<node_ptr_t> args;
+  std::vector<node_ptr_t> args;
 
-    conjunction(std::vector<node_ptr_t> nodeptrs) : args(nodeptrs) {}
+  conjunction(std::vector<node_ptr_t> nodeptrs) : args(nodeptrs) {}
 
-    output_t output(time_t now)
-    {
-        return std::all_of(args.cbegin(), args.cend(),
-            [now](node_ptr_t arg) { return arg->output(now); });
-    }
-
+  output_t output(time_t now) {
+    return std::all_of(args.cbegin(), args.cend(),
+                       [now](node_ptr_t arg) { return arg->output(now); });
+  }
 };
 
-} // namespace discrete_timed_setting
-} // namespace reelay
+}  // namespace discrete_timed_setting
+}  // namespace reelay

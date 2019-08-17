@@ -15,33 +15,27 @@
 namespace reelay {
 namespace untimed_setting {
 
-template<typename X>
-struct since : public untimed_state<X, bool>
-{
-    using input_t = X;
-    using output_t = bool;
+template <typename X>
+struct since : public untimed_state<X, bool> {
+  using input_t = X;
+  using output_t = bool;
 
-    using node_t = untimed_node<output_t>;
-    using node_ptr_t = std::shared_ptr<node_t>;
+  using node_t = untimed_node<output_t>;
+  using node_ptr_t = std::shared_ptr<node_t>;
 
-    bool value = false;
+  bool value = false;
 
-    node_ptr_t first;
-    node_ptr_t second;
+  node_ptr_t first;
+  node_ptr_t second;
 
-    since(std::vector<node_ptr_t> args)
-        : first(args[0]), second(args[1]) {}
+  since(std::vector<node_ptr_t> args) : first(args[0]), second(args[1]) {}
 
-    void update(const input_t &args) override
-    {
-        value = second->output() || (first->output() && value);
-    }
+  void update(const input_t& args) override {
+    value = second->output() || (first->output() && value);
+  }
 
-    output_t output() override
-    {
-        return value;
-    }
+  output_t output() override { return value; }
 };
 
-} // namespace untimed_setting
-} // namespace reelay
+}  // namespace untimed_setting
+}  // namespace reelay

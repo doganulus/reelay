@@ -15,25 +15,20 @@
 namespace reelay {
 namespace untimed_setting {
 
-template<typename X>
-struct negation : public untimed_node<bool>
-{
-    using input_t = X;
-    using output_t = bool;
+template <typename X>
+struct negation : public untimed_node<bool> {
+  using input_t = X;
+  using output_t = bool;
 
-    using Node = untimed_node<output_t>;
-    using node_ptr_t = std::shared_ptr<Node>;
+  using Node = untimed_node<output_t>;
+  using node_ptr_t = std::shared_ptr<Node>;
 
-    node_ptr_t arg1;
+  node_ptr_t arg1;
 
-    negation(std::vector<node_ptr_t> args)
-        : arg1(args[0]) {}
+  negation(std::vector<node_ptr_t> args) : arg1(args[0]) {}
 
-    output_t output()
-    {
-        return not arg1->output();
-    }
+  output_t output() { return not arg1->output(); }
 };
 
-} // namespace untimed_setting
-} // namespace reelay
+}  // namespace untimed_setting
+}  // namespace reelay

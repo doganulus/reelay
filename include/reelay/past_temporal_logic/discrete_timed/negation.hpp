@@ -8,8 +8,9 @@
 
 #pragma once
 
-#include "vector"
 #include "memory"
+#include "vector"
+
 
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/networks/discrete_timed_network.hpp"
@@ -17,29 +18,24 @@
 namespace reelay {
 namespace discrete_timed_setting {
 
-template<typename X, typename T>
-struct negation : public discrete_timed_node<bool, T>
-{
-    using time_t = T;
-    using input_t = X;
-    using output_t = bool;
+template <typename X, typename T>
+struct negation : public discrete_timed_node<bool, T> {
+  using time_t = T;
+  using input_t = X;
+  using output_t = bool;
 
-    using node_t = discrete_timed_node<output_t, time_t>;
-    using state_t = discrete_timed_state<input_t, output_t, time_t>;
+  using node_t = discrete_timed_node<output_t, time_t>;
+  using state_t = discrete_timed_state<input_t, output_t, time_t>;
 
-    using node_ptr_t = std::shared_ptr<node_t>;
-    using state_ptr_t = std::shared_ptr<state_t>;
+  using node_ptr_t = std::shared_ptr<node_t>;
+  using state_ptr_t = std::shared_ptr<state_t>;
 
-    node_ptr_t arg1;
+  node_ptr_t arg1;
 
-    negation(std::vector<node_ptr_t> args)
-        : arg1(args[0]) {}
+  negation(std::vector<node_ptr_t> args) : arg1(args[0]) {}
 
-    output_t output(time_t now)
-    {
-        return not arg1->output(now);
-    }
+  output_t output(time_t now) { return not arg1->output(now); }
 };
 
-} // namespace discrete_timed_setting
-} // namespace reelay
+}  // namespace discrete_timed_setting
+}  // namespace reelay

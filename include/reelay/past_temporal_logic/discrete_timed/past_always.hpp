@@ -13,35 +13,30 @@
 namespace reelay {
 namespace discrete_timed_setting {
 
-template<typename X, typename T>
-struct past_always : public discrete_timed_state<X, bool, T>
-{
-    using time_t = T;
-    using input_t = X;
-    using output_t = bool;
+template <typename X, typename T>
+struct past_always : public discrete_timed_state<X, bool, T> {
+  using time_t = T;
+  using input_t = X;
+  using output_t = bool;
 
-    using node_t = discrete_timed_node<output_t, time_t>;
-    using state_t = discrete_timed_state<input_t, output_t, time_t>;
+  using node_t = discrete_timed_node<output_t, time_t>;
+  using state_t = discrete_timed_state<input_t, output_t, time_t>;
 
-    using node_ptr_t = std::shared_ptr<node_t>;
-    using state_ptr_t = std::shared_ptr<state_t>;
+  using node_ptr_t = std::shared_ptr<node_t>;
+  using state_ptr_t = std::shared_ptr<state_t>;
 
-    bool value = true;
+  bool value = true;
 
-    node_ptr_t first;
+  node_ptr_t first;
 
-    past_always(std::vector<node_ptr_t> args) : first(args[0]) {}
+  past_always(std::vector<node_ptr_t> args) : first(args[0]) {}
 
-    void update(const input_t &args, time_t now) override
-    {
-        value = first->output(now) && value;
-    }
+  void update(const input_t& args, time_t now) override {
+    value = first->output(now) && value;
+  }
 
-    output_t output(time_t now) override
-    {
-        return value;
-    }
+  output_t output(time_t now) override { return value; }
 };
 
-} // namespace discrete_timed_setting
-} // namespace reelay
+}  // namespace discrete_timed_setting
+}  // namespace reelay

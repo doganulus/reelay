@@ -15,156 +15,113 @@
 namespace reelay {
 namespace untimed_setting {
 
-template<typename X>
-struct proposition : public untimed_state<X, bool>
-{
-    using input_t = X;
-    using output_t = bool;
+template <typename X> struct proposition : public untimed_state<X, bool> {
+  using input_t = X;
+  using output_t = bool;
 
-    using function_t = std::function<bool(const input_t &)>;
+  using function_t = std::function<bool(const input_t &)>;
 
-    bool value = false;
-    std::function<bool(const input_t &)> fn;
+  bool value = false;
+  std::function<bool(const input_t &)> fn;
 
-    proposition(std::string name) 
-        : fn( [name](const input_t &x) {return std::stoi(x.at(name));}) {}
+  proposition(std::string name)
+      : fn([name](const input_t &x) { return std::stoi(x.at(name)); }) {}
 
-    void update(const input_t &args) override
-    {
-        value = fn(args);
-    }
+  void update(const input_t &args) override { value = fn(args); }
 
-    output_t output() override
-    {
-        return value;
-    }
+  output_t output() override { return value; }
 };
 
-template<typename X>
-struct basic_predicate_lt : public untimed_state<X, bool>
-{
-    using input_t = X;
-    using output_t = bool;
+template <typename X>
+struct basic_predicate_lt : public untimed_state<X, bool> {
+  using input_t = X;
+  using output_t = bool;
 
-    using function_t = std::function<bool(const input_t &)>;
+  using function_t = std::function<bool(const input_t &)>;
 
-    bool value = false;
-    std::function<bool(const input_t &)> fn;
+  bool value = false;
+  std::function<bool(const input_t &)> fn;
 
-    basic_predicate_lt(std::string name, float c)
-        : fn( [name,c](const input_t &x) { return std::stof(x.at(name)) < c ;}) {}
+  basic_predicate_lt(std::string name, float c)
+      : fn([name, c](const input_t &x) { return std::stof(x.at(name)) < c; }) {}
 
-    void update(const input_t &args) override
-    {
-        value = fn(args);
-    }
+  void update(const input_t &args) override { value = fn(args); }
 
-    output_t output() override
-    {
-        return value;
-    }
+  output_t output() override { return value; }
 };
 
-template<typename X>
-struct basic_predicate_le : public untimed_state<X, bool>
-{
-    using input_t = X;
-    using output_t = bool;
+template <typename X>
+struct basic_predicate_le : public untimed_state<X, bool> {
+  using input_t = X;
+  using output_t = bool;
 
-    using Node = untimed_node<output_t>;
-    using SharedNode = std::shared_ptr<Node>;
+  using Node = untimed_node<output_t>;
+  using SharedNode = std::shared_ptr<Node>;
 
-    bool value = false;
-    std::function<bool(const input_t &)> fn;
+  bool value = false;
+  std::function<bool(const input_t &)> fn;
 
-    basic_predicate_le(std::string name, float c)
-        : fn( [name,c](const input_t &x) { return std::stof(x.at(name)) <= c ;}) {}
+  basic_predicate_le(std::string name, float c)
+      : fn([name, c](const input_t &x) { return std::stof(x.at(name)) <= c; }) {
+  }
 
-    void update(const input_t &args) override
-    {
-        value = fn(args);
-    }
+  void update(const input_t &args) override { value = fn(args); }
 
-    output_t output() override
-    {
-        return value;
-    }
+  output_t output() override { return value; }
 };
 
-template<typename X>
-struct basic_predicate_gt : public untimed_state<X, bool>
-{
-    using input_t = X;
-    using output_t = bool;
+template <typename X>
+struct basic_predicate_gt : public untimed_state<X, bool> {
+  using input_t = X;
+  using output_t = bool;
 
-    using function_t = std::function<bool(const input_t &)>;
+  using function_t = std::function<bool(const input_t &)>;
 
-    bool value = false;
-    std::function<bool(const input_t &)> fn;
+  bool value = false;
+  std::function<bool(const input_t &)> fn;
 
-    basic_predicate_gt(std::string name, float c)
-        : fn( [name,c](const input_t &x) { return std::stof(x.at(name)) > c ;}) {}
+  basic_predicate_gt(std::string name, float c)
+      : fn([name, c](const input_t &x) { return std::stof(x.at(name)) > c; }) {}
 
-    void update(const input_t &args) override
-    {
-        value = fn(args);
-    }
+  void update(const input_t &args) override { value = fn(args); }
 
-    output_t output() override
-    {
-        return value;
-    }
+  output_t output() override { return value; }
 };
 
+template <typename X>
+struct basic_predicate_ge : public untimed_state<X, bool> {
+  using input_t = X;
+  using output_t = bool;
 
-template<typename X>
-struct basic_predicate_ge : public untimed_state<X, bool>
-{
-    using input_t = X;
-    using output_t = bool;
+  using function_t = std::function<bool(const input_t &)>;
 
-    using function_t = std::function<bool(const input_t &)>;
+  bool value = false;
+  std::function<bool(const input_t &)> fn;
 
-    bool value = false;
-    std::function<bool(const input_t &)> fn;
+  basic_predicate_ge(std::string name, float c)
+      : fn([name, c](const input_t &x) { return std::stof(x.at(name)) >= c; }) {
+  }
 
-    basic_predicate_ge(std::string name, float c)
-        : fn( [name,c](const input_t &x) { return std::stof(x.at(name)) >= c ;}) {}
+  void update(const input_t &args) override { value = fn(args); }
 
-    void update(const input_t &args) override
-    {
-        value = fn(args);
-    }
-
-    output_t output() override
-    {
-        return value;
-    }
+  output_t output() override { return value; }
 };
 
-template<typename X>
-struct predicate : public untimed_state<X, bool>
-{
-    using input_t = X;
-    using output_t = bool;
+template <typename X> struct predicate : public untimed_state<X, bool> {
+  using input_t = X;
+  using output_t = bool;
 
-    using function_t = std::function<bool(const input_t &)>;
+  using function_t = std::function<bool(const input_t &)>;
 
-    bool value = false;
-    std::function<bool(const input_t &)> fn;
+  bool value = false;
+  std::function<bool(const input_t &)> fn;
 
-    predicate(const function_t &f) : fn(f) {}
+  predicate(const function_t &f) : fn(f) {}
 
-    void update(const input_t &args) override
-    {
-        value = fn(args);
-    }
+  void update(const input_t &args) override { value = fn(args); }
 
-    output_t output() override
-    {
-        return value;
-    }
+  output_t output() override { return value; }
 };
 
 } // namespace untimed_setting
-} // namespace reelay 
+} // namespace reelay
