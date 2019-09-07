@@ -67,7 +67,7 @@ antlr4-clean:
 apps:
 	$(CXX) $(CXXFLAGS) apps/mtl/rymtl.cpp -o bin/rymtl $(INCLUDE_FLAGS) $(LIB_FLAGS)
 
-test: test_main
+test: test_main test_untimed test_discrete_timed test_dense_timed
 
 test_main:
 	$(CXX) $(CXXFLAGS) -c test/test_main.cpp -o test/main.o $(INCLUDE_FLAGS) $(LIB_FLAGS)
