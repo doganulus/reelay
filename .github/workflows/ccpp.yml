@@ -7,6 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+    - name: anltr4 clone
+      run: git clone https://github.com/antlr/antlr4.git
     - uses: actions/checkout@v1
     - name: make test
       run: make test
