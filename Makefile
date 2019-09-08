@@ -18,22 +18,24 @@ WORKDIR = ./build
 
 ANTLR4_EXE = $(LIBDIR)/antlr-4.7.1-complete.jar
 ANTLR4_FLAGS = -Dlanguage=Cpp -visitor -Xexact-output-dir
-ANTLR4_DIR = antlr4
-ANTLR4_GRAMMAR_DIR = $(ANTLR4_DIR)/grammar
+ANTLR4_GRAMMAR_DIR = grammar/antlr4
 
 ANTLR4_TL_GRAMMAR = TemporalLogic
-ANTLR4_TL_SOURCES = $(ANTLR4_DIR)/temporal_logic
+ANTLR4_TL_SOURCES = grammar/antlr4/temporal_logic
 ANTLR4_TL_HEADERS = include/reelay/parser/antlr4/temporal_logic
 
 SOURCES = $(ANTLR4_TL_SOURCES)/$(ANTLR4_TL_GRAMMAR)Lexer.cpp $(ANTLR4_TL_SOURCES)/$(ANTLR4_TL_GRAMMAR)Parser.cpp $(ANTLR4_TL_SOURCES)/$(ANTLR4_TL_GRAMMAR)Listener.cpp $(ANTLR4_TL_SOURCES)/$(ANTLR4_TL_GRAMMAR)BaseListener.cpp $(ANTLR4_TL_SOURCES)/$(ANTLR4_TL_GRAMMAR)Visitor.cpp $(ANTLR4_TL_SOURCES)/$(ANTLR4_TL_GRAMMAR)BaseVisitor.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 
-.PHONY: all clean develop test install uninstall antlr4 apps
+.PHONY: all clean develop test install uninstall apps
 
-all: $(TARGET)
+all: antlr4-parser $(TARGET)
 
 $(TARGET) : $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $@ $(LDFLAGS)
+
+$(OBJECTS): $(ANTLR4_TL_SOURCES)/%.o : $(ANTLR4_TL_SOURCES)/%.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDE_FLAGS) -c $< -o $@
 
 clean:
 	rm -f $(ANTLR4_TL_SOURCES)/*.o
@@ -53,16 +55,33 @@ develop:
 	ln -s $(PROJECT_INCLUDE) $(DESTDIR)$(INCDIR)
 	ln -s $(TARGET) $(DESTDIR)$(LIBDIR)/$(TARGET)
 
-antlr4:
+antlr4-parser:
 	mkdir -p $(ANTLR4_TL_SOURCES)	
 	java -jar $(ANTLR4_EXE) $(ANTLR4_FLAGS) -o $(ANTLR4_TL_SOURCES) $(ANTLR4_GRAMMAR_DIR)/$(ANTLR4_TL_GRAMMAR).g4 
 	mkdir -p $(ANTLR4_TL_HEADERS)
 	cp -a $(ANTLR4_TL_SOURCES)/*.h $(ANTLR4_TL_HEADERS)
-	make all
 
-antlr4-clean:
+antlr4-parser-clean:
 	rm -rf $(ANTLR4_TL_SOURCES)
 	rm -rf $(ANTLR4_TL_HEADERS)
+
+antlr4-runtime:
+	mkdir -p build
+	cd build && curl -O https://www.antlr.org/download/antlr-4.7.2-complete.jar
+	cd build && rm -rf antlr4 && git clone https://github.com/antlr/antlr4.git
+	cd build/antlr4/runtime/Cpp && cmake . -DANTLR_JAR_LOCATION=../../../antlr-4.7.2-complete.jar
+	cd build/antlr4/runtime/Cpp && make
+
+antlr4-runtime-install:
+	cd build/antlr4/runtime/Cpp && make install
+
+antlr4-runtime-uninstall:
+	rm -rf /usr/local/include/antlr4-runtime
+	rm -rf /usr/local/share/doc/libantlr4
+	rm -r /usr/local/lib/libantlr4-runtime.*
+
+antlr4-runtime-clean:
+	rm -rf build/antlr4
 
 apps:
 	$(CXX) $(CXXFLAGS) apps/mtl/rymtl.cpp -o bin/rymtl $(INCLUDE_FLAGS) $(LIB_FLAGS)

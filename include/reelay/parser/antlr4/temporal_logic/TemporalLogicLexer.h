@@ -1,5 +1,5 @@
 
-// Generated from antlr4/grammar/TemporalLogic.g4 by ANTLR 4.7.1
+// Generated from grammar/antlr4/TemporalLogic.g4 by ANTLR 4.7.1
 
 #pragma once
 
