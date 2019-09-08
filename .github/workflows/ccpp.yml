@@ -10,6 +10,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: anltr4 runtime
       run: |
+        apt install uuid-dev 
         make antlr4-runtime
         make antlr4-runtime-install
     - name: make test
