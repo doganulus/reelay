@@ -8,7 +8,9 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - name: anltr4 runtime build
-      run: make antlr4_runtime
+    - name: anltr4 runtime
+      run: |
+        make antlr4-runtime
+        make antlr4-runtime-install
     - name: make test
       run: make test
