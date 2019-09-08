@@ -20,7 +20,6 @@
 
 
 #include "reelay/intervals.hpp"
-#include "reelay/verbosity.hpp"
 
 namespace reelay {
 
@@ -90,9 +89,6 @@ struct dense_timed {
 
     using function_t = typename factory::function_t;
 
-    using formatter_type =
-        std::shared_ptr<DenseTimedStringFormatter<input_t, time_t>>;
-
     static network_ptr_t from_temporal_logic(
         std::string pattern,
         std::map<std::string, function_t> predicates =
@@ -101,16 +97,6 @@ struct dense_timed {
     }
 
     // static type from_regular_expressions();
-
-    static formatter_type string_formatter(int verbosity) {
-      if (verbosity >= 2) {
-        return std::make_shared<DenseTimedVerbosity2<input_t, time_t>>();
-      } else if (verbosity == 1) {
-        return std::make_shared<DenseTimedVerbosity1<input_t, time_t>>();
-      } else {
-        return std::make_shared<DenseTimedVerbosity0<input_t, time_t>>();
-      }
-    }
   };
 
   // template <typename value_t>
