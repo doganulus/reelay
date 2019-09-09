@@ -19,7 +19,7 @@
 #include "reelay/settings.hpp"
 
 
-#include "reelay/intervals.hpp"
+#include "reelay/interval_set.hpp"
 
 namespace reelay {
 

@@ -4,7 +4,7 @@
 #include "catch.hpp"
 
 #include "reelay/monitors.hpp"
-#include "reelay/intervals.hpp"
+#include "reelay/interval_set.hpp"
 
 using time_t = int64_t;
 using input_t = std::map<std::string, std::string>;
