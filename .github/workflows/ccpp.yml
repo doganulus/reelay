@@ -20,5 +20,6 @@ jobs:
         sudo make antlr4-runtime-install
         make 
         sudo make install
+        sudo ldconfig
     - name: test
       run: make test
