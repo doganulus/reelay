@@ -29,7 +29,7 @@ OBJECTS = $(SOURCES:.cpp=.o)
 
 .PHONY: all clean develop test install uninstall apps
 
-all: $(TARGET)
+all: antlr4-parser $(TARGET)
 
 $(TARGET) : $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $@ $(LDFLAGS)
@@ -56,11 +56,12 @@ develop:
 	ln -s $(TARGET) $(DESTDIR)$(LIBDIR)/$(TARGET)
 
 antlr4-parser:
+	mkdir -p build
+	cd build && curl -O https://www.antlr.org/download/antlr-4.7.2-complete.jar
 	mkdir -p $(ANTLR4_TL_SOURCES)	
 	java -jar $(ANTLR4_EXE) $(ANTLR4_FLAGS) -o $(ANTLR4_TL_SOURCES) $(ANTLR4_GRAMMAR_DIR)/$(ANTLR4_TL_GRAMMAR).g4 
 	mkdir -p $(ANTLR4_TL_HEADERS)
 	cp -a $(ANTLR4_TL_SOURCES)/*.h $(ANTLR4_TL_HEADERS)
-	make all
 
 antlr4-parser-clean:
 	rm -rf $(ANTLR4_TL_SOURCES)
