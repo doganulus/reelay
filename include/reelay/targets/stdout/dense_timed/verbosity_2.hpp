@@ -9,34 +9,46 @@
 #pragma once
 
 #include "reelay/settings.hpp"
-#include "reelay/targets/stdout/dense_timed/formatter.hpp"
+#include "reelay/interval_set.hpp"
+// #include "reelay/targets/stdout/dense_timed/formatter.hpp"
 
 namespace reelay {
 namespace dense_timed_setting {
 
 template <typename X, typename T>
-struct stdout_formatter_verbosity_2 : stdout_formatter<X, T> {
-  using factory = dense_timed_setting::factory<X, T>;
+struct stdout_formatter_verbosity_2
+    : public dense_timed_state<X, std::string, T> {
+  using time_t = T;
+  using input_t = X;
+  using output_t = std::string;
 
-  using input_t = typename factory::input_t;
-  using output_t = typename factory::output_t;
-  using function_t = typename factory::function_t;
+  using interval_t = reelay::interval<time_t>;
+  using interval_set_t = reelay::interval_set<time_t>;
 
-  using network_t = typename factory::network_t;
-  using network_ptr_t = typename factory::network_ptr_t;
+  using network_t = dense_timed_network<input_t, interval_set_t, time_t>;
+  using network_ptr_t = std::shared_ptr<network_t>;
 
-  stdout_formatter_verbosity_2(network_ptr_t network,
-                               std::vector<std::string> columns) {
-    this->network = network;
-    this->columms = columns;
+  using strings_t = std::vector<std::string>;
+
+  network_ptr_t network;
+  strings_t columm_names;
+
+  stdout_formatter_verbosity_2(network_ptr_t netptr, strings_t names)
+    : network(netptr), columm_names(names) {}
+
+  void update(const input_t &args) { network->update(args); }
+  void update(const input_t &args, time_t now) { network->update(args, now); }
+  void update(const input_t &pargs, const input_t &args, time_t previous,
+              time_t now) override {
+    network->update(pargs, args, previous, now);
   }
 
-  std::string header() override {
+  std::string header() {
     std::ostringstream buffer;
 
     buffer << "time"
            << ",";
-    for (auto const& column_name : this->columms) {
+    for (auto const &column_name : columm_names) {
       if (column_name != "time") {
         buffer << column_name << ",";
       }
@@ -46,16 +58,15 @@ struct stdout_formatter_verbosity_2 : stdout_formatter<X, T> {
     return buffer.str();
   }
 
-  std::string output() override {
-    output_t result = this->network->output(
-        this->network->previous, this->network->current);
+  std::string output() {
+    time_t t;
     std::ostringstream buffer;
 
-    time_t t;
+    interval_set_t result = network->output();
 
     if (result.empty()) {
-      buffer << this->network->current << ",";
-      for (auto const& [k, v] : this->network->prevargs) {
+      buffer << network->current << ",";
+      for (auto const& [k, v] : network->prevargs) {
         if (k != "time") {
           buffer << v << ",";
         }
@@ -64,10 +75,10 @@ struct stdout_formatter_verbosity_2 : stdout_formatter<X, T> {
     }
 
     for (const auto& intv : result) {
-      if (intv.lower() > this->network->previous) {
+      if (intv.lower() > network->previous) {
         t = intv.upper();
         buffer << intv.lower() << ",";
-        for (auto const& [k, v] : this->network->prevargs) {
+        for (auto const& [k, v] : network->prevargs) {
           if (k != "time") {
             buffer << v << ",";
           }
@@ -75,7 +86,7 @@ struct stdout_formatter_verbosity_2 : stdout_formatter<X, T> {
         buffer << "0" << std::endl;
 
         buffer << intv.upper() << ",";
-        for (auto const& [k, v] : this->network->prevargs) {
+        for (auto const& [k, v] : network->prevargs) {
           if (k != "time") {
             buffer << v << ",";
           }
@@ -85,7 +96,7 @@ struct stdout_formatter_verbosity_2 : stdout_formatter<X, T> {
       } else {
         t = intv.upper();
         buffer << intv.upper() << ",";
-        for (auto const& [k, v] : this->network->prevargs) {
+        for (auto const& [k, v] : network->prevargs) {
           if (k != "time") {
             buffer << v << ",";
           }
@@ -94,9 +105,9 @@ struct stdout_formatter_verbosity_2 : stdout_formatter<X, T> {
       }
     }
 
-    if (t < this->network->current) {
-      buffer << this->network->current << ",";
-      for (auto const& [k, v] : this->network->prevargs) {
+    if (t < network->current) {
+      buffer << network->current << ",";
+      for (auto const& [k, v] : network->prevargs) {
         if (k != "time") {
           buffer << v << ",";
         }

@@ -69,16 +69,17 @@ int main(int argc, const char* argv[]) {
         reelay::dense_timed<time_t>::monitor<input_t>::from_temporal_logic(
             spec);
     auto formatter =
-        reelay::dense_timed<time_t>::monitor<input_t>::string_formatter(
-            verbosity);
+        std::make_shared<reelay::dense_timed_setting::
+                             stdout_formatter_verbosity_2<input_t, time_t>>(
+            network, header);
 
-    std::cout << formatter->get_header(header);
+    std::cout << formatter->header();
 
     time_t now = 0;
     while (csvin >> row) {
       now = now + period;
       network->update(row, now);
-      std::cout << formatter->get_output(network);
+      std::cout << formatter->output();
     }
   } else {
 
@@ -92,14 +93,16 @@ int main(int argc, const char* argv[]) {
       reelay::dense_timed<time_t>::monitor<input_t>::from_temporal_logic(
             spec);
 
-    auto formatter = reelay::dense_timed<time_t>::monitor<
-        input_t>::stdout_formatter(verbosity);
-
-    std::cout << formatter->get_header(header);
+    auto formatter =
+        std::make_shared<reelay::dense_timed_setting::
+                             stdout_formatter_verbosity_2<input_t, time_t>>(
+            network, header);
+            
+    std::cout << formatter->header();
 
     while (csvin >> row) {
       network->update(row);
-      std::cout << formatter->get_output(network);
+      std::cout << formatter->output();
     }
   }
 

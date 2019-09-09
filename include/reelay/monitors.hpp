@@ -84,9 +84,11 @@ struct dense_timed {
   struct monitor {
     using factory = dense_timed_setting::factory<input_t, time_t>;
 
+    using state_t = typename factory::state_t;
+    using state_ptr_t = typename factory::state_ptr_t;
+
     using network_t = typename factory::network_t;
     using network_ptr_t = typename factory::network_ptr_t;
-
     using function_t = typename factory::function_t;
 
     static network_ptr_t from_temporal_logic(
