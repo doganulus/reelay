@@ -16,7 +16,7 @@ INCDIR = $(PREFIX)/include
 LIBDIR = $(PREFIX)/lib
 WORKDIR = ./build
 
-ANTLR4_EXE = $(LIBDIR)/antlr-4.7.1-complete.jar
+ANTLR4_EXE = build/antlr-4.7.2-complete.jar
 ANTLR4_FLAGS = -Dlanguage=Cpp -visitor -Xexact-output-dir
 ANTLR4_GRAMMAR_DIR = grammar/antlr4
 
@@ -29,7 +29,7 @@ OBJECTS = $(SOURCES:.cpp=.o)
 
 .PHONY: all clean develop test install uninstall apps
 
-all: antlr4-parser $(TARGET)
+all: $(TARGET)
 
 $(TARGET) : $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $@ $(LDFLAGS)
@@ -60,6 +60,7 @@ antlr4-parser:
 	java -jar $(ANTLR4_EXE) $(ANTLR4_FLAGS) -o $(ANTLR4_TL_SOURCES) $(ANTLR4_GRAMMAR_DIR)/$(ANTLR4_TL_GRAMMAR).g4 
 	mkdir -p $(ANTLR4_TL_HEADERS)
 	cp -a $(ANTLR4_TL_SOURCES)/*.h $(ANTLR4_TL_HEADERS)
+	make all
 
 antlr4-parser-clean:
 	rm -rf $(ANTLR4_TL_SOURCES)

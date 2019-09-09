@@ -1,5 +1,5 @@
 
-// Generated from grammar/antlr4/TemporalLogic.g4 by ANTLR 4.7.1
+// Generated from grammar/antlr4/TemporalLogic.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -59,7 +59,7 @@ public:
   public:
     ExprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
    
-    ExprContext() : antlr4::ParserRuleContext() { }
+    ExprContext() = default;
     void copyFrom(ExprContext *context);
     using antlr4::ParserRuleContext::copyFrom;
 
@@ -358,7 +358,7 @@ public:
   public:
     AtomContext(antlr4::ParserRuleContext *parent, size_t invokingState);
    
-    AtomContext() : antlr4::ParserRuleContext() { }
+    AtomContext() = default;
     void copyFrom(AtomContext *context);
     using antlr4::ParserRuleContext::copyFrom;
 
@@ -453,7 +453,7 @@ public:
   public:
     TboundContext(antlr4::ParserRuleContext *parent, size_t invokingState);
    
-    TboundContext() : antlr4::ParserRuleContext() { }
+    TboundContext() = default;
     void copyFrom(TboundContext *context);
     using antlr4::ParserRuleContext::copyFrom;
 
