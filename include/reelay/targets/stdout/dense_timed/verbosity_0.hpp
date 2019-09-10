@@ -10,14 +10,13 @@
 
 #include "reelay/interval_set.hpp"
 #include "reelay/settings.hpp"
-// #include "reelay/targets/stdout/dense_timed/formatter.hpp"
+#include "reelay/targets/stdout/dense_timed/stdout_formatter.hpp"
 
 namespace reelay {
 namespace dense_timed_setting {
 
 template <typename X, typename T>
-struct stdout_formatter_verbosity_0
-    : public dense_timed_state<X, std::string, T> {
+struct stdout_formatter_verbosity_0 : public stdout_formatter<X,T> {
   using time_t = T;
   using input_t = X;
   using output_t = std::string;
@@ -43,16 +42,17 @@ struct stdout_formatter_verbosity_0
     network->update(pargs, args, previous, now);
   }
 
-  std::string header(const std::vector<std::string>& columm_names) override {
+  std::string header() {
     return std::string();
   }
   std::string output() {
     std::ostringstream buffer;
 
-    interval_set_t result = network->output();
+    interval_set_t result = network->negated();
+
 
     for (const auto& intv : result) {
-      buffer << "Fails between times " << intv.lower() << " and "
+      buffer << "False between " << intv.lower() << " and "
              << intv.upper() << std::endl;
     }
 

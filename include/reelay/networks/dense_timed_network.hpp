@@ -65,6 +65,10 @@ struct dense_timed_network : dense_timed_state<X, Y, T> {
     return this->output_node->output(this->previous, this->current);
   }
 
+  output_t negated() {
+    return interval_set<time_t>(interval<time_t>::
+      left_open(this->previous, this->current)) - this->output();
+  }
 };
 
 }  // namespace reelay

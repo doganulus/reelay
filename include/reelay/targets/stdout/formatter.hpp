@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "reelay/targets/stdout/dense_timed/stdout_formatter.hpp"
 #include "reelay/targets/stdout/dense_timed/verbosity_0.hpp"
 #include "reelay/targets/stdout/dense_timed/verbosity_1.hpp"
 #include "reelay/targets/stdout/dense_timed/verbosity_2.hpp"
@@ -52,36 +53,37 @@ namespace reelay {
 
 
 
-// namespace dense_timed_setting {
+namespace dense_timed_setting {
 
-// template <typename X, typename T>
-// struct make_stdout_formatter {
-//   using setting = dense_timed_setting::factory<X, T>;
+template <typename X, typename T>
+static std::shared_ptr<stdout_formatter<X, T>>
+make_stdout_formatter(
+    std::shared_ptr<dense_timed_network<X, interval_set<T>, T>> network,
+    std::vector<std::string> header, int verbosity) {
 
-//   using input_t = typename setting::input_t;
-//   using output_t = typename setting::output_t;
-//   using function_t = typename setting::function_t;
+  using time_t = T;
+  using input_t = X;
 
-//   using state_t = typename setting::state_t;
-//   using state_ptr_t = typename setting::state_ptr_t;
+  using fmt_t = stdout_formatter<X, T>;
+  using fmt_ptr_t = std::shared_ptr<fmt_t>;
 
-//   using network_t = typename setting::network_t;
-//   using network_ptr_t = typename setting::network_ptr_t;
+  fmt_ptr_t formatter;
 
-//   static state_ptr_t with_verbosity(int verbosity) {
-//     state_ptr_t formatter;
+  if (verbosity >= 2) {
+    formatter = std::make_shared<stdout_formatter_verbosity_2<input_t, time_t>>(
+        network, header);
+  } else if (verbosity == 1) {
+    formatter = std::make_shared<stdout_formatter_verbosity_1<input_t, time_t>>(
+        network, header);
+  } else {
+    formatter = std::make_shared<stdout_formatter_verbosity_0<input_t, time_t>>(
+        network, header);
+  }
+  return formatter;
+}
 
-//     if (verbosity >= 2) {
-//       formatter = std::make_shared<stdout_formatter_verbosity_2<input_t, time_t>>();
-//     } else if (verbosity == 1) {
-//       // formatter = std::make_shared<stdout_formatter_verbosity_1<input_t, time_t>>();
-//     } else {
-//       // formatter = std::make_shared<stdout_formatter_verbosity_0<input_t, time_t>>();
-//     }
-//     return formatter;
-//   }
-// };
-// }
+
+}
 
 
 }  // namespace reelay

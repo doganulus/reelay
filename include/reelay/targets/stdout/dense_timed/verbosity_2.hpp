@@ -8,16 +8,15 @@
 
 #pragma once
 
-#include "reelay/settings.hpp"
 #include "reelay/interval_set.hpp"
-// #include "reelay/targets/stdout/dense_timed/formatter.hpp"
+#include "reelay/settings.hpp"
+#include "reelay/targets/stdout/dense_timed/stdout_formatter.hpp"
 
 namespace reelay {
 namespace dense_timed_setting {
 
 template <typename X, typename T>
-struct stdout_formatter_verbosity_2
-    : public dense_timed_state<X, std::string, T> {
+struct stdout_formatter_verbosity_2 : public stdout_formatter<X, T> {
   using time_t = T;
   using input_t = X;
   using output_t = std::string;
