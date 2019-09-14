@@ -24,7 +24,7 @@ struct discrete_timed_network
 
   using type = discrete_timed_network<input_t, output_t, time_t>;
 
-  time_t _current_time = 0;
+  time_t now = 0;
 
   std::shared_ptr<node_type> output_node;
   std::vector<std::shared_ptr<state_type>> states;
@@ -33,14 +33,10 @@ struct discrete_timed_network
                          std::vector<std::shared_ptr<state_type>> ss)
       : output_node(n), states(ss) {}
 
-  inline void tick() { _current_time = _current_time + 1; }
-  inline void set_current_time(time_t now) { _current_time = now; }
-  inline time_t get_current_time() { return _current_time; }
-
   void update(const input_t& args) {
-    this->tick();
+    this->now = this->now + 1;
     for (const auto& state : this->states) {
-      state->update(args, this->get_current_time());
+      state->update(args, this->now);
     }
   }
 
@@ -54,7 +50,7 @@ struct discrete_timed_network
   // }
 
   output_t output() {
-    return this->output_node->output(this->get_current_time());
+    return this->output_node->output(this->now);
   }
 };
 

@@ -69,7 +69,7 @@ struct stdout_formatter_verbosity_1 : public stdout_formatter<X, T> {
                << "0" << std::endl;
         buffer << intv.upper() << ","
                << "1" << std::endl;
-      } else if (intv.upper() < network->current) {
+      } else {
         t = intv.upper();
         buffer << intv.upper() << ","
                << "1" << std::endl;

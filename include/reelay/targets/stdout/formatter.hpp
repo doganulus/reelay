@@ -8,6 +8,16 @@
 
 #pragma once
 
+#include "reelay/targets/stdout/untimed/stdout_formatter.hpp"
+#include "reelay/targets/stdout/untimed/verbosity_0.hpp"
+// #include "reelay/targets/stdout/untimed/verbosity_1.hpp"
+// #include "reelay/targets/stdout/untimed/verbosity_2.hpp"
+
+#include "reelay/targets/stdout/discrete_timed/stdout_formatter.hpp"
+#include "reelay/targets/stdout/discrete_timed/verbosity_0.hpp"
+#include "reelay/targets/stdout/discrete_timed/verbosity_1.hpp"
+// #include "reelay/targets/stdout/discrete_timed/verbosity_2.hpp"
+
 #include "reelay/targets/stdout/dense_timed/stdout_formatter.hpp"
 #include "reelay/targets/stdout/dense_timed/verbosity_0.hpp"
 #include "reelay/targets/stdout/dense_timed/verbosity_1.hpp"
@@ -15,44 +25,71 @@
 
 namespace reelay {
 
-// template <typename X, typename T>
-// struct make_untimed_stdout_formatter {
-//   using factory = untimed_setting::factory<X, T>;
+namespace untimed_setting {
 
-//   using input_t = typename factory::input_t;
-//   using output_t = typename factory::output_t;
-//   using function_t = typename factory::function_t;
+template <typename X>
+static std::shared_ptr<stdout_formatter<X>> make_stdout_formatter(
+    std::shared_ptr<untimed_network<X, bool>> network,
+    std::vector<std::string> header, int verbosity) {
 
-//   using network_t = typename factory::network_t;
-//   using network_ptr_t = typename factory::network_ptr_t;
+  using input_t = X;
 
-//   using fmt_ptr_t =
-//       std::shared_ptr<untimed_setting::stdout_formatter<input_t, time_t>>;
+  using fmt_t = stdout_formatter<X>;
+  using fmt_ptr_t = std::shared_ptr<fmt_t>;
 
-//   static fmt_ptr_t with_verbosity(int verbosity) { return stdout_formatter; }
-// }
+  fmt_ptr_t formatter;
 
-// template <typename X, typename T>
-// struct make_discrete_timed_stdout_formatter {
-//   using factory = discrete_timed_setting::factory<X, T>;
+  // if (verbosity >= 2) {
+  //   formatter = std::make_shared<stdout_formatter_verbosity_2<input_t,
+  //   time_t>>(
+  //       network, header);
+  // } else if (verbosity == 1) {
+  //   formatter = std::make_shared<stdout_formatter_verbosity_1<input_t,
+  //   time_t>>(
+  //       network, header);
+  // } else {
+  formatter = std::make_shared<stdout_formatter_verbosity_0<input_t>>(
+      network, header);
+  // }
+  return formatter;
+}
 
-//   using input_t = typename factory::input_t;
-//   using output_t = typename factory::output_t;
-//   using function_t = typename factory::function_t;
+} // namespace discrete_timed_setting
+} // namespace reelay
 
-//   using network_t = typename factory::network_t;
-//   using network_ptr_t = typename factory::network_ptr_t;
+namespace reelay {
+namespace discrete_timed_setting {
 
-//   using fmt_ptr_t = std::shared_ptr<
-//       discrete_timed_setting::stdout_formatter<input_t, time_t>>;
+template <typename X, typename T>
+static std::shared_ptr<stdout_formatter<X, T>> make_stdout_formatter(
+    std::shared_ptr<discrete_timed_network<X, bool, T>> network,
+    std::vector<std::string> header, int verbosity) {
 
-//   static fmt_ptr_t with_verbosity(int verbosity) { return stdout_formatter; }
-// }
+  using time_t = T;
+  using input_t = X;
 
+  using fmt_t = stdout_formatter<X, T>;
+  using fmt_ptr_t = std::shared_ptr<fmt_t>;
 
+  fmt_ptr_t formatter;
 
+  if (verbosity >= 2) {
+    formatter = std::make_shared<stdout_formatter_verbosity_1<input_t, time_t>>(
+        network, header);
+  } else if (verbosity == 1) {
+    formatter = std::make_shared<stdout_formatter_verbosity_1<input_t, time_t>>(
+        network, header);
+  } else {
+    formatter = std::make_shared<stdout_formatter_verbosity_0<input_t, time_t>>(
+        network, header);
+  }
+  return formatter;
+}
 
+} // namespace discrete_timed_setting
+} // namespace reelay
 
+namespace reelay {
 namespace dense_timed_setting {
 
 template <typename X, typename T>
@@ -81,9 +118,5 @@ make_stdout_formatter(
   }
   return formatter;
 }
-
-
-}
-
-
-}  // namespace reelay
+} // namespace dense_timed_setting
+} // namespace reelay

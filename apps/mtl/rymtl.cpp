@@ -64,6 +64,20 @@ int main(int argc, const char* argv[]) {
   input_t row;
 
   if (program.get<bool>("--discrete")) {
+    auto network =
+        reelay::discrete_timed<time_t>::monitor<input_t>::from_temporal_logic(
+            spec);
+    auto formatter =
+        reelay::discrete_timed_setting::make_stdout_formatter<input_t, time_t>(
+            network, header, verbosity);
+
+    std::cout << formatter->header();
+
+    while (csvin >> row) {
+      network->update(row);
+      std::cout << formatter->output();
+    }
+
   } else if (period > 0) {
     auto network =
       reelay::dense_timed<time_t>::monitor<input_t>::from_temporal_logic(
