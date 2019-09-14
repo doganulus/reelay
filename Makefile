@@ -93,24 +93,25 @@ apps:
 test: test_main test_untimed test_discrete_timed test_dense_timed
 
 test_main:
-	$(CXX) $(CXXFLAGS) -c test/test_main.cpp -o test/main.o $(INCLUDE_FLAGS) $(LIB_FLAGS)
+	mkdir -p build/test
+	$(CXX) $(CXXFLAGS) -c test/test_main.cpp -o build/test/main.o $(INCLUDE_FLAGS) $(LIB_FLAGS)
 
 test_untimed:
-	$(CXX) $(CXXFLAGS) test/main.o test/test_setting_untimed.cpp -o test/test_setting_untimed $(INCLUDE_FLAGS) $(LIB_FLAGS)
-	./test/test_setting_untimed -r compact
+	$(CXX) $(CXXFLAGS) build/test/main.o test/test_setting_untimed.cpp -o build/test/test_setting_untimed $(INCLUDE_FLAGS) $(LIB_FLAGS)
+	./build/test/test_setting_untimed -r compact
 
-test_robustness:
-	$(CXX) $(CXXFLAGS) test/main.o test/test_setting_robustness.cpp -o test/test_setting_robustness $(INCLUDE_FLAGS) $(LIB_FLAGS)
-	./test/test_setting_robustness -r compact
+test_untimed_robustness:
+	$(CXX) $(CXXFLAGS) build/test/main.o test/test_setting_untimed_robustness.cpp -o build/test/test_setting_untimed_robustness $(INCLUDE_FLAGS) $(LIB_FLAGS)
+	./build/test/test_setting_untimed_robustness -r compact
 
 test_discrete_timed:
-	$(CXX) $(CXXFLAGS) test/main.o test/test_setting_discrete_timed.cpp -o test/test_setting_discrete_timed $(INCLUDE_FLAGS) $(LIB_FLAGS)
-	./test/test_setting_discrete_timed -r compact
+	$(CXX) $(CXXFLAGS) build/test/main.o test/test_setting_discrete_timed.cpp -o build/test/test_setting_discrete_timed $(INCLUDE_FLAGS) $(LIB_FLAGS)
+	./build/test/test_setting_discrete_timed -r compact
 
 test_discrete_timed_robustness:
-	$(CXX) $(CXXFLAGS) test/main.o test/test_setting_discrete_timed_robustness.cpp -o test/test_setting_discrete_timed_robustness $(INCLUDE_FLAGS) $(LIB_FLAGS)
-	./test/test_discrete_timed_robustness -r compact
+	$(CXX) $(CXXFLAGS) build/test/main.o test/test_setting_discrete_timed_robustness.cpp -o build/test/test_setting_discrete_timed_robustness $(INCLUDE_FLAGS) $(LIB_FLAGS)
+	./build/test/test_discrete_timed_robustness -r compact
 
 test_dense_timed:
-	$(CXX) $(CXXFLAGS) test/main.o test/test_setting_dense_timed.cpp -o test/test_setting_dense_timed $(INCLUDE_FLAGS) $(LIB_FLAGS)
-	./test/test_setting_dense_timed -r compact
+	$(CXX) $(CXXFLAGS) build/test/main.o test/test_setting_dense_timed.cpp -o build/test/test_setting_dense_timed $(INCLUDE_FLAGS) $(LIB_FLAGS)
+	./build/test/test_setting_dense_timed -r compact

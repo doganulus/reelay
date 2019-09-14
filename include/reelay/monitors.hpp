@@ -41,13 +41,25 @@ struct monitor {
   //    static type from_regular_expressions();
 };
 
-// template <typename value_t>
-// struct robustness {
-//     template <typename input_t>
-//     struct monitor
-//     {
-//     };
-// };
+template <typename output_t>
+struct robustness {
+    template <typename input_t>
+    struct monitor {
+      using factory = untimed_robustness_setting::factory<input_t, output_t>;
+
+      using network_t = typename factory::network_t;
+      using network_ptr_t = typename factory::network_ptr_t;
+
+      using function_t = typename factory::function_t;
+
+      static network_ptr_t
+      from_temporal_logic(std::string pattern,
+                          std::map<std::string, function_t> predicates =
+                              std::map<std::string, function_t>()) {
+        return make_network<factory>::from_temporal_logic(pattern, predicates);
+      }
+    };
+};
 
 template <typename time_t>
 struct discrete_timed {
