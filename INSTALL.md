@@ -1,26 +1,27 @@
-Reelay has a few dependecies that needs to be installed before the use.
+# Install 
 
-First, install ANTLR4 C++ Runtime (this also requires CMake):
+Reelay solely tested on the latest Ubuntu LTS (18.04). A fresh Ubuntu installation at least requires the installation of following packages:
+
+     sudo apt-get update
+     sudo apt-get install -y cmake
+     sudo apt-get install -y libboost-all-dev
+
+Then, clone the `reelay` repository:
     
-     git clone https://github.com/antlr/antlr4.git
-     cd antlr4/runtime/Cpp
-     mkdir build && mkdir run && cd build
-     cmake .. 
-     make
+    git clone https://github.com/doganulus/reelay.git
+    cd reelay
+
+The following step is to build the expression parser module. This requires the installation of ANTLR4 parser generator. The following commands will download ANTLR4 from the source, build, and install ANTLR4 runtime library:
+
+     make antlr4-runtime
+     sudo make antlr4-runtime-install
+
+Finally build and install `reelay` library, which contains the runtime parser module as follows:
+
+     make 
      sudo make install
 
-Please refer to (the original documentation)[https://github.com/antlr/antlr4/tree/master/runtime/Cpp] for any problem.
+Note that you may be needed to update your shared library cache via `sudo ldconfig`.
 
-Then, install reelay/monitors library as follows:
-
-     git clone https://github.com/doganulus/monitors.git
-     make
-     sudo make install
-
-Finally, build some applications for a head start:
-
-	 make apps
-	 sudo make apps-install
-
-The latter would build executables to monitor temporal logic formulas over CSV files.
+Voila!
 
