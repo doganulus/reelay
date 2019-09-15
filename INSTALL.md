@@ -21,7 +21,7 @@ Finally build and install `reelay` library, which contains the runtime parser mo
      make 
      sudo make install
 
-Note that you may be needed to update your shared library cache via `sudo ldconfig`.
+Note that you may need to update your shared library cache via `sudo ldconfig`.
 
 Voila!
 

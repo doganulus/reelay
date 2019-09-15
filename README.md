@@ -15,13 +15,13 @@ The use of `reelay` monitors is pretty straighforward and we construct an online
 		current_output = my_monitor->output(); // obtain the current output
 	}
 
-THe ability to construct discrete and dense timed monitors from timed specifications is the main feature of Reelay. We construct online monitor from such specification as follows:
+The ability to construct discrete and dense timed monitors from timed specifications is the main goal and feature of `reelay` project. We construct online monitor from such specification as follows:
      
     auto my_monitor = reelay::discrete_timed<time_t>::monitor<input_t>::from_temporal_logic("p1 since[18:24] p2");
 
     auto my_monitor = reelay::dense_timed<time_t>::monitor<input_t>::from_temporal_logic("p1 since[18:24] p2");
 
-From online monitoring point of view, the essential difference between discrete and dense time models is the duration of updates, which is strictly one unit for the discrete setting whereas it could be arbitrarily long (or short) for a dense time monitor. For more information, please check [discrete]() and [dense]() timed settings. These settings are usually called metric temporal logic (MTL) and very popular for specifiying properties of real-time/cyber-physical systems.
+From the online monitoring point of view, the essential difference between discrete and dense time models is the duration of updates, which is strictly one time unit for the discrete setting whereas it could be arbitrarily long or short for the denseW setting. For more information, please check [discrete]() and [dense]() timed settings. These settings are usually called metric temporal logic (MTL) and very popular for specifiying properties of real-time/cyber-physical systems.
 
 # Monitoring Apps
 
