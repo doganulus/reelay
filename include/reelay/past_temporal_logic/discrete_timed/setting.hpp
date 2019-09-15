@@ -12,7 +12,7 @@
 #include "memory"
 #include "string"
 
-
+#include "reelay/intervals.hpp"
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/networks/discrete_timed_network.hpp"
 

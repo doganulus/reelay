@@ -1,5 +1,6 @@
 #include "iostream"
 #include "vector"
+#include "limits"
 
 #include "catch.hpp"
 
@@ -7,6 +8,9 @@
 
 using input_t = std::map<std::string, std::string>;
 using output_t = int64_t;
+
+output_t top = std::numeric_limits<output_t>::max();
+output_t bot = -std::numeric_limits<output_t>::max();
 
 TEST_CASE("Atoms") {
 

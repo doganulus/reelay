@@ -90,7 +90,7 @@ apps:
 	mkdir -p bin
 	$(CXX) $(CXXFLAGS) apps/mtl/rymtl.cpp -o bin/rymtl $(INCLUDE_FLAGS) $(LIB_FLAGS)
 
-test: test_main test_untimed test_discrete_timed test_dense_timed
+test: test_main test_untimed test_discrete_timed test_dense_timed test_untimed_robustness test_discrete_timed_robustness
 
 test_main:
 	mkdir -p build/test
@@ -110,7 +110,7 @@ test_discrete_timed:
 
 test_discrete_timed_robustness:
 	$(CXX) $(CXXFLAGS) build/test/main.o test/test_setting_discrete_timed_robustness.cpp -o build/test/test_setting_discrete_timed_robustness $(INCLUDE_FLAGS) $(LIB_FLAGS)
-	./build/test/test_discrete_timed_robustness -r compact
+	./build/test/test_setting_discrete_timed_robustness -r compact
 
 test_dense_timed:
 	$(CXX) $(CXXFLAGS) build/test/main.o test/test_setting_dense_timed.cpp -o build/test/test_setting_dense_timed $(INCLUDE_FLAGS) $(LIB_FLAGS)

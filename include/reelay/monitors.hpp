@@ -81,13 +81,24 @@ struct discrete_timed {
     // static network_ptr_t from_regular_expressions();
   };
 
-  // template <typename value_t>
-  // struct robustness {
-  //     template <typename input_t>
-  //     struct monitor
-  //     {
-  //     };
-  // };
+  template <typename output_t> struct robustness {
+    template <typename input_t> struct monitor {
+      using factory = 
+        discrete_timed_robustness_setting::factory<input_t, output_t, time_t>;
+
+      using network_t = typename factory::network_t;
+      using network_ptr_t = typename factory::network_ptr_t;
+
+      using function_t = typename factory::function_t;
+      using predicates_t = std::map<std::string, function_t>;
+
+      static network_ptr_t
+      from_temporal_logic(std::string pattern,
+                          predicates_t predicates = predicates_t()) {
+        return make_network<factory>::from_temporal_logic(pattern, predicates);
+      }
+    };
+  };
 };
 
 template <typename time_t>
@@ -113,12 +124,23 @@ struct dense_timed {
     // static type from_regular_expressions();
   };
 
-  // template <typename value_t>
-  // struct robustness {
-  //     template <typename input_t>
-  //     struct monitor
-  //     {
-  //     };
+  // template <typename output_t> struct robustness {
+  //   template <typename input_t> struct monitor {
+  //     using factory =
+  //       dense_timed_robustness_setting::factory<input_t, output_t, time_t>;
+
+  //     using network_t = typename factory::network_t;
+  //     using network_ptr_t = typename factory::network_ptr_t;
+
+  //     using function_t = typename factory::function_t;
+  //     using predicates_t = std::map<std::string, function_t>;
+
+  //     static network_ptr_t
+  //     from_temporal_logic(std::string pattern,
+  //                         predicates_t predicates = predicates_t()) {
+  //       return make_network<factory>::from_temporal_logic(pattern, predicates);
+  //     }
+  //   };
   // };
 };
 }  // namespace reelay
