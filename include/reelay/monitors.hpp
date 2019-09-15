@@ -18,8 +18,7 @@
 #include "reelay/networks.hpp"
 #include "reelay/settings.hpp"
 
-
-#include "reelay/interval_set.hpp"
+#include "reelay/intervals.hpp"
 
 namespace reelay {
 

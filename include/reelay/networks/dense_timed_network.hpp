@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "reelay/interval_set.hpp"
+#include "reelay/intervals.hpp"
 #include "reelay/lexical_cast.hpp"
 #include "reelay/networks/basic_structure.hpp"
 
