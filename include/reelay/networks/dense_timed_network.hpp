@@ -14,28 +14,27 @@
 
 namespace reelay {
 
-template <typename input_t, typename output_t, typename time_t>
-struct dense_timed_network : dense_timed_state<input_t, output_t, time_t> {
-  using time_type = time_t;
-  using input_type = input_t;
-  using output_type = output_t;
-  using vector_output_type = std::vector<std::pair<time_t, bool>>;
+template <typename X, typename Y, typename T>
+struct dense_timed_network : dense_timed_state<X, Y, T> {
+  using time_t = T;
+  using input_t = X;
+  using output_t = Y;
 
   using type = dense_timed_network<input_t, output_t, time_t>;
 
-  using node_type = dense_timed_node<output_t, time_t>;
-  using state_type = dense_timed_state<input_t, output_t, time_t>;
+  using node_t = dense_timed_node<output_t, time_t>;
+  using state_t = dense_timed_state<input_t, output_t, time_t>;
 
   time_t previous = 0;
   time_t current = 0;
 
   input_t prevargs;
 
-  std::shared_ptr<node_type> output_node;
-  std::vector<std::shared_ptr<state_type>> states;
+  std::shared_ptr<node_t> output_node;
+  std::vector<std::shared_ptr<state_t>> states;
 
-  dense_timed_network(std::shared_ptr<node_type> n,
-                      std::vector<std::shared_ptr<state_type>> ss)
+  dense_timed_network(std::shared_ptr<node_t> n,
+                      std::vector<std::shared_ptr<state_t>> ss)
       : output_node(n), states(ss) {}
 
   void update(const input_t& args) {
@@ -66,105 +65,9 @@ struct dense_timed_network : dense_timed_state<input_t, output_t, time_t> {
     return this->output_node->output(this->previous, this->current);
   }
 
-  std::string output_verbosity_0() {
-    output_t result = this->output_node->output(this->previous, this->current);
-
-    std::ostringstream buffer;
-    for (const auto& intv : result) {
-      buffer << "Fails between times " << intv.lower() << " and "
-             << intv.upper() << std::endl;
-    }
-
-    return buffer.str();
-  }
-
-  std::string output_verbosity_1() {
-    output_t result = this->output_node->output(this->previous, this->current);
-    std::ostringstream buffer;
-
-    time_t t;
-
-    if (result.empty()) {
-      buffer << this->current << ","
-             << "0" << std::endl;
-    }
-
-    for (const auto& intv : result) {
-      if (intv.lower() > this->previous) {
-        t = intv.upper();
-        buffer << intv.lower() << ","
-               << "0" << std::endl;
-        buffer << intv.upper() << ","
-               << "1" << std::endl;
-      } else if (intv.upper() < this->current) {
-        t = intv.upper();
-        buffer << intv.upper() << ","
-               << "1" << std::endl;
-      }
-    }
-
-    if (t < this->current) {
-      buffer << this->current << ","
-             << "0" << std::endl;
-    }
-
-    return buffer.str();
-  }
-
-  std::string output_verbosity_2() {
-    output_t result = this->output_node->output(this->previous, this->current);
-    std::ostringstream buffer;
-
-    if (result.empty()) {
-      buffer << this->current << ",";
-      for (auto const& [k, v] : this->prevargs) {
-        if (k != "time") {
-          buffer << v << ",";
-        }
-      }
-      buffer << "0" << std::endl;
-    }
-
-    for (const auto& intv : result) {
-      if (intv.lower() > this->previous) {
-        buffer << intv.lower() << ",";
-        for (auto const& [k, v] : this->prevargs) {
-          if (k != "time") {
-            buffer << v << ",";
-          }
-        }
-        buffer << "0" << std::endl;
-
-        buffer << intv.upper() << ",";
-        for (auto const& [k, v] : this->prevargs) {
-          if (k != "time") {
-            buffer << v << ",";
-          }
-        }
-        buffer << "1" << std::endl;
-
-      } else {
-        buffer << intv.upper() << ",";
-        for (auto const& [k, v] : this->prevargs) {
-          if (k != "time") {
-            buffer << v << ",";
-          }
-        }
-        buffer << "1" << std::endl;
-      }
-    }
-
-    if (result.end()->upper() < this->current) {
-      buffer << this->current << ",";
-      for (auto const& [k, v] : this->prevargs) {
-        if (k != "time") {
-          buffer << v << ",";
-        }
-      }
-      buffer << "0" << std::endl;
-    }
-
-    return buffer.str();
+  output_t negated() {
+    return interval_set<time_t>(interval<time_t>::
+      left_open(this->previous, this->current)) - this->output();
   }
 };
 
