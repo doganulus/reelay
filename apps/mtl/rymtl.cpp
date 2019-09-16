@@ -12,7 +12,7 @@
 
 
 int main(int argc, const char* argv[]) {
-  using time_t = int64_t;
+  using time_t = double;
   using input_t = std::map<std::string, std::string>;
   using interval_set = reelay::interval_set<time_t>;
 
@@ -30,8 +30,8 @@ int main(int argc, const char* argv[]) {
    *  0 - Print violations only
    */
   program.add_argument("--verbose")
-      .help("enable verbose printing (default: 2)")
-      .default_value(2)
+      .help("enable output verbosity level (default: 0)")
+      .default_value(0)
       .action([](const std::string& value) { return std::stoi(value); });
 
   program.add_argument("--discrete")
@@ -55,7 +55,7 @@ int main(int argc, const char* argv[]) {
   std::string spec = program.get<std::string>("spec");
   std::string filename = program.get<std::string>("filename");
 
-  int verbosity = program.get<int>("--verbose");
+  int verbosity = 0; // program.get<int>("--verbose"); // Temporarily disabled
   time_t period = program.get<int>("--period");
 
   csvstream csvin(filename);

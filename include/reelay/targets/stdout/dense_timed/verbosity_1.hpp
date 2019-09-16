@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "reelay/interval_set.hpp"
+#include "reelay/intervals.hpp"
 #include "reelay/settings.hpp"
 #include "reelay/targets/stdout/dense_timed/stdout_formatter.hpp"
 

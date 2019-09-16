@@ -210,7 +210,7 @@ struct ReelayTemporalLogicVisitor : public TemporalLogicBaseVisitor {
       TemporalLogicParser::TimedSometimePContext* ctx) override {
     auto child = this->visit(ctx->child);
 
-    std::pair<time_t, time_t> bounds = this->visit(ctx->bound);
+    std::pair<float, float> bounds = this->visit(ctx->bound);
 
     auto args = std::vector<std::shared_ptr<node_t>>({child});
     auto expr = Setting::make_state("past_sometime_bounded", args, bounds);
@@ -225,7 +225,7 @@ struct ReelayTemporalLogicVisitor : public TemporalLogicBaseVisitor {
       TemporalLogicParser::TimedAlwaysPContext* ctx) override {
     auto child = this->visit(ctx->child);
 
-    std::pair<time_t, time_t> bounds = this->visit(ctx->bound);
+    std::pair<float, float> bounds = this->visit(ctx->bound);
 
     auto args = std::vector<std::shared_ptr<node_t>>({child});
     auto expr = Setting::make_state("past_always_bounded", args, bounds);
@@ -241,7 +241,7 @@ struct ReelayTemporalLogicVisitor : public TemporalLogicBaseVisitor {
     auto left = this->visit(ctx->left);
     auto right = this->visit(ctx->right);
 
-    std::pair<time_t, time_t> bounds = this->visit(ctx->bound);
+    std::pair<float, float> bounds = this->visit(ctx->bound);
 
     auto args = std::vector<std::shared_ptr<node_t>>({left, right});
     auto expr = Setting::make_state("since_bounded", args, bounds);
@@ -254,8 +254,8 @@ struct ReelayTemporalLogicVisitor : public TemporalLogicBaseVisitor {
 
   antlrcpp::Any visitLowerBound(
       TemporalLogicParser::LowerBoundContext* ctx) override {
-    time_t lbound = std::stoi(ctx->l->getText());  // See boost::lexical_cast
-    time_t ubound = 0;
+    float lbound = boost::lexical_cast<float>(ctx->l->getText());
+    float ubound = 0;
 
     // std::cout << lbound << ubound << std::endl;
 
@@ -264,8 +264,8 @@ struct ReelayTemporalLogicVisitor : public TemporalLogicBaseVisitor {
 
   antlrcpp::Any visitUpperBound(
       TemporalLogicParser::UpperBoundContext* ctx) override {
-    time_t lbound = 0;
-    time_t ubound = std::stoi(ctx->u->getText());  // See boost::lexical_cast
+    float lbound = 0;
+    float ubound = boost::lexical_cast<float>(ctx->u->getText());
 
     // std::cout << lbound << ubound << std::endl;
 
@@ -274,10 +274,10 @@ struct ReelayTemporalLogicVisitor : public TemporalLogicBaseVisitor {
 
   antlrcpp::Any visitBothBound(
       TemporalLogicParser::BothBoundContext* ctx) override {
-    time_t lbound = std::stoi(ctx->l->getText());  // See boost::lexical_cast
-    time_t ubound = std::stoi(ctx->u->getText());  // See boost::lexical_cast
+    float lbound = boost::lexical_cast<float>(ctx->l->getText());
+    float ubound = boost::lexical_cast<float>(ctx->u->getText());
 
-    // std::cout << lbound << ubound << std::endl;
+    std::cout << lbound << ubound << std::endl;
 
     return std::make_pair(lbound, ubound);
   }
