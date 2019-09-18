@@ -277,7 +277,7 @@ struct ReelayTemporalLogicVisitor : public TemporalLogicBaseVisitor {
     float lbound = boost::lexical_cast<float>(ctx->l->getText());
     float ubound = boost::lexical_cast<float>(ctx->u->getText());
 
-    std::cout << lbound << ubound << std::endl;
+    // std::cout << lbound << ubound << std::endl;
 
     return std::make_pair(lbound, ubound);
   }
