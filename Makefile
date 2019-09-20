@@ -85,12 +85,11 @@ antlr4-runtime-uninstall:
 antlr4-runtime-clean:
 	rm -rf build/antlr4
 
-
 apps:
 	mkdir -p bin
 	$(CXX) $(CXXFLAGS) apps/mtl/rymtl.cpp -o bin/rymtl $(INCLUDE_FLAGS) $(LIB_FLAGS)
 
-test: test_main test_untimed test_discrete_timed test_dense_timed test_untimed_robustness test_discrete_timed_robustness
+test: test_main test_untimed test_discrete_timed test_dense_timed test_untimed_robustness test_discrete_timed_robustness apps
 
 test_main:
 	mkdir -p build/test
