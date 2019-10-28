@@ -21,7 +21,7 @@
 #include "reelay/targets/stdout/dense_timed/stdout_formatter.hpp"
 #include "reelay/targets/stdout/dense_timed/verbosity_0.hpp"
 #include "reelay/targets/stdout/dense_timed/verbosity_1.hpp"
-#include "reelay/targets/stdout/dense_timed/verbosity_2.hpp"
+// #include "reelay/targets/stdout/dense_timed/verbosity_2.hpp"
 
 namespace reelay {
 
@@ -107,7 +107,7 @@ make_stdout_formatter(
   fmt_ptr_t formatter;
 
   if (verbosity >= 2) {
-    formatter = std::make_shared<stdout_formatter_verbosity_2<input_t, time_t>>(
+    formatter = std::make_shared<stdout_formatter_verbosity_1<input_t, time_t>>(
         network, header);
   } else if (verbosity == 1) {
     formatter = std::make_shared<stdout_formatter_verbosity_1<input_t, time_t>>(
