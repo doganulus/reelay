@@ -62,7 +62,7 @@ int main(int argc, const char *argv[]) {
   int time;
   auto header = reader.get_col_names();
 
-  if (program.get<bool>("--discrete") or) {
+  if (program.get<bool>("--discrete")) {
 
     auto network =
         reelay::discrete_timed<time_t>::monitor<input_t>::from_temporal_logic(

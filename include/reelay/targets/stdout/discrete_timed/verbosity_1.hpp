@@ -39,7 +39,7 @@ struct stdout_formatter_verbosity_1 : public stdout_formatter<X, T> {
 
     buffer << "time"
            << ",";
-    buffer << "out" << std::endl;
+    buffer << "value" << std::endl;
 
     return buffer.str();
   }

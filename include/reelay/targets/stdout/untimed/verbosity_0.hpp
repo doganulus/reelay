@@ -9,7 +9,7 @@
 #pragma once
 
 #include "reelay/settings.hpp"
-#include "reelay/targets/stdout/discrete_timed/stdout_formatter.hpp"
+#include "reelay/targets/stdout/untimed/stdout_formatter.hpp"
 
 namespace reelay {
 namespace untimed_setting {

@@ -95,8 +95,7 @@ timescales-clean:
 
 apps:
 	mkdir -p bin
-	# $(CXX) $(CXXFLAGS) apps/mtl/rymtl.cpp -o bin/rymtl $(INCLUDE_FLAGS) $(LIB_FLAGS)
-	$(CXX) $(CXXFLAGS) apps/mtl/rymtl2.cpp -o bin/rymtl $(INCLUDE_FLAGS) $(LIB_FLAGS)
+	$(CXX) $(CXXFLAGS) apps/mtl/rymtl.cpp -o bin/rymtl $(INCLUDE_FLAGS) $(LIB_FLAGS)
 
 test_csvparser:
 	mkdir -p bin/csvparser

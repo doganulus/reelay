@@ -47,7 +47,7 @@ struct stdout_formatter_verbosity_1 : public stdout_formatter<X, T> {
 
     buffer << "time"
            << ",";
-    buffer << "out" << std::endl;
+    buffer << "value" << std::endl;
 
     return buffer.str();
   }
@@ -60,25 +60,24 @@ struct stdout_formatter_verbosity_1 : public stdout_formatter<X, T> {
     if (result.empty()) {
       buffer << network->current << ","
              << "0" << std::endl;
-    }
-
-    for (const auto& intv : result) {
-      if (intv.lower() > network->previous) {
+    } else {
+      for (const auto& intv : result) {
         t = intv.upper();
-        buffer << intv.lower() << ","
-               << "0" << std::endl;
-        buffer << intv.upper() << ","
-               << "1" << std::endl;
-      } else {
-        t = intv.upper();
-        buffer << intv.upper() << ","
-               << "1" << std::endl;
+        if (intv.lower() > network->previous) {
+          buffer << intv.lower() << ","
+                << "0" << std::endl;
+          buffer << intv.upper() << ","
+                << "1" << std::endl;
+        } else {
+          buffer << intv.upper() << ","
+                << "1" << std::endl;
+        }
       }
-    }
 
-    if (t < network->current) {
-      buffer << network->current << ","
-             << "0" << std::endl;
+      if (t < network->current) {
+        buffer << network->current << ","
+              << "0" << std::endl;
+      }
     }
 
     return buffer.str();
