@@ -1,0 +1,3 @@
+bin/rymtl 'historically((once[:10](q)) -> ((not p) since q))' build/timescales/fullsuite/AbsentAQ/Discrete/1M/AbsentAQ10.csv --discrete
+bin/rymtl 'historically((once[:100](q)) -> ((not p) since q))' build/timescales/fullsuite/AbsentAQ/Discrete/1M/AbsentAQ100.csv --discrete
+bin/rymtl 'historically((once[:1000](q)) -> ((not p) since q))' build/timescales/fullsuite/AbsentAQ/Discrete/1M/AbsentAQ1000.csv --discrete
