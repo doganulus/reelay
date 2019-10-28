@@ -3,7 +3,7 @@ CXXFLAGS=-std=c++17 -fPIC -O2 -g -pthread -fno-new-ttp-matching # -Wall -Wextra 
 LDFLAGS=-shared  # linking flags
 
 LIB_FLAGS=-lreelay -lantlr4-runtime
-INCLUDE_FLAGS=-I./include -I/usr/local/include/antlr4-runtime
+INCLUDE_FLAGS=-I. -I./include -I/usr/local/include/antlr4-runtime
 
 NAME = reelay
 VERSION = 1.2
@@ -85,9 +85,27 @@ antlr4-runtime-uninstall:
 antlr4-runtime-clean:
 	rm -rf build/antlr4
 
+timescales: 
+	mkdir -p build
+	cd build && rm -rf timescales && git clone https://github.com/doganulus/timescales.git
+	cd build/timescales && make full 
+
+timescales-clean:
+	rm -rf build/timescales
+
 apps:
 	mkdir -p bin
-	$(CXX) $(CXXFLAGS) apps/mtl/rymtl.cpp -o bin/rymtl $(INCLUDE_FLAGS) $(LIB_FLAGS)
+	# $(CXX) $(CXXFLAGS) apps/mtl/rymtl.cpp -o bin/rymtl $(INCLUDE_FLAGS) $(LIB_FLAGS)
+	$(CXX) $(CXXFLAGS) apps/mtl/rymtl2.cpp -o bin/rymtl $(INCLUDE_FLAGS) $(LIB_FLAGS)
+
+test_csvparser:
+	mkdir -p bin/csvparser
+	$(CXX) $(CXXFLAGS) apps/csvparser/basic.cpp -o bin/csvparser/csvparser_basic $(INCLUDE_FLAGS)
+	$(CXX) $(CXXFLAGS) apps/csvparser/fast.cpp -o bin/csvparser/csvparser_fast $(INCLUDE_FLAGS)
+	$(CXX) $(CXXFLAGS) apps/csvparser/modern.cpp -o bin/csvparser/csvparser_modern $(INCLUDE_FLAGS)
+	multitime -n 10 bin/csvparser/csvparser_basic build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv
+	multitime -n 10 bin/csvparser/csvparser_fast build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv
+	multitime -n 10 bin/csvparser/csvparser_modern build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv 
 
 test: test_main test_untimed test_discrete_timed test_dense_timed test_untimed_robustness test_discrete_timed_robustness apps
 
@@ -114,3 +132,8 @@ test_discrete_timed_robustness:
 test_dense_timed:
 	$(CXX) $(CXXFLAGS) build/test/main.o test/test_setting_dense_timed.cpp -o build/test/test_setting_dense_timed $(INCLUDE_FLAGS) $(LIB_FLAGS)
 	./build/test/test_setting_dense_timed -r compact
+
+test_mtl_performance_discrete: test/timescales/discrete/multitime/*.txt
+	for batchfile in $^ ; do \
+        multitime -n 10 -b $${batchfile} ; \
+    done
