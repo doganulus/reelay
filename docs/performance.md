@@ -2,6 +2,12 @@
 
 We use the benchmark generator [timescales](https://github.com/doganulus/timescales) to benchmark the performance of reelay MTL monitoring app.  For measurements, we use [multitime](https://github.com/ltratt/multitime) utility. Tests are performed using a laptop computer (Intel Core i5-7200U CPU @2.50 Ghz, 8GB RAM) on Ubuntu 18.04 on WSL (Build 18362.449).
 
+The full benchmark suite of `timescales` can be built using the command:
+
+    make timescales
+
+This command will clone `timescales` repository and generate the full suite.
+
 ## Discrete Time MTL Application 
 
 Test command:
