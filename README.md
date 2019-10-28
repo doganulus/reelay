@@ -29,6 +29,8 @@ A set of (standalone, command-line) online monitoring applications utilizing `re
 
 The first application `rymtl` monitors  over CSV files providing a number of convinient features such as dense-time monitoring by fixed duration steps.
 
+Performance of monitoring apps can be found [here](https://github.com/doganulus/reelay/blob/master/docs/performance.md).
+
 # Current Roadmap
 
 `reelay` is an ongoing project and below is a number of features and plans to expand the scope and improve the usability of the library.
