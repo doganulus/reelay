@@ -68,14 +68,11 @@ int main(int argc, const char *argv[]) {
         reelay::discrete_timed<time_t>::monitor<input_t>::from_temporal_logic(
             spec);
 
-    auto formatter =
-        reelay::discrete_timed_setting::make_stdout_formatter<input_t, time_t>(
-            network, header, verbosity);
-
-    std::cout << formatter->header();
     for (auto &row : reader) {
       network->update(row);
-      std::cout << formatter->output();
+      if (not network->output()) {
+        std::cout << "False at " << network->now << std::endl;
+      }
     }
 
   } else if (period > 0) {

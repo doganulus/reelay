@@ -35,13 +35,11 @@ struct stdout_formatter_verbosity_0 : public stdout_formatter<X, T> {
 
   std::string header() { return std::string(); }
   std::string output() {
-    std::ostringstream buffer;
 
     if(not network->output()){
-      buffer << "False at " << network->now << std::endl;
+      std::cout << "False at " << network->now << std::endl;
     }
 
-    return buffer.str();
   }
 };
 

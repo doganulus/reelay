@@ -31,7 +31,7 @@ struct proposition : public discrete_timed_state<X, bool, T> {
   function_t fn;
 
   proposition(std::string name)
-      : fn([name](const input_t& x) { return std::stoi(x.at(name)); }) {}
+      : fn([name](const input_t& x) { return x.at(name) != "0"; }) {}
 
   void update(const input_t& args, time_t now) override { value = fn(args); }
 

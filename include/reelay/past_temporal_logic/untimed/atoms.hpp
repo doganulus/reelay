@@ -25,7 +25,7 @@ template <typename X> struct proposition : public untimed_state<X, bool> {
   std::function<bool(const input_t &)> fn;
 
   proposition(std::string name)
-      : fn([name](const input_t &x) { return std::stoi(x.at(name)); }) {}
+      : fn([name](const input_t &x) { return x.at(name) != "0"; }) {}
 
   void update(const input_t &args) override { value = fn(args); }
 
