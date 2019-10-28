@@ -48,8 +48,7 @@ struct stdout_formatter_verbosity_0 : public stdout_formatter<X,T> {
   std::string output() {
     std::ostringstream buffer;
 
-    interval_set_t result = network->negated();
-
+    interval_set_t result = network->noutput();
 
     for (const auto& intv : result) {
       buffer << "False between " << intv.lower() << " and "

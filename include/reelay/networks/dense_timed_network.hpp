@@ -65,10 +65,61 @@ struct dense_timed_network : dense_timed_state<X, Y, T> {
     return this->output_node->output(this->previous, this->current);
   }
 
-  output_t negated() {
+  output_t noutput() {
     return interval_set<time_t>(interval<time_t>::
       left_open(this->previous, this->current)) - this->output();
   }
+
+  std::vector<std::pair<time_t, bool>> voutput() {
+    time_t t;
+    reelay::interval_set<time_t> result = this->output();
+    auto vresult = std::vector<std::pair<time_t, bool>>();
+
+    if (result.empty()) {
+      vresult.push_back(std::pair<time_t, bool>(this->current, false));
+    } else {
+      for (const auto &intv : result) {
+        t = intv.upper();
+        if (intv.lower() > this->previous) {
+          vresult.push_back(std::pair<time_t, bool>(intv.lower(), false));
+          vresult.push_back(std::pair<time_t, bool>(intv.upper(), true));
+        } else {
+          vresult.push_back(std::pair<time_t, bool>(intv.upper(), true));
+        }
+      }
+
+      if (t < this->current) {
+        vresult.push_back(std::pair<time_t, bool>(this->current, false));
+      }
+    }
+    return vresult;
+  }
+
+  std::vector<std::pair<time_t, bool>> nvoutput() {
+    time_t t;
+    reelay::interval_set<time_t> result = this->noutput();
+    auto vresult = std::vector<std::pair<time_t, bool>>();
+
+    if (result.empty()) {
+      vresult.push_back(std::pair<time_t, bool>(this->current, false));
+    } else {
+      for (const auto &intv : result) {
+        t = intv.upper();
+        if (intv.lower() > this->previous) {
+          vresult.push_back(std::pair<time_t, bool>(intv.lower(), false));
+          vresult.push_back(std::pair<time_t, bool>(intv.upper(), true));
+        } else {
+          vresult.push_back(std::pair<time_t, bool>(intv.upper(), true));
+        }
+      }
+
+      if (t < this->current) {
+        vresult.push_back(std::pair<time_t, bool>(this->current, false));
+      }
+    }
+    return vresult;
+  }
+
 };
 
 }  // namespace reelay

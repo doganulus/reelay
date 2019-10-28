@@ -52,34 +52,11 @@ struct stdout_formatter_verbosity_1 : public stdout_formatter<X, T> {
     return buffer.str();
   }
   std::string output() {
-    time_t t;
     std::ostringstream buffer;
 
-    interval_set_t result = network->output();
-
-    if (result.empty()) {
-      buffer << network->current << ","
-             << "0" << std::endl;
-    } else {
-      for (const auto& intv : result) {
-        t = intv.upper();
-        if (intv.lower() > network->previous) {
-          buffer << intv.lower() << ","
-                << "0" << std::endl;
-          buffer << intv.upper() << ","
-                << "1" << std::endl;
-        } else {
-          buffer << intv.upper() << ","
-                << "1" << std::endl;
-        }
-      }
-
-      if (t < network->current) {
-        buffer << network->current << ","
-              << "0" << std::endl;
-      }
+    for (const auto &p : network->voutput()) {
+      std::cout << p.first << "," << p.second << std::endl;
     }
-
     return buffer.str();
   }
 };

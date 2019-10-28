@@ -1,6 +1,6 @@
-CXX=g++ # C compiler
-CXXFLAGS=-std=c++17 -fPIC -O2 -g -pthread -fno-new-ttp-matching # -Wall -Wextra  C flags
-LDFLAGS=-shared  # linking flags
+CXX=g++# C compiler
+CXXFLAGS=-std=c++17 -fPIC -O2 -pthread -fno-new-ttp-matching# -Wall -Wextra C flags
+LDFLAGS=-shared# linking flags
 
 LIB_FLAGS=-lreelay -lantlr4-runtime
 INCLUDE_FLAGS=-I. -I./include -I/usr/local/include/antlr4-runtime
