@@ -93,9 +93,15 @@ timescales:
 timescales-clean:
 	rm -rf build/timescales
 
-apps:
+apps: rymtl rystl
+
+rymtl:
 	mkdir -p bin
-	$(CXX) $(CXXFLAGS) apps/mtl/rymtl.cpp -o bin/rymtl $(INCLUDE_FLAGS) $(LIB_FLAGS)
+	$(CXX) $(CXXFLAGS) apps/mtl/main.cpp -o bin/rymtl $(INCLUDE_FLAGS) $(LIB_FLAGS)
+
+rystl:
+	mkdir -p bin
+	$(CXX) $(CXXFLAGS) apps/stl/main.cpp -o bin/rystl $(INCLUDE_FLAGS) $(LIB_FLAGS)
 
 test_csvparser:
 	mkdir -p bin/csvparser

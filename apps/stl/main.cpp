@@ -10,15 +10,15 @@
 #include "../utils/argparse.hpp"
 #include "../utils/csvparser_modern.hpp"
 
-int main(int argc, const char *argv[]) {
+int main(int argc, const char* argv[]) {
   using time_t = double;
   using input_t = csv::CSVRow;
   using interval_set = reelay::interval_set<time_t>;
 
-  argparse::ArgumentParser program("rymtl");
+  argparse::ArgumentParser program("rystl");
 
   program.add_argument("spec").help(
-      "specify a past metric temporal logic formula");
+      "specify a past signal temporal logic formula");
 
   program.add_argument("filename").help("specify a CSV file to monitor");
 
@@ -31,7 +31,7 @@ int main(int argc, const char *argv[]) {
   program.add_argument("--verbose")
       .help("enable output verbosity level (default: 0)")
       .default_value(0)
-      .action([](const std::string &value) { return std::stoi(value); });
+      .action([](const std::string& value) { return std::stoi(value); });
 
   program.add_argument("--discrete")
       .help("enable discrete time semantics")
@@ -41,11 +41,11 @@ int main(int argc, const char *argv[]) {
   program.add_argument("-p", "--period")
       .help("define a unit time period")
       .default_value(0)
-      .action([](const std::string &value) { return std::stoi(value); });
+      .action([](const std::string& value) { return std::stoi(value); });
 
   try {
     program.parse_args(argc, argv);
-  } catch (const std::runtime_error &err) {
+  } catch (const std::runtime_error& err) {
     std::cout << err.what() << std::endl;
     program.print_help();
     exit(0);
@@ -68,11 +68,14 @@ int main(int argc, const char *argv[]) {
         reelay::discrete_timed<time_t>::monitor<input_t>::from_temporal_logic(
             spec);
 
+    auto formatter =
+        reelay::discrete_timed_setting::make_stdout_formatter<input_t, time_t>(
+            network, header, verbosity);
+
+    std::cout << formatter->header();
     for (auto &row : reader) {
       network->update(row);
-      if (not network->output()) {
-        std::cout << "False at " << network->now << std::endl;
-      }
+      std::cout << formatter->output();
     }
 
   } else if (period > 0) {
@@ -108,3 +111,4 @@ int main(int argc, const char *argv[]) {
     }
   }
 }
+
