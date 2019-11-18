@@ -48,7 +48,7 @@ install:
 	cp -p $(TARGET) $(DESTDIR)$(LIBDIR)/$(TARGET)
 
 uninstall:
-	rm -rf $(DESTDIR)$(INCDIR)/$(NAME) 
+	rm -rf $(DESTDIR)$(INCDIR)/$(NAME)
 	rm -rf $(DESTDIR)$(LIBDIR)/$(TARGET)
 
 develop:
@@ -58,8 +58,8 @@ develop:
 antlr4-parser:
 	mkdir -p build
 	cd build && curl -O https://www.antlr.org/download/antlr-4.7.2-complete.jar
-	mkdir -p $(ANTLR4_TL_SOURCES)	
-	java -jar $(ANTLR4_EXE) $(ANTLR4_FLAGS) -o $(ANTLR4_TL_SOURCES) $(ANTLR4_GRAMMAR_DIR)/$(ANTLR4_TL_GRAMMAR).g4 
+	mkdir -p $(ANTLR4_TL_SOURCES)
+	java -jar $(ANTLR4_EXE) $(ANTLR4_FLAGS) -o $(ANTLR4_TL_SOURCES) $(ANTLR4_GRAMMAR_DIR)/$(ANTLR4_TL_GRAMMAR).g4
 	mkdir -p $(ANTLR4_TL_HEADERS)
 	cp -a $(ANTLR4_TL_SOURCES)/*.h $(ANTLR4_TL_HEADERS)
 
@@ -85,10 +85,10 @@ antlr4-runtime-uninstall:
 antlr4-runtime-clean:
 	rm -rf build/antlr4
 
-timescales: 
+timescales:
 	mkdir -p build
 	cd build && rm -rf timescales && git clone https://github.com/doganulus/timescales.git
-	cd build/timescales && make full 
+	cd build/timescales && make full
 
 timescales-clean:
 	rm -rf build/timescales
@@ -97,6 +97,12 @@ apps:
 	mkdir -p bin
 	$(CXX) $(CXXFLAGS) apps/mtl/rymtl.cpp -o bin/rymtl $(INCLUDE_FLAGS) $(LIB_FLAGS)
 
+apps-install:
+	cp -p bin/rymtl /usr/local/bin/rymtl
+
+apps-uninstall:
+	rm /usr/local/bin/rymtl
+
 test_csvparser:
 	mkdir -p bin/csvparser
 	$(CXX) $(CXXFLAGS) apps/csvparser/basic.cpp -o bin/csvparser/csvparser_basic $(INCLUDE_FLAGS)
@@ -104,7 +110,7 @@ test_csvparser:
 	$(CXX) $(CXXFLAGS) apps/csvparser/modern.cpp -o bin/csvparser/csvparser_modern $(INCLUDE_FLAGS)
 	multitime -n 10 bin/csvparser/csvparser_basic build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv
 	multitime -n 10 bin/csvparser/csvparser_fast build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv
-	multitime -n 10 bin/csvparser/csvparser_modern build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv 
+	multitime -n 10 bin/csvparser/csvparser_modern build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv
 
 test: test_main test_untimed test_discrete_timed test_dense_timed test_untimed_robustness test_discrete_timed_robustness apps
 
