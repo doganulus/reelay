@@ -105,9 +105,11 @@ rystl:
 
 apps-install:
 	cp -p bin/rymtl /usr/local/bin/rymtl
+	cp -p bin/rystl /usr/local/bin/rystl
 
 apps-uninstall:
 	rm /usr/local/bin/rymtl
+	rm /usr/local/bin/rystl
 
 test_csvparser:
 	mkdir -p bin/csvparser
