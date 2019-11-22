@@ -1,6 +1,6 @@
 # Reelay
 
-`Reelay` is a user-friendly C++ library for online monitoring of formal specifications such as past temporal logic and regular expressions. Please see install instructions [here](https://github.com/doganulus/reelay/blob/master/INSTALL.md).
+`Reelay` is a user-friendly C++ library for online monitoring of formal specifications such as past temporal logic and regular expressions. Please see [install instructions](https://github.com/doganulus/reelay/blob/master/INSTALL.md) to install the library on your machine. A docker image of the repository is available too. Please see [Docker instructions](https://github.com/doganulus/reelay/blob/master/docker.md) if you wish to look at `reelay` quickly in a container.
 
 # Brief
 `Reelay` has been designed for efficiency and flexibility so that users can write their applications in C++ or embed formal specification monitoring into their projects easily. 
@@ -21,7 +21,7 @@ The ability to construct discrete and dense timed monitors from timed specificat
 
     auto my_monitor = reelay::dense_timed<time_t>::monitor<input_t>::from_temporal_logic("p1 since[18:24] p2");
 
-From the online monitoring point of view, the essential difference between discrete and dense time models is the duration of updates, which is strictly one time unit for the discrete setting whereas it could be arbitrarily long or short for the denseW setting. For more information, please check [discrete]() and [dense]() timed settings. These settings are usually called metric temporal logic (MTL) and very popular for specifiying properties of real-time/cyber-physical systems.
+From the online monitoring point of view, the essential difference between discrete and dense time models is the duration of updates, which is strictly one time unit for the discrete setting whereas it could be arbitrarily long or short for the dense setting. For more information, please check [discrete]() and [dense]() timed settings. These settings are usually called metric temporal logic (MTL) and very popular for specifiying properties of real-time/cyber-physical systems.
 
 # Monitoring Apps
 
@@ -39,10 +39,10 @@ Performance of monitoring apps can be found [here](https://github.com/doganulus/
 |-|---------|-------------|----------|
 |✅| v.1.1 | Untimed, discrete and dense timed settings for past temporal logic | MTL
 |✅| v.1.2 | MTL monitoring application | rymtl
-|⌛| v.1.3 | Full predicate support over piecewise linear signals | STL
-|⌛| v.1.4 | Robustness settings | STLRO
-|⌛| v.1.5 | STL monitoring application | rystl
-|🤞| v.1.6 | Python bindings | MONPY
+|✅| v.1.3 | Full predicate support over piecewise linear signals | STL
+|✅| v.1.4 | Robustness settings | STLRO
+|✅| v.1.5 | STL monitoring application | rystl
+|⌛| v.1.6 | Python bindings | MONPY
 |🤞| v.1.x | Untimed regular expressions | RE
 |🤞| v.1.x | Discrete and dense timed regular expressions | TRE
 |🤞| v.1.x | TRE monitoring application | rytre
@@ -50,3 +50,7 @@ Performance of monitoring apps can be found [here](https://github.com/doganulus/
 |🤞| v.1.x | First-order quantification for past metric temporal logic | FOMTL
 |🤞| v.1.x | FOL monitoring application | ryjavu |
 |🤞| v.2.0 | Reelay 2.0! | REELAY
+
+# Notes
+
+* 
