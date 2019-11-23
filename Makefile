@@ -101,7 +101,7 @@ rymtl:
 
 rystl:
 	mkdir -p bin
-	$(CXX) $(CXXFLAGS) apps/stl/main.cpp -o bin/rystl $(INCLUDE_FLAGS) $(LIB_FLAGS)
+	$(CXX) $(CXXFLAGS) apps/stl/main.cpp -o bin/rystl $(INCLUDE_FLAGS) $(LIB_FLAGS) -lgmpxx -lgmp
 
 apps-install:
 	cp -p bin/rymtl /usr/local/bin/rymtl

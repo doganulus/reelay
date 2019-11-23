@@ -10,6 +10,9 @@
 #include "../utils/argparse.hpp"
 #include "../utils/csvparser_modern.hpp"
 
+#include "gmpxx.h"
+
+
 int main(int argc, const char* argv[]) {
   using time_t = double;
   using input_t = csv::CSVRow;
@@ -32,6 +35,11 @@ int main(int argc, const char* argv[]) {
       .help("enable output verbosity level (default: 0)")
       .default_value(0)
       .action([](const std::string& value) { return std::stoi(value); });
+
+  program.add_argument("--pwl")
+      .help("enable piecewise linear interpretation (default: p.w. constant)")
+      .default_value(false)
+      .implicit_value(true);
 
   program.add_argument("--discrete")
       .help("enable discrete time semantics")
@@ -78,9 +86,9 @@ int main(int argc, const char* argv[]) {
       std::cout << formatter->output();
     }
 
-  } else if (period > 0) {
+  } else if (period > 0 and not program.get<bool>("--pwl")) {
     auto network =
-        reelay::dense_timed<time_t>::monitor<input_t>::from_temporal_logic(
+        reelay::dense_timed<time_t, 0>::monitor<input_t>::from_temporal_logic(
             spec);
     auto formatter =
         reelay::dense_timed_setting::make_stdout_formatter<input_t, time_t>(
@@ -95,9 +103,9 @@ int main(int argc, const char* argv[]) {
       std::cout << formatter->output();
     }
 
-  } else {
+  } else if (period > 0 and program.get<bool>("--pwl")) {
     auto network =
-        reelay::dense_timed<time_t>::monitor<input_t>::from_temporal_logic(
+        reelay::dense_timed<time_t, 1>::monitor<input_t>::from_temporal_logic(
             spec);
     auto formatter =
         reelay::dense_timed_setting::make_stdout_formatter<input_t, time_t>(
@@ -105,6 +113,40 @@ int main(int argc, const char* argv[]) {
 
     std::cout << formatter->header();
 
+    time_t now = 0;
+    // network->setup(reader[0]);
+    for (auto &row : reader) {
+      now = now + period;
+      network->update(row, now);
+      std::cout << formatter->output();
+    }
+
+  } else if (not program.get<bool>("--pwl")) {
+    auto network =
+        reelay::dense_timed<time_t, 0>::monitor<input_t>::from_temporal_logic(
+            spec);
+    auto formatter =
+        reelay::dense_timed_setting::make_stdout_formatter<input_t, time_t>(
+            network, header, verbosity);
+
+    std::cout << formatter->header();
+
+    for (auto &row : reader) {
+      network->update(row);
+      std::cout << formatter->output();
+    }
+
+  } else {
+    auto network =
+        reelay::dense_timed<time_t, 1>::monitor<input_t>::from_temporal_logic(
+            spec);
+    auto formatter =
+        reelay::dense_timed_setting::make_stdout_formatter<input_t, time_t>(
+            network, header, verbosity);
+
+    std::cout << formatter->header();
+
+    network->setup(*reader.begin());
     for (auto &row : reader) {
       network->update(row);
       std::cout << formatter->output();

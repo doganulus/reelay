@@ -37,7 +37,17 @@ struct dense_timed_network : dense_timed_state<X, Y, T> {
                       std::vector<std::shared_ptr<state_t>> ss)
       : output_node(n), states(ss) {}
 
-  void update(const input_t& args) {
+  void setup(const input_t &prevargs) {
+    this->previous = boost::lexical_cast<time_t>(prevargs.at("time"));
+    this->prevargs = prevargs;
+  }
+
+  void setup(const input_t &prevargs, time_t previous) {
+    this->previous = previous;
+    this->prevargs = prevargs;
+  }
+
+  void update(const input_t &args) {
     time_t now = boost::lexical_cast<time_t>(args.at("time"));
     this->previous = this->current;
     update(this->prevargs, args, this->previous, now);

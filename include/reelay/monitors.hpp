@@ -100,11 +100,11 @@ struct discrete_timed {
   };
 };
 
-template <typename time_t>
+template <typename time_t, int order=0>
 struct dense_timed {
   template <typename input_t>
   struct monitor {
-    using factory = dense_timed_setting::factory<input_t, time_t>;
+    using factory = dense_timed_setting::factory<input_t, time_t, order>;
 
     using state_t = typename factory::state_t;
     using state_ptr_t = typename factory::state_ptr_t;

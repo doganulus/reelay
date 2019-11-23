@@ -23,7 +23,6 @@
 #include "reelay/past_temporal_logic/dense_timed/implication.hpp"
 #include "reelay/past_temporal_logic/dense_timed/negation.hpp"
 
-
 #include "reelay/past_temporal_logic/dense_timed/past_always.hpp"
 #include "reelay/past_temporal_logic/dense_timed/past_sometime.hpp"
 #include "reelay/past_temporal_logic/dense_timed/since.hpp"
@@ -39,7 +38,9 @@
 namespace reelay {
 namespace dense_timed_setting {
 
-template <typename X, typename T>
+// enum interpolation_t {zero_order, first_order};
+
+template <typename X, typename T, int order=0>
 struct factory {
   using input_t = X;
   using time_t = T;
@@ -76,16 +77,20 @@ struct factory {
 
     if (op == "lt" or op == "<") {
       result = std::make_shared<
-          dense_timed_setting::basic_predicate_lt<input_t, time_t>>(name, c);
+          dense_timed_setting::basic_predicate_lt<input_t, time_t, order>>(name,
+                                                                           c);
     } else if (op == "le" or op == "leq" or op == "<=") {
       result = std::make_shared<
-          dense_timed_setting::basic_predicate_le<input_t, time_t>>(name, c);
+          dense_timed_setting::basic_predicate_le<input_t, time_t, order>>(name,
+                                                                           c);
     } else if (op == "gt" or op == ">") {
       result = std::make_shared<
-          dense_timed_setting::basic_predicate_gt<input_t, time_t>>(name, c);
+          dense_timed_setting::basic_predicate_gt<input_t, time_t, order>>(name,
+                                                                           c);
     } else if (op == "ge" or op == "geq" or op == ">=") {
       result = std::make_shared<
-          dense_timed_setting::basic_predicate_ge<input_t, time_t>>(name, c);
+          dense_timed_setting::basic_predicate_ge<input_t, time_t, order>>(name,
+                                                                           c);
     } else {
       throw std::invalid_argument(
           "Unsupported predicate operator for the dense timed setting");
@@ -142,7 +147,7 @@ struct factory {
   static state_ptr_t make_state(
       const std::string& name,
       const std::vector<node_ptr_t>& args,
-      const std::pair<time_t, time_t>& bounds = std::make_pair(0, 0)) {
+      const std::pair<float, float>& bounds = std::make_pair(0, 0)) {
     state_ptr_t result;
 
     if (name == "past_sometime") {
@@ -157,8 +162,8 @@ struct factory {
       result =
           std::make_shared<dense_timed_setting::since<input_t, time_t>>(args);
     } else if (name == "past_sometime_bounded") {
-      time_t l = std::get<0>(bounds);
-      time_t u = std::get<1>(bounds);
+      float l = std::get<0>(bounds);
+      float u = std::get<1>(bounds);
 
       if (u > 0) {
         result = std::make_shared<
@@ -171,8 +176,8 @@ struct factory {
       }
 
     } else if (name == "past_always_bounded") {
-      time_t l = std::get<0>(bounds);
-      time_t u = std::get<1>(bounds);
+      float l = std::get<0>(bounds);
+      float u = std::get<1>(bounds);
 
       if (u > 0) {
         result = std::make_shared<
@@ -185,8 +190,8 @@ struct factory {
       }
 
     } else if (name == "since_bounded") {
-      time_t l = std::get<0>(bounds);
-      time_t u = std::get<1>(bounds);
+      float l = std::get<0>(bounds);
+      float u = std::get<1>(bounds);
 
       if (u > 0) {
         result = std::make_shared<
