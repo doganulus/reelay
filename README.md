@@ -1,6 +1,6 @@
 # Reelay
 
-`Reelay` is a user-friendly C++ library for online monitoring of formal specifications such as past temporal logic and regular expressions. Please see [install instructions](https://github.com/doganulus/reelay/blob/master/INSTALL.md) to install the library on your machine. A docker image of the repository is available too. Please see [Docker instructions](https://github.com/doganulus/reelay/blob/master/docker.md) if you wish to look at `reelay` quickly in a container.
+`Reelay` is a user-friendly C++ library for online monitoring of formal specifications such as past temporal logic and regular expressions. Please see [install instructions](https://github.com/doganulus/reelay/blob/master/INSTALL.md) to install the library on your machine. A docker image of the repository is available too. Please see [Docker instructions](https://github.com/doganulus/reelay/blob/master/docs/docker.md) if you wish to look at `reelay` quickly in a container.
 
 # Brief
 `Reelay` has been designed for efficiency and flexibility so that users can write their applications in C++ or embed formal specification monitoring into their projects easily. 
