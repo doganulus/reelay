@@ -1,3 +1,3 @@
-bin/rymtl 'historically((r && !q && once q) -> ( ((s -> once[3:10] p) and not( not(s) since[10:] p)) since q))' build/timescales/fullsuite/RespondBQR/Discrete/1M/RespondBQR10.csv --discrete
-bin/rymtl 'historically((r && !q && once q) -> ( ((s -> once[30:100] p) and not( not(s) since[100:] p)) since q))' build/timescales/fullsuite/RespondBQR/Discrete/1M/RespondBQR100.csv --discrete
-bin/rymtl 'historically((r && !q && once q) -> ( ((s -> once[300:1000] p) and not( not(s) since[1000:] p)) since q))' build/timescales/fullsuite/RespondBQR/Discrete/1M/RespondBQR1000.csv --discrete
+bin/rymtl 'historically((r && !q && once q) -> ( ((s -> once[3:10] p) and not((not s) since[10:] p)) since q))' build/timescales/fullsuite/RespondBQR/Discrete/1M/RespondBQR10.csv --discrete
+bin/rymtl 'historically((r && !q && once q) -> ( ((s -> once[30:100] p) and not((not s) since[100:] p)) since q))' build/timescales/fullsuite/RespondBQR/Discrete/1M/RespondBQR100.csv --discrete
+bin/rymtl 'historically((r && !q && once q) -> ( ((s -> once[300:1000] p) and not((not s) since[1000:] p)) since q))' build/timescales/fullsuite/RespondBQR/Discrete/1M/RespondBQR1000.csv --discrete

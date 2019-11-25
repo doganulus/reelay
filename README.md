@@ -1,6 +1,6 @@
 # Reelay
 
-`Reelay` is a user-friendly C++ library for online monitoring of formal specifications such as past temporal logic and regular expressions. Please see [install instructions](https://github.com/doganulus/reelay/blob/master/INSTALL.md) to install the library on your machine. A docker image of the repository is available too. Please see [Docker instructions](https://github.com/doganulus/reelay/blob/master/docs/docker.md) if you wish to look at `reelay` quickly in a container.
+`Reelay` is a user-friendly header-only C++ library for online monitoring of formal specifications such as past temporal logic and regular expressions. Please see [install instructions](https://github.com/doganulus/reelay/blob/master/INSTALL.md) to install the library on your machine. A docker image of the repository is available too. Please see [Docker instructions](https://github.com/doganulus/reelay/blob/master/docs/docker.md) if you wish to look at `reelay` applications quickly in a container.
 
 # Brief
 `Reelay` has been designed for efficiency and flexibility so that users can write their applications in C++ or embed formal specification monitoring into their projects easily. 
@@ -27,7 +27,8 @@ From the online monitoring point of view, the essential difference between discr
 
 A set of (standalone, command-line) online monitoring applications utilizing `reelay` library over some common data formats such as comma separated values (CSV) files. The apps folder would contain the source code these applications and can be built using `make apps` command. Please check for more information regarding stand-alone monitoring apps.
 
-The first application `rymtl` monitors  over CSV files providing a number of convinient features such as dense-time monitoring by fixed duration steps.
+1. The first application `rymtl` provides past metric temporal logic (past MTL) monitoring over CSV files over discrete and dense time temporal Boolean streams.
+2. The second application `rystl` provides past signal temporal logic (past STL) monitoring over CSV files together with a number of convinient features including piecewise constant and piecewise linear interpolation over unevenly sampled time series.
 
 Performance of monitoring apps can be found [here](https://github.com/doganulus/reelay/blob/master/docs/performance.md).
 
@@ -51,6 +52,6 @@ Performance of monitoring apps can be found [here](https://github.com/doganulus/
 |🤞| v.1.x | FOL monitoring application | ryjavu |
 |🤞| v.2.0 | Reelay 2.0! | REELAY
 
-# Notes
+# Known Issues
 
-* 
+1. Currently the new parser parses a formula `not p since q` as `not(p since q)` rather than more intuitive `(not p) since q`. Operator precedence will be reworked in the following versions. 

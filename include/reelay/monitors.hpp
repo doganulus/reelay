@@ -14,7 +14,7 @@
 #include "string"
 
 
-#include "reelay/builders.hpp"
+#include "reelay/parser/ptl_parser.hpp"
 #include "reelay/networks.hpp"
 #include "reelay/settings.hpp"
 
@@ -35,7 +35,8 @@ struct monitor {
       std::string pattern,
       std::map<std::string, function_t> predicates =
           std::map<std::string, function_t>()) {
-    return make_network<factory>::from_temporal_logic(pattern, predicates);
+    auto parser = ptl_parser<factory>(predicates);
+    return parser.parse(pattern);
   }
   //    static type from_regular_expressions();
 };
@@ -55,7 +56,8 @@ struct robustness {
       from_temporal_logic(std::string pattern,
                           std::map<std::string, function_t> predicates =
                               std::map<std::string, function_t>()) {
-        return make_network<factory>::from_temporal_logic(pattern, predicates);
+        auto parser = ptl_parser<factory>(predicates);
+        return parser.parse(pattern);
       }
     };
 };
@@ -75,7 +77,8 @@ struct discrete_timed {
         std::string pattern,
         std::map<std::string, function_t> predicates =
             std::map<std::string, function_t>()) {
-      return make_network<factory>::from_temporal_logic(pattern, predicates);
+      auto parser = ptl_parser<factory>(predicates);
+      return parser.parse(pattern);
     }
     // static network_ptr_t from_regular_expressions();
   };
@@ -94,7 +97,8 @@ struct discrete_timed {
       static network_ptr_t
       from_temporal_logic(std::string pattern,
                           predicates_t predicates = predicates_t()) {
-        return make_network<factory>::from_temporal_logic(pattern, predicates);
+        auto parser = ptl_parser<factory>(predicates);
+        return parser.parse(pattern);
       }
     };
   };
@@ -117,7 +121,8 @@ struct dense_timed {
         std::string pattern,
         std::map<std::string, function_t> predicates =
             std::map<std::string, function_t>()) {
-      return make_network<factory>::from_temporal_logic(pattern, predicates);
+      auto parser = ptl_parser<factory>(predicates);
+      return parser.parse(pattern);
     }
 
     // static type from_regular_expressions();
