@@ -2,88 +2,32 @@ CXX=g++# C compiler
 CXXFLAGS=-std=c++17 -fPIC -O2 -pthread -fno-new-ttp-matching# -Wall -Wextra C flags
 LDFLAGS=-shared# linking flags
 
-LIB_FLAGS=-lreelay -lantlr4-runtime
-INCLUDE_FLAGS=-I. -I./include -I/usr/local/include/antlr4-runtime
+LIB_FLAGS=
+INCLUDE_FLAGS=-I. -I./include 
 
 NAME = reelay
-VERSION = 1.2
-TARGET = libreelay.so # target lib
+VERSION = 1.5
 
 PROJECT_INCLUDE = include/reelay
 
 PREFIX = /usr/local
 INCDIR = $(PREFIX)/include
-LIBDIR = $(PREFIX)/lib
 WORKDIR = ./build
 
-ANTLR4_EXE = build/antlr-4.7.2-complete.jar
-ANTLR4_FLAGS = -Dlanguage=Cpp -visitor -Xexact-output-dir
-ANTLR4_GRAMMAR_DIR = grammar/antlr4
+.PHONY: all develop test install uninstall apps
 
-ANTLR4_TL_GRAMMAR = TemporalLogic
-ANTLR4_TL_SOURCES = grammar/antlr4/temporal_logic
-ANTLR4_TL_HEADERS = include/reelay/parser/antlr4/temporal_logic
-
-SOURCES = $(ANTLR4_TL_SOURCES)/$(ANTLR4_TL_GRAMMAR)Lexer.cpp $(ANTLR4_TL_SOURCES)/$(ANTLR4_TL_GRAMMAR)Parser.cpp $(ANTLR4_TL_SOURCES)/$(ANTLR4_TL_GRAMMAR)Listener.cpp $(ANTLR4_TL_SOURCES)/$(ANTLR4_TL_GRAMMAR)BaseListener.cpp $(ANTLR4_TL_SOURCES)/$(ANTLR4_TL_GRAMMAR)Visitor.cpp $(ANTLR4_TL_SOURCES)/$(ANTLR4_TL_GRAMMAR)BaseVisitor.cpp
-OBJECTS = $(SOURCES:.cpp=.o)
-
-.PHONY: all clean develop test install uninstall apps
-
-all: antlr4-parser $(TARGET)
-
-$(TARGET) : $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $@ $(LDFLAGS)
-
-$(OBJECTS): $(ANTLR4_TL_SOURCES)/%.o : $(ANTLR4_TL_SOURCES)/%.cpp
-	$(CXX) $(CXXFLAGS) $(INCLUDE_FLAGS) -c $< -o $@
-
-clean:
-	rm -f $(ANTLR4_TL_SOURCES)/*.o
-	rm -f $(TARGET)
+all: install
 
 install:
 	mkdir -p $(DESTDIR)$(INCDIR)/$(NAME)
-
 	cp -a $(PROJECT_INCLUDE) $(DESTDIR)$(INCDIR)
-	cp -p $(TARGET) $(DESTDIR)$(LIBDIR)/$(TARGET)
 
 uninstall:
 	rm -rf $(DESTDIR)$(INCDIR)/$(NAME)
-	rm -rf $(DESTDIR)$(LIBDIR)/$(TARGET)
 
 develop:
 	ln -s $(PROJECT_INCLUDE) $(DESTDIR)$(INCDIR)
 	ln -s $(TARGET) $(DESTDIR)$(LIBDIR)/$(TARGET)
-
-antlr4-parser:
-	mkdir -p build
-	cd build && curl -O https://www.antlr.org/download/antlr-4.7.2-complete.jar
-	mkdir -p $(ANTLR4_TL_SOURCES)
-	java -jar $(ANTLR4_EXE) $(ANTLR4_FLAGS) -o $(ANTLR4_TL_SOURCES) $(ANTLR4_GRAMMAR_DIR)/$(ANTLR4_TL_GRAMMAR).g4
-	mkdir -p $(ANTLR4_TL_HEADERS)
-	cp -a $(ANTLR4_TL_SOURCES)/*.h $(ANTLR4_TL_HEADERS)
-
-antlr4-parser-clean:
-	rm -rf $(ANTLR4_TL_SOURCES)
-	rm -rf $(ANTLR4_TL_HEADERS)
-
-antlr4-runtime:
-	mkdir -p build
-	cd build && curl -O https://www.antlr.org/download/antlr-4.7.2-complete.jar
-	cd build && rm -rf antlr4 && git clone https://github.com/antlr/antlr4.git
-	cd build/antlr4/runtime/Cpp && cmake . -DANTLR_JAR_LOCATION=../../../antlr-4.7.2-complete.jar
-	cd build/antlr4/runtime/Cpp && make
-
-antlr4-runtime-install:
-	cd build/antlr4/runtime/Cpp && make install
-
-antlr4-runtime-uninstall:
-	rm -rf /usr/local/include/antlr4-runtime
-	rm -rf /usr/local/share/doc/libantlr4
-	rm -r /usr/local/lib/libantlr4-runtime.*
-
-antlr4-runtime-clean:
-	rm -rf build/antlr4
 
 timescales:
 	mkdir -p build
