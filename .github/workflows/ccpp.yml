@@ -16,10 +16,6 @@ jobs:
         sudo apt-get install -y libboost-all-dev
     - name: build
       run: |
-        make antlr4-runtime
-        sudo make antlr4-runtime-install
-        make 
         sudo make install
-        sudo ldconfig
     - name: test
       run: make test
