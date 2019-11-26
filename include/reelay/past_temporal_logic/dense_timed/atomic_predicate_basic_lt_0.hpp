@@ -37,9 +37,9 @@ struct basic_predicate_lt<X,T,0> : public dense_timed_state<X, interval_set<T>, 
   function_t fn;
 
   basic_predicate_lt(std::string name, float c)
-      : fn([name,c](const input_t &pargs, const input_t &args, time_t previous,
-                  time_t now) {
-          if (std::stof(args.at(name)) < c) {
+      : fn([name, c](const input_t &pargs, const input_t &args, time_t previous,
+                     time_t now) {
+          if (boost::lexical_cast<float>(args.at(name)) < c) {
             return interval_set(interval::left_open(previous, now));
           } else {
             return interval_set();

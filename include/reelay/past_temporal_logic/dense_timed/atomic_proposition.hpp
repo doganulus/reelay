@@ -38,11 +38,9 @@ struct proposition : public dense_timed_state<X, interval_set<T>, T> {
   function_t fn;
 
   proposition(std::string name)
-      : fn([name](const input_t& pargs,
-                  const input_t& args,
-                  time_t previous,
+      : fn([name](const input_t &pargs, const input_t &args, time_t previous,
                   time_t now) {
-          if (std::stoi(args.at(name))) {
+          if (boost::lexical_cast<bool>(args.at(name))) {
             return interval_set(interval::left_open(previous, now));
           } else {
             return interval_set();

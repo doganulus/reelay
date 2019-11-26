@@ -1,0 +1,55 @@
+/*
+ * Copyright (c) 2019 Dogan Ulus
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#include "reelay/intervals.hpp"
+#include "reelay/settings.hpp"
+#include "reelay/targets/stdout/untimed/stdout_formatter.hpp"
+
+namespace reelay {
+namespace untimed_setting {
+
+template <typename X>
+struct stdout_formatter_verbosity_1 : public stdout_formatter<X> {
+  using input_t = X;
+  using output_t = std::string;
+
+  using network_t = untimed_network<input_t, bool, time_t>;
+  using network_ptr_t = std::shared_ptr<network_t>;
+
+  using strings_t = std::vector<std::string>;
+
+  network_ptr_t network;
+  strings_t columm_names;
+
+  stdout_formatter_verbosity_1(network_ptr_t netptr, strings_t names)
+      : network(netptr), columm_names(names) {}
+
+  void update(const input_t &args) { network->update(args); }
+
+  std::string header() {
+    std::ostringstream buffer;
+
+    buffer << "time"
+           << ",";
+    buffer << "value" << std::endl;
+
+    return buffer.str();
+  }
+  std::string output() {
+    std::ostringstream buffer;
+
+    buffer << network->now << "," << network->output() << std::endl;
+
+    return buffer.str();
+  }
+};
+
+} // namespace discrete_timed_setting
+} // namespace reelay

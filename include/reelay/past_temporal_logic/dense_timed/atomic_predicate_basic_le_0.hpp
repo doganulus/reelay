@@ -41,7 +41,7 @@ struct basic_predicate_le<X, T, 0>
   basic_predicate_le(std::string name, float c)
       : fn([name, c](const input_t &pargs, const input_t &args, time_t previous,
                      time_t now) {
-          if (std::stof(args.at(name)) <= c) {
+          if (boost::lexical_cast<float>(args.at(name)) <= c) {
             return interval_set(interval::left_open(previous, now));
           } else {
             return interval_set();

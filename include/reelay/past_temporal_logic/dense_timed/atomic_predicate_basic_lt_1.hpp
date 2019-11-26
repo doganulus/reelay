@@ -41,21 +41,20 @@ struct basic_predicate_lt<X, T, 1>
   basic_predicate_lt(std::string name, float c)
       : fn([name, c](const input_t &pargs, const input_t &args, time_t previous,
                      time_t now) {
-          float y0 = std::stof(pargs.at(name));
-          float y1 = std::stof(args.at(name));
+          float y0 = boost::lexical_cast<float>(pargs.at(name));
+          float y1 = boost::lexical_cast<float>(args.at(name));
 
           if (y0 < c and y1 < c) {
             return interval_set(interval::left_open(previous, now));
           } else if (y0 > c and y1 > c) {
             return interval_set();
           } else if (y0 > y1){
-              time_t crossing = 
-                now - (now - previous) * ((c - y1) / (y0 - y1));
-              return interval_set(interval::left_open(crossing, now));
+            time_t crossing = now - (now - previous) * ((c - y1) / (y0 - y1));
+            return interval_set(interval::left_open(crossing, now));
           } else if (y0 < y1) {
-              time_t crossing = 
+            time_t crossing =
                 previous + (now - previous) * ((c - y0) / (y1 - y0));
-              return interval_set(interval::left_open(previous, crossing));
+            return interval_set(interval::left_open(previous, crossing));
           } else { // y0 == y1 == c is true
             return interval_set();
           }

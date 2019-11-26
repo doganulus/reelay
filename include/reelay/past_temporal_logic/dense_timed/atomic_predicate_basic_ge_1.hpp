@@ -41,8 +41,8 @@ struct basic_predicate_ge<X, T, 1>
   basic_predicate_ge(std::string name, float c)
       : fn([name, c](const input_t &pargs, const input_t &args, time_t previous,
                      time_t now) {
-          float y0 = std::stof(pargs.at(name));
-          float y1 = std::stof(args.at(name));
+          float y0 = boost::lexical_cast<float>(pargs.at(name));
+          float y1 = boost::lexical_cast<float>(args.at(name));
 
           if (y0 < c and y1 < c) {
             return interval_set();
