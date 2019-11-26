@@ -5,7 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-
 #pragma once
 
 #include "string"
@@ -14,18 +13,24 @@
 
 namespace reelay {
 
-struct past_ltl_monitor{
+struct discrete_timed_past_mtl_monitor {
 
-  using input_t = std::map<std::string, int64_t>;
-  using factory = untimed_setting::factory<input_t>;
+  using time_t  = int64_t;
+  using input_t = std::map<std::string, bool>;
+  using factory = discrete_timed_setting::factory<input_t, time_t>;
 
   using network_t = typename factory::network_t;
   using network_ptr_t = typename factory::network_ptr_t;
 
-  static network_ptr_t from(const std::string &pattern) {
+  network_ptr_t network;
+
+  discrete_timed_past_mtl_monitor(const std::string &pattern) {
     auto parser = ptl_parser<factory>();
-    return parser.parse(pattern);
-    }
+    this->network = parser.parse(pattern);
+  }
+
+  void update(const input_t &args) { this->network->update(args); }
+  bool output() { return this->network->output(); }
 
 };
 
