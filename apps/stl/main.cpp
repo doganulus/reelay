@@ -10,9 +10,6 @@
 #include "../utils/argparse.hpp"
 #include "../utils/csvparser_modern.hpp"
 
-#include "gmpxx.h"
-
-
 int main(int argc, const char* argv[]) {
   using time_t = double;
   using input_t = csv::CSVRow;
