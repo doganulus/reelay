@@ -1,0 +1,19 @@
+name: apps
+
+on:
+  push:
+    paths:
+    - 'apps/**'
+    - 'include/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: install
+      run: |
+        sudo make install
+    - name: build
+      run: make apps
