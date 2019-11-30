@@ -45,7 +45,7 @@ rymtl:
 
 rystl:
 	mkdir -p bin
-	$(CXX) $(CXXFLAGS) apps/stl/main.cpp -o bin/rystl $(INCLUDE_FLAGS) $(LIB_FLAGS) -lgmpxx -lgmp
+	$(CXX) $(CXXFLAGS) apps/stl/main.cpp -o bin/rystl $(INCLUDE_FLAGS) $(LIB_FLAGS)
 
 apps-install:
 	cp -p bin/rymtl /usr/local/bin/rymtl
