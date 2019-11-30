@@ -1,0 +1,39 @@
+site_name: reelay
+repo_url: https://github.com/doganulus/reelay
+docs_dir: docs
+edit_uri: 'edit/master/docs/'
+theme:
+  name: material
+  include_search_page: false
+  # search_index_only: true
+  language: en
+  palette:
+    primary: green
+    accent: lime
+  font:
+    text: Ubuntu
+    code: Ubuntu Mono
+  favicon: assets/images/favicon.png
+  logo:
+    icon: "device_hub"
+
+nav:
+  - Home: 'index.md'
+  - Quick Start:
+    - 'Docker': 'docker.md'
+  - Literature: 'literature.md'
+  - About:
+    - 'Naming': 'naming.md'
+# - 'License': 'license.md'
+# - 'Release Notes': 'release-notes.md'
+
+markdown_extensions:
+  - admonition
+  - footnotes
+  - markdown.extensions.codehilite:
+      guess_lang: false
+
+plugins:
+  - search
+  - minify:
+      minify_html: true
