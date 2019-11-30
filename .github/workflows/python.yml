@@ -1,0 +1,19 @@
+name: python
+
+on:
+  push:
+    paths:
+    - 'python/**'
+    - 'include/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: install
+      run: |
+        sudo make install
+    - name: test
+      run: make python
