@@ -14,13 +14,14 @@
 
 namespace reelay {
 
-template <typename X, typename Y, typename T>
+template <typename X, typename Y, typename T, typename V>
 struct dense_timed_network : dense_timed_state<X, Y, T> {
   using time_t = T;
+  using value_t = V;
   using input_t = X;
   using output_t = Y;
 
-  using type = dense_timed_network<input_t, output_t, time_t>;
+  using type = dense_timed_network<input_t, output_t, time_t, value_t>;
 
   using node_t = dense_timed_node<output_t, time_t>;
   using state_t = dense_timed_state<input_t, output_t, time_t>;
@@ -80,56 +81,55 @@ struct dense_timed_network : dense_timed_state<X, Y, T> {
       left_open(this->previous, this->current)) - this->output();
   }
 
-  std::vector<std::pair<time_t, bool>> voutput() {
+  std::vector<std::pair<time_t, V>> voutput() {
     time_t t;
     reelay::interval_set<time_t> result = this->output();
-    auto vresult = std::vector<std::pair<time_t, bool>>();
+    auto vresult = std::vector<std::pair<time_t, V>>();
 
     if (result.empty()) {
-      vresult.push_back(std::pair<time_t, bool>(this->current, false));
+      vresult.push_back(std::pair<time_t, V>(this->current, 0));
     } else {
       for (const auto &intv : result) {
         t = intv.upper();
         if (intv.lower() > this->previous) {
-          vresult.push_back(std::pair<time_t, bool>(intv.lower(), false));
-          vresult.push_back(std::pair<time_t, bool>(intv.upper(), true));
+          vresult.push_back(std::pair<time_t, V>(intv.lower(), 0));
+          vresult.push_back(std::pair<time_t, V>(intv.upper(), 1));
         } else {
-          vresult.push_back(std::pair<time_t, bool>(intv.upper(), true));
+          vresult.push_back(std::pair<time_t, V>(intv.upper(), 1));
         }
       }
 
       if (t < this->current) {
-        vresult.push_back(std::pair<time_t, bool>(this->current, false));
+        vresult.push_back(std::pair<time_t, V>(this->current, 0));
       }
     }
     return vresult;
   }
 
-  std::vector<std::pair<time_t, bool>> nvoutput() {
+  std::vector<std::pair<time_t, V>> nvoutput() {
     time_t t;
     reelay::interval_set<time_t> result = this->noutput();
-    auto vresult = std::vector<std::pair<time_t, bool>>();
+    auto vresult = std::vector<std::pair<time_t, V>>();
 
     if (result.empty()) {
-      vresult.push_back(std::pair<time_t, bool>(this->current, false));
+      vresult.push_back(std::pair<time_t, V>(this->current, 0));
     } else {
       for (const auto &intv : result) {
         t = intv.upper();
         if (intv.lower() > this->previous) {
-          vresult.push_back(std::pair<time_t, bool>(intv.lower(), false));
-          vresult.push_back(std::pair<time_t, bool>(intv.upper(), true));
+          vresult.push_back(std::pair<time_t, V>(intv.lower(), 0));
+          vresult.push_back(std::pair<time_t, V>(intv.upper(), 1));
         } else {
-          vresult.push_back(std::pair<time_t, bool>(intv.upper(), true));
+          vresult.push_back(std::pair<time_t, V>(intv.upper(), 1));
         }
       }
 
       if (t < this->current) {
-        vresult.push_back(std::pair<time_t, bool>(this->current, false));
+        vresult.push_back(std::pair<time_t, V>(this->current, 0));
       }
     }
     return vresult;
   }
-
 };
 
 }  // namespace reelay

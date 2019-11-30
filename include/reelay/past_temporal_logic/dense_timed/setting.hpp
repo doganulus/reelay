@@ -44,8 +44,7 @@ template <typename X, typename T, int order=0>
 struct factory {
   using input_t = X;
   using time_t = T;
-
-  using base_t = reelay::interval_set<time_t>;
+  using value_t = bool;
   using output_t = reelay::interval_set<time_t>;
 
   using function_t =
@@ -56,7 +55,8 @@ struct factory {
 
   using node_t = reelay::dense_timed_node<output_t, time_t>;
   using state_t = reelay::dense_timed_state<input_t, output_t, time_t>;
-  using network_t = reelay::dense_timed_network<input_t, output_t, time_t>;
+  using network_t =
+      reelay::dense_timed_network<input_t, output_t, time_t, value_t>;
 
   using node_ptr_t = std::shared_ptr<node_t>;
   using state_ptr_t = std::shared_ptr<state_t>;

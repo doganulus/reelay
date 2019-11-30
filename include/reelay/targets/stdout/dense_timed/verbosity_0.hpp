@@ -18,13 +18,15 @@ namespace dense_timed_setting {
 template <typename X, typename T>
 struct stdout_formatter_verbosity_0 : public stdout_formatter<X,T> {
   using time_t = T;
+  using value_t = bool;
   using input_t = X;
   using output_t = std::string;
 
   using interval_t = reelay::interval<time_t>;
   using interval_set_t = reelay::interval_set<time_t>;
 
-  using network_t = dense_timed_network<input_t, interval_set_t, time_t>;
+  using network_t =
+      dense_timed_network<input_t, interval_set_t, time_t, value_t>;
   using network_ptr_t = std::shared_ptr<network_t>;
 
   using strings_t = std::vector<std::string>;

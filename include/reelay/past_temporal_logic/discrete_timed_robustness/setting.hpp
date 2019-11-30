@@ -38,11 +38,12 @@
 namespace reelay {
 namespace discrete_timed_robustness_setting {
 
-template <typename X, typename V, typename T> 
+template <typename X, typename Y, typename T> 
 struct factory {
   using input_t = X;
   using time_t = T;
-  using output_t = V;
+  using value_t = Y;
+  using output_t = Y;
 
   using function_t = std::function<output_t(const input_t&)>;
 

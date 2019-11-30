@@ -3,10 +3,10 @@ CXXFLAGS=-std=c++17 -fPIC -O2 -pthread -fno-new-ttp-matching# -Wall -Wextra C fl
 LDFLAGS=-shared# linking flags
 
 LIB_FLAGS=
-INCLUDE_FLAGS=-I. -I./include 
+INCLUDE_FLAGS=-I. -I./include
 
 NAME = reelay
-VERSION = 1.5
+VERSION = 1.6
 
 PROJECT_INCLUDE = include/reelay
 
@@ -64,7 +64,7 @@ test_csvparser:
 	multitime -n 10 bin/csvparser/csvparser_fast build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv
 	multitime -n 10 bin/csvparser/csvparser_modern build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv
 
-test: test_main test_untimed test_discrete_timed test_dense_timed test_untimed_robustness test_discrete_timed_robustness apps
+test: test_main test_untimed test_discrete_timed test_dense_timed test_untimed_robustness test_discrete_timed_robustness
 
 test_main:
 	mkdir -p build/test
@@ -94,3 +94,13 @@ test_mtl_performance_discrete: test/timescales/discrete/multitime/*.txt
 	for batchfile in $^ ; do \
         multitime -n 10 -b $${batchfile} ; \
     done
+
+python: 
+	cd python && pip install .
+
+python-develop: 
+	sudo make uninstall && sudo make install
+	cd python && pip install .
+
+main: 
+	$(CXX) $(CXXFLAGS) $(FILE) -o bin/main $(INCLUDE_FLAGS) $(LIB_FLAGS) && bin/main $(EXTRA)

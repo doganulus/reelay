@@ -95,7 +95,7 @@ namespace dense_timed_setting {
 template <typename X, typename T>
 static std::shared_ptr<stdout_formatter<X, T>>
 make_stdout_formatter(
-    std::shared_ptr<dense_timed_network<X, interval_set<T>, T>> network,
+    std::shared_ptr<dense_timed_network<X, interval_set<T>, T, bool>> network,
     std::vector<std::string> header, int verbosity) {
 
   using time_t = T;

@@ -1,6 +1,9 @@
-name: C/C++ CI
+name: library
 
-on: [push]
+on:
+  push:
+    paths-ignore:
+    - 'docs/**'
 
 jobs:
   test:
