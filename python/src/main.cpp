@@ -5,43 +5,57 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-
 #include "pybind11/pybind11.h"
+#include "pybind11/stl.h"
 
-#include "reelay/networks.hpp"
-#include "reelay/monitors.hpp"
+#include "reelay/recipes.hpp"
 
-namespace py = pybind11;
+PYBIND11_MODULE(recipes, m) {
+    m.doc() = "This package provides Python bindings of runtime monitors constructed from formal specifications using Reelay library."; // optional module docstring
 
-struct past_ltl_monitor {
-    using input_t = std::map<std::string, int64_t>;
-    using factory = reelay::untimed_setting::factory<input_t>;
+    pybind11::class_<reelay::past_ltl_monitor>(m, "past_ltl_monitor")
+        .def(pybind11::init<const std::string &>())
+        .def("update", &reelay::past_ltl_monitor::update);
 
-    using network_t = typename factory::network_t;
-    using network_ptr_t = typename factory::network_ptr_t;
+    pybind11::class_<reelay::discrete_timed_past_mtl_monitor>(
+        m, "discrete_timed_past_mtl_monitor")
+        .def(pybind11::init<const std::string &>())
+        .def("update", &reelay::discrete_timed_past_mtl_monitor::update);
 
-    static network_ptr_t from(const std::string& pattern){
-        auto parser = ptl_parser<factory>(predicates);
-        return parser.parse(pattern);
-    }
-};
+    pybind11::class_<reelay::dense_timed_past_mtl_monitor>(
+        m, "dense_timed_past_mtl_monitor")
+        .def(pybind11::init<const std::string &>())
+        .def("update", &reelay::dense_timed_past_mtl_monitor::update);
 
-PYBIND11_MODULE(reelay, m) {
-    m.doc() = "Runtime verification using formal specifications"; // optional module docstring
+    pybind11::class_<reelay::untimed_past_stl_monitor>(
+        m, "untimed_past_stl_monitor")
+        .def(pybind11::init<const std::string &>())
+        .def("update", &reelay::untimed_past_stl_monitor::update);
 
-    using mtlmon_t = reelay::discrete_timed_network<
-        std::map<std::string, int64_t>,
-        std::map<std::string, int64_t>
-        >;
+    pybind11::class_<reelay::discrete_timed_past_stl_monitor>(
+        m, "discrete_timed_past_stl_monitor")
+        .def(pybind11::init<const std::string &>())
+        .def("update", &reelay::discrete_timed_past_stl_monitor::update);
 
-    using stlmon_t = reelay::dense_timed_network<
-        std::map<std::string, double>,
-        std::vector<std::map<std::string, int64_t>>
-        >;
+    pybind11::class_<reelay::dense_timed_past_stl0_monitor>(
+        m, "dense_timed_past_stl0_monitor")
+        .def(pybind11::init<const std::string &>())
+        .def("update", &reelay::dense_timed_past_stl0_monitor::update);
 
-    py::class_<ltlmon_t>(m, "ltlmon")
-        .def(py::init<const std::string &>())
-        .def("setName", &Pet::setName)
-        .def("getName", &Pet::getName);
+    pybind11::class_<reelay::dense_timed_past_stl1_monitor>(
+        m, "dense_timed_past_stl1_monitor")
+        .def(pybind11::init<const std::string &>())
+        .def("update", &reelay::dense_timed_past_stl1_monitor::update)
+        .def("init_update",
+             &reelay::dense_timed_past_stl1_monitor::init_update);
 
+    pybind11::class_<reelay::untimed_past_rstl_monitor>(
+        m, "untimed_past_rstl_monitor")
+        .def(pybind11::init<const std::string &>())
+        .def("update", &reelay::untimed_past_rstl_monitor::update);
+
+    pybind11::class_<reelay::discrete_timed_past_rstl_monitor>(
+        m, "discrete_timed_past_rstl_monitor")
+        .def(pybind11::init<const std::string &>())
+        .def("update", &reelay::discrete_timed_past_rstl_monitor::update);
 }

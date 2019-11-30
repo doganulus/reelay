@@ -28,8 +28,11 @@ struct past_ltl_monitor{
     this->network = parser.parse(pattern);
   }
 
-  void update(const input_t &args) { this->network->update(args); }
-  bool output() { return this->network->output(); }
+  bool update(const input_t &args) {
+    this->network->update(args);
+    return this->network->output();
+  }
+
 };
 
 } // namespace reelay

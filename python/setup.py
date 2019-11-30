@@ -1,3 +1,4 @@
+import os
 import setuptools
 
 from distutils import util
@@ -5,6 +6,9 @@ from distutils.core import setup
 from distutils.extension import Extension
 
 __version__ = '1.6.0'
+
+os.environ["CC"] = "gcc-7"
+os.environ["CXX"] = "g++-7"
 
 class get_pybind_include(object):
     """Helper class to determine the pybind11 include path
@@ -19,14 +23,17 @@ class get_pybind_include(object):
         import pybind11
         return pybind11.get_include(self.user)
 
-ext_coremtl = Extension(
-    'coremtl',
-    sources=['reelay/src/main.cpp'],
+
+ext_recipes = Extension(
+    'recipes',
+    sources=['src/main.cpp'],
     include_dirs=[
         # Path to pybind11 headers
         get_pybind_include(),
-        get_pybind_include(user=True)
+        get_pybind_include(user=True),
+        "/usr/local/include"
     ],
+    extra_compile_args = ["-O2", "--std=c++17", "-fPIC", "-pthread", "-fno-new-ttp-matching"],
     language='c++'
 )
 
@@ -43,6 +50,6 @@ setup(
     install_requires=['pybind11>=2.4'],
     setup_requires=['pybind11>=2.4'],
     ext_package='reelay',
-    ext_modules=[ext_coremtl]
-
+    ext_modules=[ext_recipes],
+    zip_safe=False
 )

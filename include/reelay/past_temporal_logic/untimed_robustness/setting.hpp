@@ -30,10 +30,11 @@
 namespace reelay {
 namespace untimed_robustness_setting {
 
-template <typename X, typename V> 
+template <typename X, typename Y> 
 struct factory {
   using input_t = X;
-  using output_t = V;
+  using value_t = Y;
+  using output_t = Y;
 
   using function_t = std::function<output_t(const input_t&)>;
 

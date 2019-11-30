@@ -34,8 +34,9 @@ namespace untimed_setting {
 template <typename X>
 struct factory {
   using input_t = X;
+  using value_t = bool;
   using output_t = bool;
-
+  
   using function_t = std::function<bool(const input_t&)>;
 
   using node_t = reelay::untimed_node<output_t>;

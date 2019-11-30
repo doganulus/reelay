@@ -13,27 +13,31 @@
 
 namespace reelay {
 
-struct discrete_timed_past_mtl_monitor {
+struct dense_timed_past_stl1_monitor {
 
-  using time_t  = int64_t;
-  using input_t = std::map<std::string, bool>;
-  using factory = discrete_timed_setting::factory<input_t, time_t>;
+  using time_t = double;
+  using input_t = std::map<std::string, time_t>;
+  using output_t = std::vector<std::pair<time_t, bool>>;
+  using factory = dense_timed_setting::factory<input_t, time_t, 1>;
 
   using network_t = typename factory::network_t;
   using network_ptr_t = typename factory::network_ptr_t;
 
   network_ptr_t network;
 
-  discrete_timed_past_mtl_monitor(const std::string &pattern) {
+  dense_timed_past_stl1_monitor(const std::string &pattern) {
     auto parser = ptl_parser<factory>();
     this->network = parser.parse(pattern);
   }
 
-  bool update(const input_t &args) {
+  output_t update(const input_t &args) {
     this->network->update(args);
-    return this->network->output();
+    return this->network->voutput();
   }
 
+  void init_update(const input_t &args) {
+    this->network->setup(args);
+  }
 };
 
 } // namespace reelay

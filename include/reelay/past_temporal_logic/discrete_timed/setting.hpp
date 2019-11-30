@@ -44,7 +44,7 @@ struct factory {
   using input_t = X;
   using time_t = T;
 
-  using base_t = reelay::interval_set<time_t>;
+  using value_t = bool;
   using output_t = bool;
 
   using function_t = std::function<bool(const input_t&)>;
