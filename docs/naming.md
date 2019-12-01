@@ -1,0 +1,2 @@
+# Naming
+The name Reelay is originated from the term "relay circuits" as the initial work in the project has been done for translating regular expressions into sequential circuits and thus we are LAY-ing down REs. The extra letter E is helpful in Google searches and also the project has been quickly evolved into other formalisms expressed as regular expressions and else (REE). The name is also a tribute to [A Symbolic Analysis of Relay and Switching Circuits](https://dspace.mit.edu/handle/1721.1/11173), the master's thesis of my scientific role model Claude E. Shannon.
