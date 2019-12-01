@@ -5,21 +5,25 @@ on:
     paths:
     - 'mkdocs.yml'
     - 'docs/**'
+    - '.github/workflows/docs.yml' # Self-trigger
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-    - name: Setup Python 3.7
+
+    - name: Setup Python 3.6
       uses: actions/setup-python@v1
       with:
-        python-version: '3.7'
+        python-version: '3.6'
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install mkdocs mkdocs-material
-    - name: build and publish docs
+
+    - name: Build and deploy docs
       run: mkdocs gh-deploy --clean
       env:
         GITHUB_PAT: ${{ secrets.GITHUB_PAT }}

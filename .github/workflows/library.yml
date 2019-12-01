@@ -4,6 +4,7 @@ on:
   push:
     paths:
     - 'include/reelay/**'
+    - '.github/workflows/library.yml' # Self-trigger
 
 jobs:
   test:

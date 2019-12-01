@@ -5,6 +5,7 @@ on:
     paths:
     - 'apps/**'
     - 'include/**'
+    - '.github/workflows/apps.yml' # Self-trigger
 
 jobs:
   build:
