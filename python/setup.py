@@ -43,7 +43,7 @@ setup(
     packages=setuptools.find_packages(),
     license='MPL-2.0',
     description = 'Runtime verification package using formal specifications',
-    python_requires='>=3.6',
+    python_requires='>=3',
     install_requires=['pybind11>=2.4'],
     setup_requires=['pybind11>=2.4'],
     ext_package='reelay',
