@@ -7,8 +7,8 @@
 #include "reelay/monitors.hpp"
 #include "reelay/targets/stdout/formatter.hpp"
 
-#include "../utils/argparse.hpp"
-#include "../utils/csvparser_modern.hpp"
+#include "../third_party/argparse.hpp"
+#include "../third_party/csvparser_modern.hpp"
 
 int main(int argc, const char* argv[]) {
   using time_t = int64_t;

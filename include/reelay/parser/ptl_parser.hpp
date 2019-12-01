@@ -10,7 +10,7 @@
 #include <iostream>
 #include <string>
 
-#include "reelay/thirdparty/peglib.h"
+#include "reelay/third_party/peglib.h"
 
 #include "reelay/networks.hpp"
 #include "reelay/settings.hpp"
