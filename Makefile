@@ -14,7 +14,7 @@ PREFIX = /usr/local
 INCDIR = $(PREFIX)/include
 WORKDIR = ./build
 
-.PHONY: all develop test install uninstall apps
+.PHONY: all apps python develop test install uninstall 
 
 all: install
 
@@ -97,6 +97,10 @@ test_mtl_performance_discrete: test/timescales/discrete/multitime/*.txt
 
 python: 
 	cd python && pip install .
+
+python-build: 
+	cd python && python setup.py sdist bdist_wheel
+	cd python && twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 python-develop: 
 	sudo make uninstall && sudo make install
