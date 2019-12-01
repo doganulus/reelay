@@ -19,10 +19,22 @@ theme:
 
 nav:
   - Home: 'index.md'
-  - Quick Start:
-    - 'Docker': 'docker.md'
-  - Literature: 'literature.md'
+  - Motivation: 'install.md'
+  - Getting Started:
+    - 'Install' : 'install.md'
+    - 'From Python' : 'install.md'
+    - 'From Terminal' : 'install.md'
+    - 'From Docker': 'docker.md'
+  - User Guide: 
+    - 'Specifications' : 'literature.md'
+    - 'Time Models' : 'literature.md'
+  - Advanced Topics: 
+    - 'Time Models' : 'literature.md'
+    - 'Benchmarking' : 'performance.md'
+    - 'References' : 'literature.md'
+
   - About:
+    - 'License' : 'license.md'
     - 'Naming': 'naming.md'
 # - 'License': 'license.md'
 # - 'Release Notes': 'release-notes.md'
