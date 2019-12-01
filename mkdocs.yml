@@ -1,4 +1,4 @@
-site_name: reelay
+site_name: Reelay
 repo_url: https://github.com/doganulus/reelay
 docs_dir: docs
 edit_uri: 'edit/master/docs/'
@@ -19,23 +19,37 @@ theme:
 
 nav:
   - Home: 'index.md'
-  - Motivation: 'install.md'
-  - Getting Started:
-    - 'Install' : 'install.md'
-    - 'From Python' : 'install.md'
-    - 'From Terminal' : 'install.md'
-    - 'From Docker': 'docker.md'
+
+  - Motivation: 'motivation.md'
+  - Install:
+    - 'From Source' : 'install.md'
+    - 'Docker Image' : 'docker.md'
+
+  - Get Started:
+    - 'From C++' : 'gs_cpp.md'
+    - 'From Python' : 'gs_python.md'
+    - 'From CLI' : 'gs_cli.md'
+
   - User Guide: 
-    - 'Specifications' : 'literature.md'
-    - 'Time Models' : 'literature.md'
-  - Advanced Topics: 
-    - 'Time Models' : 'literature.md'
+    - 'Temporal Behaviors' : 'behaviors.md'
+    - 'Formal Specifications' : 'specification.md'
+    - 'C++ API' : 'cpp_api.md'
+    - 'Python API' : 'python_api.md'
     - 'Benchmarking' : 'performance.md'
+    - 'Release Notes': 'release_notes.md'
+
+  - Advanced Topics: 
+    - 'Time Models' : 'time_models_advanced.md'
+    - 'Temporal Logic' : 'temporal_logic.md'
+    - 'Regular Expressions' : 'regular_expressions.md'
+    - 'Sequential Networks' : 'sequential_networks.md'
     - 'References' : 'literature.md'
 
   - About:
+    - 'Author' : 'author.md'
     - 'License' : 'license.md'
     - 'Naming': 'naming.md'
+
 # - 'License': 'license.md'
 # - 'Release Notes': 'release-notes.md'
 
