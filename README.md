@@ -1,5 +1,5 @@
 # Reelay
-![](https://github.com/doganulus/reelay/workflows/library/badge.svg)![](https://github.com/doganulus/reelay/workflows/apps/badge.svg)![](https://github.com/doganulus/reelay/workflows/python/badge.svg)
+![](https://github.com/doganulus/reelay/workflows/library/badge.svg)![](https://github.com/doganulus/reelay/workflows/apps/badge.svg)![](https://github.com/doganulus/reelay/workflows/python/badge.svg)![](https://github.com/doganulus/reelay/workflows/docs/badge.svg)
 
 
 `Reelay` is a header-only C++ library for online monitoring of formal specifications such as past temporal logic and regular expressions. Please see [install instructions](https://github.com/doganulus/reelay/blob/master/INSTALL.md) to install the library on your machine. A docker image of the repository is available too. Please see [Docker instructions](https://github.com/doganulus/reelay/blob/master/docs/docker.md) if you wish to look at `reelay` applications quickly in a container.
@@ -53,7 +53,3 @@ Performance of monitoring apps can be found [here](https://github.com/doganulus/
 |🤞| v.1.x | First-order quantification for past metric temporal logic | FOMTL
 |🤞| v.1.x | FOL monitoring application | ryjavu |
 |🤞| v.2.0 | Reelay 2.0! | REELAY
-
-# Known Issues
-
-1. Currently the new parser parses a formula `not p since q` as `not(p since q)` rather than more intuitive `(not p) since q`. Operator precedence will be reworked in the following versions. 
