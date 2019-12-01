@@ -26,4 +26,4 @@ jobs:
     - name: Build and deploy docs
       run: mkdocs gh-deploy --clean
       env:
-        GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
+        ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
