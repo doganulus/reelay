@@ -27,9 +27,9 @@ jobs:
       run: sudo make install
 
     - name: Setup Python
-        uses: actions/setup-python@v1
-        with:
-          python-version: ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
 
     - name: Install Python package
       run: |
