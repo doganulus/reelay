@@ -7,9 +7,6 @@ from distutils.extension import Extension
 
 __version__ = '1.6.0'
 
-os.environ["CC"] = "gcc-7"
-os.environ["CXX"] = "g++-7"
-
 class get_pybind_include(object):
     """Helper class to determine the pybind11 include path
     The purpose of this class is to postpone importing pybind11

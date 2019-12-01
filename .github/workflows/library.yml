@@ -2,9 +2,8 @@ name: library
 
 on:
   push:
-    paths-ignore:
-    - 'mkdocs.yml'
-    - 'docs/**'
+    paths:
+    - 'include/reelay/**'
 
 jobs:
   test:
