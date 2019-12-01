@@ -12,8 +12,7 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - name: install
-      run: |
-        sudo make install
-    - name: build
+    - name: Install reelay library
+      run: sudo make install
+    - name: Build command-line apps
       run: make apps

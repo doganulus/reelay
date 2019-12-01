@@ -3,6 +3,7 @@ name: library
 on:
   push:
     paths-ignore:
+    - 'mkdocs.yml'
     - 'docs/**'
 
 jobs:

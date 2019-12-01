@@ -1,4 +1,4 @@
-name: apps
+name: docs
 
 on:
   push:
@@ -21,7 +21,5 @@ jobs:
         pip install mkdocs mkdocs-material
     - name: build and publish docs
       run: mkdocs gh-deploy --clean
-      with:
-        repo-token: ${{ secrets.ACCESS_TOKEN }}
-    - name: build
-      run: make apps
+      env:
+        GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
