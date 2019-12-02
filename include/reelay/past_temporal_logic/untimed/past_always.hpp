@@ -27,7 +27,7 @@ struct past_always : public untimed_state<X, bool> {
 
   node_ptr_t first;
 
-  past_always(std::vector<node_ptr_t> args) : first(args[0]) {}
+  past_always(const std::vector<node_ptr_t> &args) : first(args[0]) {}
 
   void update(const input_t& args) { value = first->output() && value; }
 

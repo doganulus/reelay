@@ -35,7 +35,7 @@ struct dense_timed_network : dense_timed_state<X, Y, T> {
   std::vector<std::shared_ptr<state_t>> states;
 
   dense_timed_network(std::shared_ptr<node_t> n,
-                      std::vector<std::shared_ptr<state_t>> ss)
+                      const std::vector<std::shared_ptr<state_t>> &ss)
       : output_node(n), states(ss) {}
 
   void setup(const input_t &prevargs) {
@@ -56,18 +56,16 @@ struct dense_timed_network : dense_timed_state<X, Y, T> {
     this->prevargs = args;
   }
 
-  void update(const input_t& args, time_t now) {
+  void update(const input_t &args, time_t now) {
     this->previous = this->current;
     update(this->prevargs, args, this->previous, now);
     this->current = now;
     this->prevargs = args;
   }
 
-  void update(const input_t& pargs,
-              const input_t& args,
-              time_t previous,
+  void update(const input_t &pargs, const input_t &args, time_t previous,
               time_t now) noexcept override {
-    for (const auto& state : this->states) {
+    for (const auto &state : this->states) {
       state->update(pargs, args, previous, now);
     }
   }
@@ -77,8 +75,9 @@ struct dense_timed_network : dense_timed_state<X, Y, T> {
   }
 
   output_t noutput() {
-    return interval_set<time_t>(interval<time_t>::
-      left_open(this->previous, this->current)) - this->output();
+    return interval_set<time_t>(
+               interval<time_t>::left_open(this->previous, this->current)) -
+           this->output();
   }
 
   std::vector<std::pair<time_t, V>> voutput() {
@@ -132,4 +131,4 @@ struct dense_timed_network : dense_timed_state<X, Y, T> {
   }
 };
 
-}  // namespace reelay
+} // namespace reelay

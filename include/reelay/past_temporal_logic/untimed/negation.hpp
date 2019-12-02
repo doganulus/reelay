@@ -25,7 +25,7 @@ struct negation : public untimed_node<bool> {
 
   node_ptr_t arg1;
 
-  negation(std::vector<node_ptr_t> args) : arg1(args[0]) {}
+  negation(const std::vector<node_ptr_t> &args) : arg1(args[0]) {}
 
   output_t output() { return not arg1->output(); }
 };

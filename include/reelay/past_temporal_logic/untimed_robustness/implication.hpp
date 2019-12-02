@@ -26,7 +26,8 @@ struct implication : public untimed_node<V> {
   node_ptr_t arg1;
   node_ptr_t arg2;
 
-  implication(std::vector<node_ptr_t> args) : arg1(args[0]), arg2(args[1]) {}
+  implication(const std::vector<node_ptr_t> &args)
+      : arg1(args[0]), arg2(args[1]) {}
 
   output_t output() { return std::max(-arg1->output(), arg2->output()); }
 };

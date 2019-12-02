@@ -25,7 +25,7 @@ struct disjunction : public untimed_node<V> {
 
   std::vector<node_ptr_t> args;
 
-  disjunction(std::vector<node_ptr_t> nodeptrs) : args(nodeptrs) {}
+  disjunction(const std::vector<node_ptr_t> &nodeptrs) : args(nodeptrs) {}
 
   output_t output() {
     output_t result = args[0]->output();

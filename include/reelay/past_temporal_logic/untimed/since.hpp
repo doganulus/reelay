@@ -28,7 +28,8 @@ struct since : public untimed_state<X, bool> {
   node_ptr_t first;
   node_ptr_t second;
 
-  since(std::vector<node_ptr_t> args) : first(args[0]), second(args[1]) {}
+  since(const std::vector<node_ptr_t> &args)
+      : first(args[0]), second(args[1]) {}
 
   void update(const input_t& args) override {
     value = second->output() || (first->output() && value);

@@ -38,7 +38,7 @@ struct past_always_bounded : public discrete_timed_state<X, bool, T> {
   time_t lbound = 0;
   time_t ubound = 0;
 
-  past_always_bounded(std::vector<node_ptr_t> args, time_t l, time_t u)
+  past_always_bounded(const std::vector<node_ptr_t> &args, time_t l, time_t u)
       : first(args[0]), lbound(l), ubound(u) {}
 
   void update(const input_t& args, time_t now) {

@@ -34,8 +34,8 @@ struct stdout_formatter_verbosity_1 : public stdout_formatter<X, T> {
   network_ptr_t network;
   strings_t columm_names;
 
-  stdout_formatter_verbosity_1(network_ptr_t netptr, strings_t names)
-    : network(netptr), columm_names(names) {}
+  stdout_formatter_verbosity_1(network_ptr_t netptr, const strings_t &names)
+      : network(netptr), columm_names(names) {}
 
   void update(const input_t &args) { network->update(args); }
   void update(const input_t &args, time_t now) { network->update(args, now); }

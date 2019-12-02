@@ -35,7 +35,7 @@ struct past_sometime_bounded_half
 
   node_ptr_t first;
 
-  past_sometime_bounded_half(std::vector<node_ptr_t> args, time_t l)
+  past_sometime_bounded_half(const std::vector<node_ptr_t> &args, time_t l)
       : first(args[0]), lbound(l) {}
 
   void update(const input_t& pargs,

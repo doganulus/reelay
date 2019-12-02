@@ -30,7 +30,7 @@ struct proposition : public discrete_timed_state<X, bool, T> {
   bool value = false;
   function_t fn;
 
-  proposition(std::string name)
+  proposition(const std::string &name)
       : fn([name](const input_t &x) {
           return boost::lexical_cast<bool>(x.at(name));
         }) {}
@@ -51,7 +51,7 @@ struct basic_predicate_lt : public discrete_timed_state<X, bool, T> {
   bool value = false;
   function_t fn;
 
-  basic_predicate_lt(std::string name, float c)
+  basic_predicate_lt(const std::string &name, float c)
       : fn([name, c](const input_t &x) {
           return boost::lexical_cast<float>(x.at(name)) < c;
         }) {}
@@ -72,7 +72,7 @@ struct basic_predicate_le : public discrete_timed_state<X, bool, T> {
   bool value = false;
   function_t fn;
 
-  basic_predicate_le(std::string name, float c)
+  basic_predicate_le(const std::string &name, float c)
       : fn([name, c](const input_t &x) {
           return boost::lexical_cast<float>(x.at(name)) <= c;
         }) {}
@@ -93,7 +93,7 @@ struct basic_predicate_gt : public discrete_timed_state<X, bool, T> {
   bool value = false;
   function_t fn;
 
-  basic_predicate_gt(std::string name, float c)
+  basic_predicate_gt(const std::string &name, float c)
       : fn([name, c](const input_t &x) {
           return boost::lexical_cast<float>(x.at(name)) > c;
         }) {}
@@ -114,7 +114,7 @@ struct basic_predicate_ge : public discrete_timed_state<X, bool, T> {
   bool value = false;
   function_t fn;
 
-  basic_predicate_ge(std::string name, float c)
+  basic_predicate_ge(const std::string &name, float c)
       : fn([name, c](const input_t &x) {
           return boost::lexical_cast<float>(x.at(name)) >= c;
         }) {}

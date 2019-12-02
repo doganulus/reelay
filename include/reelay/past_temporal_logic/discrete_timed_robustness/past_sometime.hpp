@@ -30,7 +30,7 @@ struct past_sometime : public discrete_timed_state<X, V, T> {
 
   node_ptr_t first;
 
-  past_sometime(std::vector<node_ptr_t> args) : first(args[0]) {}
+  past_sometime(const std::vector<node_ptr_t> &args) : first(args[0]) {}
 
   void update(const input_t &args, time_t now) {
     value = std::max(value, first->output(now));

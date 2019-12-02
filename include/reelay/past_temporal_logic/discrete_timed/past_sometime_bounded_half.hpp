@@ -37,7 +37,7 @@ struct past_sometime_bounded_half : public discrete_timed_state<X, bool, T> {
 
   time_t lbound = 0;
 
-  past_sometime_bounded_half(std::vector<node_ptr_t> args, time_t l)
+  past_sometime_bounded_half(const std::vector<node_ptr_t> &args, time_t l)
       : first(args[0]), lbound(l) {}
 
   void update(const input_t& args, time_t now) {

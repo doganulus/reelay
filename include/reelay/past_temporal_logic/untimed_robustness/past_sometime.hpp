@@ -27,7 +27,7 @@ struct past_sometime : public untimed_state<X, V> {
 
   node_ptr_t first;
 
-  past_sometime(std::vector<node_ptr_t> args) : first(args[0]) {}
+  past_sometime(const std::vector<node_ptr_t> &args) : first(args[0]) {}
 
   void update(const input_t &args) { value = std::max(value, first->output()); }
 

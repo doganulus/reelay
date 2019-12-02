@@ -28,11 +28,11 @@ struct untimed_network : untimed_state<input_t, output_t> {
   std::vector<std::shared_ptr<state_type>> states;
 
   untimed_network(std::shared_ptr<node_type> n,
-                  std::vector<std::shared_ptr<state_type>> ss)
+                  const std::vector<std::shared_ptr<state_type>> &ss)
       : output_node(n), states(ss) {}
 
   void update(const input_t &args) override {
-    now = now + 1; 
+    now = now + 1;
     for (const auto &state : this->states) {
       state->update(args);
     }

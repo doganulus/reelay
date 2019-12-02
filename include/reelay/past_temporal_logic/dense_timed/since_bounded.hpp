@@ -36,7 +36,7 @@ struct since_bounded : public dense_timed_state<X, interval_set<T>, T> {
   time_t lbound = 0;
   time_t ubound = 0;
 
-  since_bounded(std::vector<node_ptr_t> args, time_t l, time_t u)
+  since_bounded(const std::vector<node_ptr_t> &args, time_t l, time_t u)
       : first(args[0]), second(args[1]), lbound(l), ubound(u) {}
 
   void update(bool p1, bool p2, time_t previous, time_t now) {

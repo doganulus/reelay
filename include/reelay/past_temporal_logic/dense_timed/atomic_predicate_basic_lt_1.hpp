@@ -38,7 +38,7 @@ struct basic_predicate_lt<X, T, 1>
   interval_set value = interval_set();
   function_t fn;
 
-  basic_predicate_lt(std::string name, float c)
+  basic_predicate_lt(const std::string &name, float c)
       : fn([name, c](const input_t &pargs, const input_t &args, time_t previous,
                      time_t now) {
           float y0 = boost::lexical_cast<float>(pargs.at(name));

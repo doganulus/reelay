@@ -40,7 +40,7 @@ struct since_bounded_half : public discrete_timed_state<X, V, T> {
 
   time_t lbound = 0;
 
-  since_bounded_half(std::vector<node_ptr_t> args, time_t l)
+  since_bounded_half(const std::vector<node_ptr_t> &args, time_t l)
       : first(args[0]), second(args[1]), lbound(l) {
     value1.add(std::make_pair(
         interval::closed(-reelay::infinity<time_t>::value(), lbound),

@@ -32,7 +32,7 @@ struct past_sometime : public dense_timed_state<X, interval_set<T>, T> {
 
   node_ptr_t first;
 
-  past_sometime(std::vector<node_ptr_t> args) : first(args[0]) {}
+  past_sometime(const std::vector<node_ptr_t> &args) : first(args[0]) {}
 
   void update(const input_t& pargs,
               const input_t& args,

@@ -38,7 +38,7 @@ struct basic_predicate_ge<X, T, 0>
   interval_set value = interval_set();
   function_t fn;
 
-  basic_predicate_ge(std::string name, float c)
+  basic_predicate_ge(const std::string &name, float c)
       : fn([name, c](const input_t &pargs, const input_t &args, time_t previous,
                      time_t now) {
           if (boost::lexical_cast<float>(args.at(name)) >= c) {

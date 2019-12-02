@@ -30,28 +30,17 @@ struct discrete_timed_network
   std::vector<std::shared_ptr<state_type>> states;
 
   discrete_timed_network(std::shared_ptr<node_type> n,
-                         std::vector<std::shared_ptr<state_type>> ss)
+                         const std::vector<std::shared_ptr<state_type>> &ss)
       : output_node(n), states(ss) {}
 
-  void update(const input_t& args) {
+  void update(const input_t &args) {
     this->now = this->now + 1;
-    for (const auto& state : this->states) {
+    for (const auto &state : this->states) {
       state->update(args, this->now);
     }
   }
 
-  // void update(const input_t &args, time_t now) override
-  // {
-  //     this->set_current_time(now);
-  //     for (const auto &state : this->states)
-  //     {
-  //         state->update(args, this->get_current_time());
-  //     }
-  // }
-
-  output_t output() {
-    return this->output_node->output(this->now);
-  }
+  output_t output() { return this->output_node->output(this->now); }
 };
 
-}  // namespace reelay
+} // namespace reelay

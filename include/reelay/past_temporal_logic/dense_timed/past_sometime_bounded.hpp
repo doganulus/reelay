@@ -35,7 +35,7 @@ struct past_sometime_bounded : public dense_timed_state<X, interval_set<T>, T> {
 
   node_ptr_t first;
 
-  past_sometime_bounded(std::vector<node_ptr_t> args, time_t l, time_t u)
+  past_sometime_bounded(const std::vector<node_ptr_t> &args, time_t l, time_t u)
       : first(args[0]), lbound(l), ubound(u) {}
 
   void update(const input_t& pargs,

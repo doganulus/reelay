@@ -35,7 +35,7 @@ struct since_bounded_half : public dense_timed_state<X, interval_set<T>, T> {
 
   time_t lbound = 0;
 
-  since_bounded_half(std::vector<node_ptr_t> args, time_t l)
+  since_bounded_half(const std::vector<node_ptr_t> &args, time_t l)
       : first(args[0]), second(args[1]), lbound(l) {}
 
   void update(bool p1, bool p2, time_t previous, time_t now) {
