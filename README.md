@@ -1,55 +1,38 @@
-# Reelay
-![](https://github.com/doganulus/reelay/workflows/library/badge.svg)![](https://github.com/doganulus/reelay/workflows/apps/badge.svg)![](https://github.com/doganulus/reelay/workflows/python/badge.svg)![](https://github.com/doganulus/reelay/workflows/docs/badge.svg)
+# Reelay Monitors
 
+Reelay is a header-only C++ library and set of tools for system-level verification and testing of real-time systems. Reelay implements state-of-the-art [runtime verification](https://en.wikipedia.org/wiki/Runtime_verification) techniques to construct runtime monitors that check temporal behaviors of the system against system-level requirements. Hence, Reelay can be used to enhance rigorous systems engineering practices by formalizing and automating the assessment phase. See [the Reelay documentation](https://doganulus.github.io/reelay/) for details.
 
-`Reelay` is a header-only C++ library for online monitoring of formal specifications such as past temporal logic and regular expressions. Please see [install instructions](https://github.com/doganulus/reelay/blob/master/INSTALL.md) to install the library on your machine. A docker image of the repository is available too. Please see [Docker instructions](https://github.com/doganulus/reelay/blob/master/docs/docker.md) if you wish to look at `reelay` applications quickly in a container.
+## Main Features
+* Formal specification of temporal properties
+* Provably correct monitor construction from the specification
+* Fast and frugal runtime requirement checking (very low overhead)
+* Simple but non-restrictive user interface 
+* Available for C++, Python, and the command line
 
-# Brief
-`Reelay` has been designed for efficiency and flexibility so that users can write their applications in C++ or embed formal specification monitoring into their projects easily. 
+## Get Started
 
-The use of `reelay` monitors is pretty straighforward and we construct an online monitor for a past temporal logic formula as follows: 
+The next steps for you are to install Reelay [from source](docs/install.md) or [Docker image](docs/docker.md) and follow through tutorials to learn how to use Reelay monitors from [C++](docs/gs_cpp.md), [Python](docs/gs_python) and the [command line interface](docs/gs_cli.md).
 
-	auto my_monitor = reelay::monitor<input_t>::from_temporal_logic("p1 since p2");
+## Contribute
 
-	for (const auto &current_input : input_sequence)
-	{
-		my_monitor->update(current_input);     // feed with current input
-		current_output = my_monitor->output(); // obtain the current output
-	}
+Currently Reelay does not have a contribution guideline. However, we always welcome bug reports, enhancements, and comments regarding the project. Please use the [Issues](https://github.com/doganulus/reelay/issues) page if you have a bug report, enhancement, or comment. Thanks for your interest!
 
-The ability to construct discrete and dense timed monitors from timed specifications is the main goal and feature of `reelay` project. We construct online monitor from such specification as follows:
-     
-    auto my_monitor = reelay::discrete_timed<time_t>::monitor<input_t>::from_temporal_logic("p1 since[18:24] p2");
+## Roadmap
 
-    auto my_monitor = reelay::dense_timed<time_t>::monitor<input_t>::from_temporal_logic("p1 since[18:24] p2");
-
-From the online monitoring point of view, the essential difference between discrete and dense time models is the duration of updates, which is strictly one time unit for the discrete setting whereas it could be arbitrarily long or short for the dense setting. For more information, please check [discrete]() and [dense]() timed settings. These settings are usually called metric temporal logic (MTL) and very popular for specifiying properties of real-time/cyber-physical systems.
-
-# Monitoring Apps
-
-A set of (standalone, command-line) online monitoring applications utilizing `reelay` library over some common data formats such as comma separated values (CSV) files. The apps folder would contain the source code these applications and can be built using `make apps` command. Please check for more information regarding stand-alone monitoring apps.
-
-1. The first application `rymtl` provides past metric temporal logic (past MTL) monitoring over CSV files over discrete and dense time temporal Boolean streams.
-2. The second application `rystl` provides past signal temporal logic (past STL) monitoring over CSV files together with a number of convinient features including piecewise constant and piecewise linear interpolation over unevenly sampled time series.
-
-Performance of monitoring apps can be found [here](https://github.com/doganulus/reelay/blob/master/docs/performance.md).
-
-# Current Roadmap
-
-`reelay` is an ongoing project and below is a number of features and plans to expand the scope and improve the usability of the library.
+Reelay is an ongoing project and below is a number of features and plans to expand the scope and improve the usability of the library.
 
 | Status | Version | Deliverable | Codename |
 |-|---------|-------------|----------|
-|✅| v.1.1 | Untimed, discrete and dense timed settings for past temporal logic | MTL
-|✅| v.1.2 | MTL monitoring application | rymtl
-|✅| v.1.3 | Full predicate support over piecewise linear signals | STL
-|✅| v.1.4 | Robustness settings | STLRO
+|✅| v.1.1 | Untimed, discrete and dense timed settings for past temporal logic | MTL |
+|✅| v.1.2 | MTL monitoring application | rymtl |
+|✅| v.1.3 | Full predicate support over piecewise linear signals | STL |
+|✅| v.1.4 | Robustness settings | STLRO |
 |✅| v.1.5 | STL monitoring application | rystl
-|⌛| v.1.6 | Python bindings | MONPY
-|🤞| v.1.x | Untimed regular expressions | RE
-|🤞| v.1.x | Discrete and dense timed regular expressions | TRE
-|🤞| v.1.x | TRE monitoring application | rytre
-|🤞| v.1.x | First-order quantification for untimed past temporal logic | FOLTL
+|✅| v.1.6 | Python bindings | MONPY |
+|🤞| v.1.x | Untimed regular expressions | RE |
+|🤞| v.1.x | Discrete and dense timed regular expressions | TRE |
+|🤞| v.1.x | TRE monitoring application | rytre |
+|🤞| v.1.x | First-order quantification for untimed past temporal logic | FOLTL |
 |🤞| v.1.x | First-order quantification for past metric temporal logic | FOMTL
 |🤞| v.1.x | FOL monitoring application | ryjavu |
-|🤞| v.2.0 | Reelay 2.0! | REELAY
+|🤞| v.2.0 | Reelay 2.0! | REELAY |
