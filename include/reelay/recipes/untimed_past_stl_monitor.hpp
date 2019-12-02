@@ -23,7 +23,7 @@ struct untimed_past_stl_monitor {
 
   network_ptr_t network;
 
-  untimed_past_stl_monitor(const std::string &pattern) {
+  explicit untimed_past_stl_monitor(const std::string &pattern) {
     auto parser = ptl_parser<factory>();
     this->network = parser.parse(pattern);
   }

@@ -1,15 +1,13 @@
 FROM ubuntu:18.04
 
-RUN apt-get update
+RUN apt-get -qq update
 # Prereqs
-RUN apt-get install -qqy --no-install-recommends uuid-dev 
-RUN apt-get install -qqy --no-install-recommends git 
-RUN apt-get install -qqy --no-install-recommends g++
-RUN apt-get install -qqy --no-install-recommends make 
-RUN apt-get install -qqy --no-install-recommends libboost-all-dev 
-RUN apt-get install -qqy --no-install-recommends libgmp-dev \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get install -qqy uuid-dev 
+RUN apt-get install -qqy git 
+RUN apt-get install -qqy g++
+RUN apt-get install -qqy make 
+RUN apt-get install -qqy libboost-all-dev 
+RUN apt-get install -qqy libgmp-dev
 # Clone reelay
 WORKDIR /home
 RUN git clone https://github.com/doganulus/reelay

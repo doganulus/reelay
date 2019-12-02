@@ -30,7 +30,7 @@ struct proposition : public discrete_timed_state<X, bool, T> {
   bool value = false;
   function_t fn;
 
-  proposition(const std::string &name)
+  explicit proposition(const std::string &name)
       : fn([name](const input_t &x) {
           return boost::lexical_cast<bool>(x.at(name));
         }) {}
