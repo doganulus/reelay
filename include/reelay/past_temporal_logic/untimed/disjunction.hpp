@@ -25,7 +25,8 @@ struct disjunction : public untimed_node<bool> {
 
   std::vector<node_ptr_t> args;
 
-  disjunction(const std::vector<node_ptr_t> &nodeptrs) : args(nodeptrs) {}
+  explicit disjunction(const std::vector<node_ptr_t> &nodeptrs)
+      : args(nodeptrs) {}
 
   output_t output() {
     return std::any_of(args.cbegin(), args.cend(),

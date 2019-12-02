@@ -37,7 +37,7 @@ struct predicate : public dense_timed_state<X, interval_set<T>, T> {
   interval_set value = interval_set();
   function_t fn;
 
-  predicate(const function_t& f) : fn(f) {}
+  explicit predicate(const function_t& f) : fn(f) {}
 
   void update(const input_t& pargs,
               const input_t& args,

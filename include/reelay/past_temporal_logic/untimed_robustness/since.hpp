@@ -28,8 +28,8 @@ struct since : public untimed_state<X, V> {
   node_ptr_t first;
   node_ptr_t second;
 
-  since(const std::vector<node_ptr_t> &args)
-    : first(args[0]), second(args[1]) {}
+  explicit since(const std::vector<node_ptr_t> &args)
+      : first(args[0]), second(args[1]) {}
 
   void update(const input_t& args) override {
     value = std::max(second->output(), std::min(value, first->output()));

@@ -30,7 +30,7 @@ struct since : public discrete_timed_state<X, V, T> {
   node_ptr_t first;
   node_ptr_t second;
 
-  since(const std::vector<node_ptr_t> &args)
+  explicit since(const std::vector<node_ptr_t> &args)
       : first(args[0]), second(args[1]) {}
 
   void update(const input_t &args, time_t now) override {

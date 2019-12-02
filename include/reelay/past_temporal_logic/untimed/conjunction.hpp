@@ -25,7 +25,8 @@ struct conjunction : public untimed_node<bool> {
 
   std::vector<node_ptr_t> args;
 
-  conjunction(const std::vector<node_ptr_t> &nodeptrs) : args(nodeptrs) {}
+  explicit conjunction(const std::vector<node_ptr_t> &nodeptrs)
+      : args(nodeptrs) {}
 
   output_t output() {
     return std::all_of(args.cbegin(), args.cend(),

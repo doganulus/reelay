@@ -24,7 +24,7 @@ template <typename X> struct proposition : public untimed_state<X, bool> {
   bool value = false;
   std::function<bool(const input_t &)> fn;
 
-  proposition(const std::string &name)
+  explicit proposition(const std::string &name)
       : fn([name](const input_t &x) {
           return boost::lexical_cast<bool>(x.at(name));
         }) {}
@@ -124,7 +124,7 @@ template <typename X> struct predicate : public untimed_state<X, bool> {
   bool value = false;
   std::function<bool(const input_t &)> fn;
 
-  predicate(const function_t &f) : fn(f) {}
+  explicit predicate(const function_t &f) : fn(f) {}
 
   void update(const input_t &args) override { value = fn(args); }
 

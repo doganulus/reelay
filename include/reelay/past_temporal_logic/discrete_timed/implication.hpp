@@ -33,7 +33,7 @@ struct implication : public discrete_timed_node<bool, T> {
   node_ptr_t arg1;
   node_ptr_t arg2;
 
-  implication(const std::vector<node_ptr_t> &args)
+  explicit implication(const std::vector<node_ptr_t> &args)
       : arg1(args[0]), arg2(args[1]) {}
 
   output_t output(time_t now) {

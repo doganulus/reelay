@@ -33,7 +33,7 @@ struct since : public dense_timed_state<X, interval_set<T>, T> {
   node_ptr_t first;
   node_ptr_t second;
 
-  since(const std::vector<node_ptr_t> &args)
+  explicit since(const std::vector<node_ptr_t> &args)
       : first(args[0]), second(args[1]) {}
 
   void update(bool p1, bool p2, time_t previous, time_t now) {

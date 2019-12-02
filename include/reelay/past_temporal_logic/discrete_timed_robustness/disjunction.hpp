@@ -31,7 +31,8 @@ struct disjunction : public discrete_timed_node<V, T> {
 
   std::vector<node_ptr_t> args;
 
-  disjunction(const std::vector<node_ptr_t> &nodeptrs) : args(nodeptrs) {}
+  explicit disjunction(const std::vector<node_ptr_t> &nodeptrs)
+      : args(nodeptrs) {}
 
   output_t output(time_t now) {
     output_t result = args[0]->output(now);

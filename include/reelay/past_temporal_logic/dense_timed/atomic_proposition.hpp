@@ -37,7 +37,7 @@ struct proposition : public dense_timed_state<X, interval_set<T>, T> {
   interval_set value = interval_set();
   function_t fn;
 
-  proposition(const std::string &name)
+  explicit proposition(const std::string &name)
       : fn([name](const input_t &pargs, const input_t &args, time_t previous,
                   time_t now) {
           if (boost::lexical_cast<bool>(args.at(name))) {

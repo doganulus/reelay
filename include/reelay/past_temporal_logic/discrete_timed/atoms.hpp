@@ -135,7 +135,7 @@ struct predicate : public discrete_timed_state<X, bool, T> {
   bool value = false;
   function_t fn;
 
-  predicate(const function_t& f) : fn(f) {}
+  explicit predicate(const function_t &f) : fn(f) {}
 
   void update(const input_t& args, time_t now) override { value = fn(args); }
 

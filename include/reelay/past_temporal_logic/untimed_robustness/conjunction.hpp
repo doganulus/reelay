@@ -25,7 +25,8 @@ struct conjunction : public untimed_node<V> {
 
   std::vector<node_ptr_t> args;
 
-  conjunction(const std::vector<node_ptr_t> &nodeptrs) : args(nodeptrs) {}
+  explicit conjunction(const std::vector<node_ptr_t> &nodeptrs)
+      : args(nodeptrs) {}
 
   output_t output() {
     output_t result = args[0]->output();

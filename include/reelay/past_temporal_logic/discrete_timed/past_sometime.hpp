@@ -30,7 +30,8 @@ struct past_sometime : public discrete_timed_state<X, bool, T> {
 
   node_ptr_t first;
 
-  past_sometime(const std::vector<node_ptr_t> &args) : first(args[0]) {}
+  explicit past_sometime(const std::vector<node_ptr_t> &args)
+      : first(args[0]) {}
 
   void update(const input_t& args, time_t now) override {
     value = first->output(now) || value;

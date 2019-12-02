@@ -29,7 +29,7 @@ struct proposition : public discrete_timed_state<X, V, T> {
   output_t value = false;
   function_t fn;
 
-  proposition(const std::string &name)
+  explicit proposition(const std::string &name)
       : fn([name](const input_t &x) {
           return boost::lexical_cast<V>(x.at(name));
         }) {}
@@ -134,7 +134,7 @@ struct predicate : public discrete_timed_state<X, V, T> {
   output_t value = false;
   function_t fn;
 
-  predicate(const function_t& f) : fn(f) {}
+  explicit predicate(const function_t &f) : fn(f) {}
 
   void update(const input_t& args, time_t now) override { value = fn(args); }
 

@@ -26,7 +26,7 @@ struct implication : public untimed_node<bool> {
   node_ptr_t arg1;
   node_ptr_t arg2;
 
-  implication(const std::vector<node_ptr_t> &args)
+  explicit implication(const std::vector<node_ptr_t> &args)
       : arg1(args[0]), arg2(args[1]) {}
 
   output_t output() { return not arg1->output() or arg2->output(); }

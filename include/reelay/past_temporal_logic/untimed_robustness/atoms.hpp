@@ -25,7 +25,7 @@ struct proposition : public untimed_state<X, V> {
   output_t value = -std::numeric_limits<output_t>::max();
   std::function<output_t(const input_t &)> fn;
 
-  proposition(const std::string &name)
+  explicit proposition(const std::string &name)
       : fn([name](const input_t &x) {
           return boost::lexical_cast<V>(x.at(name));
         }) {}
@@ -126,7 +126,7 @@ struct predicate : public untimed_state<X, V> {
   output_t value = -std::numeric_limits<output_t>::max();
   std::function<output_t(const input_t &)> fn;
 
-  predicate(const function_t &f) : fn(f) {}
+  explicit predicate(const function_t &f) : fn(f) {}
 
   void update(const input_t &args) override { value = fn(args); }
 

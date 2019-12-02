@@ -27,7 +27,8 @@ struct past_sometime : public untimed_state<X, bool> {
 
   node_ptr_t first;
 
-  past_sometime(const std::vector<node_ptr_t> &args) : first(args[0]) {}
+  explicit past_sometime(const std::vector<node_ptr_t> &args)
+      : first(args[0]) {}
 
   void update(const input_t& args) { value = first->output() || value; }
 
