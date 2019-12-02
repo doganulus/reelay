@@ -25,7 +25,7 @@ struct dense_timed_past_stl0_monitor {
 
   network_ptr_t network;
 
-  dense_timed_past_stl0_monitor(const std::string &pattern) {
+  explicit dense_timed_past_stl0_monitor(const std::string &pattern) {
     auto parser = ptl_parser<factory>();
     this->network = parser.parse(pattern);
   }

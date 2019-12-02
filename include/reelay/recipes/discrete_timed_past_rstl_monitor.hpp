@@ -26,7 +26,7 @@ struct discrete_timed_past_rstl_monitor {
 
   network_ptr_t network;
 
-  discrete_timed_past_rstl_monitor(const std::string &pattern) {
+  explicit discrete_timed_past_rstl_monitor(const std::string &pattern) {
     auto parser = ptl_parser<factory>();
     this->network = parser.parse(pattern);
   }

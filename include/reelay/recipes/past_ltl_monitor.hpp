@@ -23,7 +23,7 @@ struct past_ltl_monitor{
 
   network_ptr_t network;
 
-  past_ltl_monitor(const std::string &pattern) {
+  explicit past_ltl_monitor(const std::string &pattern) {
     auto parser = ptl_parser<factory>();
     this->network = parser.parse(pattern);
   }
