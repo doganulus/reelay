@@ -26,9 +26,10 @@ nav:
     - 'Docker Image' : 'docker.md'
 
   - Get Started:
-    - 'From C++' : 'gs_cpp.md'
-    - 'From Python' : 'gs_python.md'
-    - 'From CLI' : 'gs_cli.md'
+    - 'An Example' : 'gs_intro.md'
+    - 'C++ Tutorial' : 'gs_cpp.md'
+    - 'Python Tutorial' : 'gs_python.md'
+    - 'CLI Tutorial' : 'gs_cli.md'
 
   - User Guide: 
     - 'Temporal Behaviors' : 'behaviors.md'

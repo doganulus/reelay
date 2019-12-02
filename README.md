@@ -4,11 +4,11 @@
 Reelay is a header-only C++ library and set of tools for system-level verification and testing of real-time systems. Reelay implements state-of-the-art [runtime verification](https://en.wikipedia.org/wiki/Runtime_verification) techniques to construct runtime monitors that check temporal behaviors of the system against system-level requirements. Hence, Reelay can be used to enhance rigorous systems engineering practices by formalizing and automating the assessment phase. See [the Reelay documentation](https://doganulus.github.io/reelay/) for details.
 
 ## Main Features
-* Formal specification of temporal properties
-* Provably correct monitor construction from the specification
-* Fast and frugal runtime requirement checking (very low overhead)
-* Simple but non-restrictive user interface 
-* Available for C++, Python, and the command line
+  * Formal specification of temporal properties
+  * Provably correct monitor construction from the specification
+  * Fast and frugal runtime requirement checking (very low overhead)
+  * Simple but non-restrictive user interface 
+  * Available for C++, Python, and the command line
 
 ## Get Started
 
