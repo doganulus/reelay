@@ -1,4 +1,3 @@
-import os
 import setuptools
 
 from distutils import util

@@ -79,7 +79,7 @@ struct ptl_parser {
 
   std::map<std::string, function_t> predicates;
 
-  ptl_parser(std::map<std::string, function_t> pp =
+  ptl_parser(const std::map<std::string, function_t> &pp =
                  std::map<std::string, function_t>()) : predicates(pp) {
 
     parser = peg::parser(grammar);

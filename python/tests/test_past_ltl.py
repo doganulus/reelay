@@ -1,4 +1,3 @@
-import pytest
 import reelay
 
 def test_negation():

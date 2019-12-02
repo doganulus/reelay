@@ -1,4 +1,5 @@
 # Reelay Monitors
+![](https://github.com/doganulus/reelay/workflows/library/badge.svg)![](https://github.com/doganulus/reelay/workflows/apps/badge.svg)![](https://github.com/doganulus/reelay/workflows/python/badge.svg)![](https://github.com/doganulus/reelay/workflows/docs/badge.svg)
 
 Reelay is a header-only C++ library and set of tools for system-level verification and testing of real-time systems. Reelay implements state-of-the-art [runtime verification](https://en.wikipedia.org/wiki/Runtime_verification) techniques to construct runtime monitors that check temporal behaviors of the system against system-level requirements. Hence, Reelay can be used to enhance rigorous systems engineering practices by formalizing and automating the assessment phase. See [the Reelay documentation](https://doganulus.github.io/reelay/) for details.
 
@@ -33,6 +34,6 @@ Reelay is an ongoing project and below is a number of features and plans to expa
 |🤞| v.1.x | Discrete and dense timed regular expressions | TRE |
 |🤞| v.1.x | TRE monitoring application | rytre |
 |🤞| v.1.x | First-order quantification for untimed past temporal logic | FOLTL |
-|🤞| v.1.x | First-order quantification for past metric temporal logic | FOMTL
+|🤞| v.1.x | First-order quantification for past metric temporal logic | FOMTL |
 |🤞| v.1.x | FOL monitoring application | ryjavu |
 |🤞| v.2.0 | Reelay 2.0! | REELAY |

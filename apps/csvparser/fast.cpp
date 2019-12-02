@@ -28,10 +28,10 @@ int main(int argc, const char* argv[]) {
   row[3] = 0;
 
   while(reader.read_row(t,p,q,r)){
-    row[1] = t;
-    row[2] = p;
-    row[3] = q;
-    row[4] = r;
+    row[0] = t;
+    row[1] = p;
+    row[2] = q;
+    row[3] = r;
   }
 
   return 0;
