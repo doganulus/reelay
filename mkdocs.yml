@@ -20,16 +20,16 @@ theme:
 nav:
   - Home: 'index.md'
 
-  - Motivation: 'motivation.md'
+  # - Motivation: 'motivation.md'
   - Install:
     - 'From Source' : 'install.md'
     - 'Docker Image' : 'docker.md'
 
   - Get Started:
-    - 'An Example' : 'gs_intro.md'
-    - 'C++ Tutorial' : 'gs_cpp.md'
-    - 'Python Tutorial' : 'gs_python.md'
-    - 'CLI Tutorial' : 'gs_cli.md'
+    - 'Tutorial: Intro' : 'gs_intro.md'
+    - 'How to use from C++' : 'gs_cpp.md'
+    - 'How to use from Python' : 'gs_python.md'
+    - 'How to use from CLI' : 'gs_cli.md'
 
   - User Guide: 
     - 'Temporal Behaviors' : 'behaviors.md'
@@ -40,8 +40,8 @@ nav:
     - 'Release Notes': 'release_notes.md'
 
   - Advanced Topics: 
-    - 'Time Models' : 'time_models_advanced.md'
-    - 'Temporal Logic' : 'temporal_logic.md'
+    - 'Time Models' : 'time_models.md'
+    - 'Past Temporal Logic' : 'past_temporal_logic.md'
     - 'Regular Expressions' : 'regular_expressions.md'
     - 'Sequential Networks' : 'sequential_networks.md'
     - 'References' : 'literature.md'
@@ -64,3 +64,5 @@ plugins:
   - search
   - minify:
       minify_html: true
+
+google_analytics: ['UA-153753179-1', 'mkdocs.org']

@@ -1,7 +1,7 @@
 # Reelay Monitors
 ![](https://github.com/doganulus/reelay/workflows/library/badge.svg)![](https://github.com/doganulus/reelay/workflows/apps/badge.svg)![](https://github.com/doganulus/reelay/workflows/python/badge.svg)![](https://github.com/doganulus/reelay/workflows/docs/badge.svg) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9493a2a1ed2b47e6a0cfdcf6a68cd9b8)](https://www.codacy.com/manual/doganulus/reelay?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=doganulus/reelay&amp;utm_campaign=Badge_Grade)
 
-Reelay is a header-only C++ library and set of tools for system-level verification and testing of real-time systems. Reelay implements state-of-the-art [runtime verification](https://en.wikipedia.org/wiki/Runtime_verification) techniques to construct runtime monitors that check temporal behaviors of the system against system-level requirements. Hence, Reelay can be used to enhance rigorous systems engineering practices by formalizing and automating the assessment phase. See [the Reelay documentation](https://doganulus.github.io/reelay/) for details.
+Reelay is a header-only C++ library and set of tools for system-level verification and testing of real-time systems. Reelay implements state-of-the-art [runtime verification](https://en.wikipedia.org/wiki/Runtime_verification) techniques to construct runtime monitors that check temporal behaviors of the system against system-level requirements. Hence, Reelay can be used to enhance rigorous systems engineering practices by formalizing and automating the assessment phase. 
 
 ## Main Features
   * Formal specification of temporal properties
@@ -12,7 +12,7 @@ Reelay is a header-only C++ library and set of tools for system-level verificati
 
 ## Get Started
 
-The next steps for you are to install Reelay [from source](docs/install.md) or [Docker image](docs/docker.md) and follow through tutorials to learn how to use Reelay monitors from [C++](docs/gs_cpp.md), [Python](docs/gs_python) and the [command line interface](docs/gs_cli.md).
+The next steps for you are to install Reelay [from source](docs/install.md) or [Docker image](docs/docker.md) and follow through tutorials to learn how to use Reelay monitors from [C++](docs/gs_cpp.md), [Python](docs/gs_python) and the [command line interface](docs/gs_cli.md). Check out [the documentation](https://doganulus.github.io/reelay/) for more details regarding how it works.
 
 ## Contribute
 

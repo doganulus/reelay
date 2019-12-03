@@ -11,7 +11,7 @@ Reelay is a header-only C++ library and set of tools for system-level verificati
 
 ## Get Started
 
-The next steps for you are to install Reelay [from source](install.md) or [Docker image](docker.md) and follow through tutorials to learn how to use Reelay monitors from [C++](gs_cpp.md), [Python](gs_python) and the [command line interface](gs_cli.md).
+The next steps for you are to install Reelay [from source](install.md) or [Docker image](docker.md) and follow through [the tutorial](gs_intro) to learn how to use Reelay monitors from [C++](gs_cpp.md), [Python](gs_python), and the [command line interface](gs_cli.md).
 
 ## Contribute
 

@@ -1,4 +1,4 @@
-# Install from Source
+# Install
 
 ## Reelay C++ Library
 
@@ -30,7 +30,7 @@ A set of predefined Reelay monitors can be accessed from Python. The following c
 
 Currently past LTL, past MTL, and past STL monitors are available from Python over discrete and dense time signals. Please check [example python files](https://github.com/doganulus/reelay/tree/master/python/examples).
 
-## Reelay Monitoring Apps
+## Reelay Apps
 
 The following command will compile and install command-line applications using `reelay` library to monitor formal specifications over CSV files: 
 
