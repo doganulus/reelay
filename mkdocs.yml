@@ -8,14 +8,14 @@ theme:
   # search_index_only: true
   language: en
   palette:
-    primary: green
-    accent: lime
+    primary: black
+    accent: red
   font:
     text: Ubuntu
     code: Ubuntu Mono
-  favicon: assets/images/favicon.png
-  logo:
-    icon: "device_hub"
+  favicon: assets/favicon.png
+  logo: assets/whitelogo_boxed.png
+
 
 nav:
   - Home: 'index.md'
