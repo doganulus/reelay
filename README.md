@@ -37,3 +37,12 @@ Reelay is an ongoing project and below is a number of features and plans to expa
 |🤞| v.1.x | First-order quantification for past metric temporal logic | FOMTL |
 |🤞| v.1.x | FOL monitoring application | ryjavu |
 |🤞| v.2.0 | Reelay 2.0! | REELAY |
+
+## Credits
+
+<!-- This project has benefited from several other great software at various places now and in the past. 
+1. [catch2]() for unit testing.
+2. [pybind11]() for Python bindings.
+3. [cpp-peglib]() and [ANTLR4]() for specification parsing.
+4. `s` for CSV parsing.
+5. [mkdocs]() and [mkdocs-material]() for documentation website generation. -->
