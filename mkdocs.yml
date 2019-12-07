@@ -52,6 +52,7 @@ nav:
     - 'Naming': 'naming.md'
 
 markdown_extensions:
+  - attr_list
   - admonition
   - footnotes
   - markdown.extensions.codehilite:

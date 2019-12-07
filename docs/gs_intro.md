@@ -18,46 +18,46 @@ An important point here is that we can actually check this requirement over the 
 !!! Requirement
     **SYS-REQ-02:** The door should be closed before the system issues another warning. This should prevent that the warning is issuing several warnings after another, while the door is open.
 
-Now we have a set of system requirements for the DOW feature. The next section will be about writing these requirements in a non-ambigious (and executable) specification language.
+Now we have a set of system requirements for the DOW feature. And we may design a system whose block diagram given is below:
+
+![alt text](assets/gs_dow_diagram.png)
+
+The next section will be about writing these requirements in a non-ambigious (and executable) specification language.
 
 ## Specify Requirements
 
-In this tutorial, we will use Past Temporal Logic (PTL) to specify our requirements. Temporal logics such as PTL are commonly used to describe temporal patterns over signals in a precise manner. The cheatsheet for PTL is given [here](past_temporal_logic.md). More complete information and historical background of temporal logics can be found [here](temporal_logic.md). 
+In this tutorial, we will use Past Temporal Logic (PTL) to specify our requirements. Temporal logics such as PTL are commonly used to describe temporal patterns over signals in a precise and non-ambigious manner. **Reelay** can compile PTL specifications into efficient runtime monitors.
 
 Let's specify!
 
-Our first requirement `SYS-REQ-01` says that the system shall issue a warning if the door is open more than 15 minutes. Our common sense says that this should happen if the warning is not suppressed. Therefore we have to take care of such considerations when translating English into formal specifications.
+Our first requirement `SYS-REQ-01` says that the system shall issue a warning if the door is open more than 15 minutes. This of course should be under understood under a condition that the warning is not suppressed as `SYS-REQ-02` will require. This often goes without saying as humans can relate two requirements easily. However, when specifiying requirements for the machine, we have to be more explicit. Below is the first part of `SYS-REQ-01` expressed in PTL:
+```
+(historically[0:15](is_door_open) and not dow_suppressed) -> door_open_warning
+```
+The implication operator `->` says the right hand side must be true if the left hand side is true. The temporal operator `historically[a:b](cond)` tells that the condition `cond` must be always true between time points `[now-b, now-a]`. Therefore, the part `historically[0:15](is_door_open)` is true if `is_door_open` is always true from `15` minutes ago to `now`. The cheatsheet for PTL is available [here](past_temporal_logic.md), which includes other temporal and Boolean operators. Overall this specification verifies `SYS-REQ-01` and its violation would be considered as a false negative. 
 
+In plain English, the conditional connective `if` has sometimes a bi-directional meaning where the reverse case also goes without saying. This is also the case for `SYS-REQ-01`. The remaining two specifications verify `SYS-REQ-01` in a reverse way, for false positives, respectively. 
 ```
-(historically[0:15](door_open) and not dow_suppressed) -> door_open_warning
-```
-This specification tests `SYS-REQ-01` and its violation would be considered as a false negative.
-
-In plain English, the conditional connective `if` has sometimes a bi-directional meaning where the reverse case goes without saying. 
-The remaining two specifications test for two types of false positives, respectively. It is usually a good practice to break down specifications into smaller pieces as it would be easier to debug if tests fail.
-```
-door_open_warning -> historically[0:15](door_open)
+door_open_warning -> historically[0:15](is_door_open)
 ```
 ```
 door_open_warning -> not dow_suppressed
 ```
-These specifications test `SYS-REQ-01` and each of their violations would be considered as a false positive.
 
-The seconf requirement `SYS-REQ-02`
+Finally, the second requirement `SYS-REQ-02` describes a behavior that involves slightly more complex temporal ordering of events. Here we see the use of temporal operators `pre` (meaning previously) and `since`.
 ```
-door_open_warning -> not(pre(door_open since door_open_warning))
+door_open_warning -> not(pre(is_door_open since door_open_warning))
 ```
-These specifications test `SYS-REQ-01` and each of their violations would be considered as a false positive.
+This specification verifies `SYS-REQ-01` and each of their violations would be considered as a false positive.
 
+To conclude let's tabulate our formal specifications obtained from system requirements above in a table nicely as follows:
 
-Finally let's tabulate our formal specifications obtained from system requirements in a table nicely as follows:
-
-| Requirement  | Specification                                                                 | Failure Type   |
-|--------------|-------------------------------------------------------------------------------|----------------|
-| `SYS-REQ-01` | `(historically[0:15](door_open) and not dow_suppressed) -> door_open_warning` | False Negative |
-| `SYS-REQ-01` | `door_open_warning -> historically[0:15](door_open)`                          | False Positive |
-| `SYS-REQ-01` | `door_open_warning -> not dow_suppressed`                                     | False Positive |
-| `SYS-REQ-02` | `door_open_warning -> not(pre(door_open since door_open_warning))`            | False Positive |
+| Requirement  | Specification                                                                    | Failure Type   |
+|--------------|----------------------------------------------------------------------------------|----------------|
+| `SYS-REQ-01` | `(historically[0:15](is_door_open) and not dow_suppressed) -> door_open_warning` | False Negative |
+| `SYS-REQ-01` | `door_open_warning -> historically[0:15](is_door_open)`                          | False Positive |
+| `SYS-REQ-01` | `door_open_warning -> not dow_suppressed`                                        | False Positive |
+| `SYS-REQ-02` | `door_open_warning -> not(pre(is_door_open since door_open_warning))`            | False Positive |
 
 
 ## Verify the Execution
