@@ -46,7 +46,7 @@ struct stdout_formatter_verbosity_1 : public stdout_formatter<X, T> {
   std::string output() {
     std::ostringstream buffer;
 
-    buffer << network->now << "," << network->output() << std::endl;
+    buffer << network->now() << "," << network->output() << std::endl;
 
     return buffer.str();
   }
