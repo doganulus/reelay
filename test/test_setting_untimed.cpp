@@ -224,33 +224,64 @@ TEST_CASE( "Boolean Operations" ) {
 
 TEST_CASE( "Untimed Temporal Operations" ) {
 
-    SECTION( "Always" ) {
+  SECTION("Previous") {
 
-        std::vector<input_t> sequence = std::vector<input_t>();
-       
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
+    std::vector<input_t> sequence = std::vector<input_t>();
 
-        auto net1 = reelay::monitor<input_t>::from_temporal_logic("historically p1");
-        auto net2 = reelay::monitor<input_t>::from_temporal_logic("historically p2");
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "1"}});
 
-        auto result1 = std::vector<bool>();
-        auto result2 = std::vector<bool>();
+    auto net1 = reelay::monitor<input_t>::from_temporal_logic("pre p1");
+    auto net2 = reelay::monitor<input_t>::from_temporal_logic("pre p2");
 
-        for(const auto& s : sequence){
-            net1->update(s);
-            net2->update(s);
-            result1.push_back(net1->output());
-            result2.push_back(net2->output());
-        }
+    auto result1 = std::vector<bool>();
+    auto result2 = std::vector<bool>();
 
-        auto expected1 = std::vector<bool>({1,1,1,1});
-        auto expected2 = std::vector<bool>({1,1,0,0});
+    for (const auto &s : sequence) {
+      net1->update(s);
+      net2->update(s);
+      result1.push_back(net1->output());
+      result2.push_back(net2->output());
+    }
 
-        CHECK(result1 == expected1);
-        CHECK(result2 == expected2);
+    auto expected1 = std::vector<bool>({0, 1, 0, 1});
+    auto expected2 = std::vector<bool>({0, 0, 1, 0});
+
+    CHECK(result1 == expected1);
+    CHECK(result2 == expected2);
+  }
+  
+  SECTION("Always") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+
+    auto net1 =
+        reelay::monitor<input_t>::from_temporal_logic("historically p1");
+    auto net2 =
+        reelay::monitor<input_t>::from_temporal_logic("historically p2");
+
+    auto result1 = std::vector<bool>();
+    auto result2 = std::vector<bool>();
+
+    for (const auto &s : sequence) {
+      net1->update(s);
+      net2->update(s);
+      result1.push_back(net1->output());
+      result2.push_back(net2->output());
+    }
+
+    auto expected1 = std::vector<bool>({1, 1, 1, 1});
+    auto expected2 = std::vector<bool>({1, 1, 0, 0});
+
+    CHECK(result1 == expected1);
+    CHECK(result2 == expected2);
     }
 
     SECTION( "Once" ) {

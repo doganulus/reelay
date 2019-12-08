@@ -35,8 +35,9 @@ struct ptl_parser {
     Conjunctive <- SinceExpr (LAND SinceExpr)*
     SinceExpr <- Unary (SINCE Bound? Unary)?
 
-    Unary <- NotExpr / TimedOnceExpr / OnceExpr / TimedHistExpr / HistExpr / Atom / '(' Expression ')'
+    Unary <- NotExpr / PrevExpr / TimedOnceExpr / OnceExpr / TimedHistExpr / HistExpr / Atom / '(' Expression ')'
     NotExpr  <- LNOT Expression
+    PrevExpr <- PREV Expression
     OnceExpr <- ONCE Expression
     HistExpr <- HIST Expression
     TimedOnceExpr <- ONCE Bound Expression
@@ -56,7 +57,7 @@ struct ptl_parser {
     LowerBound <- "[" Number ":" 'inf'? "]"
     UpperBound <- "["        ":" Number "]"
         
-    ~PRE   <- < 'Y' / 'pre' >
+    ~PREV   <- < 'Y' / 'pre' >
     ~HIST  <- < 'H' / 'historically' >
     ~ONCE  <- < 'P' / 'once' >
     ~SINCE <- < 'S' / 'since' >
@@ -197,6 +198,15 @@ struct ptl_parser {
         std::shared_ptr<node_t> child = sv[0].get<std::shared_ptr<node_t>>();
         return child;
       }
+    };
+
+    parser["PrevExpr"] = [&](const peg::SemanticValues &sv) {
+      // Rule:
+      std::shared_ptr<node_t> child = sv[0].get<std::shared_ptr<node_t>>();
+      auto args = std::vector<std::shared_ptr<node_t>>({child});
+      auto expr = Setting::make_state("previous", args);
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
     };
 
     parser["OnceExpr"] = [&](const peg::SemanticValues &sv) {

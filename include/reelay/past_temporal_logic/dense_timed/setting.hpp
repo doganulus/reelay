@@ -158,6 +158,9 @@ struct factory {
       result =
           std::make_shared<dense_timed_setting::past_always<input_t, time_t>>(
               args);
+    } else if (name == "previous") {
+      throw std::invalid_argument(
+          "Previous operator is not available for dense timed settings");
     } else if (name == "since") {
       result =
           std::make_shared<dense_timed_setting::since<input_t, time_t>>(args);

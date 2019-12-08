@@ -25,6 +25,7 @@
 
 #include "reelay/past_temporal_logic/untimed_robustness/past_always.hpp"
 #include "reelay/past_temporal_logic/untimed_robustness/past_sometime.hpp"
+#include "reelay/past_temporal_logic/untimed_robustness/previous.hpp"
 #include "reelay/past_temporal_logic/untimed_robustness/since.hpp"
 
 namespace reelay {
@@ -134,6 +135,8 @@ struct factory {
     } else if (name == "past_always") {
       result = std::make_shared<
           past_always<input_t, output_t>>(args);
+    } else if (name == "previous") {
+      result = std::make_shared<previous<input_t, output_t>>(args);
     } else if (name == "since") {
       result =
           std::make_shared<since<input_t, output_t>>(

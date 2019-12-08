@@ -25,6 +25,7 @@
 
 #include "reelay/past_temporal_logic/discrete_timed_robustness/past_always.hpp"
 #include "reelay/past_temporal_logic/discrete_timed_robustness/past_sometime.hpp"
+#include "reelay/past_temporal_logic/discrete_timed_robustness/previous.hpp"
 #include "reelay/past_temporal_logic/discrete_timed_robustness/since.hpp"
 
 #include "reelay/past_temporal_logic/discrete_timed_robustness/past_always_bounded.hpp"
@@ -136,6 +137,8 @@ struct factory {
       result = std::make_shared<past_sometime<input_t, output_t, time_t>>(args);
     } else if (name == "past_always") {
       result = std::make_shared<past_always<input_t, output_t, time_t>>(args);
+    } else if (name == "previous") {
+      result = std::make_shared<previous<input_t, output_t, time_t>>(args);
     } else if (name == "since") {
       result = std::make_shared<since<input_t, output_t, time_t>>(args);
     } else if (name == "past_sometime_bounded") {

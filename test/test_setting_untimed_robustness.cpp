@@ -242,6 +242,37 @@ TEST_CASE("Boolean Operations") {
 
 TEST_CASE("Untimed Temporal Operations") {
 
+  SECTION("Previous") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"p1", "8"}, {"p2", "-1"}});
+    sequence.push_back(input_t{{"p1", "7"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "5"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "6"}, {"p2", "0"}});
+
+    auto net1 = reelay::robustness<output_t>::monitor<
+        input_t>::from_temporal_logic("pre p1");
+    auto net2 = reelay::robustness<output_t>::monitor<
+        input_t>::from_temporal_logic("pre p2");
+
+    auto result1 = std::vector<output_t>();
+    auto result2 = std::vector<output_t>();
+
+    for (const auto &s : sequence) {
+      net1->update(s);
+      net2->update(s);
+      result1.push_back(net1->output());
+      result2.push_back(net2->output());
+    }
+
+    auto expected1 = std::vector<output_t>({bot, 8, 7, 5});
+    auto expected2 = std::vector<output_t>({bot, -1, 1, 0});
+
+    CHECK(result1 == expected1);
+    CHECK(result2 == expected2);
+  }
+
   SECTION("Always") {
 
     std::vector<input_t> sequence = std::vector<input_t>();

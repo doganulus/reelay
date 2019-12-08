@@ -23,9 +23,9 @@
 #include "reelay/past_temporal_logic/discrete_timed/implication.hpp"
 #include "reelay/past_temporal_logic/discrete_timed/negation.hpp"
 
-
 #include "reelay/past_temporal_logic/discrete_timed/past_always.hpp"
 #include "reelay/past_temporal_logic/discrete_timed/past_sometime.hpp"
+#include "reelay/past_temporal_logic/discrete_timed/previous.hpp"
 #include "reelay/past_temporal_logic/discrete_timed/since.hpp"
 
 #include "reelay/past_temporal_logic/discrete_timed/past_always_bounded.hpp"
@@ -144,6 +144,9 @@ struct factory {
     } else if (name == "past_always") {
       result = std::make_shared<
           discrete_timed_setting::past_always<input_t, time_t>>(args);
+    } else if (name == "previous") {
+      result = std::make_shared<
+          discrete_timed_setting::previous<input_t, time_t>>(args);
     } else if (name == "since") {
       result = std::make_shared<discrete_timed_setting::since<input_t, time_t>>(
           args);

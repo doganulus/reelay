@@ -26,6 +26,7 @@
 
 #include "reelay/past_temporal_logic/untimed/past_always.hpp"
 #include "reelay/past_temporal_logic/untimed/past_sometime.hpp"
+#include "reelay/past_temporal_logic/untimed/previous.hpp"
 #include "reelay/past_temporal_logic/untimed/since.hpp"
 
 namespace reelay {
@@ -119,6 +120,8 @@ struct factory {
       result = std::make_shared<untimed_setting::past_sometime<input_t>>(args);
     } else if (name == "past_always") {
       result = std::make_shared<untimed_setting::past_always<input_t>>(args);
+    } else if (name == "previous") {
+      result = std::make_shared<untimed_setting::previous<input_t>>(args);
     } else if (name == "since") {
       result = std::make_shared<untimed_setting::since<input_t>>(args);
     } else {
