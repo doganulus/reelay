@@ -16,7 +16,7 @@ namespace reelay {
 struct discrete_timed_past_mtl_monitor {
 
   using time_t  = int64_t;
-  using input_t = std::map<std::string, bool>;
+  using input_t = std::map<std::string, time_t>;
   using factory = discrete_timed_setting::factory<input_t, time_t>;
 
   using network_t = typename factory::network_t;
@@ -33,7 +33,8 @@ struct discrete_timed_past_mtl_monitor {
     this->network->update(args);
     return this->network->output();
   }
-
+  
+  time_t now() { return network->now(); }
 };
 
 } // namespace reelay

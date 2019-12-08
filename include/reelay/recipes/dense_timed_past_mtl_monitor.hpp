@@ -35,6 +35,7 @@ struct dense_timed_past_mtl_monitor {
     return this->network->voutput();
   }
 
+  std::pair<time_t, time_t> now() { return network->now(); }
 };
 
 } // namespace reelay

@@ -32,6 +32,8 @@ struct untimed_past_stl_monitor {
     this->network->update(args);
     return this->network->output();
   }
+
+  int64_t now() { return network->now(); }
 };
 
 } // namespace reelay

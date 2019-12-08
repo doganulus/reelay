@@ -32,7 +32,8 @@ struct past_ltl_monitor{
     this->network->update(args);
     return this->network->output();
   }
-
+  
+  int64_t now() { return network->now(); }
 };
 
 } // namespace reelay

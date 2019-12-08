@@ -35,7 +35,7 @@ struct discrete_timed_past_rstl_monitor {
     this->network->update(args);
     return this->network->output();
   }
-
+  time_t now() { return network->now(); }
 };
 
 } // namespace reelay

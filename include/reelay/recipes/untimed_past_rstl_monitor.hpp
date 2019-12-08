@@ -33,6 +33,8 @@ struct untimed_past_rstl_monitor {
     this->network->update(args);
     return this->network->output();
   }
+  
+  int64_t now() { return network->now(); }
 };
 
 } // namespace reelay

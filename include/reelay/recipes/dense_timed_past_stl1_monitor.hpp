@@ -38,6 +38,8 @@ struct dense_timed_past_stl1_monitor {
   void init_update(const input_t &args) {
     this->network->setup(args);
   }
+
+  std::pair<time_t, time_t> now() { return network->now(); }
 };
 
 } // namespace reelay

@@ -34,6 +34,8 @@ struct dense_timed_past_stl0_monitor {
     this->network->update(args);
     return this->network->voutput();
   }
+
+  std::pair<time_t, time_t> now() { return network->now(); }
 };
 
 } // namespace reelay

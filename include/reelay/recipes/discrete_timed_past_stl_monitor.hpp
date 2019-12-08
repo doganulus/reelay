@@ -34,6 +34,7 @@ struct discrete_timed_past_stl_monitor {
     return this->network->output();
   }
 
+  time_t now() { return network->now(); }
 };
 
 } // namespace reelay

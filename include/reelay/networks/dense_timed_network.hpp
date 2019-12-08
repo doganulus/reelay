@@ -129,6 +129,10 @@ struct dense_timed_network : dense_timed_state<X, Y, T> {
     }
     return vresult;
   }
+
+  std::pair<time_t, time_t> now() {
+    return std::pair<time_t, time_t>(previous, current);
+  }
 };
 
 } // namespace reelay
