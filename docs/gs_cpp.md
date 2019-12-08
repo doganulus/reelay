@@ -1,33 +1,79 @@
 # Getting Started From C++
 
-| Requirement  | Specification                                                                 | Failure Type   |
-|--------------|-------------------------------------------------------------------------------|----------------|
-| `SYS-REQ-01` | `(historically[0:15](door_open) and not dow_suppressed) -> door_open_warning` | False Negative |
-| `SYS-REQ-01` | `door_open_warning -> historically[0:15](door_open)`                          | False Positive |
-| `SYS-REQ-01` | `door_open_warning -> not dow_suppressed`                                     | False Positive |
-| `SYS-REQ-02` | `door_open_warning -> not(pre(door_open since door_open_warning))`            | False Positive |
+In this part, we show how to instatiate and execute **Reelay** monitors in C++ given formal specifications. These monitors would observe the system behavior and report violations at runtime. First recall our specifications for the Door Open Warning (DOW) feature of a home assistant robot as explained in [the introduction](gs_intro.md). 
 
-`Reelay` has been designed for efficiency and flexibility so that users can write their applications in C++ or embed formal specification monitoring into their projects easily. 
+The source code of this tutorial can be found [here](https://github.com/doganulus/reelay/blob/master/tutorial/dow_module_testing.cpp).
+
+## Reelay C++ Library and Recipes
+
+The core component of Reelay is a header-only template library for C++ supporting several specification languages. Templates allow to customize monitors for different input types (e.g `std::tuple` or `std::map`) or different time types (e.g. `int64_t` or `double`). In this tutorial, we will use **Reelay** recipes, a predefined selection of concrete monitor classes that instatiates monitor templates by convenient datatypes. We include **Reelay** recipes into our source file as follows:
 
     #include "reelay/recipes.hpp"
 
-The use of `reelay` monitors is pretty straighforward and we construct an online monitor for a past temporal logic formula as follows: 
+Some of these recipes are given below in the table together with predefined datatypes. Main differences between these monitor classes are the time model, either `discrete` or `dense` (roughly meaning-- might have time gaps between samples), and the input type whether we monitor Boolean signals (as in `past_ltl_monitor`) or numerical signals (as in `past_stl_monitor`).
 
-	auto my_monitor = reelay::past_ltl_monitor("grant -> once(request)");
+| Class Name | `input_t` | `time_t` | Gaps in behaviors |
+|-|-|-|-|
+|`reelay::past_ltl_monitor` | `std::map<std::string, bool>`|-| No |
+|`reelay::past_mtl_monitor` | `std::map<std::string, int64_t>` | `int64_t` | **Yes** |
+|`reelay::discrete_timed_past_mtl_monitor` | `std::map<std::string, int64_t>` | `int64_t` | No |
+|`reelay::past_stl_monitor` | `std::map<std::string, double>` | `double` | **Yes**|
+|`reelay::discrete_timed_past_stl_monitor` | `std::map<std::string, double>` | `int64_t` | No |
 
-	for (const auto &current_input : input_sequence)
-	{
-		my_monitor->update(current_input);     // feed with current input
-		current_output = my_monitor->output(); // obtain the current output
-	}
+Please also check [the User Manual](user_manual.md) for the information regarding `reelay/recipes.hpp` as well as `reelay/monitors.hpp`, which provide a nice interface for full datatype customization of monitors. We provide further information on [time models](time_models.md) and [temporal logics](temporal_logic.md) under advanced topics. 
 
-Since this is a property that should be true at each and every time point 
+## Check Requirements over System Behaviors
 
-The ability to construct discrete and dense timed monitors from timed specifications is the main goal and feature of `reelay` project. We construct online monitor from such specification as follows:
-     
-    auto my_monitor = reelay::discrete_timed<time_t>::monitor<input_t>::from_temporal_logic("p1 since[18:24] p2");
+Let's put correct system behavior into a container for demo purposes. Later we will read one-by-one it as if it comes from a real-time system.
+```cpp
+using input_t = std::map<std::string, int64_t>;
+std::vector<input_t> correct_sys_behavior = std::vector<input_t>();
 
-    auto my_monitor = reelay::dense_timed<time_t>::monitor<input_t>::from_temporal_logic("p1 since[18:24] p2");
+correct_sys_behavior.push_back( 
+	input_t{{"time", 1}, {"door_open", 0}, {"dow_suppressed", 0}, {"door_open_warning", 0}} );
+correct_sys_behavior.push_back( 
+	input_t{{"time", 2}, {"door_open", 1}, {"dow_suppressed", 0}, {"door_open_warning", 0}} );
+correct_sys_behavior.push_back( 
+	input_t{{"time", 3}, {"door_open", 1}, {"dow_suppressed", 0}, {"door_open_warning", 0}} );
+correct_sys_behavior.push_back( 
+	input_t{{"time", 4}, {"door_open", 1}, {"dow_suppressed", 0}, {"door_open_warning", 0}} );
+correct_sys_behavior.push_back( 
+	input_t{{"time", 5}, {"door_open", 1}, {"dow_suppressed", 0}, {"door_open_warning", 0}} );
+correct_sys_behavior.push_back( 
+	input_t{{"time", 6}, {"door_open", 1}, {"dow_suppressed", 0}, {"door_open_warning", 0}} );
+correct_sys_behavior.push_back( 
+	input_t{{"time", 7}, {"door_open", 1}, {"dow_suppressed", 0}, {"door_open_warning", 1}} );
+correct_sys_behavior.push_back( 
+	input_t{{"time", 8}, {"door_open", 1}, {"dow_suppressed", 1}, {"door_open_warning", 0}} );
+correct_sys_behavior.push_back( 
+	input_t{{"time", 9}, {"door_open", 1}, {"dow_suppressed", 1}, {"door_open_warning", 0}} );
+```
 
-From the online monitoring point of view, the essential difference between discrete and dense time models is the duration of updates, which is strictly one time unit for the discrete setting whereas it could be arbitrarily long or short for the dense setting. For more information, please check [discrete]() and [dense]() timed settings. These settings are usually called metric temporal logic (MTL) and very popular for specifiying properties of real-time/cyber-physical systems.
+The use of `reelay` monitors is pretty straighforward and we construct an online monitor for our first specification as follows: 
+```cpp
+auto my_monitor_1 = reelay::discrete_timed_past_mtl_monitor(
+	"(historically[0:5](door_open) and not dow_suppressed) -> door_open_warning");
+```
 
+The rest of the program reads the system behavior incrementally and feeds the monitor accordingly. 
+```cpp
+for (const auto &message : correct_sys_behavior)
+{
+	auto check_1 = my_monitor_1.update(message);
+
+	if (not check_1) {
+      std::cout << "Error at time " << my_monitor_1.now()
+                << " : False negative detected (SYS-REQ-01 Violation)"
+                << std::endl;
+    }
+}
+```
+The monitor would return `false` if it detects a violation then the program print an error message. When checking `correct_sys_behavior`, we will not see any error as the behavior satisfies the requirement. In the next section, however, we will insert some errors into the behavior and **Reelay** monitors would catch them all. 
+
+## Inserting an Error
+
+(Under construction)
+
+## Time Gaps in Behaviors
+
+(Under construction)
