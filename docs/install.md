@@ -28,6 +28,10 @@ A set of predefined Reelay monitors can be accessed from Python. The following c
 
     make python
 
+Alternatively there is also a one-liner just to install Python package from the Github repo:
+
+    pip install git+https://github.com/doganulus/reelay.git#"egg=reelay&subdirectory=python"
+
 Currently past LTL, past MTL, and past STL monitors are available from Python over discrete and dense time signals. Please check [example python files](https://github.com/doganulus/reelay/tree/master/python/examples).
 
 ## Reelay Apps
