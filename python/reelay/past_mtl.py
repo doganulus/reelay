@@ -8,10 +8,12 @@
 import reelay
 
 class monitor(object):
-	def __new__(cls, pattern:str, time_model="dense", period=0):
+	def __new__(cls, pattern:str, time_model="discrete", period=0):
 		if time_model == "dense": 
 			return reelay.recipes.dense_timed_past_mtl_monitor(pattern)
 		elif time_model == "discrete":
 			return reelay.recipes.discrete_timed_past_mtl_monitor(pattern)
+		elif time_model == "untimed" or time_model == None:
+			return reelay.recipes.past_ltl_monitor(pattern)
 		else:
 			raise AttributeError("")

@@ -8,7 +8,7 @@
 import reelay.recipes
 
 class monitor(object):
-	def __new__(cls, pattern:str, initial=None, time_model="dense", piecewise="linear", enable_robustness=False, init_update=None):
+	def __new__(cls, pattern:str, time_model="dense", piecewise="linear", enable_robustness=False, init_update=None):
 		if time_model == "dense":
 			if piecewise == "linear":
 				if not enable_robustness:
@@ -32,7 +32,7 @@ class monitor(object):
 			else:
 				return reelay.recipes.discrete_timed_past_rstl_monitor(pattern)
 
-		elif time_model == "untimed":
+		elif time_model == "untimed" or time_model == None:
 			if not enable_robustness:
 				return reelay.recipes.untimed_past_stl_monitor(pattern)
 			else:
