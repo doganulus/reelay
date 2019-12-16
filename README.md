@@ -22,27 +22,27 @@ Currently Reelay does not have a contribution guideline. However, we always welc
 
 Reelay is an ongoing project and below is a number of features and plans to expand the scope and improve the usability of the library.
 
-| Status | Version | Deliverable | Codename |
-|-|---------|-------------|----------|
-|✅| v.1.1 | Untimed, discrete and dense timed settings for past temporal logic | MTL |
-|✅| v.1.2 | MTL monitoring application | rymtl |
-|✅| v.1.3 | Full predicate support over piecewise linear signals | STL |
-|✅| v.1.4 | Robustness settings | STLRO |
-|✅| v.1.5 | STL monitoring application | rystl
+| Status | Version | Main Quest |
+|--------|---------|------------|
+|✅| v.1.1 | Untimed, discrete and dense timed settings for past temporal logic |
+|✅| v.1.2 | MTL monitoring application | 
+|✅| v.1.3 | Full predicate support over piecewise linear signals | 
+|✅| v.1.4 | Robustness settings |
+|✅| v.1.5 | STL monitoring application |
 |✅| v.1.6 | Python bindings | MONPY |
-|🤞| v.1.x | Untimed regular expressions | RE |
-|🤞| v.1.x | Discrete and dense timed regular expressions | TRE |
-|🤞| v.1.x | TRE monitoring application | rytre |
-|🤞| v.1.x | First-order quantification for untimed past temporal logic | FOLTL |
-|🤞| v.1.x | First-order quantification for past metric temporal logic | FOMTL |
-|🤞| v.1.x | FOL monitoring application | ryjavu |
-|🤞| v.2.0 | Reelay 2.0! | REELAY |
+|🤞| v.1.x | Untimed regular expressions | 
+|🤞| v.1.x | Discrete and dense timed regular expressions | 
+|🤞| v.1.x | TRE monitoring application | 
+|🤞| v.1.x | First-order quantification for untimed past temporal logic | 
+|🤞| v.1.x | First-order quantification for past metric temporal logic | 
+|🤞| v.1.x | FOL monitoring application | 
 
 ## Credits
 
-<!-- This project has benefited from several other great software at various places now and in the past. 
-1. [catch2]() for unit testing.
-2. [pybind11]() for Python bindings.
-3. [cpp-peglib]() and [ANTLR4]() for specification parsing.
-4. `s` for CSV parsing.
-5. [mkdocs]() and [mkdocs-material]() for documentation website generation. -->
+This project has benefited from several other great software at various stages now and in the past. 
+1. [Catch2](https://github.com/catchorg/Catch2) for unit testing.
+2. [pybind11](https://github.com/pybind/pybind11) for Python bindings.
+3. Yuji Hirose's [cpp-peglib](https://github.com/yhirose/cpp-peglib) for specification parsing from C++.
+4. Vincent La's [csv-parser](https://github.com/vincentlaucsb/csv-parser), Andrew DeOrio's [csvstream](https://github.com/awdeorio/csvstream), Ben Strasser's [fast-cpp-csv-parser](https://github.com/ben-strasser/fast-cpp-csv-parser) for CSV parsing from C++.
+5.  Pranav Srinivas Kumar's [argparse](https://github.com/p-ranav/argparse) for argument parsing from C++.
+5. [mkdocs]() and [mkdocs-material]() for documentation website generation.
