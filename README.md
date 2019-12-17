@@ -46,4 +46,4 @@ This project has benefited from several other great software at various stages n
 3. Yuji Hirose's [cpp-peglib](https://github.com/yhirose/cpp-peglib) for specification parsing from C++.
 4. Vincent La's [csv-parser](https://github.com/vincentlaucsb/csv-parser), Andrew DeOrio's [csvstream](https://github.com/awdeorio/csvstream), Ben Strasser's [fast-cpp-csv-parser](https://github.com/ben-strasser/fast-cpp-csv-parser) for CSV parsing from C++.
 5.  Pranav Srinivas Kumar's [argparse](https://github.com/p-ranav/argparse) for argument parsing from C++.
-5. [mkdocs]() and [mkdocs-material]() for documentation website generation.
+5. [mkdocs](https://github.com/mkdocs/mkdocs) and [mkdocs-material](https://github.com/squidfunk/mkdocs-material) for documentation website generation.
