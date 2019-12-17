@@ -49,7 +49,6 @@ nav:
   - About:
     - 'Author' : 'author.md'
     - 'License' : 'license.md'
-    - 'Naming': 'naming.md'
 
 markdown_extensions:
   - attr_list
@@ -63,4 +62,4 @@ plugins:
   - minify:
       minify_html: true
 
-google_analytics: ['UA-153753179-1', 'mkdocs.org']
+google_analytics: ['UA-153753179-1', 'auto']

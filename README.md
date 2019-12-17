@@ -12,7 +12,7 @@ Reelay is a header-only C++ library and set of tools for system-level verificati
 
 ## Get Started
 
-The next steps for you are to install Reelay [from source](docs/install.md) or [Docker image](docs/docker.md) and follow through tutorials to learn how to use Reelay monitors from [C++](docs/gs_cpp.md), [Python](docs/gs_python) and the [command line interface](docs/gs_cli.md). Check out [the documentation](https://doganulus.github.io/reelay/) for more details regarding how it works.
+The next steps for you are to install Reelay [from source](install.md) and follow through [the tutorial](gs_intro) to learn how to use Reelay monitors from [C++](gs_cpp.md), [Python](gs_python.md), and the [command line interface](gs_cli.md). Check out [the documentation](https://doganulus.github.io/reelay/) for more details.
 
 ## Contribute
 
@@ -22,20 +22,21 @@ Currently Reelay does not have a contribution guideline. However, we always welc
 
 Reelay is an ongoing project and below is a number of features and plans to expand the scope and improve the usability of the library.
 
-| Status | Version | Main Quest |
+| Status | Version | Story |
 |--------|---------|------------|
 |✅| v.1.1 | Untimed, discrete and dense timed settings for past temporal logic |
-|✅| v.1.2 | MTL monitoring application | 
+|✅| v.1.2 | MTL monitoring application (rymtl) | 
 |✅| v.1.3 | Full predicate support over piecewise linear signals | 
 |✅| v.1.4 | Robustness settings |
-|✅| v.1.5 | STL monitoring application |
-|✅| v.1.6 | Python bindings | MONPY |
+|✅| v.1.5 | STL monitoring application (rystl) |
+|✅| v.1.6 | Python bindings and API | 
+|⌛| v.1.7 | First-order quantification for untimed past temporal logic | 
+|🤞| v.1.x | First-order quantification for past metric temporal logic | 
+|🤞| v.1.x | FOL monitoring application (ryjavu) | 
 |🤞| v.1.x | Untimed regular expressions | 
 |🤞| v.1.x | Discrete and dense timed regular expressions | 
 |🤞| v.1.x | TRE monitoring application | 
-|🤞| v.1.x | First-order quantification for untimed past temporal logic | 
-|🤞| v.1.x | First-order quantification for past metric temporal logic | 
-|🤞| v.1.x | FOL monitoring application | 
+
 
 ## Credits
 
