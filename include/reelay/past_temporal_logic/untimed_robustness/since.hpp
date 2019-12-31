@@ -31,6 +31,9 @@ struct since : public untimed_state<X, V> {
   explicit since(const std::vector<node_ptr_t> &args)
       : first(args[0]), second(args[1]) {}
 
+  explicit since(const kwargs &kw)
+      : since(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+
   void update(const input_t& args) override {
     value = std::max(second->output(), std::min(value, first->output()));
   }

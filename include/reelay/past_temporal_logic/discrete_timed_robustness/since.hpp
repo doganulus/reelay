@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "reelay/common.hpp"
 #include "reelay/networks/basic_structure.hpp"
 
 namespace reelay {
@@ -32,6 +33,9 @@ struct since : public discrete_timed_state<X, V, T> {
 
   explicit since(const std::vector<node_ptr_t> &args)
       : first(args[0]), second(args[1]) {}
+
+  explicit since(const kwargs &kw)
+      : since(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   void update(const input_t &args, time_t now) override {
     value = std::max(second->output(now), std::min(value, first->output(now)));

@@ -10,6 +10,7 @@
 
 #include "vector"
 
+#include "reelay/common.hpp"
 #include "reelay/intervals.hpp"
 #include "reelay/networks/basic_structure.hpp"
 
@@ -40,6 +41,12 @@ struct past_sometime_bounded : public discrete_timed_state<X, bool, T> {
 
   past_sometime_bounded(const std::vector<node_ptr_t> &args, time_t l, time_t u)
       : first(args[0]), lbound(l), ubound(u) {}
+
+  explicit past_sometime_bounded(const kwargs &kw)
+      : past_sometime_bounded(
+            std::any_cast<std::vector<node_ptr_t>>(kw.at("args")),
+            std::any_cast<time_t>(kw.at("lbound")),
+            std::any_cast<time_t>(kw.at("ubound"))) {}
 
   void update(const input_t& args, time_t now) {
     if (first->output(now)) {

@@ -12,11 +12,6 @@
 #include "memory"
 #include "vector"
 
-
-#include "reelay/intervals.hpp"
-#include "reelay/networks/basic_structure.hpp"
-
-
 namespace reelay {
 namespace dense_timed_setting {
 

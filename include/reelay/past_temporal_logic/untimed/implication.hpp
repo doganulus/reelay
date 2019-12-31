@@ -10,6 +10,7 @@
 
 #include "vector"
 
+#include "reelay/common.hpp"
 #include "reelay/networks/basic_structure.hpp"
 
 namespace reelay {
@@ -28,6 +29,9 @@ struct implication : public untimed_node<bool> {
 
   explicit implication(const std::vector<node_ptr_t> &args)
       : arg1(args[0]), arg2(args[1]) {}
+
+  explicit implication(const kwargs &kw)
+      : implication(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   output_t output() { return not arg1->output() or arg2->output(); }
 };

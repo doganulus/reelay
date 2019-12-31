@@ -38,6 +38,12 @@ struct past_sometime_bounded : public dense_timed_state<X, interval_set<T>, T> {
   past_sometime_bounded(const std::vector<node_ptr_t> &args, time_t l, time_t u)
       : first(args[0]), lbound(l), ubound(u) {}
 
+  explicit past_sometime_bounded(const kwargs &kw)
+      : past_sometime_bounded(
+            std::any_cast<std::vector<node_ptr_t>>(kw.at("args")),
+            std::any_cast<time_t>(kw.at("lbound")),
+            std::any_cast<time_t>(kw.at("ubound"))) {}
+
   void update(const input_t& pargs,
               const input_t& args,
               time_t previous,

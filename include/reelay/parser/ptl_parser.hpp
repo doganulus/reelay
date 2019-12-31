@@ -17,9 +17,9 @@
 
 namespace reelay {
 
-template <class Setting>
-struct ptl_parser {
+template <class Setting> struct ptl_parser {
 
+  using time_t = typename Setting::time_t;
   using input_t = typename Setting::input_t;
   using output_t = typename Setting::output_t;
   using function_t = typename Setting::function_t;
@@ -27,6 +27,9 @@ struct ptl_parser {
   using node_t = typename Setting::node_t;
   using state_t = typename Setting::state_t;
   using network_t = typename Setting::network_t;
+
+  using node_ptr_t = typename Setting::node_ptr_t;
+  using state_ptr_t = typename Setting::state_ptr_t;
 
   static constexpr auto grammar = R"(
     Expression  <- Implicative 
@@ -75,8 +78,7 @@ struct ptl_parser {
 
   peg::parser parser;
 
-  std::vector<std::shared_ptr<state_t>> states =
-    std::vector<std::shared_ptr<state_t>>();
+  std::vector<state_ptr_t> states = std::vector<state_ptr_t>();
 
   std::map<std::string, function_t> predicates;
 
@@ -91,17 +93,21 @@ struct ptl_parser {
 
     parser["Proposition"] = [&](const peg::SemanticValues &sv) {
       auto name = sv[0].get<std::string>();
-      auto expr = Setting::make_proposition(name);
+
+      reelay::kwargs kw = {{"name", name}};
+      auto expr = Setting::make_state("proposition", kw);
+
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
 
     parser["BasicPredicateLT"] = [&](const peg::SemanticValues &sv) {
-
       auto name = sv[0].get<std::string>();
       auto constant = std::stof(sv[1].get<std::string>());
 
-      auto expr = Setting::make_basic_predicate(name, "lt", constant);
+      reelay::kwargs kw = {{"name", name}, {"constant", constant}};
+      auto expr = Setting::make_state("lt", kw);
+
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
@@ -110,7 +116,9 @@ struct ptl_parser {
       auto name = sv[0].get<std::string>();
       auto constant = std::stof(sv[1].get<std::string>());
 
-      auto expr = Setting::make_basic_predicate(name, "le", constant);
+      reelay::kwargs kw = {{"name", name}, {"constant", constant}};
+      auto expr = Setting::make_state("le", kw);
+
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
@@ -119,7 +127,9 @@ struct ptl_parser {
       auto name = sv[0].get<std::string>();
       auto constant = std::stof(sv[1].get<std::string>());
 
-      auto expr = Setting::make_basic_predicate(name, "gt", constant);
+      reelay::kwargs kw = {{"name", name}, {"constant", constant}};
+      auto expr = Setting::make_state("gt", kw);
+
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
@@ -128,7 +138,9 @@ struct ptl_parser {
       auto name = sv[0].get<std::string>();
       auto constant = std::stof(sv[1].get<std::string>());
 
-      auto expr = Setting::make_basic_predicate(name, "ge", constant);
+      reelay::kwargs kw = {{"name", name}, {"constant", constant}};
+      auto expr = Setting::make_state("ge", kw);
+
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
@@ -136,34 +148,44 @@ struct ptl_parser {
     parser["CustomPredicate"] = [&](const peg::SemanticValues &sv) {
       auto name = sv[0].get<std::string>();
       auto func = predicates[name];
-      auto expr = Setting::make_predicate(func);
+
+      reelay::kwargs kw = {{"function", func}};
+      auto expr = Setting::make_state("predicate", kw);
 
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
 
-    parser["Comparison"] = [](const peg::SemanticValues &sv) { return sv.token(); };
+    parser["Comparison"] = [](const peg::SemanticValues &sv) {
+      return sv.token();
+    };
 
     parser["NotExpr"] = [&](const peg::SemanticValues &sv) {
       // Rule: NotExpr  <- LNOT Expression
-      std::shared_ptr<node_t> child = sv[0].get<std::shared_ptr<node_t>>();
-      auto args = std::vector<std::shared_ptr<node_t>>({child});
-      auto expr = Setting::make_node("negation", args);
+      node_ptr_t child = sv[0].get<node_ptr_t>();
+      auto args = std::vector<node_ptr_t>({child});
+
+      reelay::kwargs kw = {{"args", args}};
+      auto expr = Setting::make_node("negation", kw);
+
       return std::static_pointer_cast<node_t>(expr);
     };
 
     parser["Implicative"] = [&](const peg::SemanticValues &sv) {
       // Rule:
       if (sv.size() > 1) {
-        std::vector<std::shared_ptr<node_t>> args;
+        std::vector<node_ptr_t> args;
         for (size_t i = 0; i < sv.size(); i++) {
-          std::shared_ptr<node_t> child = sv[i].get<std::shared_ptr<node_t>>();
+          node_ptr_t child = sv[i].get<node_ptr_t>();
           args.push_back(child);
         }
-        auto expr = Setting::make_node("implication", args);
+
+        reelay::kwargs kw = {{"args", args}};
+        auto expr = Setting::make_node("implication", kw);
+
         return std::static_pointer_cast<node_t>(expr);
       } else {
-        std::shared_ptr<node_t> child = sv[0].get<std::shared_ptr<node_t>>();
+        node_ptr_t child = sv[0].get<node_ptr_t>();
         return child;
       }
     };
@@ -171,49 +193,61 @@ struct ptl_parser {
     parser["Disjunctive"] = [&](const peg::SemanticValues &sv) {
       // Rule:
       if (sv.size() > 1) {
-        std::vector<std::shared_ptr<node_t>> args;
+        std::vector<node_ptr_t> args;
         for (size_t i = 0; i < sv.size(); i++) {
-          std::shared_ptr<node_t> child = sv[i].get<std::shared_ptr<node_t>>();
+          node_ptr_t child = sv[i].get<node_ptr_t>();
           args.push_back(child);
         }
-        auto expr = Setting::make_node("disjunction", args);
+
+        reelay::kwargs kw = {{"args", args}};
+        auto expr = Setting::make_node("disjunction", kw);
+
         return std::static_pointer_cast<node_t>(expr);
       } else {
-        std::shared_ptr<node_t> child = sv[0].get<std::shared_ptr<node_t>>();
+        node_ptr_t child = sv[0].get<node_ptr_t>();
         return child;
       }
     };
 
     parser["Conjunctive"] = [&](const peg::SemanticValues &sv) {
-      // Rule: 
-      if(sv.size() > 1){
-        std::vector<std::shared_ptr<node_t>> args;
+      // Rule:
+      if (sv.size() > 1) {
+        std::vector<node_ptr_t> args;
         for (size_t i = 0; i < sv.size(); i++) {
-          std::shared_ptr<node_t> child = sv[i].get<std::shared_ptr<node_t>>();
+          node_ptr_t child = sv[i].get<node_ptr_t>();
           args.push_back(child);
         }
-        auto expr = Setting::make_node("conjunction", args);
+
+        reelay::kwargs kw = {{"args", args}};
+        auto expr = Setting::make_node("conjunction", kw);
+
         return std::static_pointer_cast<node_t>(expr);
       } else {
-        std::shared_ptr<node_t> child = sv[0].get<std::shared_ptr<node_t>>();
+        node_ptr_t child = sv[0].get<node_ptr_t>();
         return child;
       }
     };
 
     parser["PrevExpr"] = [&](const peg::SemanticValues &sv) {
       // Rule:
-      std::shared_ptr<node_t> child = sv[0].get<std::shared_ptr<node_t>>();
-      auto args = std::vector<std::shared_ptr<node_t>>({child});
-      auto expr = Setting::make_state("previous", args);
+      node_ptr_t child = sv[0].get<node_ptr_t>();
+      auto args = std::vector<node_ptr_t>({child});
+
+      reelay::kwargs kw = {{"args", args}};
+      auto expr = Setting::make_state("previous", kw);
+
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
 
     parser["OnceExpr"] = [&](const peg::SemanticValues &sv) {
       // Rule:
-      std::shared_ptr<node_t> child = sv[0].get<std::shared_ptr<node_t>>();
-      auto args = std::vector<std::shared_ptr<node_t>>({child});
-      auto expr = Setting::make_state("past_sometime", args);
+      node_ptr_t child = sv[0].get<node_ptr_t>();
+      auto args = std::vector<node_ptr_t>({child});
+
+      reelay::kwargs kw = {{"args", args}};
+      auto expr = Setting::make_state("past_sometime", kw);
+
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
@@ -221,19 +255,34 @@ struct ptl_parser {
     parser["TimedOnceExpr"] = [&](const peg::SemanticValues &sv) {
       // Rule:
       std::pair<float, float> bound = sv[0].get<std::pair<float, float>>();
-      std::shared_ptr<node_t> child = sv[1].get<std::shared_ptr<node_t>>();
+      node_ptr_t child = sv[1].get<node_ptr_t>();
 
-      auto args = std::vector<std::shared_ptr<node_t>>({child});
-      auto expr = Setting::make_state("past_sometime_bounded", args, bound);
+      time_t lbound = std::get<0>(bound);
+      time_t ubound = std::get<1>(bound);
+      auto args = std::vector<node_ptr_t>({child});
+
+      reelay::kwargs kw = {
+          {"args", args}, {"lbound", lbound}, {"ubound", ubound}};
+
+      state_ptr_t expr;
+      if (ubound > 0) {
+        expr = Setting::make_state("past_sometime_bounded", kw);
+      } else {
+        expr = Setting::make_state("past_sometime_bounded_half", kw);
+      }
+
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
 
     parser["HistExpr"] = [&](const peg::SemanticValues &sv) {
       // Rule:
-      std::shared_ptr<node_t> child = sv[0].get<std::shared_ptr<node_t>>();
-      auto args = std::vector<std::shared_ptr<node_t>>({child});
-      auto expr = Setting::make_state("past_always", args);
+      node_ptr_t child = sv[0].get<node_ptr_t>();
+      auto args = std::vector<node_ptr_t>({child});
+
+      reelay::kwargs kw = {{"args", args}};
+      auto expr = Setting::make_state("past_always", kw);
+
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
@@ -241,35 +290,63 @@ struct ptl_parser {
     parser["TimedHistExpr"] = [&](const peg::SemanticValues &sv) {
       // Rule:
       std::pair<float, float> bound = sv[0].get<std::pair<float, float>>();
-      std::shared_ptr<node_t> child = sv[1].get<std::shared_ptr<node_t>>();
+      node_ptr_t child = sv[1].get<node_ptr_t>();
 
-      auto args = std::vector<std::shared_ptr<node_t>>({child});
-      auto expr = Setting::make_state("past_always_bounded", args, bound);
+      time_t lbound = std::get<0>(bound);
+      time_t ubound = std::get<1>(bound);
+      auto args = std::vector<node_ptr_t>({child});
+
+      reelay::kwargs kw = {
+          {"args", args}, {"lbound", lbound}, {"ubound", ubound}};
+
+      state_ptr_t expr;
+      if (ubound > 0) {
+        expr = Setting::make_state("past_always_bounded", kw);
+      } else {
+        expr = Setting::make_state("past_always_bounded_half", kw);
+      }
+
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
 
     parser["SinceExpr"] = [&](const peg::SemanticValues &sv) {
-      // Rule:
+      
       if (sv.size() == 3) {
-        std::shared_ptr<node_t> left = sv[0].get<std::shared_ptr<node_t>>();
+        node_ptr_t left = sv[0].get<node_ptr_t>();
         std::pair<float, float> bound = sv[1].get<std::pair<float, float>>();
-        std::shared_ptr<node_t> right = sv[2].get<std::shared_ptr<node_t>>();
-        auto args = std::vector<std::shared_ptr<node_t>>({left, right});
-        auto expr = Setting::make_state("since_bounded", args, bound);
+        node_ptr_t right = sv[2].get<node_ptr_t>();
+
+        time_t lbound = std::get<0>(bound);
+        time_t ubound = std::get<1>(bound);
+        auto args = std::vector<node_ptr_t>({left, right});
+
+        reelay::kwargs kw = {
+            {"args", args}, {"lbound", lbound}, {"ubound", ubound}};
+
+        state_ptr_t expr;
+        if (ubound > 0){
+          expr = Setting::make_state("since_bounded", kw);
+        } else {
+          expr = Setting::make_state("since_bounded_half", kw);
+        }
+
         this->states.push_back(expr);
         return std::static_pointer_cast<node_t>(expr);
 
       } else if (sv.size() == 2) {
-        std::shared_ptr<node_t> left = sv[0].get<std::shared_ptr<node_t>>();
-        std::shared_ptr<node_t> right = sv[1].get<std::shared_ptr<node_t>>();
-        auto args = std::vector<std::shared_ptr<node_t>>({left, right});
-        auto expr = Setting::make_state("since", args);
+        node_ptr_t left = sv[0].get<node_ptr_t>();
+        node_ptr_t right = sv[1].get<node_ptr_t>();
+        auto args = std::vector<node_ptr_t>({left, right});
+
+        reelay::kwargs kw = {{"args", args}};
+        auto expr = Setting::make_state("since", kw);
+
         this->states.push_back(expr);
         return std::static_pointer_cast<node_t>(expr);
 
       } else {
-        std::shared_ptr<node_t> child = sv[0].get<std::shared_ptr<node_t>>();
+        node_ptr_t child = sv[0].get<node_ptr_t>();
         return child;
       }
     };
@@ -279,7 +356,7 @@ struct ptl_parser {
       if (sv.size() > 1) {
 
       } else {
-        std::shared_ptr<node_t> child = sv[0].get<std::shared_ptr<node_t>>();
+        node_ptr_t child = sv[0].get<node_ptr_t>();
         return child;
       }
     };
@@ -287,7 +364,7 @@ struct ptl_parser {
     parser["FullBound"] = [](const peg::SemanticValues &sv) {
       float l = std::stof(sv[0].get<std::string>());
       float u = std::stof(sv[1].get<std::string>());
-      return std::make_pair(l,u);
+      return std::make_pair(l, u);
     };
 
     parser["LowerBound"] = [](const peg::SemanticValues &sv) {
@@ -300,18 +377,14 @@ struct ptl_parser {
       return std::make_pair(0.0f, u);
     };
 
-    parser["Name"] = [](const peg::SemanticValues &sv) {
-      return sv.token();
-    };
-    parser["Number"] = [](const peg::SemanticValues &sv) {
-      return sv.token();
-    };
+    parser["Name"] = [](const peg::SemanticValues &sv) { return sv.token(); };
+    parser["Number"] = [](const peg::SemanticValues &sv) { return sv.token(); };
 
     parser.enable_packrat_parsing(); // Enable packrat parsing.
   }
 
   std::shared_ptr<network_t> parse(const std::string &formula) {
-    std::shared_ptr<node_t> output_func;
+    node_ptr_t output_func;
     parser.parse(formula.c_str(), output_func);
 
     auto network = std::make_shared<network_t>(output_func, states);

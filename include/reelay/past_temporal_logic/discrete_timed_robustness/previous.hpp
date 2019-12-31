@@ -11,6 +11,7 @@
 #include "memory"
 #include "vector"
 
+#include "reelay/common.hpp"
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/networks/discrete_timed_network.hpp"
 
@@ -35,6 +36,9 @@ struct previous : public discrete_timed_state<X, V, T> {
   node_ptr_t first;
 
   explicit previous(const std::vector<node_ptr_t> &args) : first(args[0]) {}
+
+  explicit previous(const kwargs &kw)
+      : previous(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   void update(const input_t &args, time_t now) override {
     prev_value = value;

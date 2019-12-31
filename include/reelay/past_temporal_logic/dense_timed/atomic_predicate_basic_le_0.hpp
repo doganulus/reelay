@@ -48,6 +48,10 @@ struct basic_predicate_le<X, T, 0>
           }
         }) {}
 
+  explicit basic_predicate_le(const kwargs &kw)
+      : basic_predicate_le(std::any_cast<std::string>(kw.at("name")),
+                           std::any_cast<float>(kw.at("constant"))) {}
+
   void update(const input_t& pargs,
               const input_t& args,
               time_t previous,

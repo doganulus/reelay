@@ -10,6 +10,7 @@
 
 #include "string"
 
+#include "reelay/common.hpp"
 #include "reelay/networks/basic_structure.hpp"
 
 namespace reelay {
@@ -28,6 +29,9 @@ template <typename X> struct proposition : public untimed_state<X, bool> {
       : fn([name](const input_t &x) {
           return boost::lexical_cast<bool>(x.at(name));
         }) {}
+
+  explicit proposition(const kwargs &kw)
+      : proposition(std::any_cast<std::string>(kw.at("name"))) {}
 
   void update(const input_t &args) override { value = fn(args); }
 
@@ -48,6 +52,10 @@ struct basic_predicate_lt : public untimed_state<X, bool> {
       : fn([name, c](const input_t &x) {
           return boost::lexical_cast<float>(x.at(name)) < c;
         }) {}
+
+  explicit basic_predicate_lt(const kwargs &kw)
+      : basic_predicate_lt(std::any_cast<std::string>(kw.at("name")),
+                           std::any_cast<float>(kw.at("constant"))) {}
 
   void update(const input_t &args) override { value = fn(args); }
 
@@ -70,6 +78,10 @@ struct basic_predicate_le : public untimed_state<X, bool> {
           return boost::lexical_cast<float>(x.at(name)) <= c;
         }) {}
 
+  explicit basic_predicate_le(const kwargs &kw)
+      : basic_predicate_le(std::any_cast<std::string>(kw.at("name")),
+                           std::any_cast<float>(kw.at("constant"))) {}
+
   void update(const input_t &args) override { value = fn(args); }
 
   output_t output() override { return value; }
@@ -89,6 +101,10 @@ struct basic_predicate_gt : public untimed_state<X, bool> {
       : fn([name, c](const input_t &x) {
           return boost::lexical_cast<float>(x.at(name)) > c;
         }) {}
+
+  explicit basic_predicate_gt(const kwargs &kw)
+      : basic_predicate_gt(std::any_cast<std::string>(kw.at("name")),
+                           std::any_cast<float>(kw.at("constant"))) {}
 
   void update(const input_t &args) override { value = fn(args); }
 
@@ -110,6 +126,10 @@ struct basic_predicate_ge : public untimed_state<X, bool> {
           return boost::lexical_cast<float>(x.at(name)) >= c;
         }) {}
 
+  explicit basic_predicate_ge(const kwargs &kw)
+      : basic_predicate_ge(std::any_cast<std::string>(kw.at("name")),
+                           std::any_cast<float>(kw.at("constant"))) {}
+
   void update(const input_t &args) override { value = fn(args); }
 
   output_t output() override { return value; }
@@ -125,6 +145,9 @@ template <typename X> struct predicate : public untimed_state<X, bool> {
   std::function<bool(const input_t &)> fn;
 
   explicit predicate(const function_t &f) : fn(f) {}
+
+  explicit predicate(const kwargs &kw)
+      : predicate(std::any_cast<function_t>(kw.at("function"))) {}
 
   void update(const input_t &args) override { value = fn(args); }
 

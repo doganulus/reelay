@@ -11,7 +11,7 @@
 #include "memory"
 #include "vector"
 
-
+#include "reelay/common.hpp"
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/networks/discrete_timed_network.hpp"
 
@@ -34,6 +34,9 @@ struct disjunction : public discrete_timed_node<bool, T> {
 
   explicit disjunction(const std::vector<node_ptr_t> &nodeptrs)
       : args(nodeptrs) {}
+
+  explicit disjunction(const kwargs &kw)
+      : disjunction(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   output_t output(time_t now) {
     return std::any_of(args.cbegin(), args.cend(),

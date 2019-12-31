@@ -29,6 +29,9 @@ struct past_always : public untimed_state<X, V> {
 
   explicit past_always(const std::vector<node_ptr_t> &args) : first(args[0]) {}
 
+  explicit past_always(const kwargs &kw)
+      : past_always(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+
   void update(const input_t &args) { value = std::min(value, first->output()); }
 
   output_t output() { return value; }

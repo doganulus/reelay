@@ -10,6 +10,7 @@
 
 #include "vector"
 
+#include "reelay/common.hpp"
 #include "reelay/networks/basic_structure.hpp"
 
 namespace reelay {
@@ -25,8 +26,11 @@ struct conjunction : public untimed_node<bool> {
 
   std::vector<node_ptr_t> args;
 
-  explicit conjunction(const std::vector<node_ptr_t> &nodeptrs)
-      : args(nodeptrs) {}
+  explicit conjunction(const std::vector<node_ptr_t> &args)
+      : args(args) {}
+
+  explicit conjunction(const kwargs &kw)
+      : conjunction(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   output_t output() {
     return std::all_of(args.cbegin(), args.cend(),

@@ -10,6 +10,7 @@
 
 #include "vector"
 
+#include "reelay/common.hpp"
 #include "reelay/intervals.hpp"
 #include "reelay/networks/basic_structure.hpp"
 
@@ -51,6 +52,10 @@ struct since_bounded : public discrete_timed_state<X, V, T> {
         -reelay::infinity<output_t>::value()));
   }
 
+  explicit since_bounded(const kwargs &kw)
+      : since_bounded(std::any_cast<std::vector<node_ptr_t>>(kw.at("args")),
+                      std::any_cast<time_t>(kw.at("lbound")),
+                      std::any_cast<time_t>(kw.at("ubound"))) {}
 
   void update(const input_t& args, time_t now) {
 

@@ -11,6 +11,7 @@
 #include "memory"
 #include "vector"
 
+#include "reelay/common.hpp"
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/networks/discrete_timed_network.hpp"
 
@@ -34,6 +35,9 @@ struct implication : public discrete_timed_node<V, T> {
 
   explicit implication(const std::vector<node_ptr_t> &args)
       : arg1(args[0]), arg2(args[1]) {}
+
+  explicit implication(const kwargs &kw)
+      : implication(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   output_t output(time_t now) {
     return std::max(-arg1->output(now), arg2->output(now));

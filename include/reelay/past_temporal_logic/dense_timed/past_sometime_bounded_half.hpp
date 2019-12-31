@@ -38,6 +38,11 @@ struct past_sometime_bounded_half
   past_sometime_bounded_half(const std::vector<node_ptr_t> &args, time_t l)
       : first(args[0]), lbound(l) {}
 
+  explicit past_sometime_bounded_half(const kwargs &kw)
+      : past_sometime_bounded_half(
+            std::any_cast<std::vector<node_ptr_t>>(kw.at("args")),
+            std::any_cast<time_t>(kw.at("lbound"))) {}
+
   void update(const input_t& pargs,
               const input_t& args,
               time_t previous,

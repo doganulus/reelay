@@ -10,6 +10,7 @@
 
 #include "vector"
 
+#include "reelay/common.hpp"
 #include "reelay/intervals.hpp"
 #include "reelay/networks/basic_structure.hpp"
 
@@ -40,6 +41,11 @@ struct since_bounded_half : public discrete_timed_state<X, bool, T> {
 
   since_bounded_half(const std::vector<node_ptr_t> &args, time_t l)
       : first(args[0]), second(args[1]), lbound(l) {}
+
+  explicit since_bounded_half(const kwargs &kw)
+      : since_bounded_half(
+            std::any_cast<std::vector<node_ptr_t>>(kw.at("args")),
+            std::any_cast<time_t>(kw.at("lbound"))) {}
 
   void update(const input_t& args, time_t now) {
     if (first->output(now) and second->output(now)) {

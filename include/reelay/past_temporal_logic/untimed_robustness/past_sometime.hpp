@@ -30,6 +30,9 @@ struct past_sometime : public untimed_state<X, V> {
   explicit past_sometime(const std::vector<node_ptr_t> &args)
       : first(args[0]) {}
 
+  explicit past_sometime(const kwargs &kw)
+      : past_sometime(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+
   void update(const input_t &args) { value = std::max(value, first->output()); }
 
   output_t output() { return value; }

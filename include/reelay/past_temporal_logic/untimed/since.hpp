@@ -10,6 +10,7 @@
 
 #include "vector"
 
+#include "reelay/common.hpp"
 #include "reelay/networks/basic_structure.hpp"
 
 namespace reelay {
@@ -30,6 +31,9 @@ struct since : public untimed_state<X, bool> {
 
   explicit since(const std::vector<node_ptr_t> &args)
       : first(args[0]), second(args[1]) {}
+
+  explicit since(const kwargs &kw)
+      : since(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   void update(const input_t& args) override {
     value = second->output() || (first->output() && value);

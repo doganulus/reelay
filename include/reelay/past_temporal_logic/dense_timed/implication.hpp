@@ -34,6 +34,9 @@ struct implication : public dense_timed_node<interval_set<T>, T> {
   explicit implication(const std::vector<node_ptr_t> &args)
       : arg1(args[0]), arg2(args[1]) {}
 
+  explicit implication(const kwargs &kw)
+      : implication(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+
   output_t output(time_t previous, time_t now) {
     return (interval_set(interval::left_open(previous, now)) -
             arg1->output(previous, now)) |

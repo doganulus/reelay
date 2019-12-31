@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "reelay/common.hpp"
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/networks/untimed_network.hpp"
 
@@ -32,6 +33,9 @@ struct past_sometime : public discrete_timed_state<X, V, T> {
 
   explicit past_sometime(const std::vector<node_ptr_t> &args)
       : first(args[0]) {}
+
+  explicit past_sometime(const kwargs &kw)
+      : past_sometime(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   void update(const input_t &args, time_t now) {
     value = std::max(value, first->output(now));

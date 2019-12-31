@@ -60,6 +60,10 @@ struct basic_predicate_lt<X, T, 1>
           }
         }) {}
 
+  explicit basic_predicate_lt(const kwargs &kw)
+      : basic_predicate_lt(std::any_cast<std::string>(kw.at("name")),
+                           std::any_cast<float>(kw.at("constant"))) {}
+
   void update(const input_t &pargs, const input_t &args, time_t previous,
               time_t now) override {
     value = fn(pargs, args, previous, now);

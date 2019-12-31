@@ -28,6 +28,9 @@ struct disjunction : public untimed_node<V> {
   explicit disjunction(const std::vector<node_ptr_t> &nodeptrs)
       : args(nodeptrs) {}
 
+  explicit disjunction(const kwargs &kw)
+      : disjunction(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+
   output_t output() {
     output_t result = args[0]->output();
     for (size_t i = 1; i < args.size(); i++) {

@@ -10,6 +10,7 @@
 
 #include "vector"
 
+#include "reelay/common.hpp"
 #include "reelay/networks/basic_structure.hpp"
 
 namespace reelay {
@@ -28,6 +29,9 @@ struct past_always : public untimed_state<X, bool> {
   node_ptr_t first;
 
   explicit past_always(const std::vector<node_ptr_t> &args) : first(args[0]) {}
+
+  explicit past_always(const kwargs &kw)
+      : past_always(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   void update(const input_t& args) { value = first->output() && value; }
 

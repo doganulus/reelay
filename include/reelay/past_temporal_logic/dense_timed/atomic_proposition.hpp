@@ -12,10 +12,9 @@
 #include "memory"
 #include "vector"
 
-
+#include "reelay/common.hpp"
 #include "reelay/intervals.hpp"
 #include "reelay/networks/basic_structure.hpp"
-
 
 namespace reelay {
 namespace dense_timed_setting {
@@ -46,6 +45,9 @@ struct proposition : public dense_timed_state<X, interval_set<T>, T> {
             return interval_set();
           }
         }) {}
+
+  explicit proposition(const kwargs &kw)
+      : proposition(std::any_cast<std::string>(kw.at("name"))) {}
 
   void update(const input_t& pargs,
               const input_t& args,

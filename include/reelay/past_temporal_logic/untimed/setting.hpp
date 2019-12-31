@@ -12,7 +12,7 @@
 #include "memory"
 #include "string"
 
-
+#include "reelay/common.hpp"
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/networks/untimed_network.hpp"
 
@@ -34,6 +34,7 @@ namespace untimed_setting {
 
 template <typename X>
 struct factory {
+  using time_t = int;
   using input_t = X;
   using value_t = bool;
   using output_t = bool;
@@ -55,6 +56,56 @@ struct factory {
     return std::make_shared<untimed_setting::proposition<input_t>>(name);
   }
 
+  static node_ptr_t make_node(const std::string &name, const kwargs &kw) {
+
+    node_ptr_t result;
+
+    if (name == "disjunction") {
+      result = std::make_shared<disjunction<input_t>>(kw);
+    } else if (name == "conjunction") {
+      result = std::make_shared<conjunction<input_t>>(kw);
+    } else if (name == "negation") {
+      result = std::make_shared<negation<input_t>>(kw);
+    } else if (name == "implication") {
+      result = std::make_shared<implication<input_t>>(kw);
+    } else {
+      throw std::invalid_argument(
+          "Unsupported operator for the untimed setting");
+    }
+    return result;
+  }
+
+  static state_ptr_t make_state(const std::string &name, const kwargs &kw) {
+
+    state_ptr_t result;
+
+    if (name == "proposition") {
+      result = std::make_shared<proposition<input_t>>(kw);
+    } else if(name == "lt" or name == "<") {
+      result = std::make_shared<basic_predicate_lt<input_t>>(kw);
+    } else if (name == "le" or name == "leq" or name == "<=") {
+      result = std::make_shared<basic_predicate_le<input_t>>(kw);
+    } else if (name == "gt" or name == ">") {
+      result = std::make_shared<basic_predicate_gt<input_t>>(kw);
+    } else if (name == "ge" or name == "geq" or name == ">=") {
+      result = std::make_shared<basic_predicate_ge<input_t>>(kw);
+    } else if (name == "previous") {
+      result = std::make_shared<previous<input_t>>(kw);
+    } else if (name == "past_sometime") {
+      result = std::make_shared<past_sometime<input_t>>(kw);
+    } else if (name == "past_always") {
+      result = std::make_shared<past_always<input_t>>(kw);
+    } else if (name == "since") {
+      result = std::make_shared<since<input_t>>(kw);
+    } else if (name == "predicate") {
+      result = std::make_shared<predicate<input_t>>(kw);
+    } else {
+      throw std::invalid_argument(
+          "Unsupported operator for the untimed setting");
+    }
+    return result;
+  }
+
   static state_ptr_t make_basic_predicate(const std::string& name,
                                           const std::string& op,
                                           float c) {
@@ -74,7 +125,7 @@ struct factory {
           name, c);
     } else {
       throw std::invalid_argument(
-          "Unsupported predicate operator for the discrete timed setting");
+          "Unsupported operator for the untimed setting");
     }
 
     return result;

@@ -32,6 +32,9 @@ struct negation : public dense_timed_node<interval_set<T>, T> {
 
   explicit negation(const std::vector<node_ptr_t> &args) : arg1(args[0]) {}
 
+  explicit negation(const kwargs &kw)
+      : negation(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+
   output_t output(time_t previous, time_t now) {
     return interval_set(interval::left_open(previous, now)) -
            arg1->output(previous, now);

@@ -36,6 +36,9 @@ struct since : public dense_timed_state<X, interval_set<T>, T> {
   explicit since(const std::vector<node_ptr_t> &args)
       : first(args[0]), second(args[1]) {}
 
+  explicit since(const kwargs &kw)
+      : since(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+
   void update(bool p1, bool p2, time_t previous, time_t now) {
     if (previous == now) {
       return;
