@@ -3,6 +3,7 @@
 
 #include "catch.hpp"
 
+#include "reelay/common.hpp"
 #include "reelay/intervals.hpp"
 #include "reelay/monitors.hpp"
 

@@ -3,10 +3,11 @@
 
 #include "catch.hpp"
 
+#include "reelay/common.hpp"
 #include "reelay/monitors.hpp"
 
 using input_t = std::map<std::string, std::string>;
-
+using function_t = std::function<bool(const input_t &)>;
 
 TEST_CASE( "Atoms" ) {
 
@@ -106,9 +107,12 @@ TEST_CASE( "Atoms" ) {
         sequence.push_back( input_t{{"x1", "3.4"}, {"x2", "1.6"}} );
         sequence.push_back( input_t{{"x1", "3.5"}, {"x2", "1.9"}} );
 
-        std::map<std::string, std::function<bool(const input_t &)>> predicates = {
-            {"sum_x1_and_x2_gt_5", [](const input_t& row){return (std::stof(row.at("x1")) + std::stof(row.at("x2"))) > 5.0;} }
+        function_t sum_x1_and_x2_gt_5 = [](const input_t &row) {
+          return (std::stof(row.at("x1")) + std::stof(row.at("x2"))) > 5.0;
         };
+        
+        reelay::kwargs predicates = {
+            {"sum_x1_and_x2_gt_5", sum_x1_and_x2_gt_5}};
 
         auto net1 = reelay::monitor<input_t>::from_temporal_logic("$sum_x1_and_x2_gt_5", predicates);
 
