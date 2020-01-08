@@ -13,7 +13,7 @@
 #include "memory"
 #include "string"
 
-
+#include "reelay/common.hpp"
 #include "reelay/parser/ptl_parser.hpp"
 #include "reelay/networks.hpp"
 #include "reelay/settings.hpp"
@@ -31,11 +31,10 @@ struct monitor {
 
   using function_t = typename factory::function_t;
 
-  static network_ptr_t from_temporal_logic(
-      std::string pattern,
-      std::map<std::string, function_t> predicates =
-          std::map<std::string, function_t>()) {
-    auto parser = ptl_parser<factory>(predicates);
+  static network_ptr_t
+  from_temporal_logic(std::string pattern,
+                      reelay::kwargs kw = reelay::kwargs()) {
+    auto parser = ptl_parser<factory>(kw);
     return parser.parse(pattern);
   }
   //    static type from_regular_expressions();
@@ -54,13 +53,29 @@ struct robustness {
 
       static network_ptr_t
       from_temporal_logic(std::string pattern,
-                          std::map<std::string, function_t> predicates =
-                              std::map<std::string, function_t>()) {
-        auto parser = ptl_parser<factory>(predicates);
+                          reelay::kwargs kw = reelay::kwargs()) {
+        auto parser = ptl_parser<factory>(kw);
         return parser.parse(pattern);
       }
     };
 };
+
+// struct unordered_data {
+//   template <typename input_t> struct monitor {
+//     using factory = untimed_data_setting::factory<input_t>;
+
+//     using network_t = typename factory::network_t;
+//     using network_ptr_t = typename factory::network_ptr_t;
+//     using function_t = typename factory::function_t;
+
+//     static network_ptr_t
+//     from_temporal_logic(std::string pattern,
+//                         reelay::kwargs kw = reelay::kwargs()) {
+//       auto parser = ptl_parser<factory>(kw);
+//       return parser.parse(pattern);
+//     }
+//   };
+// };
 
 template <typename time_t>
 struct discrete_timed {
@@ -70,14 +85,12 @@ struct discrete_timed {
 
     using network_t = typename factory::network_t;
     using network_ptr_t = typename factory::network_ptr_t;
-
     using function_t = typename factory::function_t;
 
-    static network_ptr_t from_temporal_logic(
-        std::string pattern,
-        std::map<std::string, function_t> predicates =
-            std::map<std::string, function_t>()) {
-      auto parser = ptl_parser<factory>(predicates);
+    static network_ptr_t
+    from_temporal_logic(std::string pattern,
+                        reelay::kwargs kw = reelay::kwargs()) {
+      auto parser = ptl_parser<factory>(kw);
       return parser.parse(pattern);
     }
     // static network_ptr_t from_regular_expressions();
@@ -90,14 +103,12 @@ struct discrete_timed {
 
       using network_t = typename factory::network_t;
       using network_ptr_t = typename factory::network_ptr_t;
-
       using function_t = typename factory::function_t;
-      using predicates_t = std::map<std::string, function_t>;
 
       static network_ptr_t
       from_temporal_logic(std::string pattern,
-                          predicates_t predicates = predicates_t()) {
-        auto parser = ptl_parser<factory>(predicates);
+                          reelay::kwargs kw = reelay::kwargs()) {
+        auto parser = ptl_parser<factory>(kw);
         return parser.parse(pattern);
       }
     };
@@ -110,41 +121,19 @@ struct dense_timed {
   struct monitor {
     using factory = dense_timed_setting::factory<input_t, time_t, order>;
 
-    using state_t = typename factory::state_t;
-    using state_ptr_t = typename factory::state_ptr_t;
-
     using network_t = typename factory::network_t;
     using network_ptr_t = typename factory::network_ptr_t;
     using function_t = typename factory::function_t;
 
-    static network_ptr_t from_temporal_logic(
-        std::string pattern,
-        std::map<std::string, function_t> predicates =
-            std::map<std::string, function_t>()) {
-      auto parser = ptl_parser<factory>(predicates);
+    static network_ptr_t
+    from_temporal_logic(std::string pattern,
+                        reelay::kwargs kw = reelay::kwargs()) {
+      auto parser = ptl_parser<factory>(kw);
       return parser.parse(pattern);
     }
 
     // static type from_regular_expressions();
   };
 
-  // template <typename output_t> struct robustness {
-  //   template <typename input_t> struct monitor {
-  //     using factory =
-  //       dense_timed_robustness_setting::factory<input_t, output_t, time_t>;
-
-  //     using network_t = typename factory::network_t;
-  //     using network_ptr_t = typename factory::network_ptr_t;
-
-  //     using function_t = typename factory::function_t;
-  //     using predicates_t = std::map<std::string, function_t>;
-
-  //     static network_ptr_t
-  //     from_temporal_logic(std::string pattern,
-  //                         predicates_t predicates = predicates_t()) {
-  //       return make_network<factory>::from_temporal_logic(pattern, predicates);
-  //     }
-  //   };
-  // };
 };
 }  // namespace reelay

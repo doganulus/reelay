@@ -32,21 +32,21 @@ template <class Setting> struct ptl_parser {
   using state_ptr_t = typename Setting::state_ptr_t;
 
   static constexpr auto grammar = R"(
-    Expression  <- Implicative 
+    Expression  <- ExistsExpr / ForallExpr / Implicative
+    ExistsExpr  <- EXISTS '[' NonEmptyVarList ']' '.' Implicative 
+    ForallExpr  <- FORALL '[' NonEmptyVarList ']' '.' Implicative
     Implicative <- Disjunctive (LIMPLIES Disjunctive)?
     Disjunctive <- Conjunctive (LOR Conjunctive)*
     Conjunctive <- SinceExpr (LAND SinceExpr)*
     SinceExpr <- Unary (SINCE Bound? Unary)?
-
     Unary <- NotExpr / PrevExpr / TimedOnceExpr / OnceExpr / TimedHistExpr / HistExpr / Atom / '(' Expression ')'
-    NotExpr  <- LNOT Expression
-    PrevExpr <- PREV Expression
-    OnceExpr <- ONCE Expression
-    HistExpr <- HIST Expression
-    TimedOnceExpr <- ONCE Bound Expression
-    TimedHistExpr <- HIST Bound Expression
-
-    Atom <- CustomPredicate / BasicPredicateLE / BasicPredicateLT / BasicPredicateGE / BasicPredicateGT / Proposition
+    NotExpr  <- LNOT Atom / LNOT '(' Expression ')'
+    PrevExpr <- PREV Atom / PREV '(' Expression ')'
+    OnceExpr <- ONCE Atom / ONCE '(' Expression ')'
+    HistExpr <- HIST Atom / HIST '(' Expression ')'
+    TimedOnceExpr <- ONCE Bound Atom / ONCE Bound '(' Expression ')'
+    TimedHistExpr <- HIST Bound Atom / HIST Bound '(' Expression ')'
+    Atom <- CustomPredicate / BasicPredicateLE / BasicPredicateLT / BasicPredicateGE / BasicPredicateGT / ListProposition / RecordProposition / Proposition
             
     Proposition <- Name
     BasicPredicateLE <- Name "<=" Number
@@ -54,6 +54,20 @@ template <class Setting> struct ptl_parser {
     BasicPredicateGE <- Name ">=" Number
     BasicPredicateGT <- Name ">" Number
     CustomPredicate <- '$' Name
+
+    ListProposition <- LBRACE NonEmptyValueList RBRACE
+    RecordProposition <- LCURLY NonEmptyKeyValuePairs RCURLY
+
+    NonEmptyValueList <- FieldValue (',' FieldValue)*
+    NonEmptyKeyValuePairs <- KeyValuePair (',' KeyValuePair)*
+
+    FieldKey <- Name ('.' Name)*
+    FieldValue <- VariableRef / UnnamedRef / Name
+    KeyValuePair <- FieldKey ':' FieldValue
+
+    UnnamedRef <- STAR
+    VariableRef <- STAR Name
+    VariableDecl <- AMSAND Name
   
     Bound <- FullBound / LowerBound / UpperBound
     FullBound <-  "[" Number ":" Number "]"
@@ -69,6 +83,22 @@ template <class Setting> struct ptl_parser {
     ~LAND     <- < "&&" / 'and' >
     ~LNOT     <- < "!"  / 'not' >
     ~LIMPLIES <- < "->" / 'implies' >
+    ~EXISTS <- < 'E' / 'exists' >
+    ~FORALL <- < 'A' / 'forall' >
+    ~COMMA <- < ',' >
+    ~LPARAM <- < '(' >
+    ~RPARAM <- < ')' >
+    ~LBRACE <- < '[' >
+    ~RBRACE <- < ']' >
+    ~LCURLY <- < '{' >
+    ~RCURLY <- < '}' >
+    
+    ~STAR <- < '*' >
+    ~AMSAND <- < '*' >
+    ~DOLLAR <- < '$' >
+    ~SQUARE <- < '#' >
+    
+    NonEmptyVarList <- Name (COMMA Name)*
             
     Name   <- <[_a-zA-Z][_a-zA-Z0-9]*>
     Number <- <'-'? [0-9]+ ('.' [0-9]+)?>
@@ -77,14 +107,12 @@ template <class Setting> struct ptl_parser {
     )";
 
   peg::parser parser;
+  reelay::kwargs meta;
 
   std::vector<state_ptr_t> states = std::vector<state_ptr_t>();
 
-  std::map<std::string, function_t> predicates;
-
-  explicit ptl_parser(const std::map<std::string, function_t> &pp =
-                          std::map<std::string, function_t>())
-      : predicates(pp) {
+  explicit ptl_parser(const reelay::kwargs &mm = reelay::kwargs())
+      : meta(mm) {
 
     parser = peg::parser(grammar);
     parser.log = [](size_t line, size_t col, const std::string &msg) {
@@ -95,7 +123,30 @@ template <class Setting> struct ptl_parser {
       auto name = sv[0].get<std::string>();
 
       reelay::kwargs kw = {{"name", name}};
+      kw.insert(meta.begin(), meta.end());
       auto expr = Setting::make_state("proposition", kw);
+
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
+    };
+
+    parser["ListProposition"] = [&](const peg::SemanticValues &sv) {
+      auto name = sv[0].get<std::string>();
+
+      reelay::kwargs kw = {{"name", name}};
+      kw.insert(meta.begin(), meta.end());
+      auto expr = Setting::make_state("list_proposition", kw);
+
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
+    };
+
+    parser["NonEmptyValueList"] = [&](const peg::SemanticValues &sv) {
+      auto name = sv[0].get<std::string>();
+
+      reelay::kwargs kw = {{"name", name}};
+      kw.insert(meta.begin(), meta.end());
+      auto expr = Setting::make_state("list_proposition", kw);
 
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
@@ -106,6 +157,7 @@ template <class Setting> struct ptl_parser {
       auto constant = std::stof(sv[1].get<std::string>());
 
       reelay::kwargs kw = {{"name", name}, {"constant", constant}};
+      kw.insert(meta.begin(), meta.end());
       auto expr = Setting::make_state("lt", kw);
 
       this->states.push_back(expr);
@@ -117,6 +169,7 @@ template <class Setting> struct ptl_parser {
       auto constant = std::stof(sv[1].get<std::string>());
 
       reelay::kwargs kw = {{"name", name}, {"constant", constant}};
+      kw.insert(meta.begin(), meta.end());
       auto expr = Setting::make_state("le", kw);
 
       this->states.push_back(expr);
@@ -128,6 +181,7 @@ template <class Setting> struct ptl_parser {
       auto constant = std::stof(sv[1].get<std::string>());
 
       reelay::kwargs kw = {{"name", name}, {"constant", constant}};
+      kw.insert(meta.begin(), meta.end());
       auto expr = Setting::make_state("gt", kw);
 
       this->states.push_back(expr);
@@ -139,6 +193,7 @@ template <class Setting> struct ptl_parser {
       auto constant = std::stof(sv[1].get<std::string>());
 
       reelay::kwargs kw = {{"name", name}, {"constant", constant}};
+      kw.insert(meta.begin(), meta.end());
       auto expr = Setting::make_state("ge", kw);
 
       this->states.push_back(expr);
@@ -147,9 +202,10 @@ template <class Setting> struct ptl_parser {
 
     parser["CustomPredicate"] = [&](const peg::SemanticValues &sv) {
       auto name = sv[0].get<std::string>();
-      auto func = predicates[name];
+      auto func = meta[name];
 
       reelay::kwargs kw = {{"function", func}};
+      kw.insert(meta.begin(), meta.end()); 
       auto expr = Setting::make_state("predicate", kw);
 
       this->states.push_back(expr);
@@ -166,6 +222,7 @@ template <class Setting> struct ptl_parser {
       auto args = std::vector<node_ptr_t>({child});
 
       reelay::kwargs kw = {{"args", args}};
+      kw.insert(meta.begin(), meta.end());
       auto expr = Setting::make_node("negation", kw);
 
       return std::static_pointer_cast<node_t>(expr);
@@ -181,6 +238,7 @@ template <class Setting> struct ptl_parser {
         }
 
         reelay::kwargs kw = {{"args", args}};
+        kw.insert(meta.begin(), meta.end());
         auto expr = Setting::make_node("implication", kw);
 
         return std::static_pointer_cast<node_t>(expr);
@@ -200,6 +258,7 @@ template <class Setting> struct ptl_parser {
         }
 
         reelay::kwargs kw = {{"args", args}};
+        kw.insert(meta.begin(), meta.end());
         auto expr = Setting::make_node("disjunction", kw);
 
         return std::static_pointer_cast<node_t>(expr);
@@ -219,6 +278,7 @@ template <class Setting> struct ptl_parser {
         }
 
         reelay::kwargs kw = {{"args", args}};
+        kw.insert(meta.begin(), meta.end());
         auto expr = Setting::make_node("conjunction", kw);
 
         return std::static_pointer_cast<node_t>(expr);
@@ -234,6 +294,7 @@ template <class Setting> struct ptl_parser {
       auto args = std::vector<node_ptr_t>({child});
 
       reelay::kwargs kw = {{"args", args}};
+      kw.insert(meta.begin(), meta.end());
       auto expr = Setting::make_state("previous", kw);
 
       this->states.push_back(expr);
@@ -246,6 +307,7 @@ template <class Setting> struct ptl_parser {
       auto args = std::vector<node_ptr_t>({child});
 
       reelay::kwargs kw = {{"args", args}};
+      kw.insert(meta.begin(), meta.end());
       auto expr = Setting::make_state("past_sometime", kw);
 
       this->states.push_back(expr);
@@ -261,9 +323,10 @@ template <class Setting> struct ptl_parser {
       time_t ubound = std::get<1>(bound);
       auto args = std::vector<node_ptr_t>({child});
 
-      reelay::kwargs kw = {
-          {"args", args}, {"lbound", lbound}, {"ubound", ubound}};
-
+      reelay::kwargs kw = {{"args", args},
+                           {"lbound", lbound},
+                           {"ubound", ubound}};
+      kw.insert(meta.begin(), meta.end());
       state_ptr_t expr;
       if (ubound > 0) {
         expr = Setting::make_state("past_sometime_bounded", kw);
@@ -281,6 +344,7 @@ template <class Setting> struct ptl_parser {
       auto args = std::vector<node_ptr_t>({child});
 
       reelay::kwargs kw = {{"args", args}};
+      kw.insert(meta.begin(), meta.end());
       auto expr = Setting::make_state("past_always", kw);
 
       this->states.push_back(expr);
@@ -296,9 +360,10 @@ template <class Setting> struct ptl_parser {
       time_t ubound = std::get<1>(bound);
       auto args = std::vector<node_ptr_t>({child});
 
-      reelay::kwargs kw = {
-          {"args", args}, {"lbound", lbound}, {"ubound", ubound}};
-
+      reelay::kwargs kw = {{"args", args},
+                           {"lbound", lbound},
+                           {"ubound", ubound}};
+      kw.insert(meta.begin(), meta.end());
       state_ptr_t expr;
       if (ubound > 0) {
         expr = Setting::make_state("past_always_bounded", kw);
@@ -321,8 +386,10 @@ template <class Setting> struct ptl_parser {
         time_t ubound = std::get<1>(bound);
         auto args = std::vector<node_ptr_t>({left, right});
 
-        reelay::kwargs kw = {
-            {"args", args}, {"lbound", lbound}, {"ubound", ubound}};
+        reelay::kwargs kw = {{"args", args},
+                             {"lbound", lbound},
+                             {"ubound", ubound}};
+        kw.insert(meta.begin(), meta.end());
 
         state_ptr_t expr;
         if (ubound > 0){
@@ -340,20 +407,11 @@ template <class Setting> struct ptl_parser {
         auto args = std::vector<node_ptr_t>({left, right});
 
         reelay::kwargs kw = {{"args", args}};
+        kw.insert(meta.begin(), meta.end());
         auto expr = Setting::make_state("since", kw);
 
         this->states.push_back(expr);
         return std::static_pointer_cast<node_t>(expr);
-
-      } else {
-        node_ptr_t child = sv[0].get<node_ptr_t>();
-        return child;
-      }
-    };
-
-    parser["TimedSinceExpr"] = [&](const peg::SemanticValues &sv) {
-      // Rule:
-      if (sv.size() > 1) {
 
       } else {
         node_ptr_t child = sv[0].get<node_ptr_t>();
@@ -383,9 +441,9 @@ template <class Setting> struct ptl_parser {
     parser.enable_packrat_parsing(); // Enable packrat parsing.
   }
 
-  std::shared_ptr<network_t> parse(const std::string &formula) {
+  std::shared_ptr<network_t> parse(const std::string &pattern) {
     node_ptr_t output_func;
-    parser.parse(formula.c_str(), output_func);
+    parser.parse(pattern.c_str(), output_func);
 
     auto network = std::make_shared<network_t>(output_func, states);
     return network;

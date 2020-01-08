@@ -52,9 +52,7 @@ struct factory {
   const static output_t top = true;
   const static output_t bottom = false;
 
-  static state_ptr_t make_proposition(const std::string& name) {
-    return std::make_shared<untimed_setting::proposition<input_t>>(name);
-  }
+  explicit factory() {}
 
   static node_ptr_t make_node(const std::string &name, const kwargs &kw) {
 
