@@ -13,7 +13,7 @@ The next step is to analyse and break down the feature into testable system requ
 !!! Requirement
     **SYS-REQ-01:** The system shall issue a warning if the entry door is left open at least 5 minutes.
 
-An important point here is that we can actually check this requirement over the behavior of the robot in such scenarios. Perhaps a spoiler but we will use **Reelay** monitors to check but let's finish our requirements first. Assume that we also want to give the warning once as multiple warnings for the same occasion may annoy our users. This constitutes our third and final requirement expressed as follows:
+An important point here is that we can actually check this requirement over the behavior of the robot in such scenarios. Perhaps a spoiler but we will use **Reelay** monitors to check but let's finish our requirements first. Assume that we also want to give the warning once as multiple warnings for the same occasion may annoy our users. This constitutes our second requirement expressed as follows:
 
 !!! Requirement
     **SYS-REQ-02:** The door should be closed before the system issues another warning. This should prevent that the warning is issuing several warnings after another, while the door is open.
@@ -56,7 +56,7 @@ In plain English, the conditional connective `if` has sometimes a bi-directional
 door_open_warning -> historically[0:5](door_open)
 ```
 ```
-door_open_warning -> not dow_suppressed
+door_open_warning1 -> not dow_suppressed
 ```
 
 Finally, the second requirement `SYS-REQ-02` describes a behavior that involves slightly more complex temporal ordering of events. Here we see the use of temporal operators `pre` (meaning previously) and `since`.
