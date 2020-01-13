@@ -60,22 +60,22 @@ struct robustness {
     };
 };
 
-// struct unordered_data {
-//   template <typename input_t> struct monitor {
-//     using factory = untimed_data_setting::factory<input_t>;
+struct unordered_data {
+  template <typename input_t> struct monitor {
+    using factory = untimed_data_setting::factory<input_t>;
 
-//     using network_t = typename factory::network_t;
-//     using network_ptr_t = typename factory::network_ptr_t;
-//     using function_t = typename factory::function_t;
+    using network_t = typename factory::network_t;
+    using network_ptr_t = typename factory::network_ptr_t;
+    using function_t = typename factory::function_t;
 
-//     static network_ptr_t
-//     from_temporal_logic(std::string pattern,
-//                         reelay::kwargs kw = reelay::kwargs()) {
-//       auto parser = ptl_parser<factory>(kw);
-//       return parser.parse(pattern);
-//     }
-//   };
-// };
+    static network_ptr_t
+    from_temporal_logic(std::string pattern,
+                        reelay::kwargs kw = reelay::kwargs()) {
+      auto parser = ptl_parser<factory>(kw);
+      return parser.parse(pattern);
+    }
+  };
+};
 
 template <typename time_t>
 struct discrete_timed {

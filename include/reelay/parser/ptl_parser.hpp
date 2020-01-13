@@ -58,11 +58,13 @@ template <class Setting> struct ptl_parser {
     ListProposition <- LBRACE NonEmptyValueList RBRACE
     RecordProposition <- LCURLY NonEmptyKeyValuePairs RCURLY
 
-    NonEmptyValueList <- FieldValue (',' FieldValue)*
-    NonEmptyKeyValuePairs <- KeyValuePair (',' KeyValuePair)*
+    NonEmptyVarList <- Name (COMMA Name)*
+    NonEmptyValueList <- FieldValue (COMMA FieldValue)*
+    NonEmptyKeyValuePairs <- KeyValuePair (COMMA KeyValuePair)*
 
-    FieldKey <- Name ('.' Name)*
-    FieldValue <- VariableRef / UnnamedRef / Name
+    FieldProp <- Name
+    FieldKey <- Name (DOT Name)*
+    FieldValue <- VariableRef / UnnamedRef / FieldProp
     KeyValuePair <- FieldKey ':' FieldValue
 
     UnnamedRef <- STAR
@@ -93,13 +95,12 @@ template <class Setting> struct ptl_parser {
     ~LCURLY <- < '{' >
     ~RCURLY <- < '}' >
     
+    ~DOT <- < '.' >
     ~STAR <- < '*' >
-    ~AMSAND <- < '*' >
+    ~AMSAND <- < '&' >
     ~DOLLAR <- < '$' >
     ~SQUARE <- < '#' >
     
-    NonEmptyVarList <- Name (COMMA Name)*
-            
     Name   <- <[_a-zA-Z][_a-zA-Z0-9]*>
     Number <- <'-'? [0-9]+ ('.' [0-9]+)?>
             
@@ -131,25 +132,57 @@ template <class Setting> struct ptl_parser {
     };
 
     parser["ListProposition"] = [&](const peg::SemanticValues &sv) {
-      auto name = sv[0].get<std::string>();
+      auto manager = std::any_cast<data_mgr_t>(meta.at("manager"));
+      auto fields =
+          sv[0].get<std::vector<std::pair<std::string, std::string>>>();
+      reelay::kwargs kw = {{"fields", fields}};
+      
+      for(const auto& field : fields){
+        if(field.first == "variable_ref"){
+          manager->add_variable(field.second);
+        }
+      }
 
-      reelay::kwargs kw = {{"name", name}};
       kw.insert(meta.begin(), meta.end());
-      auto expr = Setting::make_state("list_proposition", kw);
+      auto expr = Setting::make_state("listing", kw);
 
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
 
+    parser["NonEmptyVarList"] = [&](const peg::SemanticValues &sv) {
+      auto vlist = std::vector<std::string>();
+
+      for (std::size_t i = 0; i < sv.size(); i++) {
+        auto child = sv[i].get<std::string>();
+        vlist.push_back(child);
+      }
+
+      return vlist;
+    };
+
     parser["NonEmptyValueList"] = [&](const peg::SemanticValues &sv) {
-      auto name = sv[0].get<std::string>();
+      auto vlist = std::vector<std::pair<std::string, std::string>>();
 
-      reelay::kwargs kw = {{"name", name}};
-      kw.insert(meta.begin(), meta.end());
-      auto expr = Setting::make_state("list_proposition", kw);
+      for (std::size_t i = 0; i < sv.size(); i++) {
+        auto child = sv[i].get<std::pair<std::string, std::string>>();
+        vlist.push_back(child);
+      }
 
-      this->states.push_back(expr);
-      return std::static_pointer_cast<node_t>(expr);
+      return vlist;
+    };
+
+    parser["FieldProp"] = [&](const peg::SemanticValues &sv) {
+      return std::pair<std::string, std::string>("proposition",
+                                                 sv[0].get<std::string>());
+    };
+
+    parser["VariableRef"] = [&](const peg::SemanticValues &sv) {
+      return std::pair<std::string, std::string>("variable_ref", sv[0].get<std::string>());
+    };
+
+    parser["UnnamedRef"] = [&](const peg::SemanticValues &sv) {
+      return std::pair<std::string, std::string>("ignore_field","");
     };
 
     parser["BasicPredicateLT"] = [&](const peg::SemanticValues &sv) {
@@ -212,8 +245,30 @@ template <class Setting> struct ptl_parser {
       return std::static_pointer_cast<node_t>(expr);
     };
 
-    parser["Comparison"] = [](const peg::SemanticValues &sv) {
-      return sv.token();
+    parser["ExistsExpr"] = [&](const peg::SemanticValues &sv) {
+      auto vars = sv[0].get<std::vector<std::string>>();
+      
+      auto child = sv[1].get<node_ptr_t>();
+      auto args = std::vector<node_ptr_t>({child});
+
+      reelay::kwargs kw = {{"args", args}, {"vars", vars}};
+      kw.insert(meta.begin(), meta.end());
+      auto expr = Setting::make_node("exists", kw);
+
+      return std::static_pointer_cast<node_t>(expr);
+    };
+
+    parser["ForallExpr"] = [&](const peg::SemanticValues &sv) {
+      auto vars = sv[0].get<std::vector<std::string>>();
+
+      auto child = sv[1].get<node_ptr_t>();
+      auto args = std::vector<node_ptr_t>({child});
+
+      reelay::kwargs kw = {{"args", args}, {"vars", vars}};
+      kw.insert(meta.begin(), meta.end());
+      auto expr = Setting::make_node("forall", kw);
+
+      return std::static_pointer_cast<node_t>(expr);
     };
 
     parser["NotExpr"] = [&](const peg::SemanticValues &sv) {

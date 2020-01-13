@@ -12,6 +12,14 @@
 #include <string>
 #include <unordered_map>
 
+template <typename K, typename V>
+std::ostream &operator<<(std::ostream &os, const std::unordered_map<K, V> &m) {
+  for (const std::pair<K, V> &p : m) {
+    os << "{" << p.first << ": " << p.second << "}\n";
+  }
+  return os;
+}
+
 namespace reelay {
 
 using any = std::any;

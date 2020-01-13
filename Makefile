@@ -2,7 +2,7 @@ CXX=g++# C compiler
 CXXFLAGS=-std=c++17 -fPIC -O2 -pthread -fno-new-ttp-matching# -Wall -Wextra C flags
 LDFLAGS=-shared# linking flags
 
-LIB_FLAGS=
+LIB_FLAGS=-lcudd
 INCLUDE_FLAGS=-I. -I./include
 
 NAME = reelay
@@ -64,7 +64,7 @@ test_csvparser:
 	multitime -n 10 bin/csvparser/csvparser_fast build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv
 	multitime -n 10 bin/csvparser/csvparser_modern build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv
 
-test: test_main test_untimed test_discrete_timed test_dense_timed test_untimed_robustness test_discrete_timed_robustness
+test: test_main test_untimed test_discrete_timed test_dense_timed test_untimed_robustness test_discrete_timed_robustness test_untimed_data
 
 test_main:
 	mkdir -p build/test
@@ -73,6 +73,10 @@ test_main:
 test_untimed:
 	$(CXX) $(CXXFLAGS) build/test/main.o test/test_setting_untimed.cpp -o build/test/test_setting_untimed $(INCLUDE_FLAGS) $(LIB_FLAGS)
 	./build/test/test_setting_untimed -r compact
+
+test_untimed_data:
+	$(CXX) $(CXXFLAGS) build/test/main.o test/test_setting_untimed_data.cpp -o build/test/test_setting_untimed_data $(INCLUDE_FLAGS) $(LIB_FLAGS)
+	./build/test/test_setting_untimed_data -r compact
 
 test_untimed_robustness:
 	$(CXX) $(CXXFLAGS) build/test/main.o test/test_setting_untimed_robustness.cpp -o build/test/test_setting_untimed_robustness $(INCLUDE_FLAGS) $(LIB_FLAGS)
@@ -89,6 +93,10 @@ test_discrete_timed_robustness:
 test_dense_timed:
 	$(CXX) $(CXXFLAGS) build/test/main.o test/test_setting_dense_timed.cpp -o build/test/test_setting_dense_timed $(INCLUDE_FLAGS) $(LIB_FLAGS)
 	./build/test/test_setting_dense_timed -r compact
+
+test_data_manager:
+	$(CXX) $(CXXFLAGS) build/test/main.o test/test_data_manager.cpp -o build/test/test_data_manager $(INCLUDE_FLAGS) $(LIB_FLAGS)
+	./build/test/test_data_manager -r compact
 
 test_mtl_performance_discrete: test/timescales/discrete/multitime/*.txt
 	for batchfile in $^ ; do \
