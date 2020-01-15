@@ -1,4 +1,5 @@
-CXX=g++# C compiler
+CC=gcc#
+CXX=g++#
 CXXFLAGS=-std=c++17 -fPIC -O2 -pthread -fno-new-ttp-matching# -Wall -Wextra C flags
 LDFLAGS=-shared# linking flags
 
@@ -28,6 +29,14 @@ uninstall:
 develop:
 	ln -s $(PROJECT_INCLUDE) $(DESTDIR)$(INCDIR)
 	ln -s $(TARGET) $(DESTDIR)$(LIBDIR)/$(TARGET)
+
+cudd:
+	mkdir -p build
+	cd build && rm -rf cudd && git clone https://github.com/doganulus/cudd.git
+	cd build/cudd && aclocal && autoconf &&./configure CC=gcc CXX=g++ --enable-silent-rules --enable-shared --enable-obj
+	cd build/cudd && make
+cudd-install:
+	cd build/cudd && make install
 
 timescales:
 	mkdir -p build
