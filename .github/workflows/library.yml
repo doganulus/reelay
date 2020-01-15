@@ -24,7 +24,7 @@ jobs:
       run: |
         make cudd
         sudo make cudd-install
-        ldconfig
+        sudo ldconfig
 
     - name: Install Reelay
       run: |
