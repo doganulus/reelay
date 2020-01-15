@@ -24,7 +24,13 @@ jobs:
         sudo apt-get install -y autotools-dev
         sudo apt-get install -y libboost-all-dev
 
-    - name: Install Reelay library
+    - name: Install CUDD
+      run: |
+        make cudd
+        sudo make cudd-install
+        ldconfig
+
+    - name: Install Reelay
       run: sudo make install
 
     - name: Setup Python
