@@ -17,6 +17,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y apt-transport-https
         sudo apt-get install -y uuid-dev 
+        sudo apt-get install -y autotools-dev
         sudo apt-get install -y libboost-all-dev
     - name: Install reelay library
       run: sudo make install
