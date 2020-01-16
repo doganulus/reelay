@@ -11,18 +11,17 @@ RUN apt-get install -qqy autotools-dev
 RUN apt-get install -qqy libboost-all-dev 
 RUN apt-get install -qqy libgmp-dev
 
-# Build CUDD
+# Install Reelay
 WORKDIR /home
-RUN git clone https://github.com/doganulus/cudd
-WORKDIR /home/cudd
+RUN git clone https://github.com/doganulus/reelay
+WORKDIR /home/reelay
+
+# Build CUDD dependency
 RUN make cudd
 RUN make cudd-install
 RUN ldconfig
 
 # Install Reelay
-WORKDIR /home
-RUN git clone https://github.com/doganulus/reelay
-WORKDIR /home/reelay
 RUN make install
 
 # Build Apps
