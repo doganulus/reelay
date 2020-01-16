@@ -7,7 +7,7 @@ RUN apt-get install -qqy git
 RUN apt-get install -qqy gcc
 RUN apt-get install -qqy g++
 RUN apt-get install -qqy make
-RUN apt-get install -qqy autotools-dev
+RUN apt-get install -qqy autoconf automake autotools-dev
 RUN apt-get install -qqy libboost-all-dev 
 RUN apt-get install -qqy libgmp-dev
 
