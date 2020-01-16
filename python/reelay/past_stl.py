@@ -5,7 +5,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 #
-import reelay.recipes
+import reelay
 
 class monitor(object):
 	def __new__(cls, pattern:str, time_model="dense", piecewise="linear", enable_robustness=False, init_update=None):

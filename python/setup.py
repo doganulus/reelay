@@ -4,7 +4,7 @@ from distutils import util
 from distutils.core import setup
 from distutils.extension import Extension
 
-__version__ = '1.6.0'
+__version__ = '1.7.0'
 
 class get_pybind_include(object):
     """Helper class to determine the pybind11 include path
@@ -27,8 +27,11 @@ ext_recipes = Extension(
         # Path to pybind11 headers
         get_pybind_include(),
         get_pybind_include(user=True),
-        "/usr/local/include"
-    ],
+        "include",
+        "../include"
+        ],
+    library_dirs = ['/usr/local/lib'],
+    libraries = ['cudd'],
     extra_compile_args = ["-O2", "--std=c++17", "-fPIC", "-pthread", "-fno-new-ttp-matching"],
     language='c++'
 )
@@ -42,10 +45,23 @@ setup(
     packages=setuptools.find_packages(),
     license='MPL-2.0',
     description = 'Runtime verification package using formal specifications',
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Intended Audience :: Developers',
+        'Intended Audience :: Science/Research',
+        'Topic :: Scientific/Engineering',
+        'Topic :: Scientific/Engineering :: Mathematics',
+        'Topic :: Software Development :: Testing',
+        'License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)',
+        'Programming Language :: Python :: 3',
+    ],
     python_requires='>=3',
     install_requires=['pybind11>=2.4'],
     setup_requires=['pybind11>=2.4'],
+    tests_requires=['pytest'],
     ext_package='reelay',
     ext_modules=[ext_recipes],
+    include_package_data=True,
     zip_safe=False
+
 )

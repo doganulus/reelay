@@ -1,7 +1,6 @@
 CC=gcc#
 CXX=g++#
 CXXFLAGS=-std=c++17 -fPIC -O2 -pthread -fno-new-ttp-matching# -Wall -Wextra C flags
-LDFLAGS=-shared# linking flags
 
 LIB_FLAGS=-lcudd
 INCLUDE_FLAGS=-I. -I./include
