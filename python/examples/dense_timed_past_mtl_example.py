@@ -1,6 +1,8 @@
 import reelay
 
-my_monitor = reelay.past_mtl.monitor("p1 since[4.1:13.2] p2")
+my_monitor = reelay.past_mtl.monitor(
+    "p1 since[4.1:13.2] p2", 
+    time_model="dense")
 
 input_sequence = [
     dict(time=3.4,  p1=False,p2=False),
