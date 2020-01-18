@@ -50,11 +50,11 @@ timescales-clean:
 rvbc2018:
 	mkdir -p build
 	cd build && rm -rf benchmark-challenge-2018 && git clone https://github.com/runtime-verification/benchmark-challenge-2018.git
-	
+
 rvbc2018-clean:
 	rm -rf build/benchmark-challenge-2018
 
-apps: rymtl rystl
+apps: rymtl rystl ryjavu
 
 rymtl:
 	mkdir -p bin
