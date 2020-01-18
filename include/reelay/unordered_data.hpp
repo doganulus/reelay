@@ -41,9 +41,12 @@ struct binding_manager {
 
   template<typename V = std::string>
   struct variable_t {
+    set_t one;
     set_t cube;
     set_t other_cubes;
     set_t empty_slots;
+
+    std::size_t n = 0;
 
     std::vector<set_t> bddvars;
     std::unordered_map<set_t, V> values = {};
@@ -53,21 +56,48 @@ struct binding_manager {
 
     variable_t(const mgr_t &mgr, const std::vector<set_t> &vars)
         : bddvars(vars) {
+      one = mgr.bddOne();
       cube = mgr.computeCube(vars);
       empty_slots = ~cube;
     }
 
     std::size_t size(){return bddvars.size();}
 
+    // set_t assign(const V &value) {
+    //   if (slots.find(value) != slots.end()) {
+    //     return slots[value];
+    //   }
+    //   auto slot = empty_slots.PickOneMinterm(bddvars);
+    //   values[slot] = value;
+    //   slots[value] = slot;
+    //   empty_slots = ~slot * empty_slots; // Excludes slot from empty slots
+    //   return slot;
+    // }
+
     set_t assign(const V &value) {
       if (slots.find(value) != slots.end()) {
         return slots[value];
       }
-      auto slot = empty_slots.PickOneMinterm(bddvars);
+      auto slot = make_minterm_of(n);
+      n++;
       values[slot] = value;
       slots[value] = slot;
-      empty_slots = ~slot * empty_slots; // Excludes slot from empty slots
       return slot;
+    }
+
+    set_t make_minterm_of(std::size_t n) {
+      std::size_t k = n; 
+      set_t c = one;
+
+      for(std::size_t i = 0; i < bddvars.size(); i++){
+        if (k % 2 != 0) {
+          c *= bddvars[i];
+        } else {
+          c *= ~bddvars[i];
+        }
+        k /= 2;
+      }
+      return c;
     }
 
     set_t erase(const V &value) {
@@ -95,12 +125,17 @@ struct binding_manager {
 
   std::unordered_map<std::string, variable_t<std::string>> variables = {};
 
-  binding_manager() { cudd = Cudd(0, 0); }
+  binding_manager() {
+    cudd = Cudd(0, 0);
+    cudd.AutodynDisable();
+    // cudd.bddVar();
+    // cudd.AutodynEnable(CUDD_REORDER_RANDOM);
+  }
 
   set_t one() { return cudd.bddOne(); }
   set_t zero() { return cudd.bddZero(); }
 
-  void add_variable(std::string name, std::size_t nbits=12) {
+  void add_variable(std::string name, std::size_t nbits=20) {
     if (variables.find(name) == variables.end()) {
       std::vector<set_t> bddvars = {};
       for (std::size_t i = 0; i < nbits; i++) {
@@ -114,5 +149,6 @@ struct binding_manager {
     return variables[name].assign(value);
   }
 };
+
 
 } // namespace reelay

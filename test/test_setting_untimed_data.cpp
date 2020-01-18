@@ -405,7 +405,171 @@ TEST_CASE("Quantification") {
 
 TEST_CASE("Temporal Operations") {
 
-  SECTION("Existence") {
+  SECTION("Previous") {
+    using input_t = std::vector<std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{"open", "1"});
+    sequence.push_back(input_t{"open", "2"});
+    sequence.push_back(input_t{"close", "2"});
+    sequence.push_back(input_t{"close", "2"});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "pre([open, *])", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({f, t, t, f});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Once") {
+    using input_t = std::vector<std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{"open", "a"});
+    sequence.push_back(input_t{"open", "c"});
+    sequence.push_back(input_t{"close", "c"});
+    sequence.push_back(input_t{"close", "a"});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "once([open, c])", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({f, t, t, t});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Once") {
+    using input_t = std::vector<std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{"open", "a"});
+    sequence.push_back(input_t{"open", "c"});
+    sequence.push_back(input_t{"close", "c"});
+    sequence.push_back(input_t{"close", "a"});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "once([open, *file])", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto file_a = manager->assign("file", "a");
+    auto file_c = manager->assign("file", "c");
+
+    auto expected = std::vector<reelay::data_set_t>({
+        file_a,
+        file_a + file_c,
+        file_a + file_c,
+        file_a + file_c,
+    });
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Historically") {
+    using input_t = std::vector<std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{"is_open", "a"});
+    sequence.push_back(input_t{"is_open", "a"});
+    sequence.push_back(input_t{"is_open", "a"});
+    sequence.push_back(input_t{"close", "a"});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "historically([is_open, a])", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({t, t, t, f});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Since") {
+    using input_t = std::vector<std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{"open", "a"});
+    sequence.push_back(input_t{"is_open", "a"});
+    sequence.push_back(input_t{"is_open", "a"});
+    sequence.push_back(input_t{"is_open", "a"});
+    sequence.push_back(input_t{"is_open", "b"});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "[is_open, a] since [open, a]", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({t, t, t, t, f});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Existential Quantification") {
 
     using input_t = std::vector<std::string>;
 
@@ -437,6 +601,131 @@ TEST_CASE("Temporal Operations") {
     auto datum3 = manager->assign("file", "feed_your_head");
 
     auto expected = std::vector<reelay::data_set_t>({datum1, f, datum3, f, f});
+
+    CHECK(result == expected);
+  }
+
+}
+
+TEST_CASE("Some complex formulas") {
+
+  SECTION("Attempt to access a closed file") {
+
+    using input_t = std::vector<std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{"login", "alice"});
+    sequence.push_back(input_t{"login", "bob"});
+    sequence.push_back(input_t{"open", "wonderland"});
+    sequence.push_back(input_t{"access", "alice", "wonderland"});
+    sequence.push_back(input_t{"close", "wonderland"});
+    sequence.push_back(input_t{"access", "bob", "wonderland"});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "forall[user,file]. [access, *user, *file] implies (![logout, *user] "
+        "since [login, *user] and ![close, *file] since [open, *file])",
+        extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({t, t, t, t, t, f});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Neither Open Nor Close") {
+
+    using input_t = std::vector<std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{"open", "1", "read"});
+    sequence.push_back(input_t{"open", "2", "read"});
+    sequence.push_back(input_t{"open", "3", "read"});
+    sequence.push_back(input_t{"open", "4", "read"});
+    sequence.push_back(input_t{"close", "4"});
+    sequence.push_back(input_t{"open", "3", "write"});
+    sequence.push_back(input_t{"open", "4", "write"});
+    sequence.push_back(input_t{"close", "4"});
+    sequence.push_back(input_t{"close", "3"});
+    sequence.push_back(input_t{"close", "2"});
+    sequence.push_back(input_t{"close", "1"});
+    sequence.push_back(input_t{"close", "4"});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "forall[file]. [close, *file] implies (exists[mode]. pre(![close, "
+        "*file] since [open, *file, *mode]))",
+        extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected =
+        std::vector<reelay::data_set_t>({t, t, t, t, t, t, t, t, t, t, t, f});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("First In-n-Out") {
+
+    using input_t = std::vector<std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{"enter", "a"});
+    sequence.push_back(input_t{"enter", "b"});
+    sequence.push_back(input_t{"enter", "c"});
+    sequence.push_back(input_t{"enter", "d"});
+    sequence.push_back(input_t{"enter", "e"});
+    sequence.push_back(input_t{"enter", "f"});
+    sequence.push_back(input_t{"enter", "g"});
+    sequence.push_back(input_t{"enter", "h"});
+    sequence.push_back(input_t{"exit", "a"});
+    sequence.push_back(input_t{"exit", "b"});
+    sequence.push_back(input_t{"exit", "d"});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "forall[x,y].([exit, *y] and once([enter, *y] and pre(once[enter, "
+        "*x])) implies pre(once[exit, *x]))",
+        extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected =
+        std::vector<reelay::data_set_t>({t, t, t, t, t, t, t, t, t, t, f});
 
     CHECK(result == expected);
   }
