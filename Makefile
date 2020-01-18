@@ -37,6 +37,8 @@ cudd:
 cudd-install:
 	cd build/cudd && make install
 
+benchmark: timescales rvbc2018
+
 timescales:
 	mkdir -p build
 	cd build && rm -rf timescales && git clone https://github.com/doganulus/timescales.git
@@ -44,6 +46,13 @@ timescales:
 
 timescales-clean:
 	rm -rf build/timescales
+
+rvbc2018:
+	mkdir -p build
+	cd build && rm -rf benchmark-challenge-2018 && git clone https://github.com/runtime-verification/benchmark-challenge-2018.git
+	
+rvbc2018-clean:
+	rm -rf build/benchmark-challenge-2018
 
 apps: rymtl rystl
 
@@ -54,6 +63,10 @@ rymtl:
 rystl:
 	mkdir -p bin
 	$(CXX) $(CXXFLAGS) apps/stl/main.cpp -o bin/rystl $(INCLUDE_FLAGS) $(LIB_FLAGS)
+
+ryjavu:
+	mkdir -p bin
+	$(CXX) $(CXXFLAGS) apps/ryjavu/main.cpp -o bin/ryjavu $(INCLUDE_FLAGS) $(LIB_FLAGS)
 
 apps-install:
 	cp -p bin/rymtl /usr/local/bin/rymtl
@@ -107,6 +120,11 @@ test_data_manager:
 	./build/test/test_data_manager -r compact
 
 test_mtl_performance_discrete: test/timescales/discrete/multitime/*.txt
+	for batchfile in $^ ; do \
+        multitime -n 10 -b $${batchfile} ; \
+    done
+
+test_qtl_performance_discrete: test/dejavu/*.txt
 	for batchfile in $^ ; do \
         multitime -n 10 -b $${batchfile} ; \
     done
