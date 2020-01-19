@@ -247,6 +247,124 @@ TEST_CASE( "Atoms" ) {
 
     CHECK(result == expected);
   }
+
+  SECTION("Record Proposition 0") {
+
+    using input_t = std::unordered_map<std::string, std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{
+        {"event", "access"},
+        {"user", "alice"},
+        {"file", "wonderland"}
+    });
+    sequence.push_back(input_t{
+        {"event", "access"},
+        {"user", "alice"},
+        {"file", "feed_your_head"}
+    });
+    sequence.push_back(input_t{
+        {"event", "access"},
+        {"user", "alice"},
+        {"file", "wonderland"},
+        {"version", "v2"}
+    });
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "{event: access, user: alice, file: wonderland}", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({t, f, t});
+    CHECK(result == expected);
+  }
+
+  SECTION("Record Proposition 1") {
+
+    using input_t = std::unordered_map<std::string, std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{
+        {"event", "access"}, {"user", "alice"}, {"file", "wonderland"}});
+    sequence.push_back(input_t{
+        {"event", "access"}, {"user", "bob"}, {"file", "feed_your_head"}});
+    sequence.push_back(input_t{
+        {"event", "access"}, {"user", "charlotte"}, {"file", "wonderland"}});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "{event: access, user: *name, file: wonderland}", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto d1 = manager->assign("name", "alice");
+    auto d3 = manager->assign("name", "charlotte");
+
+    auto expected = std::vector<reelay::data_set_t>({d1, f, d3});
+    CHECK(result == expected);
+  }
+
+  SECTION("Record Proposition 1") {
+
+    using input_t = std::unordered_map<std::string, std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{
+        {"event", "access"}, {"user", "alice"}, {"file", "wonderland"}});
+    sequence.push_back(input_t{
+        {"event", "access"}, {"user", "bob"}, {"file", "feed_your_head"}});
+    sequence.push_back(input_t{
+        {"event", "access"}, {"user", "charlotte"}, {"file", "wonderland"}});
+    sequence.push_back(input_t{
+        {"event", "access"}, {"user", "charlotte"}});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "{event: access, user: *name, file:*}", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto d1 = manager->assign("name", "alice");
+    auto d2 = manager->assign("name", "bob");
+    auto d3 = manager->assign("name", "charlotte");
+
+    auto expected = std::vector<reelay::data_set_t>({d1, d2, d3, f});
+    CHECK(result == expected);
+  }
 }
 
 TEST_CASE("Boolean Operations") {

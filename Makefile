@@ -71,10 +71,12 @@ ryjavu:
 apps-install:
 	cp -p bin/rymtl /usr/local/bin/rymtl
 	cp -p bin/rystl /usr/local/bin/rystl
+	cp -p bin/rystl /usr/local/bin/ryjavu
 
 apps-uninstall:
 	rm /usr/local/bin/rymtl
 	rm /usr/local/bin/rystl
+	rm /usr/local/bin/ryjavu
 
 test_csvparser:
 	mkdir -p bin/csvparser
@@ -133,7 +135,7 @@ python:
 	cd python && pip install .
 
 python-build: 
-	cd python && python setup.py sdist bdist_wheel
+	cd python && python setup.py sdist
 	cd python && twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 python-develop: 

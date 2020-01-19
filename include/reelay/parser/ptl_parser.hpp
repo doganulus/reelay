@@ -150,6 +150,28 @@ template <class Setting> struct ptl_parser {
       return std::static_pointer_cast<node_t>(expr);
     };
 
+    parser["RecordProposition"] = [&](const peg::SemanticValues &sv) {
+      auto manager = std::any_cast<data_mgr_t>(meta.at("manager"));
+      auto fields =
+          sv[0]
+              .get<std::vector<std::pair<
+                  std::string, std::pair<std::string, std::string>>>>();
+
+      reelay::kwargs kw = {{"fields", fields}};
+
+      for (const auto &field : fields) {
+        if (field.second.first == "variable_ref") {
+          manager->add_variable(field.second.second);
+        }
+      }
+
+      kw.insert(meta.begin(), meta.end());
+      auto expr = Setting::make_state("record", kw);
+
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
+    };
+
     parser["NonEmptyVarList"] = [&](const peg::SemanticValues &sv) {
       auto vlist = std::vector<std::string>();
 
@@ -172,6 +194,20 @@ template <class Setting> struct ptl_parser {
       return vlist;
     };
 
+    parser["NonEmptyKeyValuePairs"] = [&](const peg::SemanticValues &sv) {
+      auto keyvals = std::vector<
+          std::pair<std::string, std::pair<std::string, std::string>>>();
+
+      for (std::size_t i = 0; i < sv.size(); i++) {
+        auto child = sv[i]
+                         .get<std::pair<std::string,
+                                        std::pair<std::string, std::string>>>();
+        keyvals.push_back(child);
+      }
+
+      return keyvals;
+    };
+
     parser["FieldProp"] = [&](const peg::SemanticValues &sv) {
       return std::pair<std::string, std::string>("proposition",
                                                  sv[0].get<std::string>());
@@ -183,6 +219,25 @@ template <class Setting> struct ptl_parser {
 
     parser["UnnamedRef"] = [&](const peg::SemanticValues &sv) {
       return std::pair<std::string, std::string>("ignore_field","");
+    };
+
+    parser["FieldKey"] = [&](const peg::SemanticValues &sv) {
+      auto keys = std::vector<std::string>();
+      for (std::size_t i = 0; i < std::size(sv); i++) {
+        keys.push_back(sv[i].get<std::string>());
+      }
+      return keys;
+    };
+
+    parser["KeyValuePair"] = [&](const peg::SemanticValues &sv) {
+      auto key_path = sv[0].get<std::vector<std::string>>();
+      auto value = sv[1].get<std::pair<std::string, std::string>>();
+      auto key = key_path[0];
+      for (std::size_t i = 1; i < std::size(key_path); i++) {
+        key += '/'+ key_path[i];
+      }
+      return std::pair<std::string, std::pair<std::string, std::string>>(key, value);
+      ;
     };
 
     parser["BasicPredicateLT"] = [&](const peg::SemanticValues &sv) {

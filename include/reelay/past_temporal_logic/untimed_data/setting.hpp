@@ -94,6 +94,8 @@ struct factory {
       result = std::make_shared<proposition<input_t>>(kw);
     } else if (name == "listing") {
       result = std::make_shared<listing<input_t>>(kw);
+    } else if (name == "record") {
+      result = std::make_shared<record<input_t>>(kw);
     // } else if(name == "lt" or name == "<") {
     //   result = std::make_shared<basic_predicate_lt<input_t>>(kw);
     // } else if (name == "le" or name == "leq" or name == "<=") {
