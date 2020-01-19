@@ -128,8 +128,6 @@ struct binding_manager {
   binding_manager() {
     cudd = Cudd(0, 0);
     cudd.AutodynDisable();
-    // cudd.bddVar();
-    // cudd.AutodynEnable(CUDD_REORDER_RANDOM);
   }
 
   set_t one() { return cudd.bddOne(); }

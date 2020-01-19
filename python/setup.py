@@ -58,7 +58,6 @@ setup(
     python_requires='>=3',
     install_requires=['pybind11>=2.4'],
     setup_requires=['pybind11>=2.4'],
-    tests_requires=['pytest'],
     ext_package='reelay',
     ext_modules=[ext_recipes],
     include_package_data=True,
