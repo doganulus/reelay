@@ -22,12 +22,12 @@ struct since : public untimed_state<X, data_set_t> {
 
   using node_t = untimed_node<output_t>;
   using node_ptr_t = std::shared_ptr<node_t>;
-
+  
+  data_mgr_t manager;
   data_set_t value;
 
   node_ptr_t first;
   node_ptr_t second;
-  data_mgr_t manager;
 
   explicit since(const data_mgr_t &mgr, const std::vector<node_ptr_t> &args)
       : manager(mgr), first(args[0]), second(args[1]) {

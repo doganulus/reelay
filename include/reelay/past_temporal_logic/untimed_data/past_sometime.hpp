@@ -23,10 +23,10 @@ struct past_sometime : public untimed_state<X, data_set_t> {
   using node_t = untimed_node<output_t>;
   using node_ptr_t = std::shared_ptr<node_t>;
 
+  data_mgr_t manager;
   data_set_t value;
   
   node_ptr_t first;
-  data_mgr_t manager;
 
   explicit past_sometime(const data_mgr_t &mgr,
                          const std::vector<node_ptr_t> &args)

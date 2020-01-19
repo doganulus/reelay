@@ -22,10 +22,10 @@ struct previous : public untimed_state<X, data_set_t> {
 
   using node_t = untimed_node<output_t>;
   using node_ptr_t = std::shared_ptr<node_t>;
-
+  
+  data_mgr_t manager;
   data_set_t prev_value;
   data_set_t value;
-  data_mgr_t manager;
 
   node_ptr_t first;
 

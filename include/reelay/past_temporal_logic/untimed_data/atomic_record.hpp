@@ -32,9 +32,9 @@ struct record<std::unordered_map<std::string, std::string>>
   using output_t = data_set_t;
 
   using function_t = std::function<data_set_t(const input_t &)>;
-
-  data_set_t value;
+  
   data_mgr_t manager;
+  data_set_t value;
 
   std::vector<function_t> funcs = {};
 

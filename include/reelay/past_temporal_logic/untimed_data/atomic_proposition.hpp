@@ -29,12 +29,13 @@ struct proposition<std::vector<std::string>>
   using output_t = data_set_t;
 
   using function_t = std::function<data_set_t(const input_t &)>;
-
-  data_set_t value;
-  function_t fn;
+  
   data_mgr_t manager;
+  data_set_t value;
 
-  explicit proposition(const std::string &name, const data_mgr_t &mgr)
+  function_t fn;
+
+  explicit proposition(const data_mgr_t &mgr, const std::string &name)
       : fn([name, mgr](const input_t &x) {
           if (std::find(x.begin(), x.end(), name) != x.end())
             return mgr->one();
@@ -46,8 +47,8 @@ struct proposition<std::vector<std::string>>
   }
 
   explicit proposition(const kwargs &kw)
-      : proposition(std::any_cast<std::string>(kw.at("name")),
-                    std::any_cast<data_mgr_t>(kw.at("manager"))) {}
+      : proposition(std::any_cast<data_mgr_t>(kw.at("manager")),
+                    std::any_cast<std::string>(kw.at("name"))) {}
 
   void update(const input_t &args) override { value = fn(args); }
 
