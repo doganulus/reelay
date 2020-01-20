@@ -1,3 +1,3 @@
-[submodule "third_party/cudd"]
+[submodule "cudd"]
 	path = third_party/cudd
 	url = https://github.com/doganulus/cudd.git
