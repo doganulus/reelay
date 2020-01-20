@@ -43,6 +43,7 @@ struct record<std::unordered_map<std::string, std::string>>
       const std::vector<
           std::pair<std::string, std::pair<std::string, std::string>>> &fields)
       : manager(mgr) {
+
     for (std::size_t i = 0; i < fields.size(); i++) {
       auto key_name = fields[i].first;
       auto value_type = fields[i].second.first;
@@ -57,6 +58,7 @@ struct record<std::unordered_map<std::string, std::string>>
         });
       } else if (value_type == "variable_ref") {
         auto name = fields[i].second.second;
+        mgr->add_variable(name);
         funcs.push_back([mgr, key_name, name](const input_t &x) {
           if (x.find(key_name) != x.end()) {
             return mgr->assign(name, x.at(key_name));

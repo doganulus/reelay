@@ -132,17 +132,9 @@ template <class Setting> struct ptl_parser {
     };
 
     parser["ListProposition"] = [&](const peg::SemanticValues &sv) {
-      auto manager = std::any_cast<data_mgr_t>(meta.at("manager"));
       auto fields =
           sv[0].get<std::vector<std::pair<std::string, std::string>>>();
       reelay::kwargs kw = {{"fields", fields}};
-      
-      for(const auto& field : fields){
-        if(field.first == "variable_ref"){
-          manager->add_variable(field.second);
-        }
-      }
-
       kw.insert(meta.begin(), meta.end());
       auto expr = Setting::make_state("listing", kw);
 
@@ -151,20 +143,12 @@ template <class Setting> struct ptl_parser {
     };
 
     parser["RecordProposition"] = [&](const peg::SemanticValues &sv) {
-      auto manager = std::any_cast<data_mgr_t>(meta.at("manager"));
       auto fields =
           sv[0]
               .get<std::vector<std::pair<
                   std::string, std::pair<std::string, std::string>>>>();
 
       reelay::kwargs kw = {{"fields", fields}};
-
-      for (const auto &field : fields) {
-        if (field.second.first == "variable_ref") {
-          manager->add_variable(field.second.second);
-        }
-      }
-
       kw.insert(meta.begin(), meta.end());
       auto expr = Setting::make_state("record", kw);
 

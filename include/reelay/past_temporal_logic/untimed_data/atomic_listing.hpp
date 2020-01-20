@@ -51,6 +51,7 @@ struct listing<std::vector<std::string>>
         });
       } else if (fields[i].first == "variable_ref") {
         auto name = fields[i].second;
+        mgr->add_variable(name);
         funcs.push_back([mgr, name, i](const input_t &x) {
           return mgr->assign(name, x[i]);
         });
