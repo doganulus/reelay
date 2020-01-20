@@ -11,8 +11,6 @@
 #include "reelay/recipes/past_ltl_monitor.hpp"
 #include "reelay/recipes/untimed_past_stl_monitor.hpp"
 #include "reelay/recipes/untimed_past_rstl_monitor.hpp"
-#include "reelay/recipes/untimed_past_qtl_list_monitor.hpp"
-#include "reelay/recipes/untimed_past_qtl_dict_monitor.hpp"
 
 #include "reelay/recipes/discrete_timed_past_mtl_monitor.hpp"
 #include "reelay/recipes/discrete_timed_past_stl_monitor.hpp"
@@ -22,3 +20,7 @@
 #include "reelay/recipes/dense_timed_past_stl0_monitor.hpp"
 #include "reelay/recipes/dense_timed_past_stl1_monitor.hpp"
 
+#ifdef CUDD_INSTALLED
+#include "reelay/recipes/untimed_past_qtl_list_monitor.hpp"
+#include "reelay/recipes/untimed_past_qtl_dict_monitor.hpp"
+#endif

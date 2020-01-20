@@ -1,10 +1,48 @@
+import os
 import setuptools
 
 from distutils import util
 from distutils.core import setup
 from distutils.extension import Extension
 
+from distutils.errors import CCompilerError
+from distutils.errors import DistutilsExecError
+from distutils.errors import DistutilsPlatformError
+
 __version__ = '1.7.0'
+
+def _have_cudd_support():
+    import shutil
+    import tempfile
+    from distutils.ccompiler import new_compiler
+    from distutils.sysconfig import customize_compiler
+
+    cpp_code = ('#include "cudd.h"\n#include "cuddObj.hh"\n\n'
+              'int main(int argc, char **argv) { return 0; }')
+    tmp_dir = tempfile.mkdtemp(prefix='tmp_cudd_')
+    bin_file = os.path.join(tmp_dir, 'test_cudd')
+    src_file = bin_file + '.cpp'
+    with open(src_file, 'w') as fh:
+        fh.write(cpp_code)
+
+    compiler = new_compiler()
+    customize_compiler(compiler)
+    success = False
+    try:
+        compiler.link_executable(
+            compiler.compile([src_file], output_dir=tmp_dir),
+            bin_file,
+            libraries=['cudd'])
+    except CCompilerError:
+        print('Unable to compile CUDD - Missing headers?')
+    except DistutilsExecError:
+        print('Unable to compile CUDD - No C++ compiler?')
+    except DistutilsPlatformError:
+        print('Unable to compile CUDD - Platform error')
+    else:
+        success = True
+    shutil.rmtree(tmp_dir)
+    return success
 
 class get_pybind_include(object):
     """Helper class to determine the pybind11 include path
@@ -31,7 +69,7 @@ ext_recipes = Extension(
         "../include"
         ],
     library_dirs = ['/usr/local/lib'],
-    libraries = ['cudd'],
+    libraries = ['cudd'] if _have_cudd_support() else [],
     extra_compile_args = ["-O2", "--std=c++17", "-fPIC", "-pthread", "-fno-new-ttp-matching"],
     language='c++'
 )

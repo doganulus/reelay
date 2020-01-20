@@ -12,14 +12,8 @@
 #include "string"
 #include "functional"
 
-#if defined __has_include
-#if __has_include("cudd.h")
 #include "cudd.h"
-#endif
-#if __has_include("cuddObj.hh")
 #include "cuddObj.hh"
-#endif
-#endif
 
 template <> struct std::hash<BDD> {
   std::size_t operator()(const BDD &k) const {
