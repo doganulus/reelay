@@ -68,15 +68,15 @@ apps: rymtl rystl ryjavu
 
 rymtl:
 	mkdir -p bin
-	$(CXX) $(CXXFLAGS) apps/mtl/main.cpp -o bin/rymtl $(INCLUDE_FLAGS) $(LIB_FLAGS)
+	$(CXX) $(CXXFLAGS) apps/mtl/main.cpp -o bin/rymtl $(INCLUDE_FLAGS)
 
 rystl:
 	mkdir -p bin
-	$(CXX) $(CXXFLAGS) apps/stl/main.cpp -o bin/rystl $(INCLUDE_FLAGS) $(LIB_FLAGS)
+	$(CXX) $(CXXFLAGS) apps/stl/main.cpp -o bin/rystl $(INCLUDE_FLAGS) 
 
 ryjavu:
 	mkdir -p bin
-	$(CXX) $(CXXFLAGS) apps/ryjavu/main.cpp -o bin/ryjavu $(INCLUDE_FLAGS) $(LIB_FLAGS)
+	$(CXX) $(CXXFLAGS) apps/ryjavu/main.cpp /usr/local/lib/libcudd.a -o bin/ryjavu $(INCLUDE_FLAGS) 
 
 apps-install:
 	cp -p bin/rymtl /usr/local/bin/rymtl
