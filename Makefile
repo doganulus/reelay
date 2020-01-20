@@ -2,7 +2,13 @@ CC=gcc#
 CXX=g++#
 CXXFLAGS=-std=c++17 -fPIC -O2 -pthread -fno-new-ttp-matching# -Wall -Wextra C flags
 
-LIB_FLAGS=-lcudd
+ifneq (,$(shell ldconfig -p | grep libcudd))
+LIB_CUDD_FLAG=-lcudd
+else
+LIB_CUDD_FLAG=#
+endif
+
+LIB_FLAGS=$(LIB_CUDD_FLAG)
 INCLUDE_FLAGS=-I. -I./include
 
 NAME = reelay
@@ -34,8 +40,12 @@ cudd:
 	cd build && rm -rf cudd && git clone https://github.com/doganulus/cudd.git
 	cd build/cudd && aclocal && autoconf &&./configure CC=gcc CXX=g++ --enable-silent-rules --enable-shared --enable-obj
 	cd build/cudd && make
+
 cudd-install:
 	cd build/cudd && make install
+
+cudd-uninstall:
+	cd build/cudd && make uninstall
 
 benchmark: timescales rvbc2018
 
@@ -120,6 +130,10 @@ test_dense_timed:
 test_data_manager:
 	$(CXX) $(CXXFLAGS) build/test/main.o test/test_data_manager.cpp -o build/test/test_data_manager $(INCLUDE_FLAGS) $(LIB_FLAGS)
 	./build/test/test_data_manager -r compact
+
+test_recipes:
+	$(CXX) $(CXXFLAGS) build/test/main.o test/test_recipes.cpp -o build/test/test_recipes $(INCLUDE_FLAGS) $(LIB_FLAGS)
+	./build/test/test_recipes -r compact
 
 test_mtl_performance_discrete: test/timescales/discrete/multitime/*.txt
 	for batchfile in $^ ; do \
