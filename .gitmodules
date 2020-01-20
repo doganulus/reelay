@@ -1,0 +1,3 @@
+[submodule "third_party/cudd"]
+	path = third_party/cudd
+	url = https://github.com/doganulus/cudd.git
