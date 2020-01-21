@@ -8,12 +8,8 @@
 
 #pragma once
 
-#if defined __has_include
-#if __has_include("cudd.h") && __has_include("cuddObj.hh")
 #ifndef CUDD_INSTALLED
 #define CUDD_INSTALLED
-#endif
-#endif
 #endif
 
 #include "functional"

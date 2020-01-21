@@ -8,6 +8,10 @@
 
 #pragma once
 
+#ifndef CUDD_INSTALLED
+#define CUDD_INSTALLED
+#endif
+
 #include "reelay/recipes/past_ltl_monitor.hpp"
 #include "reelay/recipes/untimed_past_stl_monitor.hpp"
 #include "reelay/recipes/untimed_past_rstl_monitor.hpp"
