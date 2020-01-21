@@ -2,6 +2,7 @@ CC=gcc#
 CXX=g++#
 CXXFLAGS=-std=c++17 -fPIC -O2 -pthread -fno-new-ttp-matching# -Wall -Wextra C flags
 
+
 ifneq (,$(shell ldconfig -p | grep libcudd))
 LIB_CUDD_FLAG=-lcudd
 else
@@ -12,7 +13,7 @@ LIB_FLAGS=$(LIB_CUDD_FLAG)
 INCLUDE_FLAGS=-I. -I./include
 
 NAME = reelay
-VERSION = 1.6
+VERSION=2001
 
 PROJECT_INCLUDE = include/reelay
 
@@ -148,9 +149,9 @@ test_qtl_performance_discrete: test/dejavu/*.txt
 python: 
 	cd python && pip install .
 
-python-build: 
-	cd python && python setup.py sdist
-	cd python && twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+python-pypi-upload: 
+	python setup.py sdist
+	twine upload --repository-url https://test.pypi.org/legacy/ dist/reelay-$(VERSION).tar.gz
 
 python-develop: 
 	sudo make uninstall && sudo make install
