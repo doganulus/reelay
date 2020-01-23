@@ -19,29 +19,19 @@ jobs:
     - name: Install Reelay dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y apt-transport-https
-        sudo apt-get install -y uuid-dev 
-        sudo apt-get install -y autotools-dev
         sudo apt-get install -y libboost-all-dev
 
-    - name: Install CUDD
-      run: |
-        make cudd
-        sudo make cudd-install
-        sudo ldconfig
-
-    - name: Install Reelay
-      run: sudo make install
-
-    - name: Setup Python
+    - name: Setup
       uses: actions/setup-python@v1
+      run: |
+        git submodule init 
+        git submodule update 
+
       with:
         python-version: ${{ matrix.python-version }}
 
     - name: Install Python package
-      run: |
-        python -m pip install --upgrade pip
-        pip install .
+      run: pip install .
 
     - name: Install test dependencies
       run: pip install pytest
