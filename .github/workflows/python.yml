@@ -3,6 +3,7 @@ name: python
 on:
   push:
     paths:
+    - 'setup.py'
     - 'python/**'
     - 'include/reelay/**'
     - '.github/workflows/python.yml' # Self-trigger
