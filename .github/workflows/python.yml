@@ -21,16 +21,17 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y libboost-all-dev
 
-    - name: Setup
+    - name: Setup Python version
       uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Get submodules
       run: |
         git submodule init 
         git submodule update 
 
-      with:
-        python-version: ${{ matrix.python-version }}
-
-    - name: Install Python package
+    - name: Build Reelay Python package
       run: pip install .
 
     - name: Install test dependencies
