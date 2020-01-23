@@ -20,8 +20,6 @@
 // #include "reelay/regular_expressions/discrete_timed/setting.hpp"
 // #include "reelay/regular_expressions/dense_timed/setting.hpp"
 
-#ifdef CUDD_INSTALLED
 #include "reelay/past_temporal_logic/untimed_data/setting.hpp"
 // #include "reelay/past_temporal_logic/discrete_timed_data/setting.hpp"
 // #include "reelay/past_temporal_logic/dense_timed_data/setting.hpp"
-#endif

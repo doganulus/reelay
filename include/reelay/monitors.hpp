@@ -8,10 +8,6 @@
 
 #pragma once
 
-#ifndef CUDD_INSTALLED
-#define CUDD_INSTALLED
-#endif
-
 #include "functional"
 #include "map"
 #include "memory"
@@ -64,7 +60,6 @@ struct robustness {
     };
 };
 
-#ifdef CUDD_INSTALLED
 struct unordered_data {
   template <typename input_t> struct monitor {
     using factory = untimed_data_setting::factory<input_t>;
@@ -81,7 +76,6 @@ struct unordered_data {
     }
   };
 };
-#endif
 
 template <typename time_t>
 struct discrete_timed {
