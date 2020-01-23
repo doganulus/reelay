@@ -119,7 +119,7 @@ setup(
     ],
     python_requires='>=3',
     install_requires=[],
-    setup_requires=['pybind11>=2.4', 'cmake'],
+    setup_requires=['pybind11>=2.4'],
     tests_require=['pytest'],
     ext_package='reelay',
     ext_modules=[ext_recipes],
