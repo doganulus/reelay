@@ -147,7 +147,7 @@ test_qtl_performance_discrete: test/dejavu/*.txt
     done
 
 python: 
-	cd python && pip install .
+	pip install .
 
 python-pypi-upload: 
 	python setup.py sdist

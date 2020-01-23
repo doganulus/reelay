@@ -4,6 +4,8 @@ import sys
 import platform
 import subprocess
 
+from glob import glob
+
 import setuptools
 
 from setuptools import setup, Extension
@@ -15,13 +17,7 @@ from distutils.errors import DistutilsPlatformError
 
 from distutils.version import LooseVersion
 
-__version__ = '2001.2'
-
-class ReelayRecipesExtension(Extension):
-    def __init__(self, name, sourcedir='', cudd_src_dir='cudd'):
-        Extension.__init__(self, name, sources=[])
-        self.sourcedir = os.path.abspath(sourcedir)
-        self.include_dirs = os.path.abspath(sourcedir)
+__version__ = '2001.3'
 
 class BuildWithCudd(build_ext):
     def run(self):
@@ -65,20 +61,39 @@ class get_pybind_include(object):
         import pybind11
         return pybind11.get_include(self.user)
 
-
 ext_recipes = Extension(
     'recipes',
-    sources=['python/src/main.cpp'],
+    sources=[
+        'python/src/main.cpp',
+        'third_party/cudd/st/st.c',
+        'third_party/cudd/mtr/mtrBasic.c',
+        'third_party/cudd/mtr/mtrGroup.c',
+        'third_party/cudd/epd/epd.c',
+        'third_party/cudd/cplusplus/cuddObj.cc'] + 
+        glob('third_party/cudd/util/*.c') + 
+        glob('third_party/cudd/cudd/cudd*.c'),
     include_dirs=[
-        # Path to pybind11 headers
-        get_pybind_include(),
-        get_pybind_include(user=True),
         "include",
+        'third_party/cudd/st',
+        'third_party/cudd/mtr',
+        'third_party/cudd/epd',
+        'third_party/cudd/util',
+        'third_party/cudd/cudd', 
+        'third_party/cudd/cplusplus',
+        'build/cudd_build',
+        get_pybind_include(),
+        get_pybind_include(user=True),  
         ],
-    # library_dirs = ['/usr/local/lib'],
+    # library_dirs = [],
     # libraries = ['cudd'] if _have_cudd_support() else [],
     extra_compile_args = ["-O3", "--std=c++17", "-fPIC", "-fno-new-ttp-matching"],
-    extra_objects=['build/cudd_build/cplusplus/libcuddObj.a'],
+    # extra_objects=[
+    #     'build/cudd_build/st/libst.a',
+    #     'build/cudd_build/mtr/libmtr.a',
+    #     'build/cudd_build/epd/libepd.a',
+    #     'build/cudd_build/util/libutil.a',
+    #     'build/cudd_build/cplusplus/libcuddObj.a',
+    #     'build/cudd_build/cudd/libcudd.a'],
     language='c++'
 )
 
@@ -103,8 +118,9 @@ setup(
         'Programming Language :: Python :: 3',
     ],
     python_requires='>=3',
-    install_requires=['pybind11>=2.4'],
-    setup_requires=['pybind11>=2.4'],
+    install_requires=[],
+    setup_requires=['pybind11>=2.4', 'cmake'],
+    tests_require=['pytest'],
     ext_package='reelay',
     ext_modules=[ext_recipes],
     cmdclass=dict(build_ext=BuildWithCudd),
