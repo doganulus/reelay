@@ -118,7 +118,7 @@ setup(
         'Programming Language :: Python :: 3',
     ],
     python_requires='>=3',
-    install_requires=[],
+    install_requires=['pybind11>=2.4'],
     setup_requires=['pybind11>=2.4'],
     tests_require=['pytest'],
     ext_package='reelay',
