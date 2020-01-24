@@ -22,14 +22,14 @@ struct untimed_node {
 
 template <typename output_t, typename time_t>
 struct discrete_timed_node {
-  virtual output_t output(time_t now) {
+  virtual output_t output(time_t) {
     throw std::runtime_error("Undefined output function");
   }
 };
 
 template <typename output_t, typename time_t>
 struct dense_timed_node {
-  virtual output_t output(time_t previous, time_t now) {
+  virtual output_t output(time_t, time_t) {
     throw std::runtime_error("Undefined output function");
   }
 };
@@ -40,30 +40,29 @@ struct untimed_state : untimed_node<output_t> {
     throw std::runtime_error("Undefined output function");
   }
 
-  virtual void update(const input_t& args) {
+  virtual void update(const input_t&) {
     throw std::runtime_error("Undefined update function");
   }
 };
 
 template <typename input_t, typename output_t, typename time_t>
 struct discrete_timed_state : discrete_timed_node<output_t, time_t> {
-  virtual output_t output(time_t now) override {
+  virtual output_t output(time_t) override {
     throw std::runtime_error("Undefined output function");
   }
 
-  virtual void update(const input_t& args, time_t now) {
+  virtual void update(const input_t&, time_t) {
     throw std::runtime_error("Undefined update function");
   }
 };
 
 template <typename input_t, typename output_t, typename time_t>
 struct dense_timed_state : dense_timed_node<output_t, time_t> {
-  virtual output_t output(time_t previous, time_t now) override {
+  virtual output_t output(time_t, time_t) override {
     throw std::runtime_error("Undefined output function");
   }
 
-  virtual void update(const input_t& pargs, const input_t& args,
-                      time_t previous, time_t now) {
+  virtual void update(const input_t&, const input_t&, time_t, time_t) {
     throw std::runtime_error("Undefined update function");
   }
 };

@@ -201,7 +201,7 @@ template <class Setting> struct ptl_parser {
       return std::pair<std::string, std::string>("variable_ref", sv[0].get<std::string>());
     };
 
-    parser["UnnamedRef"] = [&](const peg::SemanticValues &sv) {
+    parser["UnnamedRef"] = [&](const peg::SemanticValues &) {
       return std::pair<std::string, std::string>("ignore_field","");
     };
 
