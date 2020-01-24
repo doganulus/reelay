@@ -26,10 +26,11 @@ struct since : public discrete_timed_state<X, V, T> {
   using node_ptr_t = std::shared_ptr<node_t>;
   using state_ptr_t = std::shared_ptr<state_t>;
 
-  output_t value = -reelay::infinity<output_t>::value();
 
   node_ptr_t first;
   node_ptr_t second;
+
+  output_t value = -reelay::infinity<output_t>::value();
 
   explicit since(const std::vector<node_ptr_t> &args)
       : first(args[0]), second(args[1]) {}
@@ -37,11 +38,11 @@ struct since : public discrete_timed_state<X, V, T> {
   explicit since(const kwargs &kw)
       : since(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
-  void update(const input_t &args, time_t now) override {
+  void update(const input_t &, time_t now) override {
     value = std::max(second->output(now), std::min(value, first->output(now)));
   }
 
-  output_t output(time_t now) override { return value; }
+  output_t output(time_t) override { return value; }
 };
 
 }  // namespace discrete_timed_robustness_setting

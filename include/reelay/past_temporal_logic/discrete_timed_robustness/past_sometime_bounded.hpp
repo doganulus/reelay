@@ -36,10 +36,10 @@ struct past_sometime_bounded : public discrete_timed_state<X, V, T> {
 
   node_ptr_t first;
 
-  time_t lbound = 0;
-  time_t ubound = 0;
+  time_t lbound;
+  time_t ubound;
 
-  past_sometime_bounded(const std::vector<node_ptr_t> &args, time_t l, time_t u)
+  past_sometime_bounded(const std::vector<node_ptr_t> &args, time_t l=0, time_t u=0)
       : first(args[0]), lbound(l), ubound(u) {
     value.add(
         std::make_pair(interval::closed(
@@ -53,7 +53,7 @@ struct past_sometime_bounded : public discrete_timed_state<X, V, T> {
             std::any_cast<time_t>(kw.at("lbound")),
             std::any_cast<time_t>(kw.at("ubound"))) {}
   
-  void update(const input_t &args, time_t now) {
+  void update(const input_t &, time_t now) {
     value.add(std::make_pair(
         reelay::interval<time_t>::closed(now + lbound, now + ubound),
         first->output(now)));

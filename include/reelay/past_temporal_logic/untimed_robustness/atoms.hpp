@@ -23,8 +23,8 @@ struct proposition : public untimed_state<X, V> {
 
   using function_t = std::function<output_t(const input_t &)>;
 
-  output_t value = -std::numeric_limits<output_t>::max();
   std::function<output_t(const input_t &)> fn;
+  output_t value = -std::numeric_limits<output_t>::max();
 
   explicit proposition(const std::string &name)
       : fn([name](const input_t &x) {
@@ -46,8 +46,8 @@ struct basic_predicate_lt : public untimed_state<X, V> {
 
   using function_t = std::function<output_t(const input_t &)>;
 
-  output_t value = -std::numeric_limits<output_t>::max();
   std::function<output_t(const input_t &)> fn;
+  output_t value = -std::numeric_limits<output_t>::max();
 
   basic_predicate_lt(const std::string &name, float c)
       : fn([name, c](const input_t &x) {
@@ -71,8 +71,8 @@ struct basic_predicate_le : public untimed_state<X, V> {
   using Node = untimed_node<output_t>;
   using SharedNode = std::shared_ptr<Node>;
 
-  output_t value = -std::numeric_limits<output_t>::max();
   std::function<output_t(const input_t &)> fn;
+  output_t value = -std::numeric_limits<output_t>::max();
 
   basic_predicate_le(const std::string &name, float c)
       : fn([name, c](const input_t &x) {
@@ -95,8 +95,8 @@ struct basic_predicate_gt : public untimed_state<X, V> {
 
   using function_t = std::function<output_t(const input_t &)>;
 
-  output_t value = -std::numeric_limits<output_t>::max();
   std::function<output_t(const input_t &)> fn;
+  output_t value = -std::numeric_limits<output_t>::max();
 
   basic_predicate_gt(const std::string &name, float c)
       : fn([name, c](const input_t &x) {
@@ -119,8 +119,8 @@ struct basic_predicate_ge : public untimed_state<X, V> {
 
   using function_t = std::function<output_t(const input_t &)>;
 
-  output_t value = -std::numeric_limits<output_t>::max();
   std::function<output_t(const input_t &)> fn;
+  output_t value = -std::numeric_limits<output_t>::max();
 
   basic_predicate_ge(const std::string &name, float c)
       : fn([name, c](const input_t &x) {
@@ -143,8 +143,8 @@ struct predicate : public untimed_state<X, V> {
 
   using function_t = std::function<output_t(const input_t &)>;
 
-  output_t value = -std::numeric_limits<output_t>::max();
   std::function<output_t(const input_t &)> fn;
+  output_t value = -std::numeric_limits<output_t>::max();
 
   explicit predicate(const function_t &f) : fn(f) {}
 

@@ -40,12 +40,12 @@ struct previous : public discrete_timed_state<X, bool, T> {
   explicit previous(const kwargs &kw)
       : previous(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
-  void update(const input_t &args, time_t now) override {
+  void update(const input_t &, time_t now) override {
     prev_value = value;
     value = first->output(now);
   }
 
-  output_t output(time_t now) override {
+  output_t output(time_t) override {
     return prev_value;
   }
 };

@@ -36,9 +36,9 @@ struct past_sometime_bounded_half : public discrete_timed_state<X, V, T> {
 
   node_ptr_t first;
 
-  time_t lbound = 0;
+  time_t lbound;
 
-  past_sometime_bounded_half(const std::vector<node_ptr_t> &args, time_t l)
+  past_sometime_bounded_half(const std::vector<node_ptr_t> &args, time_t l=0)
       : first(args[0]), lbound(l) {
     value.add(
         std::make_pair(interval::closed(-reelay::infinity<time_t>::value(),
@@ -51,7 +51,7 @@ struct past_sometime_bounded_half : public discrete_timed_state<X, V, T> {
             std::any_cast<std::vector<node_ptr_t>>(kw.at("args")),
             std::any_cast<time_t>(kw.at("lbound"))) {}
 
-  void update(const input_t &args, time_t now) {
+  void update(const input_t &, time_t now) {
     value.add(
         std::make_pair(reelay::interval<time_t>::closed(
                            now + lbound, reelay::infinity<time_t>::value()),

@@ -23,10 +23,10 @@ struct since : public untimed_state<X, V> {
   using node_t = untimed_node<output_t>;
   using node_ptr_t = std::shared_ptr<node_t>;
 
-  output_t value = -std::numeric_limits<output_t>::max();
-
   node_ptr_t first;
   node_ptr_t second;
+
+  output_t value = -std::numeric_limits<output_t>::max();
 
   explicit since(const std::vector<node_ptr_t> &args)
       : first(args[0]), second(args[1]) {}
@@ -34,7 +34,7 @@ struct since : public untimed_state<X, V> {
   explicit since(const kwargs &kw)
       : since(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
-  void update(const input_t& args) override {
+  void update(const input_t&) override {
     value = std::max(second->output(), std::min(value, first->output()));
   }
 

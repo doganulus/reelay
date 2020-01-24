@@ -37,11 +37,11 @@ struct past_sometime : public discrete_timed_state<X, V, T> {
   explicit past_sometime(const kwargs &kw)
       : past_sometime(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
-  void update(const input_t &args, time_t now) {
+  void update(const input_t &, time_t now) {
     value = std::max(value, first->output(now));
   }
 
-  output_t output(time_t now) override { return value; }
+  output_t output(time_t) override { return value; }
 };
 
 } // namespace discrete_timed_setting

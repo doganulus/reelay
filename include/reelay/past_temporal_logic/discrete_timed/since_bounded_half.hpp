@@ -37,9 +37,9 @@ struct since_bounded_half : public discrete_timed_state<X, bool, T> {
   node_ptr_t first;
   node_ptr_t second;
 
-  time_t lbound = 0;
+  time_t lbound;
 
-  since_bounded_half(const std::vector<node_ptr_t> &args, time_t l)
+  since_bounded_half(const std::vector<node_ptr_t> &args, time_t l=0)
       : first(args[0]), second(args[1]), lbound(l) {}
 
   explicit since_bounded_half(const kwargs &kw)
@@ -47,7 +47,7 @@ struct since_bounded_half : public discrete_timed_state<X, bool, T> {
             std::any_cast<std::vector<node_ptr_t>>(kw.at("args")),
             std::any_cast<time_t>(kw.at("lbound"))) {}
 
-  void update(const input_t& args, time_t now) {
+  void update(const input_t&, time_t now) {
     if (first->output(now) and second->output(now)) {
       value = value.add(
           interval::closed(now + lbound, std::numeric_limits<time_t>::max()));

@@ -73,8 +73,8 @@ struct since_bounded_half : public dense_timed_state<X, interval_set<T>, T> {
     }
   }
 
-  void update(const input_t& pargs,
-              const input_t& args,
+  void update(const input_t&,
+              const input_t&,
               time_t previous,
               time_t now) override {
     /*

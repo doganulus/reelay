@@ -27,8 +27,8 @@ struct proposition : public discrete_timed_state<X, V, T> {
 
   using function_t = std::function<output_t(const input_t&)>;
 
-  output_t value = false;
   function_t fn;
+  output_t value = false;
 
   explicit proposition(const std::string &name)
       : fn([name](const input_t &x) {
@@ -38,9 +38,9 @@ struct proposition : public discrete_timed_state<X, V, T> {
   explicit proposition(const kwargs &kw)
       : proposition(std::any_cast<std::string>(kw.at("name"))) {}
 
-  void update(const input_t& args, time_t now) override { value = fn(args); }
+  void update(const input_t& args, time_t) override { value = fn(args); }
 
-  output_t output(time_t now) override { return value; }
+  output_t output(time_t) override { return value; }
 };
 
 template <typename X, typename V, typename T>
@@ -51,8 +51,8 @@ struct basic_predicate_lt : public discrete_timed_state<X, V, T> {
 
   using function_t = std::function<output_t(const input_t &)>;
 
-  output_t value = false;
   function_t fn;
+  output_t value = false;
 
   basic_predicate_lt(const std::string &name, float c)
       : fn([name, c](const input_t &x) {
@@ -63,9 +63,9 @@ struct basic_predicate_lt : public discrete_timed_state<X, V, T> {
       : basic_predicate_lt(std::any_cast<std::string>(kw.at("name")),
                            std::any_cast<float>(kw.at("constant"))) {}
 
-  void update(const input_t& args, time_t now) override { value = fn(args); }
+  void update(const input_t& args, time_t) override { value = fn(args); }
 
-  output_t output(time_t now) override { return value; }
+  output_t output(time_t) override { return value; }
 };
 
 template <typename X, typename V, typename T>
@@ -76,8 +76,8 @@ struct basic_predicate_le : public discrete_timed_state<X, V, T> {
 
   using function_t = std::function<output_t(const input_t &)>;
 
-  output_t value = false;
   function_t fn;
+  output_t value = false;
 
   basic_predicate_le(const std::string &name, float c)
       : fn([name, c](const input_t &x) {
@@ -88,9 +88,9 @@ struct basic_predicate_le : public discrete_timed_state<X, V, T> {
       : basic_predicate_le(std::any_cast<std::string>(kw.at("name")),
                            std::any_cast<float>(kw.at("constant"))) {}
 
-  void update(const input_t& args, time_t now) override { value = fn(args); }
+  void update(const input_t& args, time_t) override { value = fn(args); }
 
-  output_t output(time_t now) override { return value; }
+  output_t output(time_t) override { return value; }
 };
 
 template <typename X, typename V, typename T>
@@ -101,8 +101,8 @@ struct basic_predicate_gt : public discrete_timed_state<X, V, T> {
 
   using function_t = std::function<output_t(const input_t &)>;
 
-  output_t value = false;
   function_t fn;
+  output_t value = false;
 
   basic_predicate_gt(const std::string &name, float c)
       : fn([name, c](const input_t &x) {
@@ -113,9 +113,9 @@ struct basic_predicate_gt : public discrete_timed_state<X, V, T> {
       : basic_predicate_gt(std::any_cast<std::string>(kw.at("name")),
                            std::any_cast<float>(kw.at("constant"))) {}
 
-  void update(const input_t& args, time_t now) override { value = fn(args); }
+  void update(const input_t& args, time_t) override { value = fn(args); }
 
-  output_t output(time_t now) override { return value; }
+  output_t output(time_t) override { return value; }
 };
 
 template <typename X, typename V, typename T>
@@ -126,8 +126,8 @@ struct basic_predicate_ge : public discrete_timed_state<X, V, T> {
 
   using function_t = std::function<output_t(const input_t &)>;
 
-  output_t value = false;
   function_t fn;
+  output_t value = false;
 
   basic_predicate_ge(const std::string &name, float c)
       : fn([name, c](const input_t &x) {
@@ -138,9 +138,9 @@ struct basic_predicate_ge : public discrete_timed_state<X, V, T> {
       : basic_predicate_ge(std::any_cast<std::string>(kw.at("name")),
                            std::any_cast<float>(kw.at("constant"))) {}
 
-  void update(const input_t& args, time_t now) override { value = fn(args); }
+  void update(const input_t& args, time_t) override { value = fn(args); }
 
-  output_t output(time_t now) override { return value; }
+  output_t output(time_t) override { return value; }
 };
 
 template <typename X, typename V, typename T>
@@ -151,17 +151,17 @@ struct predicate : public discrete_timed_state<X, V, T> {
 
   using function_t = std::function<output_t(const input_t &)>;
 
-  output_t value = false;
   function_t fn;
+  output_t value = false;
 
   explicit predicate(const function_t &f) : fn(f) {}
 
   explicit predicate(const kwargs &kw)
       : predicate(std::any_cast<function_t>(kw.at("function"))) {}
 
-  void update(const input_t& args, time_t now) override { value = fn(args); }
+  void update(const input_t& args, time_t) override { value = fn(args); }
 
-  output_t output(time_t now) override { return value; }
+  output_t output(time_t) override { return value; }
 };
 
 } // namespace discrete_timed_robustness_setting

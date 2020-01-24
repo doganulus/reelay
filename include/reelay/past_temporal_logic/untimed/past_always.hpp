@@ -24,16 +24,16 @@ struct past_always : public untimed_state<X, bool> {
   using node_t = untimed_node<output_t>;
   using node_ptr_t = std::shared_ptr<node_t>;
 
-  bool value = true;
-
   node_ptr_t first;
+
+  bool value = true;
 
   explicit past_always(const std::vector<node_ptr_t> &args) : first(args[0]) {}
 
   explicit past_always(const kwargs &kw)
       : past_always(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
-  void update(const input_t& args) { value = first->output() && value; }
+  void update(const input_t&) { value = first->output() && value; }
 
   output_t output() { return value; }
 };

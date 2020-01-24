@@ -19,7 +19,7 @@ namespace untimed_data_setting {
 
 template <typename X> 
 struct proposition : public untimed_state<X, data_set_t> {
-  explicit proposition(const kwargs &kw) {}
+  explicit proposition(const kwargs &) {}
 };
 
 template <>
@@ -29,20 +29,21 @@ struct proposition<std::vector<std::string>>
   using output_t = data_set_t;
 
   using function_t = std::function<data_set_t(const input_t &)>;
-  
+
   data_mgr_t manager;
-  data_set_t value;
 
   function_t fn;
 
+  data_set_t value;
+
   explicit proposition(const data_mgr_t &mgr, const std::string &name)
-      : fn([name, mgr](const input_t &x) {
+      : manager(mgr), fn([name, mgr](const input_t &x) {
           if (std::find(x.begin(), x.end(), name) != x.end())
             return mgr->one();
           else
             return mgr->zero();
-        }),
-        manager(mgr) {
+        })
+  {
     value = manager->zero();
   }
 

@@ -19,7 +19,7 @@ namespace untimed_data_setting {
 
 template <typename X> 
 struct listing : public untimed_state<X, data_set_t> {
-  explicit listing(const kwargs &kw) {}
+  explicit listing(const kwargs &) {}
 };
 
 template <>
@@ -32,9 +32,10 @@ struct listing<std::vector<std::string>>
   using function_t = std::function<data_set_t(const input_t &)>;
 
   data_mgr_t manager;
-  data_set_t value;
 
   std::vector<function_t> funcs = {};
+
+  data_set_t value;
 
   explicit listing(
       const data_mgr_t &mgr,
@@ -56,7 +57,7 @@ struct listing<std::vector<std::string>>
           return mgr->assign(name, x[i]);
         });
       } else if (fields[i].first == "ignore_field") {
-        funcs.push_back([mgr](const input_t &x) { return mgr->one(); });
+        funcs.push_back([mgr](const input_t &) { return mgr->one(); });
       } else {
       }
     }

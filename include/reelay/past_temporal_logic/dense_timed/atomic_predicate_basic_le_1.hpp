@@ -69,7 +69,7 @@ struct basic_predicate_le<X, T, 1>
     value = fn(pargs, args, previous, now);
   }
 
-  output_t output(time_t previous, time_t now) override { return value; }
+  output_t output(time_t, time_t) override { return value; }
 };
 
 }  // namespace dense_timed_setting

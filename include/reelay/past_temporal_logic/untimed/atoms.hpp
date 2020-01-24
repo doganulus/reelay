@@ -22,8 +22,8 @@ template <typename X> struct proposition : public untimed_state<X, bool> {
 
   using function_t = std::function<bool(const input_t &)>;
 
-  bool value = false;
   std::function<bool(const input_t &)> fn;
+  bool value = false;
 
   explicit proposition(const std::string &name)
       : fn([name](const input_t &x) {
@@ -45,8 +45,8 @@ struct basic_predicate_lt : public untimed_state<X, bool> {
 
   using function_t = std::function<bool(const input_t &)>;
 
-  bool value = false;
   std::function<bool(const input_t &)> fn;
+  bool value = false;
 
   basic_predicate_lt(const std::string &name, float c)
       : fn([name, c](const input_t &x) {
@@ -70,8 +70,8 @@ struct basic_predicate_le : public untimed_state<X, bool> {
   using Node = untimed_node<output_t>;
   using SharedNode = std::shared_ptr<Node>;
 
-  bool value = false;
   std::function<bool(const input_t &)> fn;
+  bool value = false;
 
   basic_predicate_le(const std::string &name, float c)
       : fn([name, c](const input_t &x) {
@@ -94,8 +94,8 @@ struct basic_predicate_gt : public untimed_state<X, bool> {
 
   using function_t = std::function<bool(const input_t &)>;
 
-  bool value = false;
   std::function<bool(const input_t &)> fn;
+  bool value = false;
 
   basic_predicate_gt(const std::string &name, float c)
       : fn([name, c](const input_t &x) {
@@ -118,8 +118,8 @@ struct basic_predicate_ge : public untimed_state<X, bool> {
 
   using function_t = std::function<bool(const input_t &)>;
 
-  bool value = false;
   std::function<bool(const input_t &)> fn;
+  bool value = false;
 
   basic_predicate_ge(const std::string &name, float c)
       : fn([name, c](const input_t &x) {
@@ -141,8 +141,8 @@ template <typename X> struct predicate : public untimed_state<X, bool> {
 
   using function_t = std::function<bool(const input_t &)>;
 
-  bool value = false;
   std::function<bool(const input_t &)> fn;
+  bool value = false;
 
   explicit predicate(const function_t &f) : fn(f) {}
 

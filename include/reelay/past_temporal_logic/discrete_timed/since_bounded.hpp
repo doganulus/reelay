@@ -37,10 +37,10 @@ struct since_bounded : public discrete_timed_state<X, bool, T> {
   node_ptr_t first;
   node_ptr_t second;
 
-  time_t lbound = 0;
-  time_t ubound = 0;
+  time_t lbound;
+  time_t ubound;
 
-  since_bounded(const std::vector<node_ptr_t> &args, time_t l, time_t u)
+  since_bounded(const std::vector<node_ptr_t> &args, time_t l=0, time_t u=0)
       : first(args[0]), second(args[1]), lbound(l), ubound(u) {}
 
   explicit since_bounded(const kwargs &kw)
@@ -48,7 +48,7 @@ struct since_bounded : public discrete_timed_state<X, bool, T> {
                       std::any_cast<time_t>(kw.at("lbound")),
                       std::any_cast<time_t>(kw.at("ubound"))) {}
 
-  void update(const input_t& args, time_t now) {
+  void update(const input_t&, time_t now) {
     if (first->output(now) and second->output(now)) {
       value = value.add(interval::closed(now + lbound, now + ubound));
       value = value - interval_set(interval::right_open(0, now));

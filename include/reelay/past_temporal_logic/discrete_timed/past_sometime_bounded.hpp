@@ -36,10 +36,11 @@ struct past_sometime_bounded : public discrete_timed_state<X, bool, T> {
 
   node_ptr_t first;
 
-  time_t lbound = 0;
-  time_t ubound = 0;
+  time_t lbound;
+  time_t ubound;
 
-  past_sometime_bounded(const std::vector<node_ptr_t> &args, time_t l, time_t u)
+  past_sometime_bounded(const std::vector<node_ptr_t> &args, time_t l = 0,
+                        time_t u = 0)
       : first(args[0]), lbound(l), ubound(u) {}
 
   explicit past_sometime_bounded(const kwargs &kw)
@@ -48,7 +49,7 @@ struct past_sometime_bounded : public discrete_timed_state<X, bool, T> {
             std::any_cast<time_t>(kw.at("lbound")),
             std::any_cast<time_t>(kw.at("ubound"))) {}
 
-  void update(const input_t& args, time_t now) {
+  void update(const input_t&, time_t now) {
     if (first->output(now)) {
       value = value.add(interval::closed(now + lbound, now + ubound));
       value = value - interval_set(interval::right_open(0, now));

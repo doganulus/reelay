@@ -39,9 +39,9 @@ struct since_bounded_half : public discrete_timed_state<X, V, T> {
   node_ptr_t first;
   node_ptr_t second;
 
-  time_t lbound = 0;
+  time_t lbound;
 
-  since_bounded_half(const std::vector<node_ptr_t> &args, time_t l)
+  since_bounded_half(const std::vector<node_ptr_t> &args, time_t l=0)
       : first(args[0]), second(args[1]), lbound(l) {
     value1.add(std::make_pair(
         interval::closed(-reelay::infinity<time_t>::value(), lbound),
@@ -56,7 +56,7 @@ struct since_bounded_half : public discrete_timed_state<X, V, T> {
             std::any_cast<std::vector<node_ptr_t>>(kw.at("args")),
             std::any_cast<time_t>(kw.at("lbound"))) {}
 
-  void update(const input_t &args, time_t now) {
+  void update(const input_t &, time_t now) {
 
     // This procedure is adapted from the rewriting technique
     // introduced in "Efficient Robust Monitoring for STL"

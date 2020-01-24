@@ -31,11 +31,10 @@ struct past_sometime_bounded_half
 
   interval_set value = interval_set();
 
-  time_t lbound = 0;
-
   node_ptr_t first;
+  time_t lbound;
 
-  past_sometime_bounded_half(const std::vector<node_ptr_t> &args, time_t l)
+  past_sometime_bounded_half(const std::vector<node_ptr_t> &args, time_t l=0)
       : first(args[0]), lbound(l) {}
 
   explicit past_sometime_bounded_half(const kwargs &kw)
@@ -43,8 +42,8 @@ struct past_sometime_bounded_half
             std::any_cast<std::vector<node_ptr_t>>(kw.at("args")),
             std::any_cast<time_t>(kw.at("lbound"))) {}
 
-  void update(const input_t& pargs,
-              const input_t& args,
+  void update(const input_t&,
+              const input_t&,
               time_t previous,
               time_t now) override {
     for (const auto& intv : first->output(previous, now)) {

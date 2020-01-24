@@ -23,9 +23,8 @@ struct past_sometime : public untimed_state<X, V> {
   using node_t = untimed_node<output_t>;
   using node_ptr_t = std::shared_ptr<node_t>;
 
-  output_t value = -std::numeric_limits<output_t>::max();
-
   node_ptr_t first;
+  output_t value = -std::numeric_limits<output_t>::max();
 
   explicit past_sometime(const std::vector<node_ptr_t> &args)
       : first(args[0]) {}
@@ -33,7 +32,7 @@ struct past_sometime : public untimed_state<X, V> {
   explicit past_sometime(const kwargs &kw)
       : past_sometime(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
-  void update(const input_t &args) { value = std::max(value, first->output()); }
+  void update(const input_t &) { value = std::max(value, first->output()); }
 
   output_t output() { return value; }
 };

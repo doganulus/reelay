@@ -39,7 +39,7 @@ struct basic_predicate_gt<X, T, 0>
   function_t fn;
 
   basic_predicate_gt(const std::string &name, float c)
-      : fn([name, c](const input_t &pargs, const input_t &args, time_t previous,
+      : fn([name, c](const input_t &, const input_t &args, time_t previous,
                      time_t now) {
           if (boost::lexical_cast<float>(args.at(name)) > c) {
             return interval_set(interval::left_open(previous, now));
@@ -59,7 +59,7 @@ struct basic_predicate_gt<X, T, 0>
     value = fn(pargs, args, previous, now);
   }
 
-  output_t output(time_t previous, time_t now) override { return value; }
+  output_t output(time_t, time_t) override { return value; }
 };
 
 }  // namespace dense_timed_setting

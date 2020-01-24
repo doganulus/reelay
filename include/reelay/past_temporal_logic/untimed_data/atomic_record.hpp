@@ -20,7 +20,7 @@ namespace untimed_data_setting {
 
 template <typename X>
 struct record : public untimed_state<X, data_set_t> {
-  explicit record(const kwargs &kw) {}
+  explicit record(const kwargs &) {}
 };
 
 template <>
@@ -34,9 +34,10 @@ struct record<std::unordered_map<std::string, std::string>>
   using function_t = std::function<data_set_t(const input_t &)>;
   
   data_mgr_t manager;
-  data_set_t value;
 
   std::vector<function_t> funcs = {};
+
+  data_set_t value;
 
   explicit record(
       const data_mgr_t &mgr,

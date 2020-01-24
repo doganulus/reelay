@@ -35,10 +35,9 @@ struct past_always_bounded_half : public discrete_timed_state<X, bool, T> {
   interval_set value = interval_set();  // true
 
   node_ptr_t first;
+  time_t lbound;
 
-  time_t lbound = 0;
-
-  past_always_bounded_half(const std::vector<node_ptr_t> &args, time_t l)
+  past_always_bounded_half(const std::vector<node_ptr_t> &args, time_t l=0)
       : first(args[0]), lbound(l) {}
 
   explicit past_always_bounded_half(const kwargs &kw)
@@ -46,7 +45,7 @@ struct past_always_bounded_half : public discrete_timed_state<X, bool, T> {
             std::any_cast<std::vector<node_ptr_t>>(kw.at("args")),
             std::any_cast<time_t>(kw.at("lbound"))) {}
 
-  void update(const input_t& args, time_t now) {
+  void update(const input_t&, time_t now) {
     if (not first->output(now)) {
       value = value.add(
           interval::closed(now + lbound, std::numeric_limits<time_t>::max()));

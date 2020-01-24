@@ -23,17 +23,17 @@ struct previous : public untimed_state<X, V> {
   using node_t = untimed_node<output_t>;
   using node_ptr_t = std::shared_ptr<node_t>;
 
+  node_ptr_t first;
+
   output_t prev_value = -std::numeric_limits<output_t>::max();
   output_t value = -std::numeric_limits<output_t>::max();
-
-  node_ptr_t first;
 
   explicit previous(const std::vector<node_ptr_t> &args) : first(args[0]) {}
 
   explicit previous(const kwargs &kw)
       : previous(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
-  void update(const input_t &args) override {
+  void update(const input_t &) override {
     prev_value = value;
     value = first->output();
   }

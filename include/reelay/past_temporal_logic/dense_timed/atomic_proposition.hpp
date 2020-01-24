@@ -33,11 +33,11 @@ struct proposition : public dense_timed_state<X, interval_set<T>, T> {
   using interval = reelay::interval<time_t>;
   using interval_set = reelay::interval_set<time_t>;
 
-  interval_set value = interval_set();
   function_t fn;
+  interval_set value = interval_set();
 
   explicit proposition(const std::string &name)
-      : fn([name](const input_t &pargs, const input_t &args, time_t previous,
+      : fn([name](const input_t &, const input_t &args, time_t previous,
                   time_t now) {
           if (boost::lexical_cast<bool>(args.at(name))) {
             return interval_set(interval::left_open(previous, now));
@@ -56,7 +56,7 @@ struct proposition : public dense_timed_state<X, interval_set<T>, T> {
     value = fn(pargs, args, previous, now);
   }
 
-  output_t output(time_t previous, time_t now) override { return value; }
+  output_t output(time_t, time_t) override { return value; }
 };
 
 }  // namespace dense_timed_setting

@@ -38,8 +38,8 @@ struct past_sometime : public dense_timed_state<X, interval_set<T>, T> {
   explicit past_sometime(const kwargs &kw)
       : past_sometime(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
-  void update(const input_t& pargs,
-              const input_t& args,
+  void update(const input_t&,
+              const input_t&,
               time_t previous,
               time_t now) override {
     value = first->output(previous, now) | value;
