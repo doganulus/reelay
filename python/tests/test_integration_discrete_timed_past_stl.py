@@ -1,10 +1,11 @@
 import reelay
 
+
 def test_integration_discrete_timed_past_stl():
 
     my_monitor = reelay.past_stl.monitor(
-        pattern="(speed > 13.0) since[:3] lights_on", 
-        time_model="discrete"    
+        pattern="(speed > 13.0) since[:3] lights_on",
+        time_model="discrete"
         )
 
     input_sequence = [
@@ -24,4 +25,5 @@ def test_integration_discrete_timed_past_stl():
         output_sequence.append(current_output)
 
     expected = [False, False, True, True, True, True, False, False]
+
     assert output_sequence == expected

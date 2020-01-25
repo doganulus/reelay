@@ -7,8 +7,7 @@
 #
 import reelay.recipes
 
+
 class monitor(object):
-	def __new__(cls, pattern:str):
-		return reelay.recipes.past_ltl_monitor(pattern)
-
-
+    def __new__(cls, pattern: str):
+        return reelay.recipes.past_ltl_monitor(pattern)

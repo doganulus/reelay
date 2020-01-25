@@ -1,12 +1,13 @@
 import reelay
 
+
 def test_integration_untimed_past_qtl_dict():
 
     my_monitor = reelay.past_qtl.monitor(
         pattern=r"""forall[file].(
             {event: close, file: *file} implies (
-                exists[mode]. 
-                    pre(!{event: close, file: *file} 
+                exists[mode].
+                    pre(!{event: close, file: *file}
                     since {event:open, file: *file, mode: *mode})
                 )
             )
@@ -32,6 +33,8 @@ def test_integration_untimed_past_qtl_dict():
     for event in event_sequence:
         current_output = my_monitor.update(event)
         output_sequence.append(current_output)
-        
-    expected = [True, True, True, True, True, True, True, True, True, True, True, False]
+
+    expected = [True, True, True, True, True,
+                True, True, True, True, True, True, False]
+
     assert output_sequence == expected

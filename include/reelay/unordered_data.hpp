@@ -49,11 +49,8 @@ struct binding_manager {
     variable_t(){}
 
     variable_t(const mgr_t &mgr, const std::vector<set_t> &vars)
-        : bddvars(vars) {
-      one = mgr.bddOne();
-      cube = mgr.computeCube(vars);
-      empty_slots = ~cube;
-    }
+        : one(mgr.bddOne()), cube(mgr.computeCube(vars)), empty_slots(~cube),
+          bddvars(vars) {}
 
     std::size_t size(){return bddvars.size();}
 
@@ -141,6 +138,5 @@ struct binding_manager {
     return variables[name].assign(value);
   }
 };
-
 
 } // namespace reelay

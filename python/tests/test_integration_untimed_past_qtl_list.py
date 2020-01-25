@@ -1,11 +1,13 @@
 import reelay
 
+
 def test_integration_untimed_past_qtl_list():
 
     my_monitor = reelay.past_qtl.monitor(
         pattern=r"""forall[file].(
             [close, *file] implies (
-                exists[mode]. pre(![close, *file] since [open, *file, *mode])))""",
+                exists[mode].
+                    pre(![close, *file] since [open, *file, *mode])))""",
         event_type="list[str]")
 
     event_sequence = [
@@ -27,6 +29,8 @@ def test_integration_untimed_past_qtl_list():
     for event in event_sequence:
         current_output = my_monitor.update(event)
         output_sequence.append(current_output)
-        
-    expected = [True, True, True, True, True, True, True, True, True, True, True, False]
+
+    expected = [True, True, True, True, True,
+                True, True, True, True, True, True, False]
+
     assert output_sequence == expected

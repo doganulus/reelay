@@ -1,5 +1,6 @@
 import reelay
 
+
 def test_negation():
 
     my_monitor = reelay.past_ltl.monitor(
@@ -8,16 +9,17 @@ def test_negation():
     input_sequence = [
         dict(p1=False),
         dict(p1=True),
-        ]
+    ]
 
     output_sequence = []
     for x in input_sequence:
         current_output = my_monitor.update(x)
         output_sequence.append(current_output)
-        
+
     expected = [True, False]
 
     assert output_sequence == expected
+
 
 def test_disjunction():
 
@@ -29,16 +31,17 @@ def test_disjunction():
         dict(p1=False, p2=True),
         dict(p1=True,  p2=False),
         dict(p1=True,  p2=True),
-        ]
+    ]
 
     output_sequence = []
     for x in input_sequence:
         current_output = my_monitor.update(x)
         output_sequence.append(current_output)
-        
+
     expected = [False, True, True, True]
 
     assert output_sequence == expected
+
 
 def test_conjunction():
 
@@ -50,16 +53,17 @@ def test_conjunction():
         dict(p1=False, p2=True),
         dict(p1=True,  p2=False),
         dict(p1=True,  p2=True),
-        ]
+    ]
 
     output_sequence = []
     for x in input_sequence:
         current_output = my_monitor.update(x)
         output_sequence.append(current_output)
-        
+
     expected = [False, False, False, True]
 
     assert output_sequence == expected
+
 
 def test_implication():
 
@@ -71,16 +75,17 @@ def test_implication():
         dict(p1=False, p2=True),
         dict(p1=True,  p2=False),
         dict(p1=True,  p2=True),
-        ]
+    ]
 
     output_sequence = []
     for x in input_sequence:
         current_output = my_monitor.update(x)
         output_sequence.append(current_output)
-        
+
     expected = [True, True, False, True]
 
     assert output_sequence == expected
+
 
 def test_since():
 
@@ -96,13 +101,13 @@ def test_since():
         dict(p1=True,  p2=False),
         dict(p1=True,  p2=False),
         dict(p1=False, p2=False),
-        ]
+    ]
 
     output_sequence = []
     for x in input_sequence:
         current_output = my_monitor.update(x)
         output_sequence.append(current_output)
-        
+
     expected = [False, True, True, True, True, True, True, False]
 
     assert output_sequence == expected
