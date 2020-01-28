@@ -1,17 +1,13 @@
 import os
-import re
 import sys
-import platform
 import subprocess
-
-from glob import glob
 
 import setuptools
 
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 
-__version__ = '2001.8'
+__version__ = '2001'
 
 
 class BuildWithCudd(build_ext):
@@ -22,7 +18,8 @@ class BuildWithCudd(build_ext):
     def build_cudd(self):
         cudd_dir = os.path.abspath('third_party/cudd')
         subprocess.check_call(
-            ['./configure', '--enable-obj', '--enable-silent-rules'], cwd=cudd_dir)
+            ['./configure', '--enable-obj', '--enable-silent-rules'],
+            cwd=cudd_dir)
         subprocess.check_call(['make'], cwd=cudd_dir)
 
 

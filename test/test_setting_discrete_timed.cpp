@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2019-2020 Dogan Ulus
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 #include "iostream"
 #include "vector"
 
@@ -6,7 +13,7 @@
 #include "reelay/common.hpp"
 #include "reelay/monitors.hpp"
 
-using input_t = std::map<std::string, std::string>;
+    using input_t = std::map <std::string, std::string>;
 using function_t = std::function<bool(const input_t &)>;
 
 TEST_CASE("Atoms") {

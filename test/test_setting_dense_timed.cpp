@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2019-2020 Dogan Ulus
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 #include "iostream"
 #include "vector"
 
@@ -7,7 +14,7 @@
 #include "reelay/intervals.hpp"
 #include "reelay/monitors.hpp"
 
-using dense_time_t = double;
+    using dense_time_t = double;
 using input_t = std::map<std::string, std::string>;
 using interval = reelay::interval<dense_time_t>;
 using interval_set = reelay::interval_set<dense_time_t>;

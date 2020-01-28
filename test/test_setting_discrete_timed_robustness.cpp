@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2019-2020 Dogan Ulus
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 #include "iostream"
 #include "limits"
 #include "vector"
@@ -7,7 +14,7 @@
 #include "reelay/common.hpp"
 #include "reelay/monitors.hpp"
 
-using time_t = int64_t;
+    using time_t = int64_t;
 using input_t = std::map<std::string, std::string>;
 using output_t = int64_t;
 using function_t = std::function<output_t(const input_t &)>;
