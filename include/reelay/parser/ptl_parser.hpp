@@ -122,7 +122,7 @@ template <class Setting> struct ptl_parser {
     };
 
     parser["Proposition"] = [&](const peg::SemanticValues &sv) {
-      auto name = sv[0].get<std::string>();
+      auto name = any_cast<std::string>(sv[0]);
 
       reelay::kwargs kw = {{"name", name}};
       kw.insert(meta.begin(), meta.end());
@@ -134,7 +134,7 @@ template <class Setting> struct ptl_parser {
 
     parser["ListProposition"] = [&](const peg::SemanticValues &sv) {
       auto fields =
-          sv[0].get<std::vector<std::pair<std::string, std::string>>>();
+          any_cast<std::vector<std::pair<std::string, std::string>>>(sv[0]);
       reelay::kwargs kw = {{"fields", fields}};
       kw.insert(meta.begin(), meta.end());
       auto expr = Setting::make_state("listing", kw);
@@ -144,10 +144,8 @@ template <class Setting> struct ptl_parser {
     };
 
     parser["RecordProposition"] = [&](const peg::SemanticValues &sv) {
-      auto fields =
-          sv[0]
-              .get<std::vector<std::pair<
-                  std::string, std::pair<std::string, std::string>>>>();
+      auto fields = any_cast<std::vector<
+          std::pair<std::string, std::pair<std::string, std::string>>>>(sv[0]);
 
       reelay::kwargs kw = {{"fields", fields}};
       kw.insert(meta.begin(), meta.end());
@@ -161,7 +159,7 @@ template <class Setting> struct ptl_parser {
       auto vlist = std::vector<std::string>();
 
       for (std::size_t i = 0; i < sv.size(); i++) {
-        auto child = sv[i].get<std::string>();
+        auto child = any_cast<std::string>(sv[i]);
         vlist.push_back(child);
       }
 
@@ -172,7 +170,7 @@ template <class Setting> struct ptl_parser {
       auto vlist = std::vector<std::pair<std::string, std::string>>();
 
       for (std::size_t i = 0; i < sv.size(); i++) {
-        auto child = sv[i].get<std::pair<std::string, std::string>>();
+        auto child = any_cast<std::pair<std::string, std::string>>(sv[i]);
         vlist.push_back(child);
       }
 
@@ -184,9 +182,8 @@ template <class Setting> struct ptl_parser {
           std::pair<std::string, std::pair<std::string, std::string>>>();
 
       for (std::size_t i = 0; i < sv.size(); i++) {
-        auto child = sv[i]
-                         .get<std::pair<std::string,
-                                        std::pair<std::string, std::string>>>();
+        auto child = any_cast<
+            std::pair<std::string, std::pair<std::string, std::string>>>(sv[i]);
         keyvals.push_back(child);
       }
 
@@ -195,11 +192,12 @@ template <class Setting> struct ptl_parser {
 
     parser["FieldProp"] = [&](const peg::SemanticValues &sv) {
       return std::pair<std::string, std::string>("proposition",
-                                                 sv[0].get<std::string>());
+                                                 any_cast<std::string>(sv[0]));
     };
 
     parser["VariableRef"] = [&](const peg::SemanticValues &sv) {
-      return std::pair<std::string, std::string>("variable_ref", sv[0].get<std::string>());
+      return std::pair<std::string, std::string>("variable_ref",
+                                                 any_cast<std::string>(sv[0]));
     };
 
     parser["UnnamedRef"] = [&](const peg::SemanticValues &) {
@@ -209,14 +207,14 @@ template <class Setting> struct ptl_parser {
     parser["FieldKey"] = [&](const peg::SemanticValues &sv) {
       auto keys = std::vector<std::string>();
       for (std::size_t i = 0; i < std::size(sv); i++) {
-        keys.push_back(sv[i].get<std::string>());
+        keys.push_back(any_cast<std::string>(sv[i]));
       }
       return keys;
     };
 
     parser["KeyValuePair"] = [&](const peg::SemanticValues &sv) {
-      auto key_path = sv[0].get<std::vector<std::string>>();
-      auto value = sv[1].get<std::pair<std::string, std::string>>();
+      auto key_path = any_cast<std::vector<std::string>>(sv[0]);
+      auto value = any_cast<std::pair<std::string, std::string>>(sv[1]);
       auto key = key_path[0];
       for (std::size_t i = 1; i < std::size(key_path); i++) {
         key += '/'+ key_path[i];
@@ -226,8 +224,8 @@ template <class Setting> struct ptl_parser {
     };
 
     parser["BasicPredicateLT"] = [&](const peg::SemanticValues &sv) {
-      auto name = sv[0].get<std::string>();
-      auto constant = std::stof(sv[1].get<std::string>());
+      auto name = any_cast<std::string>(sv[0]);
+      auto constant = std::stof(any_cast<std::string>(sv[1]));
 
       reelay::kwargs kw = {{"name", name}, {"constant", constant}};
       kw.insert(meta.begin(), meta.end());
@@ -238,8 +236,8 @@ template <class Setting> struct ptl_parser {
     };
 
     parser["BasicPredicateLE"] = [&](const peg::SemanticValues &sv) {
-      auto name = sv[0].get<std::string>();
-      auto constant = std::stof(sv[1].get<std::string>());
+      auto name = any_cast<std::string>(sv[0]);
+      auto constant = std::stof(any_cast<std::string>(sv[1]));
 
       reelay::kwargs kw = {{"name", name}, {"constant", constant}};
       kw.insert(meta.begin(), meta.end());
@@ -250,8 +248,8 @@ template <class Setting> struct ptl_parser {
     };
 
     parser["BasicPredicateGT"] = [&](const peg::SemanticValues &sv) {
-      auto name = sv[0].get<std::string>();
-      auto constant = std::stof(sv[1].get<std::string>());
+      auto name = any_cast<std::string>(sv[0]);
+      auto constant = std::stof(any_cast<std::string>(sv[1]));
 
       reelay::kwargs kw = {{"name", name}, {"constant", constant}};
       kw.insert(meta.begin(), meta.end());
@@ -262,8 +260,8 @@ template <class Setting> struct ptl_parser {
     };
 
     parser["BasicPredicateGE"] = [&](const peg::SemanticValues &sv) {
-      auto name = sv[0].get<std::string>();
-      auto constant = std::stof(sv[1].get<std::string>());
+      auto name = any_cast<std::string>(sv[0]);
+      auto constant = std::stof(any_cast<std::string>(sv[1]));
 
       reelay::kwargs kw = {{"name", name}, {"constant", constant}};
       kw.insert(meta.begin(), meta.end());
@@ -274,7 +272,7 @@ template <class Setting> struct ptl_parser {
     };
 
     parser["CustomPredicate"] = [&](const peg::SemanticValues &sv) {
-      auto name = sv[0].get<std::string>();
+      auto name = any_cast<std::string>(sv[0]);
       auto func = meta[name];
 
       reelay::kwargs kw = {{"function", func}};
@@ -286,9 +284,9 @@ template <class Setting> struct ptl_parser {
     };
 
     parser["ExistsExpr"] = [&](const peg::SemanticValues &sv) {
-      auto vars = sv[0].get<std::vector<std::string>>();
-      
-      auto child = sv[1].get<node_ptr_t>();
+      auto vars = any_cast<std::vector<std::string>>(sv[0]);
+
+      auto child = any_cast<node_ptr_t>(sv[1]);
       auto args = std::vector<node_ptr_t>({child});
 
       reelay::kwargs kw = {{"args", args}, {"vars", vars}};
@@ -299,9 +297,9 @@ template <class Setting> struct ptl_parser {
     };
 
     parser["ForallExpr"] = [&](const peg::SemanticValues &sv) {
-      auto vars = sv[0].get<std::vector<std::string>>();
+      auto vars = any_cast<std::vector<std::string>>(sv[0]);
 
-      auto child = sv[1].get<node_ptr_t>();
+      auto child = any_cast<node_ptr_t>(sv[1]);
       auto args = std::vector<node_ptr_t>({child});
 
       reelay::kwargs kw = {{"args", args}, {"vars", vars}};
@@ -313,7 +311,7 @@ template <class Setting> struct ptl_parser {
 
     parser["NotExpr"] = [&](const peg::SemanticValues &sv) {
       // Rule: NotExpr  <- LNOT Expression
-      node_ptr_t child = sv[0].get<node_ptr_t>();
+      node_ptr_t child = any_cast<node_ptr_t>(sv[0]);
       auto args = std::vector<node_ptr_t>({child});
 
       reelay::kwargs kw = {{"args", args}};
@@ -328,7 +326,7 @@ template <class Setting> struct ptl_parser {
       if (sv.size() > 1) {
         std::vector<node_ptr_t> args;
         for (size_t i = 0; i < sv.size(); i++) {
-          node_ptr_t child = sv[i].get<node_ptr_t>();
+          node_ptr_t child = any_cast<node_ptr_t>(sv[i]);
           args.push_back(child);
         }
 
@@ -338,7 +336,7 @@ template <class Setting> struct ptl_parser {
 
         return std::static_pointer_cast<node_t>(expr);
       } else {
-        node_ptr_t child = sv[0].get<node_ptr_t>();
+        node_ptr_t child = any_cast<node_ptr_t>(sv[0]);
         return child;
       }
     };
@@ -348,7 +346,7 @@ template <class Setting> struct ptl_parser {
       if (sv.size() > 1) {
         std::vector<node_ptr_t> args;
         for (size_t i = 0; i < sv.size(); i++) {
-          node_ptr_t child = sv[i].get<node_ptr_t>();
+          node_ptr_t child = any_cast<node_ptr_t>(sv[i]);
           args.push_back(child);
         }
 
@@ -358,7 +356,7 @@ template <class Setting> struct ptl_parser {
 
         return std::static_pointer_cast<node_t>(expr);
       } else {
-        node_ptr_t child = sv[0].get<node_ptr_t>();
+        node_ptr_t child = any_cast<node_ptr_t>(sv[0]);
         return child;
       }
     };
@@ -368,7 +366,7 @@ template <class Setting> struct ptl_parser {
       if (sv.size() > 1) {
         std::vector<node_ptr_t> args;
         for (size_t i = 0; i < sv.size(); i++) {
-          node_ptr_t child = sv[i].get<node_ptr_t>();
+          node_ptr_t child = any_cast<node_ptr_t>(sv[i]);
           args.push_back(child);
         }
 
@@ -378,14 +376,14 @@ template <class Setting> struct ptl_parser {
 
         return std::static_pointer_cast<node_t>(expr);
       } else {
-        node_ptr_t child = sv[0].get<node_ptr_t>();
+        node_ptr_t child = any_cast<node_ptr_t>(sv[0]);
         return child;
       }
     };
 
     parser["PrevExpr"] = [&](const peg::SemanticValues &sv) {
       // Rule:
-      node_ptr_t child = sv[0].get<node_ptr_t>();
+      node_ptr_t child = any_cast<node_ptr_t>(sv[0]);
       auto args = std::vector<node_ptr_t>({child});
 
       reelay::kwargs kw = {{"args", args}};
@@ -398,7 +396,7 @@ template <class Setting> struct ptl_parser {
 
     parser["OnceExpr"] = [&](const peg::SemanticValues &sv) {
       // Rule:
-      node_ptr_t child = sv[0].get<node_ptr_t>();
+      node_ptr_t child = any_cast<node_ptr_t>(sv[0]);
       auto args = std::vector<node_ptr_t>({child});
 
       reelay::kwargs kw = {{"args", args}};
@@ -411,8 +409,8 @@ template <class Setting> struct ptl_parser {
 
     parser["TimedOnceExpr"] = [&](const peg::SemanticValues &sv) {
       // Rule:
-      std::pair<float, float> bound = sv[0].get<std::pair<float, float>>();
-      node_ptr_t child = sv[1].get<node_ptr_t>();
+      std::pair<float, float> bound = any_cast<std::pair<float, float>>(sv[0]);
+      node_ptr_t child = any_cast<node_ptr_t>(sv[1]);
 
       time_t lbound = std::get<0>(bound);
       time_t ubound = std::get<1>(bound);
@@ -435,7 +433,7 @@ template <class Setting> struct ptl_parser {
 
     parser["HistExpr"] = [&](const peg::SemanticValues &sv) {
       // Rule:
-      node_ptr_t child = sv[0].get<node_ptr_t>();
+      node_ptr_t child = any_cast<node_ptr_t>(sv[0]);
       auto args = std::vector<node_ptr_t>({child});
 
       reelay::kwargs kw = {{"args", args}};
@@ -448,8 +446,8 @@ template <class Setting> struct ptl_parser {
 
     parser["TimedHistExpr"] = [&](const peg::SemanticValues &sv) {
       // Rule:
-      std::pair<float, float> bound = sv[0].get<std::pair<float, float>>();
-      node_ptr_t child = sv[1].get<node_ptr_t>();
+      std::pair<float, float> bound = any_cast<std::pair<float, float>>(sv[0]);
+      node_ptr_t child = any_cast<node_ptr_t>(sv[1]);
 
       time_t lbound = std::get<0>(bound);
       time_t ubound = std::get<1>(bound);
@@ -473,9 +471,10 @@ template <class Setting> struct ptl_parser {
     parser["SinceExpr"] = [&](const peg::SemanticValues &sv) {
       
       if (sv.size() == 3) {
-        node_ptr_t left = sv[0].get<node_ptr_t>();
-        std::pair<float, float> bound = sv[1].get<std::pair<float, float>>();
-        node_ptr_t right = sv[2].get<node_ptr_t>();
+        node_ptr_t left = any_cast<node_ptr_t>(sv[0]);
+        std::pair<float, float> bound =
+            any_cast<std::pair<float, float>>(sv[1]);
+        node_ptr_t right = any_cast<node_ptr_t>(sv[2]);
 
         time_t lbound = std::get<0>(bound);
         time_t ubound = std::get<1>(bound);
@@ -497,8 +496,8 @@ template <class Setting> struct ptl_parser {
         return std::static_pointer_cast<node_t>(expr);
 
       } else if (sv.size() == 2) {
-        node_ptr_t left = sv[0].get<node_ptr_t>();
-        node_ptr_t right = sv[1].get<node_ptr_t>();
+        node_ptr_t left = any_cast<node_ptr_t>(sv[0]);
+        node_ptr_t right = any_cast<node_ptr_t>(sv[1]);
         auto args = std::vector<node_ptr_t>({left, right});
 
         reelay::kwargs kw = {{"args", args}};
@@ -509,24 +508,24 @@ template <class Setting> struct ptl_parser {
         return std::static_pointer_cast<node_t>(expr);
 
       } else {
-        node_ptr_t child = sv[0].get<node_ptr_t>();
+        node_ptr_t child = any_cast<node_ptr_t>(sv[0]);
         return child;
       }
     };
 
     parser["FullBound"] = [](const peg::SemanticValues &sv) {
-      float l = std::stof(sv[0].get<std::string>());
-      float u = std::stof(sv[1].get<std::string>());
+      float l = std::stof(any_cast<std::string>(sv[0]));
+      float u = std::stof(any_cast<std::string>(sv[1]));
       return std::make_pair(l, u);
     };
 
     parser["LowerBound"] = [](const peg::SemanticValues &sv) {
-      float l = std::stof(sv[0].get<std::string>());
+      float l = std::stof(any_cast<std::string>(sv[0]));
       return std::make_pair(l, 0.0f);
     };
 
     parser["UpperBound"] = [](const peg::SemanticValues &sv) {
-      float u = std::stof(sv[0].get<std::string>());
+      float u = std::stof(any_cast<std::string>(sv[0]));
       return std::make_pair(0.0f, u);
     };
 
