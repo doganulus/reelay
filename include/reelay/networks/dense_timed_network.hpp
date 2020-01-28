@@ -62,15 +62,19 @@ struct dense_timed_network : dense_timed_state<X, Y, T> {
     this->prevargs = args;
   }
 
-  void update(const input_t &pargs, const input_t &args, time_t previous,
-              time_t now) noexcept override {
+  void update(const input_t &pargs, const input_t &args, time_t pre,
+              time_t now) {
     for (const auto &state : this->states) {
-      state->update(pargs, args, previous, now);
+      state->update(pargs, args, pre, now);
     }
   }
 
   output_t output() {
-    return this->output_node->output(this->previous, this->current);
+    return this->output(this->previous, this->current);
+  }
+
+  output_t output(time_t pre, time_t now) {
+    return this->output_node->output(pre, now);
   }
 
   output_t noutput() {

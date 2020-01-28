@@ -31,13 +31,13 @@ struct untimed_network : untimed_state<input_t, output_t> {
                   const std::vector<std::shared_ptr<state_type>> &ss)
       : output_node(n), states(ss) {}
 
-  void update(const input_t &args) override {
+  void update(const input_t &args) {
     _now = _now + 1;
     for (const auto &state : this->states) {
       state->update(args);
     }
   }
-  output_t output() override { return this->output_node->output(); }
+  output_t output() { return this->output_node->output(); }
 
   int64_t now() { return _now; }
 };

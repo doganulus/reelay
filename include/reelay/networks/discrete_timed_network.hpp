@@ -35,12 +35,18 @@ struct discrete_timed_network
 
   void update(const input_t &args) {
     this->_now = this->_now + 1;
+    this->update(args, this->_now);
+  }
+
+  void update(const input_t &args, time_t now) {
     for (const auto &state : this->states) {
-      state->update(args, this->_now);
+      state->update(args, now);
     }
   }
 
-  output_t output() { return this->output_node->output(this->_now); }
+  output_t output() { return this->output(this->_now); }
+  
+  output_t output(time_t now) { return this->output_node->output(now);}
 
   time_t now() { return _now; }
 };

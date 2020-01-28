@@ -15,6 +15,7 @@ namespace reelay {
 
 template <typename output_t>
 struct untimed_node {
+  virtual ~untimed_node() {}
   virtual output_t output() {
     throw std::runtime_error("Undefined output function");
   };
@@ -22,6 +23,7 @@ struct untimed_node {
 
 template <typename output_t, typename time_t>
 struct discrete_timed_node {
+  virtual ~discrete_timed_node() {}
   virtual output_t output(time_t) {
     throw std::runtime_error("Undefined output function");
   }
@@ -29,6 +31,7 @@ struct discrete_timed_node {
 
 template <typename output_t, typename time_t>
 struct dense_timed_node {
+  virtual ~dense_timed_node() {}
   virtual output_t output(time_t, time_t) {
     throw std::runtime_error("Undefined output function");
   }
@@ -36,6 +39,7 @@ struct dense_timed_node {
 
 template <typename input_t, typename output_t>
 struct untimed_state : untimed_node<output_t> {
+  virtual ~untimed_state() {}
   virtual output_t output() override {
     throw std::runtime_error("Undefined output function");
   }
@@ -47,6 +51,7 @@ struct untimed_state : untimed_node<output_t> {
 
 template <typename input_t, typename output_t, typename time_t>
 struct discrete_timed_state : discrete_timed_node<output_t, time_t> {
+  virtual ~discrete_timed_state() {}
   virtual output_t output(time_t) override {
     throw std::runtime_error("Undefined output function");
   }
@@ -58,6 +63,7 @@ struct discrete_timed_state : discrete_timed_node<output_t, time_t> {
 
 template <typename input_t, typename output_t, typename time_t>
 struct dense_timed_state : dense_timed_node<output_t, time_t> {
+  virtual ~dense_timed_state() {}
   virtual output_t output(time_t, time_t) override {
     throw std::runtime_error("Undefined output function");
   }

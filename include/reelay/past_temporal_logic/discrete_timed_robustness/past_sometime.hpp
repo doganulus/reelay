@@ -41,7 +41,7 @@ struct past_sometime : public discrete_timed_state<X, V, T> {
     value = std::max(value, first->output(now));
   }
 
-  output_t output(time_t) override { return value; }
+  output_t output(time_t) { return value; }
 };
 
 } // namespace discrete_timed_setting

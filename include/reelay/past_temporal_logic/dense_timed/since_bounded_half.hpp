@@ -76,7 +76,7 @@ struct since_bounded_half : public dense_timed_state<X, interval_set<T>, T> {
   void update(const input_t&,
               const input_t&,
               time_t previous,
-              time_t now) override {
+              time_t now) {
     /*
      *  The following code performs the sychronization between two arbitrary
      * chunks and calls the _update function for each constant period
