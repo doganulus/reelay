@@ -56,5 +56,40 @@ struct proposition<std::vector<std::string>>
   output_t output() override { return value; }
 };
 
+template <>
+struct proposition<std::unordered_map<std::string, std::string>>
+    : public untimed_state<std::unordered_map<std::string, std::string>,
+                           data_set_t> {
+  using input_t = std::unordered_map<std::string, std::string>;
+  using output_t = data_set_t;
+
+  using function_t = std::function<data_set_t(const input_t &)>;
+
+  data_mgr_t manager;
+
+  function_t fn;
+
+  data_set_t value;
+
+  explicit proposition(const data_mgr_t &mgr, const std::string &name)
+      : manager(mgr), fn([name, mgr](const input_t &x) {
+          if (x.find(name) != x.end()) {
+            return mgr->one();
+          } else {
+            return mgr->zero();
+          }
+        }) {
+    value = manager->zero();
+  }
+
+  explicit proposition(const kwargs &kw)
+      : proposition(std::any_cast<data_mgr_t>(kw.at("manager")),
+                    std::any_cast<std::string>(kw.at("name"))) {}
+
+  void update(const input_t &args) override { value = fn(args); }
+
+  output_t output() override { return value; }
+};
+
 } // namespace untimed_data_setting
 } // namespace reelay
