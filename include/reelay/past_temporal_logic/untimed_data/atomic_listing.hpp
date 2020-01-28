@@ -64,8 +64,8 @@ struct listing<std::vector<std::string>>
   }
 
   explicit listing(const kwargs &kw)
-      : listing(std::any_cast<data_mgr_t>(kw.at("manager")),
-                std::any_cast<std::vector<std::pair<std::string, std::string>>>(
+      : listing(reelay::any_cast<data_mgr_t>(kw.at("manager")),
+                reelay::any_cast<std::vector<std::pair<std::string, std::string>>>(
                     kw.at("fields"))) {}
 
   void update(const input_t &args) override {

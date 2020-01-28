@@ -61,8 +61,8 @@ struct basic_predicate_le<X, T, 1>
         }) {}
 
   explicit basic_predicate_le(const kwargs &kw)
-      : basic_predicate_le(std::any_cast<std::string>(kw.at("name")),
-                           std::any_cast<float>(kw.at("constant"))) {}
+      : basic_predicate_le(reelay::any_cast<std::string>(kw.at("name")),
+                           reelay::any_cast<float>(kw.at("constant"))) {}
 
   void update(const input_t &pargs, const input_t &args, time_t previous,
               time_t now) override {

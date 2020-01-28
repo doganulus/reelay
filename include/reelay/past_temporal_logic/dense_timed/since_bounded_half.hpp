@@ -40,8 +40,8 @@ struct since_bounded_half : public dense_timed_state<X, interval_set<T>, T> {
 
   explicit since_bounded_half(const kwargs &kw)
       : since_bounded_half(
-            std::any_cast<std::vector<node_ptr_t>>(kw.at("args")),
-            std::any_cast<time_t>(kw.at("lbound"))) {}
+            reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args")),
+            reelay::any_cast<time_t>(kw.at("lbound"))) {}
 
   void update(bool p1, bool p2, time_t previous, time_t now) {
     if (previous == now) {

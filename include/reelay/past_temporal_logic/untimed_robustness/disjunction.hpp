@@ -29,7 +29,7 @@ struct disjunction : public untimed_node<V> {
       : args(nodeptrs) {}
 
   explicit disjunction(const kwargs &kw)
-      : disjunction(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+      : disjunction(reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   output_t output() {
     output_t result = args[0]->output();

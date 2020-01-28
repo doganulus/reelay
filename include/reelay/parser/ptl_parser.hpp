@@ -11,6 +11,7 @@
 #include <iostream>
 #include <string>
 
+#define PEGLIB_USE_STD_ANY 0
 #include "reelay/third_party/peglib.h"
 
 #include "reelay/networks.hpp"

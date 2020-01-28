@@ -31,7 +31,7 @@ template <typename X> struct previous : public untimed_state<X, bool> {
   explicit previous(const std::vector<node_ptr_t> &args) : first(args[0]) {}
 
   explicit previous(const kwargs &kw)
-      : previous(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+      : previous(reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   void update(const input_t &) override {
     prev_value = value;

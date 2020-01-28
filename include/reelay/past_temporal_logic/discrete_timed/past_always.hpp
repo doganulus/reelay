@@ -33,7 +33,7 @@ struct past_always : public discrete_timed_state<X, bool, T> {
   explicit past_always(const std::vector<node_ptr_t> &args) : first(args[0]) {}
 
   explicit past_always(const kwargs &kw)
-      : past_always(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+      : past_always(reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   void update(const input_t&, time_t now) override {
     value = first->output(now) && value;

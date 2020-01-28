@@ -33,7 +33,7 @@ struct conjunction : public dense_timed_node<interval_set<T>, T> {
   explicit conjunction(const std::vector<node_ptr_t> &args) : args(args) {}
 
   explicit conjunction(const kwargs &kw)
-      : conjunction(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+      : conjunction(reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   output_t output(time_t previous, time_t now) {
     interval_set result = args[0]->output(previous, now);

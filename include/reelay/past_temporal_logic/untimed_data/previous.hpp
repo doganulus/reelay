@@ -37,8 +37,8 @@ struct previous : public untimed_state<X, data_set_t> {
       }
 
   explicit previous(const kwargs &kw)
-      : previous(std::any_cast<data_mgr_t>(kw.at("manager")),
-                 std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+      : previous(reelay::any_cast<data_mgr_t>(kw.at("manager")),
+                 reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   void update(const input_t &) override {
     prev_value = value;

@@ -27,7 +27,7 @@ template <typename X> struct negation : public untimed_node<data_set_t> {
   explicit negation(const std::vector<node_ptr_t> &args) : arg1(args[0]) {}
 
   explicit negation(const kwargs &kw)
-      : negation(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+      : negation(reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   output_t output() { return ~arg1->output(); }
 };

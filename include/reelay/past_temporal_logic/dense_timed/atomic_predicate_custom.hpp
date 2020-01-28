@@ -40,7 +40,7 @@ struct predicate : public dense_timed_state<X, interval_set<T>, T> {
   explicit predicate(const function_t& f) : fn(f) {}
 
   explicit predicate(const kwargs &kw)
-      : predicate(std::any_cast<function_t>(kw.at("function"))) {}
+      : predicate(reelay::any_cast<function_t>(kw.at("function"))) {}
 
   void update(const input_t& pargs,
               const input_t& args,

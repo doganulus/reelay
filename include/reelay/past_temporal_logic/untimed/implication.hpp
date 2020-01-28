@@ -31,7 +31,7 @@ struct implication : public untimed_node<bool> {
       : arg1(args[0]), arg2(args[1]) {}
 
   explicit implication(const kwargs &kw)
-      : implication(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+      : implication(reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   output_t output() { return not arg1->output() or arg2->output(); }
 };

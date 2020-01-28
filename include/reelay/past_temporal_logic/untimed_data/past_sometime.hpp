@@ -36,8 +36,8 @@ struct past_sometime : public untimed_state<X, data_set_t> {
   }
 
   explicit past_sometime(const kwargs &kw)
-      : past_sometime(std::any_cast<data_mgr_t>(kw.at("manager")),
-                      std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+      : past_sometime(reelay::any_cast<data_mgr_t>(kw.at("manager")),
+                      reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   void update(const input_t&) { value = first->output() + value; }
 

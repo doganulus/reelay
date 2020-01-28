@@ -36,7 +36,7 @@ struct proposition : public discrete_timed_state<X, V, T> {
         }) {}
 
   explicit proposition(const kwargs &kw)
-      : proposition(std::any_cast<std::string>(kw.at("name"))) {}
+      : proposition(reelay::any_cast<std::string>(kw.at("name"))) {}
 
   void update(const input_t& args, time_t) override { value = fn(args); }
 
@@ -60,8 +60,8 @@ struct basic_predicate_lt : public discrete_timed_state<X, V, T> {
         }) {}
 
   explicit basic_predicate_lt(const kwargs &kw)
-      : basic_predicate_lt(std::any_cast<std::string>(kw.at("name")),
-                           std::any_cast<float>(kw.at("constant"))) {}
+      : basic_predicate_lt(reelay::any_cast<std::string>(kw.at("name")),
+                           reelay::any_cast<float>(kw.at("constant"))) {}
 
   void update(const input_t& args, time_t) override { value = fn(args); }
 
@@ -85,8 +85,8 @@ struct basic_predicate_le : public discrete_timed_state<X, V, T> {
         }) {}
 
   explicit basic_predicate_le(const kwargs &kw)
-      : basic_predicate_le(std::any_cast<std::string>(kw.at("name")),
-                           std::any_cast<float>(kw.at("constant"))) {}
+      : basic_predicate_le(reelay::any_cast<std::string>(kw.at("name")),
+                           reelay::any_cast<float>(kw.at("constant"))) {}
 
   void update(const input_t& args, time_t) override { value = fn(args); }
 
@@ -110,8 +110,8 @@ struct basic_predicate_gt : public discrete_timed_state<X, V, T> {
         }) {}
 
   explicit basic_predicate_gt(const kwargs &kw)
-      : basic_predicate_gt(std::any_cast<std::string>(kw.at("name")),
-                           std::any_cast<float>(kw.at("constant"))) {}
+      : basic_predicate_gt(reelay::any_cast<std::string>(kw.at("name")),
+                           reelay::any_cast<float>(kw.at("constant"))) {}
 
   void update(const input_t& args, time_t) override { value = fn(args); }
 
@@ -135,8 +135,8 @@ struct basic_predicate_ge : public discrete_timed_state<X, V, T> {
         }) {}
 
   explicit basic_predicate_ge(const kwargs &kw)
-      : basic_predicate_ge(std::any_cast<std::string>(kw.at("name")),
-                           std::any_cast<float>(kw.at("constant"))) {}
+      : basic_predicate_ge(reelay::any_cast<std::string>(kw.at("name")),
+                           reelay::any_cast<float>(kw.at("constant"))) {}
 
   void update(const input_t& args, time_t) override { value = fn(args); }
 
@@ -157,7 +157,7 @@ struct predicate : public discrete_timed_state<X, V, T> {
   explicit predicate(const function_t &f) : fn(f) {}
 
   explicit predicate(const kwargs &kw)
-      : predicate(std::any_cast<function_t>(kw.at("function"))) {}
+      : predicate(reelay::any_cast<function_t>(kw.at("function"))) {}
 
   void update(const input_t& args, time_t) override { value = fn(args); }
 

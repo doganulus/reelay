@@ -35,7 +35,7 @@ struct since : public discrete_timed_state<X, bool, T> {
       : first(args[0]), second(args[1]) {}
 
   explicit since(const kwargs &kw)
-      : since(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+      : since(reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   void update(const input_t &, time_t now) override {
     value = second->output(now) || (first->output(now) && value);

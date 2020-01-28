@@ -44,9 +44,9 @@ struct since_bounded : public discrete_timed_state<X, bool, T> {
       : first(args[0]), second(args[1]), lbound(l), ubound(u) {}
 
   explicit since_bounded(const kwargs &kw)
-      : since_bounded(std::any_cast<std::vector<node_ptr_t>>(kw.at("args")),
-                      std::any_cast<time_t>(kw.at("lbound")),
-                      std::any_cast<time_t>(kw.at("ubound"))) {}
+      : since_bounded(reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args")),
+                      reelay::any_cast<time_t>(kw.at("lbound")),
+                      reelay::any_cast<time_t>(kw.at("ubound"))) {}
 
   void update(const input_t&, time_t now) {
     if (first->output(now) and second->output(now)) {

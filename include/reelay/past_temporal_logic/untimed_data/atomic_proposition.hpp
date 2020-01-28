@@ -48,8 +48,8 @@ struct proposition<std::vector<std::string>>
   }
 
   explicit proposition(const kwargs &kw)
-      : proposition(std::any_cast<data_mgr_t>(kw.at("manager")),
-                    std::any_cast<std::string>(kw.at("name"))) {}
+      : proposition(reelay::any_cast<data_mgr_t>(kw.at("manager")),
+                    reelay::any_cast<std::string>(kw.at("name"))) {}
 
   void update(const input_t &args) override { value = fn(args); }
 
@@ -83,8 +83,8 @@ struct proposition<std::unordered_map<std::string, std::string>>
   }
 
   explicit proposition(const kwargs &kw)
-      : proposition(std::any_cast<data_mgr_t>(kw.at("manager")),
-                    std::any_cast<std::string>(kw.at("name"))) {}
+      : proposition(reelay::any_cast<data_mgr_t>(kw.at("manager")),
+                    reelay::any_cast<std::string>(kw.at("name"))) {}
 
   void update(const input_t &args) override { value = fn(args); }
 

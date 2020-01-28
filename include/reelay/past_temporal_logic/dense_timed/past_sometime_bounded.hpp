@@ -41,9 +41,9 @@ struct past_sometime_bounded : public dense_timed_state<X, interval_set<T>, T> {
 
   explicit past_sometime_bounded(const kwargs &kw)
       : past_sometime_bounded(
-            std::any_cast<std::vector<node_ptr_t>>(kw.at("args")),
-            std::any_cast<time_t>(kw.at("lbound")),
-            std::any_cast<time_t>(kw.at("ubound"))) {}
+            reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args")),
+            reelay::any_cast<time_t>(kw.at("lbound")),
+            reelay::any_cast<time_t>(kw.at("ubound"))) {}
 
   void update(const input_t&,
               const input_t&,

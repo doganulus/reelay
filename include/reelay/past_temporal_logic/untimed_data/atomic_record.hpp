@@ -82,8 +82,8 @@ struct record<std::unordered_map<std::string, std::string>>
   }
 
   explicit record(const kwargs &kw)
-      : record(std::any_cast<data_mgr_t>(kw.at("manager")),
-               std::any_cast <
+      : record(reelay::any_cast<data_mgr_t>(kw.at("manager")),
+               reelay::any_cast <
                    std::vector<std::pair<std::string,
                                          std::pair<std::string, std::string>>>>(
                        kw.at("fields"))) {}

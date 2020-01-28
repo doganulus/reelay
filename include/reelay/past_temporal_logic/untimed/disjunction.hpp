@@ -30,7 +30,7 @@ struct disjunction : public untimed_node<bool> {
       : args(args) {}
 
   explicit disjunction(const kwargs &kw)
-      : disjunction(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+      : disjunction(reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   output_t output() {
     return std::any_of(args.cbegin(), args.cend(),

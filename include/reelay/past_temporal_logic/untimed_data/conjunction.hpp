@@ -28,7 +28,7 @@ template <typename X> struct conjunction : public untimed_node<data_set_t> {
       : args(nodeptrs) {}
 
   explicit conjunction(const kwargs &kw)
-      : conjunction(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+      : conjunction(reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   output_t output() {
     output_t result = args[0]->output();

@@ -47,8 +47,8 @@ struct basic_predicate_lt<X,T,0> : public dense_timed_state<X, interval_set<T>, 
         }) {}
 
   explicit basic_predicate_lt(const kwargs &kw)
-      : basic_predicate_lt(std::any_cast<std::string>(kw.at("name")),
-                           std::any_cast<float>(kw.at("constant"))) {}
+      : basic_predicate_lt(reelay::any_cast<std::string>(kw.at("name")),
+                           reelay::any_cast<float>(kw.at("constant"))) {}
 
   void update(const input_t& pargs,
               const input_t& args,

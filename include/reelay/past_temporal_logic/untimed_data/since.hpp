@@ -36,8 +36,8 @@ struct since : public untimed_state<X, data_set_t> {
   }
 
   explicit since(const kwargs &kw)
-      : since(std::any_cast<data_mgr_t>(kw.at("manager")),
-              std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+      : since(reelay::any_cast<data_mgr_t>(kw.at("manager")),
+              reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   void update(const input_t&) override {
     value = second->output() + (first->output() * value);

@@ -47,7 +47,7 @@ struct proposition : public dense_timed_state<X, interval_set<T>, T> {
         }) {}
 
   explicit proposition(const kwargs &kw)
-      : proposition(std::any_cast<std::string>(kw.at("name"))) {}
+      : proposition(reelay::any_cast<std::string>(kw.at("name"))) {}
 
   void update(const input_t& pargs,
               const input_t& args,

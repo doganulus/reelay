@@ -35,7 +35,7 @@ struct negation : public discrete_timed_node<V, T> {
   explicit negation(const std::vector<node_ptr_t> &args) : arg1(args[0]) {}
 
   explicit negation(const kwargs &kw)
-      : negation(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+      : negation(reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   output_t output(time_t now) { return -arg1->output(now); }
 };

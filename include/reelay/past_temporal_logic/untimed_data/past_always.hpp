@@ -36,8 +36,8 @@ struct past_always : public untimed_state<X, data_set_t> {
   }
 
   explicit past_always(const kwargs &kw)
-      : past_always(std::any_cast<data_mgr_t>(kw.at("manager")),
-                    std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+      : past_always(reelay::any_cast<data_mgr_t>(kw.at("manager")),
+                    reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   void update(const input_t&) { value = first->output() * value; }
 

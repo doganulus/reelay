@@ -38,7 +38,7 @@ struct previous : public discrete_timed_state<X, V, T> {
   explicit previous(const std::vector<node_ptr_t> &args) : first(args[0]) {}
 
   explicit previous(const kwargs &kw)
-      : previous(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+      : previous(reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   void update(const input_t &, time_t now) override {
     prev_value = value;

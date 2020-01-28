@@ -35,7 +35,7 @@ struct past_sometime : public discrete_timed_state<X, bool, T> {
       : first(args[0]) {}
 
   explicit past_sometime(const kwargs &kw)
-      : past_sometime(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+      : past_sometime(reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   void update(const input_t&, time_t now) override {
     value = first->output(now) || value;

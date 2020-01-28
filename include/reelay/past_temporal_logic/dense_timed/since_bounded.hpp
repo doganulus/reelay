@@ -40,9 +40,9 @@ struct since_bounded : public dense_timed_state<X, interval_set<T>, T> {
       : first(args[0]), second(args[1]), lbound(l), ubound(u) {}
 
   explicit since_bounded(const kwargs &kw)
-      : since_bounded(std::any_cast<std::vector<node_ptr_t>>(kw.at("args")),
-                      std::any_cast<time_t>(kw.at("lbound")),
-                      std::any_cast<time_t>(kw.at("ubound"))) {}
+      : since_bounded(reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args")),
+                      reelay::any_cast<time_t>(kw.at("lbound")),
+                      reelay::any_cast<time_t>(kw.at("ubound"))) {}
 
   void update(bool p1, bool p2, time_t previous, time_t now) {
     if (previous == now) {

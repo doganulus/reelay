@@ -31,7 +31,7 @@ struct past_always : public untimed_state<X, bool> {
   explicit past_always(const std::vector<node_ptr_t> &args) : first(args[0]) {}
 
   explicit past_always(const kwargs &kw)
-      : past_always(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+      : past_always(reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   void update(const input_t&) { value = first->output() && value; }
 

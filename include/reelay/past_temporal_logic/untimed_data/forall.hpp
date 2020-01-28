@@ -35,9 +35,9 @@ template <typename X> struct forall : public untimed_node<data_set_t> {
   }
 
   explicit forall(const kwargs &kw)
-      : forall(std::any_cast<data_mgr_t>(kw.at("manager")),
-               std::any_cast<std::vector<std::string>>(kw.at("vars")),
-               std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+      : forall(reelay::any_cast<data_mgr_t>(kw.at("manager")),
+               reelay::any_cast<std::vector<std::string>>(kw.at("vars")),
+               reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   output_t output() {
     data_set_t value = arg1->output();

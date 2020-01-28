@@ -36,7 +36,7 @@ struct conjunction : public discrete_timed_node<bool, T> {
       : args(nodeptrs) {}
 
   explicit conjunction(const kwargs &kw)
-      : conjunction(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+      : conjunction(reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   output_t output(time_t now) {
     return std::all_of(args.cbegin(), args.cend(),

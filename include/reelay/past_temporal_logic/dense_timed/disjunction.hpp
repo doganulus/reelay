@@ -34,7 +34,7 @@ struct disjunction : public dense_timed_node<interval_set<T>, T> {
       : args(args) {}
 
   explicit disjunction(const kwargs &kw)
-      : disjunction(std::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
+      : disjunction(reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
   output_t output(time_t previous, time_t now) {
     interval_set result = args[0]->output(previous, now);

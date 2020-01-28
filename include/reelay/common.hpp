@@ -8,9 +8,14 @@
 
 #pragma once
 
-#include <any>
 #include <string>
 #include <unordered_map>
+
+#include "boost/any.hpp"
+#include "boost/lexical_cast.hpp"
+
+#define PEGLIB_USE_STD_ANY 0
+#include "reelay/third_party/peglib.h"
 
 template <typename K, typename V>
 std::ostream &operator<<(std::ostream &os, const std::unordered_map<K, V> &m) {
@@ -22,10 +27,19 @@ std::ostream &operator<<(std::ostream &os, const std::unordered_map<K, V> &m) {
 
 namespace reelay {
 
-using any = std::any;
+using any = peg::any;
 
-// template<typename T>
-// using any_cast = std::any_cast; 
+// template <typename T> 
+// constexpr auto any_cast = peg::any_cast<T>;
+
+template <typename T, typename... Args>
+auto any_cast(Args &&... args)
+    -> decltype(peg::any_cast<T>(std::forward<Args>(args)...)) {
+  return peg::any_cast<T>(std::forward<Args>(args)...);
+}
+
+template <typename T> 
+constexpr auto lexical_cast = boost::lexical_cast<T>;
 
 using kwargs = std::unordered_map<std::string, any>;
 
