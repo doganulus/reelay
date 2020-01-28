@@ -69,11 +69,11 @@ apps: rymtl rystl ryjavu
 
 rymtl:
 	mkdir -p bin
-	$(CXX) $(CXXFLAGS) apps/mtl/main.cpp -o bin/rymtl $(INCLUDE_FLAGS)
+	$(CXX) $(CXXFLAGS) apps/rymtl/main.cpp -o bin/rymtl $(INCLUDE_FLAGS)
 
 rystl:
 	mkdir -p bin
-	$(CXX) $(CXXFLAGS) apps/stl/main.cpp -o bin/rystl $(INCLUDE_FLAGS) 
+	$(CXX) $(CXXFLAGS) apps/rystl/main.cpp -o bin/rystl $(INCLUDE_FLAGS) 
 
 ryjavu:
 	mkdir -p bin
