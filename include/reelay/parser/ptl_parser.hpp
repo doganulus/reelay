@@ -207,7 +207,7 @@ template <class Setting> struct ptl_parser {
 
     parser["FieldKey"] = [&](const peg::SemanticValues &sv) {
       auto keys = std::vector<std::string>();
-      for (std::size_t i = 0; i < std::size(sv); i++) {
+      for (std::size_t i = 0; i < sv.size(); i++) {
         keys.push_back(any_cast<std::string>(sv[i]));
       }
       return keys;
@@ -217,7 +217,7 @@ template <class Setting> struct ptl_parser {
       auto key_path = any_cast<std::vector<std::string>>(sv[0]);
       auto value = any_cast<std::pair<std::string, std::string>>(sv[1]);
       auto key = key_path[0];
-      for (std::size_t i = 1; i < std::size(key_path); i++) {
+      for (std::size_t i = 1; i < key_path.size(); i++) {
         key += '/'+ key_path[i];
       }
       return std::pair<std::string, std::pair<std::string, std::string>>(key, value);
