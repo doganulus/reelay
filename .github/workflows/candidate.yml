@@ -1,0 +1,110 @@
+name: rc
+
+on:
+  push:
+    branches:
+      - 'release'
+      - 'test_actions'
+    
+jobs:
+  bionic-build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-18.04]
+        python-version: ['3.5', '3.6', '3.7', '3.8']
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Get submodules
+      run: |
+        git submodule init 
+        git submodule update
+
+    - name: Setup Python version
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Reelay dependencies
+      run: |
+        sudo apt-get install -y libboost-all-dev
+
+    - name: Build Reelay Python package
+      run: pip install .
+
+    - name: Test
+      run: |
+        pip install pytest
+        pytest python/tests
+
+  xenial-build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-16.04]
+        python-version: ['3.5', '3.6', '3.7', '3.8']
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Get submodules
+      run: |
+        git submodule init 
+        git submodule update
+
+    - name: Setup Python version
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Reelay dependencies
+      run: |
+        sudo apt install -y libboost-all-dev
+
+    - name: Build Reelay Python package
+      run: pip install .
+      env:
+        CC: gcc-7
+        CXX: g++-7
+
+    - name: Test
+      run: |
+        pip install pytest
+        pytest python/tests
+
+  macos-build:
+    runs-on: ['macos-latest']
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.5', '3.6', '3.7', '3.8']
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Get submodules
+      run: |
+        git submodule init 
+        git submodule update
+
+    - name: Setup Python version
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Reelay dependencies
+      run: |
+        brew install boost
+        brew install pybind11
+
+    - name: Build Reelay Python package
+      run: pip install .
+
+    - name: Test
+      run: |
+        pip install pytest
+        pytest python/tests
