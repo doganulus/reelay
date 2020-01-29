@@ -1,6 +1,6 @@
 CC=gcc#
 CXX=g++#
-CXXFLAGS=-std=c++17 -fPIC -O2 -pthread -fno-new-ttp-matching -Wall -Wextra
+CXXFLAGS=-std=c++14 -fPIC -O2 -pthread -fno-new-ttp-matching -Wall -Wextra
 
 
 ifneq (,$(shell ldconfig -p | grep libcudd))
@@ -69,15 +69,15 @@ apps: rymtl rystl ryjavu
 
 rymtl:
 	mkdir -p bin
-	$(CXX) $(CXXFLAGS) apps/rymtl/main.cpp -o bin/rymtl $(INCLUDE_FLAGS)
+	$(CXX) $(CXXFLAGS) apps/rymtl/main.cpp -o bin/rymtl $(INCLUDE_FLAGS) -std=c++17
 
 rystl:
 	mkdir -p bin
-	$(CXX) $(CXXFLAGS) apps/rystl/main.cpp -o bin/rystl $(INCLUDE_FLAGS) 
+	$(CXX) $(CXXFLAGS) apps/rystl/main.cpp -o bin/rystl $(INCLUDE_FLAGS) -std=c++17
 
 ryjavu:
 	mkdir -p bin
-	$(CXX) $(CXXFLAGS) apps/ryjavu/main.cpp /usr/local/lib/libcudd.a -o bin/ryjavu $(INCLUDE_FLAGS) 
+	$(CXX) $(CXXFLAGS) apps/ryjavu/main.cpp /usr/local/lib/libcudd.a -o bin/ryjavu $(INCLUDE_FLAGS) -std=c++17
 
 apps-install:
 	cp -p bin/rymtl /usr/local/bin/rymtl
