@@ -8,4 +8,4 @@
 
 #pragma once
 
-#define REELAY_LIB_VERSION "2001"
+#define REELAY_VERSION "2001_0"
