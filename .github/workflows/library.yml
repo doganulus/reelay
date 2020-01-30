@@ -12,7 +12,7 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - name: setup
+    - name: Setup and install dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y libboost-all-dev
@@ -36,4 +36,4 @@ jobs:
       with:
         name: library
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: test/build/coverage/lcov.info
+        path-to-lcov: test/build/lcov.info
