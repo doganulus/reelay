@@ -1,25 +1,20 @@
 CC=gcc#
 CXX=g++#
-CXXFLAGS=-std=c++11 -fPIC -O2 -pthread -fno-new-ttp-matching -Wall -Wextra
+CXXFLAGS=-std=c++11 -fPIC -O2 -pthread -Wall -Wextra
 
+CXXFLAGS_TEST=-g -std=c++11 -fPIC -O0 -pthread -Wall -Wextra --coverage -fno-inline -fno-inline-small-functions -fno-default-inline 
 
-ifneq (,$(shell ldconfig -p | grep libcudd))
-LIB_CUDD_FLAG=-lcudd
-else
-LIB_CUDD_FLAG=#
-endif
-
-LIB_FLAGS=$(LIB_CUDD_FLAG)
+LIB_FLAGS=-lcudd
 INCLUDE_FLAGS=-I. -I./include
 
-NAME = reelay
+NAME=reelay
 VERSION=2001
 
-PROJECT_INCLUDE = include/reelay
+ROOT_DIR=$(shell pwd)
+PROJECT_INCLUDE=include/reelay
 
 PREFIX = /usr/local
 INCDIR = $(PREFIX)/include
-WORKDIR = ./build
 
 .PHONY: all apps python develop test install uninstall 
 
@@ -98,39 +93,35 @@ test_csvparser:
 	multitime -n 10 bin/csvparser/csvparser_fast build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv
 	multitime -n 10 bin/csvparser/csvparser_modern build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv
 
-test: test_main test_untimed test_discrete_timed test_dense_timed test_untimed_robustness test_discrete_timed_robustness test_untimed_data
+test: test_main test_untimed test_discrete_timed test_dense_timed test_untimed_robustness test_discrete_timed_robustness test_untimed_data coverage
 
 test_main:
-	mkdir -p build/test
-	$(CXX) $(CXXFLAGS) -c test/test_main.cpp -o build/test/main.o $(INCLUDE_FLAGS) $(LIB_FLAGS)
+	mkdir -p test/build
+	$(CXX) $(CXXFLAGS) -c test/test_main.cpp -o test/build/main.o
 
 test_untimed:
-	$(CXX) $(CXXFLAGS) build/test/main.o test/test_setting_untimed.cpp -o build/test/test_setting_untimed $(INCLUDE_FLAGS) $(LIB_FLAGS)
-	./build/test/test_setting_untimed -r compact
+	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_setting_untimed.cpp -o test_setting_untimed -I$(ROOT_DIR)/include
+	cd test/build && ./test_setting_untimed -r compact
 
 test_untimed_data:
-	$(CXX) $(CXXFLAGS) build/test/main.o test/test_setting_untimed_data.cpp -o build/test/test_setting_untimed_data $(INCLUDE_FLAGS) $(LIB_FLAGS)
-	./build/test/test_setting_untimed_data -r compact
+	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_setting_untimed_data.cpp -o test_setting_untimed_data -I$(ROOT_DIR)/include -lcudd
+	cd test/build && ./test_setting_untimed_data -r compact
 
 test_untimed_robustness:
-	$(CXX) $(CXXFLAGS) build/test/main.o test/test_setting_untimed_robustness.cpp -o build/test/test_setting_untimed_robustness $(INCLUDE_FLAGS) $(LIB_FLAGS)
-	./build/test/test_setting_untimed_robustness -r compact
+	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_setting_untimed_robustness.cpp -o test_setting_untimed_robustness -I$(ROOT_DIR)/include
+	cd test/build && ./test_setting_untimed_robustness -r compact
 
 test_discrete_timed:
-	$(CXX) $(CXXFLAGS) build/test/main.o test/test_setting_discrete_timed.cpp -o build/test/test_setting_discrete_timed $(INCLUDE_FLAGS) $(LIB_FLAGS)
-	./build/test/test_setting_discrete_timed -r compact
+	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_setting_discrete_timed.cpp -o test_setting_discrete_timed -I$(ROOT_DIR)/include
+	cd test/build && ./test_setting_discrete_timed -r compact
 
 test_discrete_timed_robustness:
-	$(CXX) $(CXXFLAGS) build/test/main.o test/test_setting_discrete_timed_robustness.cpp -o build/test/test_setting_discrete_timed_robustness $(INCLUDE_FLAGS) $(LIB_FLAGS)
-	./build/test/test_setting_discrete_timed_robustness -r compact
+	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_setting_discrete_timed_robustness.cpp -o test_setting_discrete_timed_robustness -I$(ROOT_DIR)/include
+	cd test/build && ./test_setting_discrete_timed_robustness -r compact
 
 test_dense_timed:
-	$(CXX) $(CXXFLAGS) build/test/main.o test/test_setting_dense_timed.cpp -o build/test/test_setting_dense_timed $(INCLUDE_FLAGS) $(LIB_FLAGS)
-	./build/test/test_setting_dense_timed -r compact
-
-test_data_manager:
-	$(CXX) $(CXXFLAGS) build/test/main.o test/test_data_manager.cpp -o build/test/test_data_manager $(INCLUDE_FLAGS) $(LIB_FLAGS)
-	./build/test/test_data_manager -r compact
+	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_setting_dense_timed.cpp -o test_setting_dense_timed -I$(ROOT_DIR)/include
+	cd test/build && ./test_setting_dense_timed -r compact
 
 test_recipes:
 	$(CXX) $(CXXFLAGS) build/test/main.o test/test_recipes.cpp -o build/test/test_recipes $(INCLUDE_FLAGS) $(LIB_FLAGS)
@@ -159,3 +150,9 @@ python-develop:
 
 main: 
 	$(CXX) $(CXXFLAGS) $(FILE) -o bin/main $(INCLUDE_FLAGS) $(LIB_FLAGS) && bin/main $(EXTRA)
+
+coverage:
+	cd test/build && gcov -p -s .. -o . test_setting_untimed.cpp test_setting_discrete_timed.cpp test_setting_dense_timed.cpp test_setting_untimed_robustness test_discrete_timed_robustness.cpp test_setting_untimed_data.cpp
+	cd test/build && lcov --capture --quiet --directory . --output-file lcov.info  
+	cd test/build && lcov --remove lcov.info "/usr/*" "$(ROOT_DIR)/third_party/*" "$(ROOT_DIR)/include/reelay/third_party/*" "$(ROOT_DIR)/test/*" --directory . --output-file lcov.info
+	cd test/build && genhtml --ignore-errors source lcov.info --legend --title "commit SHA1"

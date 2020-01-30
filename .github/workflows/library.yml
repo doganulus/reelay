@@ -15,10 +15,8 @@ jobs:
     - name: setup
       run: |
         sudo apt-get update
-        sudo apt-get install -y apt-transport-https
-        sudo apt-get install -y uuid-dev
-        sudo apt-get install -y autotools-dev
         sudo apt-get install -y libboost-all-dev
+        sudo apt-get install -y lcov
 
     - name: Install CUDD
       run: |
@@ -32,3 +30,10 @@ jobs:
 
     - name: Test
       run: make test
+
+    - name: Publish to Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        name: library
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        path-to-lcov: test/build/coverage/lcov.info

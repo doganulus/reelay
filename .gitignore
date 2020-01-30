@@ -35,6 +35,12 @@
 /bin/*
 /build/*
 
+# GCC coverage testing tool files
+
+*.gcno
+*.gcda
+*.gcov
+
 # Python Stuff
 # Byte-compiled / optimized / DLL files
 __pycache__/
