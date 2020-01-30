@@ -9,7 +9,10 @@ from setuptools.command.build_ext import build_ext
 
 __version__ = '2001'
 
-cxxflags = ['--std=c++14', '-fvisibility=hidden']
+cxxflags = [
+    '--std=c++11',          # C++11 required for manylinux2014
+    '-fvisibility=hidden',  # Produces smaller shared objects (see pybind11)
+    ]
 
 if platform.system() == 'Linux':
     cxx = os.environ.get('CXX', 'g++')
