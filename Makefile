@@ -1,6 +1,6 @@
 CC=gcc#
 CXX=g++#
-CXXFLAGS=-std=c++14 -fPIC -O2 -pthread -fno-new-ttp-matching -Wall -Wextra
+CXXFLAGS=-std=c++11 -fPIC -O2 -pthread -fno-new-ttp-matching -Wall -Wextra
 
 
 ifneq (,$(shell ldconfig -p | grep libcudd))

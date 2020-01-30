@@ -26,7 +26,7 @@ struct untimed_past_qtl_list_monitor{
 
   explicit untimed_past_qtl_list_monitor(const std::string &pattern) {
 
-    manager = std::make_unique<reelay::binding_manager>();
+    manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs kw = {{"manager", manager}};
 
     auto parser = ptl_parser<factory>(kw);

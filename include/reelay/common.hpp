@@ -29,17 +29,11 @@ namespace reelay {
 
 using any = peg::any;
 
-// template <typename T> 
-// constexpr auto any_cast = peg::any_cast<T>;
-
 template <typename T, typename... Args>
 auto any_cast(Args &&... args)
     -> decltype(peg::any_cast<T>(std::forward<Args>(args)...)) {
   return peg::any_cast<T>(std::forward<Args>(args)...);
 }
-
-template <typename T> 
-constexpr auto lexical_cast = boost::lexical_cast<T>;
 
 using kwargs = std::unordered_map<std::string, any>;
 
