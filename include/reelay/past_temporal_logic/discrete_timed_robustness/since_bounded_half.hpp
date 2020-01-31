@@ -71,7 +71,7 @@ struct since_bounded_half : public discrete_timed_state<X, V, T> {
     value2.add(
         std::make_pair(reelay::interval<time_t>::closed(
                            now + lbound, reelay::infinity<time_t>::value()),
-                       first->output(now)));
+                       second->output(now)));
 
     // Clean-up the past
     value1 = value1 - interval_map(std::make_pair(
