@@ -12,48 +12,57 @@ class monitor(object):
     def __new__(cls,
                 pattern: str,
                 time_model="dense",
-                piecewise="linear",
-                enable_robustness=False,
+                piecewise="constant",
+                semantics="boolean",
                 init_update=None):
 
         if time_model == "dense":
             if piecewise == "linear":
-                if not enable_robustness:
+                if semantics == "boolean":
                     monitor = reelay.recipes.dense_timed_past_stl1_monitor(
                         pattern)
                     if init_update is not None:
                         monitor.init_update(init_update)
                     return monitor
-                else:
+                elif semantics == "robustness":
                     raise NotImplementedError(
                         "Robustness semantics is not available for dense time "
                         "piecewise linear signals. Please enable discrete "
-                        "timed setting (time_model='discrete').")
+                        "timed setting or use piecewise constant signals.")
+                else:
+                    raise AttributeError(
+                        "Semantics must be 'boolean' or 'robustness'.")
             elif piecewise == "constant":
-                if not enable_robustness:
+                if semantics == "boolean":
                     return reelay.recipes.dense_timed_past_stl0_monitor(
                         pattern)
+                elif semantics == "robustness":
+                    return reelay.recipes.dense_timed_past_rstl0_monitor(
+                        pattern)
                 else:
-                    raise NotImplementedError(
-                        "Robustness semantics is not available for dense time "
-                        "piecewise constant signals. Please enable discrete "
-                        "timed setting (time_model='discrete').")
+                    raise AttributeError(
+                        "Semantics must be 'boolean' or 'robustness'.")
             else:
                 raise AttributeError(
                     "Piecewise interpolation must be 'constant' or 'linear'.")
 
         elif time_model == "discrete":
-            if not enable_robustness:
+            if semantics == "boolean":
                 return reelay.recipes.discrete_timed_past_stl_monitor(pattern)
-            else:
+            elif semantics == "robustness":
                 return reelay.recipes.discrete_timed_past_rstl_monitor(pattern)
+            else:
+                raise AttributeError(
+                    "Semantics must be 'boolean' or 'robustness'.")
 
         elif time_model == "untimed" or time_model is None:
-            if not enable_robustness:
+            if semantics == "boolean":
                 return reelay.recipes.untimed_past_stl_monitor(pattern)
-            else:
+            elif semantics == "robustness":
                 return reelay.recipes.untimed_past_rstl_monitor(pattern)
-
+            else:
+                raise AttributeError(
+                    "Semantics must be 'boolean' or 'robustness'.")
         else:
             raise AttributeError(
                 "Time model must be 'untimed', 'discrete', or 'dense'.")

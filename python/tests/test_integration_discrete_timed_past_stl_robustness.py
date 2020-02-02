@@ -14,7 +14,7 @@ def test_integration_discrete_timed_past_stl_robustness():
     my_monitor = reelay.past_stl.monitor(
         pattern="historically[:4](speed > 13.0)",
         time_model="discrete",
-        enable_robustness=True
+        semantics="robustness"
     )
 
     input_sequence = [
