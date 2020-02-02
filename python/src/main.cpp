@@ -68,6 +68,12 @@ PYBIND11_MODULE(recipes, m) {
         .def("now", &reelay::discrete_timed_past_rstl_monitor::now)
         .def("update", &reelay::discrete_timed_past_rstl_monitor::update);
 
+    pybind11::class_<reelay::dense_timed_past_rstl0_monitor>(
+        m, "dense_timed_past_rstl0_monitor")
+        .def(pybind11::init<const std::string &>())
+        .def("now", &reelay::dense_timed_past_rstl0_monitor::now)
+        .def("update", &reelay::dense_timed_past_rstl0_monitor::update);
+
     pybind11::class_<reelay::untimed_past_qtl_list_monitor>(
         m, "untimed_past_qtl_list_monitor")
         .def(pybind11::init<const std::string &>())

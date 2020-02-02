@@ -1,7 +1,7 @@
 CC=gcc#
 CXX=g++#
-CXXFLAGS=-std=c++11 -fPIC -O2 -pthread -Wall -Wextra
-
+CXXFLAGS=-std=c++11 -fPIC -O2 -pthread
+CXXFLAGS_APPS=-std=c++17 -fPIC -O2 -pthread -fno-new-ttp-matching -Wall -Wextra
 CXXFLAGS_TEST=-g -std=c++11 -fPIC -O0 -pthread --coverage -fno-inline -fno-inline-small-functions -fno-default-inline#-Wall -Wextra
 
 LIB_FLAGS=-lcudd
@@ -64,15 +64,15 @@ apps: rymtl rystl ryjavu
 
 rymtl:
 	mkdir -p bin
-	$(CXX) $(CXXFLAGS) apps/rymtl/main.cpp -o bin/rymtl $(INCLUDE_FLAGS) -std=c++17
+	$(CXX) $(CXXFLAGS_APPS) apps/rymtl/main.cpp -o bin/rymtl $(INCLUDE_FLAGS)
 
 rystl:
 	mkdir -p bin
-	$(CXX) $(CXXFLAGS) apps/rystl/main.cpp -o bin/rystl $(INCLUDE_FLAGS) -std=c++17
+	$(CXX) $(CXXFLAGS_APPS) apps/rystl/main.cpp -o bin/rystl $(INCLUDE_FLAGS)
 
 ryjavu:
 	mkdir -p bin
-	$(CXX) $(CXXFLAGS) apps/ryjavu/main.cpp /usr/local/lib/libcudd.a -o bin/ryjavu $(INCLUDE_FLAGS) -std=c++17
+	$(CXX) $(CXXFLAGS_APPS) apps/ryjavu/main.cpp /usr/local/lib/libcudd.a -o bin/ryjavu $(INCLUDE_FLAGS)
 
 apps-install:
 	cp -p bin/rymtl /usr/local/bin/rymtl
@@ -93,7 +93,7 @@ test_csvparser:
 	multitime -n 10 bin/csvparser/csvparser_fast build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv
 	multitime -n 10 bin/csvparser/csvparser_modern build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv
 
-test: test_main test_untimed test_discrete_timed test_dense_timed test_untimed_robustness test_discrete_timed_robustness test_untimed_data coverage
+test: test_main test_untimed test_discrete_timed test_dense_timed test_untimed_robustness test_discrete_timed_robustness test_dense_timed_robustness_0 test_untimed_data coverage
 
 test_main:
 	mkdir -p test/build
@@ -156,7 +156,7 @@ main:
 	$(CXX) $(CXXFLAGS) $(FILE) -o bin/main $(INCLUDE_FLAGS) $(LIB_FLAGS) && bin/main $(EXTRA)
 
 coverage:
-	cd test/build && gcov -p -s .. -o . test_setting_untimed.cpp test_setting_discrete_timed.cpp test_setting_dense_timed.cpp test_setting_untimed_robustness test_discrete_timed_robustness.cpp test_setting_untimed_data.cpp
+	cd test/build && gcov -p -s .. -o . test_setting_untimed.cpp test_setting_discrete_timed.cpp test_setting_dense_timed.cpp test_setting_untimed_robustness.cpp test_setting_discrete_timed_robustness.cpp test_setting_dense_timed_robustness.cpp test_setting_untimed_data.cpp
 	cd test/build && lcov --capture --quiet --directory . --output-file lcov.info  
 	cd test/build && lcov --remove lcov.info "/usr/*" "$(ROOT_DIR)/third_party/*" "$(ROOT_DIR)/include/reelay/third_party/*" "$(ROOT_DIR)/test/*" --directory . --output-file lcov.info
 	cd test/build && genhtml --ignore-errors source lcov.info --legend --title "commit SHA1"
