@@ -28,8 +28,8 @@ struct past_always : public dense_timed_state<X, interval_set<T>, T> {
   using interval = reelay::interval<time_t>;
   using interval_set = reelay::interval_set<time_t>;
 
-  interval_set value = interval_set(
-      interval::left_open(-std::numeric_limits<time_t>::max(), 0));  // true
+  bool done = false;
+  interval_set value = interval_set();  // true
 
   node_ptr_t first;
 
@@ -42,9 +42,20 @@ struct past_always : public dense_timed_state<X, interval_set<T>, T> {
               const input_t&,
               time_t previous,
               time_t now) override {
+    if(done) {
+      return;
+    }
+
     auto complement = interval_set(interval::left_open(previous, now)) -
                       first->output(previous, now);
-    value = complement | value;
+
+    if (complement.size() == 0) {
+      return;
+    }
+    time_t earliest_time = complement.begin()->lower();
+    value = interval_set(
+        interval::left_open(earliest_time, infinity<time_t>::value()));
+    done = true;
   }
 
   output_t output(time_t previous, time_t now) override {

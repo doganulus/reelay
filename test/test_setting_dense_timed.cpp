@@ -433,6 +433,8 @@ TEST_CASE( "Untimed Temporal Operations" ) {
         sequence.push_back( input_t{{"time", "30"}, {"p1", "1"}, {"p2", "0"}} );
         sequence.push_back( input_t{{"time", "60"}, {"p1", "1"}, {"p2", "0"}} );
         sequence.push_back( input_t{{"time", "70"}, {"p1", "0"}, {"p2", "0"}} );
+        sequence.push_back(input_t{{"time", "90"}, {"p1", "1"}, {"p2", "0"}});
+        sequence.push_back(input_t{{"time", "120"}, {"p1", "1"}, {"p2", "0"}});
 
         auto net1 = reelay::dense_timed<dense_time_t>::monitor<input_t>::from_temporal_logic("historically p1");
 
@@ -460,6 +462,8 @@ TEST_CASE( "Untimed Temporal Operations" ) {
         sequence.push_back( input_t{{"time", "60"}, {"p1", "0"}, {"p2", "0"}} );
         sequence.push_back( input_t{{"time", "70"}, {"p1", "1"}, {"p2", "0"}} );
         sequence.push_back( input_t{{"time", "90"}, {"p1", "1"}, {"p2", "0"}} );
+        sequence.push_back(input_t{{"time", "110"}, {"p1", "0"}, {"p2", "0"}});
+        sequence.push_back(input_t{{"time", "125"}, {"p1", "0"}, {"p2", "0"}});
 
         auto net1 = reelay::dense_timed<dense_time_t>::monitor<input_t>::from_temporal_logic("once p1");
 
@@ -472,7 +476,7 @@ TEST_CASE( "Untimed Temporal Operations" ) {
         }
 
         auto expected1 = interval_set();
-        expected1.add(interval::left_open(60,90));
+        expected1.add(interval::left_open(60,125));
 
         CHECK(result1 == expected1);
     }

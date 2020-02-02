@@ -111,7 +111,7 @@ struct since_bounded : public dense_timed_state<X, interval_set<T>, T> {
     auto it2 = bounds2.begin();
 
     value = value & interval_set(interval::left_open(
-                        previous, std::numeric_limits<time_t>::max()));
+                        previous, infinity<time_t>::value()));
 
     while (it1 != bounds1.end() and it2 != bounds2.end()) {
       if (*it1 < *it2) {
