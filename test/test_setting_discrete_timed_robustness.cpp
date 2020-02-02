@@ -571,15 +571,15 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"p1", "-3"}, {"p2", "-100"}});
     sequence.push_back(input_t{{"p1", "-1"}, {"p2", "-100"}});
     sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "4"}, {"p2", "1"}});     //-4
-    sequence.push_back(input_t{{"p1", "-1"}, {"p2", "-100"}}); //-100
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});  //-100
+    sequence.push_back(input_t{{"p1", "4"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "-1"}, {"p2", "-100"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
     sequence.push_back(input_t{{"p1", "-4"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});  //-4
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
     sequence.push_back(input_t{{"p1", "1"}, {"p2", "5"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});//-100
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});//1
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});//1
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("p1 since[2:4] p2");
@@ -671,11 +671,11 @@ TEST_CASE("Timed Temporal Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "-3"}, {"p2", "-6"}}); // -6
-    sequence.push_back(input_t{{"p1", "-4"}, {"p2", "1"}}); // 
-    sequence.push_back(input_t{{"p1", "-5"}, {"p2", "-8"}}); // -6
-    sequence.push_back(input_t{{"p1", "15"}, {"p2", "3"}});  // -5
-    sequence.push_back(input_t{{"p1", "-3"}, {"p2", "22"}}); // -5
+    sequence.push_back(input_t{{"p1", "-3"}, {"p2", "-6"}});
+    sequence.push_back(input_t{{"p1", "-4"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "-5"}, {"p2", "-8"}});
+    sequence.push_back(input_t{{"p1", "15"}, {"p2", "3"}});
+    sequence.push_back(input_t{{"p1", "-3"}, {"p2", "22"}});
 
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<

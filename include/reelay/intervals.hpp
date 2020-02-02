@@ -12,13 +12,9 @@
 #include "boost/icl/interval_set.hpp"
 #include "boost/icl/interval_map.hpp"
 
-namespace reelay {
+namespace boost { namespace icl {
 
-template <class V>
-using infinity = boost::icl::infinity<V>; // aka arbitrarily large finite number
-
-template <typename V> 
-struct robustness_join {
+template <typename V> struct robustness_join {
   typedef V &first_argument_type;
   typedef const V &second_argument_type;
 
@@ -35,6 +31,39 @@ struct robustness_join {
   }
 };
 
+template <typename V> struct robustness_meet {
+  typedef V &first_argument_type;
+  typedef const V &second_argument_type;
+
+  typedef void result_type;
+
+  typedef robustness_meet<V> type;
+
+  inline static V identity_element() { return infinity<V>::value(); }
+
+  void operator()(V &object, const V &operand) const {
+    if (object > operand) {
+      object = operand;
+    }
+  }
+};
+
+template <class T> struct inverse<robustness_meet<T>> {
+  typedef robustness_join<T> type;
+};
+
+template <class T> struct inverse<robustness_join<T>> {
+  typedef robustness_meet<T> type;
+};
+
+}
+}
+
+namespace reelay {
+
+template <class V>
+using infinity = boost::icl::infinity<V>; // aka arbitrarily large finite number
+
 template <class T>
 using interval = boost::icl::interval<T>;
 
@@ -43,6 +72,6 @@ using interval_set = boost::icl::interval_set<T>;
 
 template <class T, class V>
 using robustness_interval_map =
-  boost::icl::interval_map
-    <T, V, boost::icl::total_absorber, std::less, boost::icl::inplace_max>;
+    boost::icl::interval_map<T, V, boost::icl::total_enricher, std::less,
+                             boost::icl::robustness_join>;
 }  // namespace reelay

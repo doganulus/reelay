@@ -344,7 +344,7 @@ TEST_CASE( "Boolean Operations" ) {
         CHECK(result == expected);
     }
 
-    SECTION( "Conjuction" ) {
+    SECTION( "Conjunction" ) {
 
         std::vector<input_t> sequence = std::vector<input_t>();
        

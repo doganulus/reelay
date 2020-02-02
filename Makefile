@@ -2,7 +2,7 @@ CC=gcc#
 CXX=g++#
 CXXFLAGS=-std=c++11 -fPIC -O2 -pthread -Wall -Wextra
 
-CXXFLAGS_TEST=-g -std=c++11 -fPIC -O0 -pthread -Wall -Wextra --coverage -fno-inline -fno-inline-small-functions -fno-default-inline 
+CXXFLAGS_TEST=-g -std=c++11 -fPIC -O0 -pthread --coverage -fno-inline -fno-inline-small-functions -fno-default-inline#-Wall -Wextra
 
 LIB_FLAGS=-lcudd
 INCLUDE_FLAGS=-I. -I./include
@@ -122,6 +122,10 @@ test_discrete_timed_robustness:
 test_dense_timed:
 	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_setting_dense_timed.cpp -o test_setting_dense_timed -I$(ROOT_DIR)/include
 	cd test/build && ./test_setting_dense_timed -r compact
+
+test_dense_timed_robustness_0:
+	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_setting_dense_timed_robustness_0.cpp -o test_setting_dense_timed_robustness_0 -I$(ROOT_DIR)/include
+	cd test/build && ./test_setting_dense_timed_robustness_0 -r compact
 
 test_recipes:
 	$(CXX) $(CXXFLAGS) build/test/main.o test/test_recipes.cpp -o build/test/test_recipes $(INCLUDE_FLAGS) $(LIB_FLAGS)

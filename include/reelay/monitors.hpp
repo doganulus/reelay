@@ -29,8 +29,6 @@ struct monitor {
   using network_t = typename factory::network_t;
   using network_ptr_t = typename factory::network_ptr_t;
 
-  using function_t = typename factory::function_t;
-
   static network_ptr_t
   from_temporal_logic(std::string pattern,
                       reelay::kwargs kw = reelay::kwargs()) {
@@ -49,8 +47,6 @@ struct robustness {
       using network_t = typename factory::network_t;
       using network_ptr_t = typename factory::network_ptr_t;
 
-      using function_t = typename factory::function_t;
-
       static network_ptr_t
       from_temporal_logic(std::string pattern,
                           reelay::kwargs kw = reelay::kwargs()) {
@@ -66,7 +62,6 @@ struct unordered_data {
 
     using network_t = typename factory::network_t;
     using network_ptr_t = typename factory::network_ptr_t;
-    using function_t = typename factory::function_t;
 
     static network_ptr_t
     from_temporal_logic(std::string pattern,
@@ -85,7 +80,6 @@ struct discrete_timed {
 
     using network_t = typename factory::network_t;
     using network_ptr_t = typename factory::network_ptr_t;
-    using function_t = typename factory::function_t;
 
     static network_ptr_t
     from_temporal_logic(std::string pattern,
@@ -103,7 +97,6 @@ struct discrete_timed {
 
       using network_t = typename factory::network_t;
       using network_ptr_t = typename factory::network_ptr_t;
-      using function_t = typename factory::function_t;
 
       static network_ptr_t
       from_temporal_logic(std::string pattern,
@@ -123,7 +116,6 @@ struct dense_timed {
 
     using network_t = typename factory::network_t;
     using network_ptr_t = typename factory::network_ptr_t;
-    using function_t = typename factory::function_t;
 
     static network_ptr_t
     from_temporal_logic(std::string pattern,
@@ -135,5 +127,21 @@ struct dense_timed {
     // static type from_regular_expressions();
   };
 
+  template <typename value_t> struct robustness {
+    template <typename input_t> struct monitor {
+      using factory =
+          dense_timed_robustness_0_setting::factory<input_t, value_t, time_t>;
+
+      using network_t = typename factory::network_t;
+      using network_ptr_t = typename factory::network_ptr_t;
+
+      static network_ptr_t
+      from_temporal_logic(std::string pattern,
+                          reelay::kwargs kw = reelay::kwargs()) {
+        auto parser = ptl_parser<factory>(kw);
+        return parser.parse(pattern);
+      }
+    };
+  };
 };
 }  // namespace reelay
