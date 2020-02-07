@@ -86,4 +86,15 @@ PYBIND11_MODULE(recipes, m) {
         .def("now", &reelay::untimed_past_qtl_dict_monitor::now)
         .def("update", &reelay::untimed_past_qtl_dict_monitor::update);
 
+    pybind11::class_<reelay::discrete_timed_past_qtl_list_monitor>(
+        m, "discrete_timed_past_qtl_list_monitor")
+        .def(pybind11::init<const std::string &>())
+        .def("now", &reelay::discrete_timed_past_qtl_list_monitor::now)
+        .def("update", &reelay::discrete_timed_past_qtl_list_monitor::update);
+
+    pybind11::class_<reelay::discrete_timed_past_qtl_dict_monitor>(
+        m, "discrete_timed_past_qtl_dict_monitor")
+        .def(pybind11::init<const std::string &>())
+        .def("now", &reelay::discrete_timed_past_qtl_dict_monitor::now)
+        .def("update", &reelay::discrete_timed_past_qtl_dict_monitor::update);
 }

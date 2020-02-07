@@ -11,16 +11,18 @@ import reelay.recipes
 class monitor(object):
     def __new__(cls,
                 pattern: str,
-                time_model=None,
+                time_model="discrete",
                 event_type="dict[str,str]"):
 
         if time_model == "dense":
-            raise NotImplementedError("")
-        elif time_model == "discrete":
-            raise NotImplementedError("")
+            raise NotImplementedError("Dense time not implemented yet")
+        elif time_model == "discrete" and event_type == "dict[str,str]":
+            return reelay.recipes.discrete_timed_past_qtl_dict_monitor(pattern)
+        elif time_model == "discrete" and event_type == "list[str]":
+            return reelay.recipes.discrete_timed_past_qtl_list_monitor(pattern)
         elif time_model is None and event_type == "dict[str,str]":
             return reelay.recipes.untimed_past_qtl_dict_monitor(pattern)
         elif time_model is None and event_type == "list[str]":
             return reelay.recipes.untimed_past_qtl_list_monitor(pattern)
         else:
-            raise AttributeError("")
+            raise AttributeError("Event type must be either list[str] or dict[str,str]")
