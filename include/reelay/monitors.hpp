@@ -90,6 +90,25 @@ struct discrete_timed {
     // static network_ptr_t from_regular_expressions();
   };
 
+  struct unordered_data {
+    template <typename input_t>
+    struct monitor
+    {
+      using factory = discrete_timed_data_setting::factory<input_t, time_t>;
+
+      using network_t = typename factory::network_t;
+      using network_ptr_t = typename factory::network_ptr_t;
+
+      static network_ptr_t
+      from_temporal_logic(std::string pattern,
+                          reelay::kwargs kw = reelay::kwargs())
+      {
+        auto parser = ptl_parser<factory>(kw);
+        return parser.parse(pattern);
+      }
+    };
+  };
+
   template <typename output_t> struct robustness {
     template <typename input_t> struct monitor {
       using factory = 

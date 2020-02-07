@@ -12,7 +12,45 @@
 #include "boost/icl/interval_set.hpp"
 #include "boost/icl/interval_map.hpp"
 
+#include "cudd.h"
+#include "cuddObj.hh"
+
 namespace boost { namespace icl {
+
+template <typename V> struct data_join {
+
+  typedef V &first_argument_type;
+  typedef const V &second_argument_type;
+
+  typedef void result_type;
+
+  typedef data_join<V> type;
+
+  inline static V identity_element() { return BDD(); } // Unsafe
+
+  void operator()(V &object, const V &operand) const { object |= operand; }
+};
+
+template <typename V> struct data_meet {
+  typedef V &first_argument_type;
+  typedef const V &second_argument_type;
+
+  typedef void result_type;
+
+  typedef data_meet<V> type;
+
+  inline static V identity_element() { return BDD(); } //Unsafe
+
+  void operator()(V &object, const V &operand) const { object &= operand; }
+};
+
+template <class T> struct inverse<boost::icl::data_join<T>> {
+  typedef boost::icl::data_meet<T> type;
+};
+
+template <class T> struct inverse<boost::icl::data_meet<T>> {
+  typedef boost::icl::data_join<T> type;
+};
 
 template <typename V> struct robustness_join {
   typedef V &first_argument_type;
@@ -74,4 +112,9 @@ template <class T, class V>
 using robustness_interval_map =
     boost::icl::interval_map<T, V, boost::icl::total_enricher, std::less,
                              boost::icl::robustness_join>;
+
+template <class T>
+using data_interval_map =
+    boost::icl::interval_map<T, BDD, boost::icl::total_enricher, std::less,
+                             boost::icl::data_join>;
 }  // namespace reelay
