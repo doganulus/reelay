@@ -13,11 +13,11 @@
 #include "reelay/common.hpp"
 #include "reelay/monitors.hpp"
 
-    // using input_t = std::vector<std::vector<std::string>>;
-    // using input_t = std::vector<std::unordered_map<std::string,
-    // std::string>>;
+// using input_t = std::vector<std::vector<std::string>>;
+// using input_t = std::vector<std::unordered_map<std::string,
+// std::string>>;
 
-    TEST_CASE("Atoms") {
+TEST_CASE("Atoms") {
 
   SECTION("Simple Proposition 1") {
 
@@ -297,21 +297,13 @@
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{
-        {"event", "access"},
-        {"user", "alice"},
-        {"file", "wonderland"}
-    });
+        {"event", "access"}, {"user", "alice"}, {"file", "wonderland"}});
     sequence.push_back(input_t{
-        {"event", "access"},
-        {"user", "alice"},
-        {"file", "feed_your_head"}
-    });
-    sequence.push_back(input_t{
-        {"event", "access"},
-        {"user", "alice"},
-        {"file", "wonderland"},
-        {"version", "v2"}
-    });
+        {"event", "access"}, {"user", "alice"}, {"file", "feed_your_head"}});
+    sequence.push_back(input_t{{"event", "access"},
+                               {"user", "alice"},
+                               {"file", "wonderland"},
+                               {"version", "v2"}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -381,8 +373,7 @@
         {"event", "access"}, {"user", "bob"}, {"file", "feed_your_head"}});
     sequence.push_back(input_t{
         {"event", "access"}, {"user", "charlotte"}, {"file", "wonderland"}});
-    sequence.push_back(input_t{
-        {"event", "access"}, {"user", "charlotte"}});
+    sequence.push_back(input_t{{"event", "access"}, {"user", "charlotte"}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -439,8 +430,7 @@ TEST_CASE("Boolean Operations") {
     auto t = manager->one();
     auto f = manager->zero();
 
-    auto expected = std::vector<reelay::data_set_t>(
-        {f, t, f, t, t});
+    auto expected = std::vector<reelay::data_set_t>({f, t, f, t, t});
 
     CHECK(result == expected);
   }
@@ -512,8 +502,8 @@ TEST_CASE("Boolean Operations") {
     auto f = manager->zero();
 
     auto datum1 = (manager->assign("event", "access") *
-                  manager->assign("file", "wonderland")) +
-                 manager->assign("user", "alice");
+                   manager->assign("file", "wonderland")) +
+                  manager->assign("user", "alice");
 
     auto datum3 = manager->assign("event", "access") *
                   manager->assign("file", "feed_your_head");
@@ -764,7 +754,6 @@ TEST_CASE("Temporal Operations") {
 
     CHECK(result == expected);
   }
-
 }
 
 TEST_CASE("Some complex formulas") {

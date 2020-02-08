@@ -24,7 +24,7 @@ using value_t = BDD;
 //    * Test BDD Signal Functionality
 //    *
 //    * BDD signals are functions from time domain to BDD instances.
-//    * BDD signals are represented as boost::icl::interval_map<time_t, BDD> 
+//    * BDD signals are represented as boost::icl::interval_map<time_t, BDD>
 //    * BDDs are managed by a particular BDD manager (see CUDD docs)
 //    */
 
@@ -166,8 +166,8 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<input_t>::from_temporal_logic(
-        "alice", extra_args);
+    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+        input_t>::from_temporal_logic("alice", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
 
@@ -553,8 +553,8 @@ TEST_CASE("Boolean Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<input_t>::from_temporal_logic(
-        "![access, alice, *]", extra_args);
+    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+        input_t>::from_temporal_logic("![access, alice, *]", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
 
@@ -1029,8 +1029,7 @@ TEST_CASE("Timed Temporal Operations") {
     auto t = manager->one();
     auto f = manager->zero();
 
-    auto expected =
-        std::vector<reelay::data_set_t>({t, t, t, t, t, t, t, f});
+    auto expected = std::vector<reelay::data_set_t>({t, t, t, t, t, t, t, f});
 
     CHECK(result == expected);
   }

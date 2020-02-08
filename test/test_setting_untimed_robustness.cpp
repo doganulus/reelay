@@ -6,14 +6,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include "iostream"
-#include "vector"
 #include "limits"
+#include "vector"
 
 #include "catch.hpp"
 
 #include "reelay/monitors.hpp"
 
-    using input_t = std::map <std::string, std::string>;
+using input_t = std::map<std::string, std::string>;
 using output_t = int64_t;
 using function_t = std::function<output_t(const input_t &)>;
 
@@ -127,13 +127,14 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"x1", "5"}, {"x2", "9"}});
 
     function_t sum_x1_and_x2_gt_5 = [](const input_t &row) {
-        return (std::stof(row.at("x1")) + std::stof(row.at("x2"))) - 11.0;
+      return (std::stof(row.at("x1")) + std::stof(row.at("x2"))) - 11.0;
     };
 
     reelay::kwargs predicates = {{"sum_x1_and_x2_gt_5", sum_x1_and_x2_gt_5}};
 
-    auto net1 = reelay::robustness<output_t>::monitor<input_t>::from_temporal_logic(
-        "$sum_x1_and_x2_gt_5", predicates);
+    auto net1 =
+        reelay::robustness<output_t>::monitor<input_t>::from_temporal_logic(
+            "$sum_x1_and_x2_gt_5", predicates);
 
     auto result = std::vector<output_t>();
 
@@ -260,10 +261,12 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_t{{"p1", "5"}, {"p2", "0"}});
     sequence.push_back(input_t{{"p1", "6"}, {"p2", "0"}});
 
-    auto net1 = reelay::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("pre p1");
-    auto net2 = reelay::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("pre p2");
+    auto net1 =
+        reelay::robustness<output_t>::monitor<input_t>::from_temporal_logic(
+            "pre p1");
+    auto net2 =
+        reelay::robustness<output_t>::monitor<input_t>::from_temporal_logic(
+            "pre p2");
 
     auto result1 = std::vector<output_t>();
     auto result2 = std::vector<output_t>();

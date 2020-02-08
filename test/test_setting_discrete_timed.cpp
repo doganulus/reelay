@@ -13,7 +13,7 @@
 #include "reelay/common.hpp"
 #include "reelay/monitors.hpp"
 
-    using input_t = std::map <std::string, std::string>;
+using input_t = std::map<std::string, std::string>;
 using function_t = std::function<bool(const input_t &)>;
 
 TEST_CASE("Atoms") {
@@ -123,7 +123,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"x1", "3.5"}, {"x2", "1.9"}});
 
     function_t sum_x1_and_x2_gt_5 = [](const input_t &row) {
-        return (std::stof(row.at("x1")) + std::stof(row.at("x2"))) > 5.0;
+      return (std::stof(row.at("x1")) + std::stof(row.at("x2"))) > 5.0;
     };
 
     reelay::kwargs predicates = {{"sum_x1_and_x2_gt_5", sum_x1_and_x2_gt_5}};
@@ -145,104 +145,108 @@ TEST_CASE("Atoms") {
   }
 }
 
-TEST_CASE( "Boolean Operations" ) {
+TEST_CASE("Boolean Operations") {
 
-    SECTION( "Disjunction" ) {
+  SECTION("Disjunction") {
 
-        std::vector<input_t> sequence = std::vector<input_t>();
-       
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
+    std::vector<input_t> sequence = std::vector<input_t>();
 
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
 
-		auto net1 = reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic("p1 or p2");
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "p1 or p2");
 
-		auto result = std::vector<bool>();
+    auto result = std::vector<bool>();
 
-    	for(const auto& row : sequence){
-        	net1->update(row);
-        	result.push_back(net1->output());
-    	}
-
-    	auto expected = std::vector<bool>({0,1,1,1});
-
-        CHECK(result == expected);
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
     }
 
-    SECTION( "Conjuction" ) {
+    auto expected = std::vector<bool>({0, 1, 1, 1});
 
-        std::vector<input_t> sequence = std::vector<input_t>();
-       
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
+    CHECK(result == expected);
+  }
 
+  SECTION("Conjuction") {
 
-        auto net1 = reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic("p1 and p2");
+    std::vector<input_t> sequence = std::vector<input_t>();
 
-        auto result = std::vector<bool>();
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
 
-        for(const auto& row : sequence){
-            net1->update(row);
-            result.push_back(net1->output());
-        }
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "p1 and p2");
 
-        auto expected = std::vector<bool>({0,0,0,1});
+    auto result = std::vector<bool>();
 
-        CHECK(result == expected);
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
     }
 
-    SECTION( "Implication" ) {
+    auto expected = std::vector<bool>({0, 0, 0, 1});
 
-        std::vector<input_t> sequence = std::vector<input_t>();
-       
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
+    CHECK(result == expected);
+  }
 
+  SECTION("Implication") {
 
-        auto net1 = reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic("p1 -> p2");
+    std::vector<input_t> sequence = std::vector<input_t>();
 
-        auto result = std::vector<bool>();
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
 
-        for(const auto& row : sequence){
-            net1->update(row);
-            result.push_back(net1->output());
-        }
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "p1 -> p2");
 
-        auto expected = std::vector<bool>({1,0,1,1});
+    auto result = std::vector<bool>();
 
-        CHECK(result == expected);
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
     }
 
-    SECTION( "Negation" ) {
+    auto expected = std::vector<bool>({1, 0, 1, 1});
 
-        std::vector<input_t> sequence = std::vector<input_t>();
-       
-        sequence.push_back( input_t{{"p1", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}} );
+    CHECK(result == expected);
+  }
 
+  SECTION("Negation") {
 
-        auto net1 = reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic("not p1");
+    std::vector<input_t> sequence = std::vector<input_t>();
 
-        auto result = std::vector<bool>();
+    sequence.push_back(input_t{{"p1", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}});
 
-        for(const auto& row : sequence){
-            net1->update(row);
-            result.push_back(net1->output());
-        }
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "not p1");
 
-        auto expected = std::vector<bool>({1,0});
+    auto result = std::vector<bool>();
 
-        CHECK(result == expected);
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
     }
+
+    auto expected = std::vector<bool>({1, 0});
+
+    CHECK(result == expected);
+  }
 }
 
-TEST_CASE( "Untimed Temporal Operations" ) {
+TEST_CASE("Untimed Temporal Operations") {
 
   SECTION("Previous") {
 
@@ -308,357 +312,362 @@ TEST_CASE( "Untimed Temporal Operations" ) {
 
     CHECK(result1 == expected1);
     CHECK(result2 == expected2);
+  }
+
+  SECTION("Past Sometime") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "once p1");
+    auto net2 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "once p2");
+
+    auto result1 = std::vector<bool>();
+    auto result2 = std::vector<bool>();
+
+    for (const auto &s : sequence) {
+      net1->update(s);
+      net2->update(s);
+      result1.push_back(net1->output());
+      result2.push_back(net2->output());
     }
 
-    SECTION( "Past Sometime" ) {
+    auto expected1 = std::vector<bool>({0, 0, 1, 1});
+    auto expected2 = std::vector<bool>({0, 0, 0, 0});
 
-        std::vector<input_t> sequence = std::vector<input_t>();
-       
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
+    CHECK(result1 == expected1);
+    CHECK(result2 == expected2);
+  }
 
-        auto net1 = reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic("once p1");
-        auto net2 = reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic("once p2");
+  SECTION("Since") {
 
-        auto result1 = std::vector<bool>();
-        auto result2 = std::vector<bool>();
+    std::vector<input_t> sequence = std::vector<input_t>();
 
-        for(const auto& s : sequence){
-            net1->update(s);
-            net2->update(s);
-            result1.push_back(net1->output());
-            result2.push_back(net2->output());
-        }
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
 
-        auto expected1 = std::vector<bool>({0,0,1,1});
-        auto expected2 = std::vector<bool>({0,0,0,0});
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "p1 since p2");
 
-        CHECK(result1 == expected1);
-        CHECK(result2 == expected2);
+    auto result1 = std::vector<bool>();
+
+    for (const auto &s : sequence) {
+      net1->update(s);
+      result1.push_back(net1->output());
     }
 
-    SECTION( "Since" ) {
+    auto expected1 =
+        std::vector<bool>({0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1});
 
-        std::vector<input_t> sequence = std::vector<input_t>();
-       
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-
-        auto net1 = reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic("p1 since p2");
-
-        auto result1 = std::vector<bool>();
-
-        for(const auto& s : sequence){
-            net1->update(s);
-            result1.push_back(net1->output());
-        }
-
-        auto expected1 = std::vector<bool>({0,1,1,1,1,0,0,1,1,1,0,0,1,1});
-
-        CHECK(result1 == expected1);
-    }
+    CHECK(result1 == expected1);
+  }
 }
 
+TEST_CASE("Timed Temporal Operations") {
 
-TEST_CASE("Timed Temporal Operations")
-{
+  SECTION("Timed Once") {
 
-	SECTION("Timed Once")
-	{
-
-        std::vector<input_t> sequence = std::vector<input_t>();
-
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-
-		auto net1 = reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic("once[2:4] p2");
-
-		auto result1 = std::vector<bool>();
-
-		for (const auto &s : sequence)
-		{
-			net1->update(s);
-			result1.push_back(net1->output());
-		}
-
-		auto expected1 = std::vector<bool>({0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1});
-
-		CHECK(result1 == expected1);
-	}
-
-	SECTION("Timed Once Zero")
-	{
-
-        std::vector<input_t> sequence = std::vector<input_t>();
-
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-
-		auto net1 = reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic("once[:4] p2");
-
-		auto result1 = std::vector<bool>();
-
-		for (const auto &s : sequence)
-		{
-			net1->update(s);
-			result1.push_back(net1->output());
-		}
-
-		auto expected1 = std::vector<bool>({0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1});
-
-		CHECK(result1 == expected1);
-	}
-
-	SECTION("Timed Once Inf")
-	{
-
-        std::vector<input_t> sequence = std::vector<input_t>();
-
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-
-		auto net1 = reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic("once[2:] p2");
-
-		auto result1 = std::vector<bool>();
-
-		for (const auto &s : sequence)
-		{
-			net1->update(s);
-			result1.push_back(net1->output());
-		}
-
-		auto expected1 = std::vector<bool>({0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1});
-
-		CHECK(result1 == expected1);
-	}
-
-	SECTION("Timed Always")
-	{
-        std::vector<input_t> sequence = std::vector<input_t>();
-
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-
-		auto net1 = reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic("historically[2:4] p1");
-
-		auto result1 = std::vector<bool>();
-
-		for (const auto &s : sequence)
-		{
-			net1->update(s);
-			result1.push_back(net1->output());
-		}
-
-		auto expected1 = std::vector<bool>({1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1});
-
-		CHECK(result1 == expected1);
-	}
-
-	SECTION("Timed Always Zero")
-	{
-        std::vector<input_t> sequence = std::vector<input_t>();
-
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-
-		auto net1 = reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic("historically[:4] p1");
-
-		auto result1 = std::vector<bool>();
-
-		for (const auto &s : sequence)
-		{
-			net1->update(s);
-			result1.push_back(net1->output());
-		}
-
-		auto expected1 = std::vector<bool>({0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0});
-
-		CHECK(result1 == expected1);
-	}
-
-	SECTION("Timed Always Inf")
-	{
-        std::vector<input_t> sequence = std::vector<input_t>();
-
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-
-		auto net1 = reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic("historically[2:] p1");
-
-		auto result1 = std::vector<bool>();
-
-		for (const auto &s : sequence)
-		{
-			net1->update(s);
-			result1.push_back(net1->output());
-		}
-
-		auto expected1 = std::vector<bool>({1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0});
-
-		CHECK(result1 == expected1);
-	}
-
-	SECTION("Timed Since")
-	{
-
-        std::vector<input_t> sequence = std::vector<input_t>();
-
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-
-		auto net1 = reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic("p1 since[2:4] p2");
-
-		auto result1 = std::vector<bool>();
-
-		for (const auto &s : sequence)
-		{
-			net1->update(s);
-			result1.push_back(net1->output());
-		}
-
-		auto expected1 = std::vector<bool>({0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0});
-
-		CHECK(result1 == expected1);
-	}
-
-	SECTION("Timed Since Zero")
-	{
-
-        std::vector<input_t> sequence = std::vector<input_t>();
-
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-
-		auto net1 = reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic("p1 since[:4] p2");
-
-		auto result1 = std::vector<bool>();
-
-		for (const auto &s : sequence)
-		{
-			net1->update(s);
-			result1.push_back(net1->output());
-		}
-
-		auto expected1 = std::vector<bool>({0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0});
-
-		CHECK(result1 == expected1);
-	}
-
-	SECTION("Timed Since Inf")
-	{
-
-        std::vector<input_t> sequence = std::vector<input_t>();
-
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
-        sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
-
-		auto net1 = reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic("p1 since[2:] p2");
-
-		auto result1 = std::vector<bool>();
-
-		for (const auto &s : sequence)
-		{
-			net1->update(s);
-			result1.push_back(net1->output());
-		}
-
-		auto expected1 = std::vector<bool>({0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0});
-
-		CHECK(result1 == expected1);
-	}
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "once[2:4] p2");
+
+    auto result1 = std::vector<bool>();
+
+    for (const auto &s : sequence) {
+      net1->update(s);
+      result1.push_back(net1->output());
+    }
+
+    auto expected1 = std::vector<bool>({0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1});
+
+    CHECK(result1 == expected1);
+  }
+
+  SECTION("Timed Once Zero") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "once[:4] p2");
+
+    auto result1 = std::vector<bool>();
+
+    for (const auto &s : sequence) {
+      net1->update(s);
+      result1.push_back(net1->output());
+    }
+
+    auto expected1 = std::vector<bool>({0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1});
+
+    CHECK(result1 == expected1);
+  }
+
+  SECTION("Timed Once Inf") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "once[2:] p2");
+
+    auto result1 = std::vector<bool>();
+
+    for (const auto &s : sequence) {
+      net1->update(s);
+      result1.push_back(net1->output());
+    }
+
+    auto expected1 = std::vector<bool>({0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1});
+
+    CHECK(result1 == expected1);
+  }
+
+  SECTION("Timed Always") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "historically[2:4] p1");
+
+    auto result1 = std::vector<bool>();
+
+    for (const auto &s : sequence) {
+      net1->update(s);
+      result1.push_back(net1->output());
+    }
+
+    auto expected1 = std::vector<bool>({1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1});
+
+    CHECK(result1 == expected1);
+  }
+
+  SECTION("Timed Always Zero") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "historically[:4] p1");
+
+    auto result1 = std::vector<bool>();
+
+    for (const auto &s : sequence) {
+      net1->update(s);
+      result1.push_back(net1->output());
+    }
+
+    auto expected1 = std::vector<bool>({0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0});
+
+    CHECK(result1 == expected1);
+  }
+
+  SECTION("Timed Always Inf") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "historically[2:] p1");
+
+    auto result1 = std::vector<bool>();
+
+    for (const auto &s : sequence) {
+      net1->update(s);
+      result1.push_back(net1->output());
+    }
+
+    auto expected1 = std::vector<bool>({1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0});
+
+    CHECK(result1 == expected1);
+  }
+
+  SECTION("Timed Since") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "p1 since[2:4] p2");
+
+    auto result1 = std::vector<bool>();
+
+    for (const auto &s : sequence) {
+      net1->update(s);
+      result1.push_back(net1->output());
+    }
+
+    auto expected1 = std::vector<bool>({0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0});
+
+    CHECK(result1 == expected1);
+  }
+
+  SECTION("Timed Since Zero") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "p1 since[:4] p2");
+
+    auto result1 = std::vector<bool>();
+
+    for (const auto &s : sequence) {
+      net1->update(s);
+      result1.push_back(net1->output());
+    }
+
+    auto expected1 = std::vector<bool>({0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0});
+
+    CHECK(result1 == expected1);
+  }
+
+  SECTION("Timed Since Inf") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "p1 since[2:] p2");
+
+    auto result1 = std::vector<bool>();
+
+    for (const auto &s : sequence) {
+      net1->update(s);
+      result1.push_back(net1->output());
+    }
+
+    auto expected1 = std::vector<bool>({0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0});
+
+    CHECK(result1 == expected1);
+  }
 }

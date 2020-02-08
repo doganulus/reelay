@@ -14,7 +14,6 @@
 #include "reelay/common.hpp"
 #include "reelay/monitors.hpp"
 
-
 using time_t = int64_t;
 using input_t = std::map<std::string, std::string>;
 using output_t = int64_t;
@@ -403,7 +402,8 @@ TEST_CASE("Timed Temporal Operations") {
       result1.push_back(net1->output());
     }
 
-    auto expected1 = std::vector<output_t>({bot, bot, 3, 4, 5, 5, 5, 2, 2, 14, 14});
+    auto expected1 =
+        std::vector<output_t>({bot, bot, 3, 4, 5, 5, 5, 2, 2, 14, 14});
 
     CHECK(result1 == expected1);
   }
@@ -434,7 +434,8 @@ TEST_CASE("Timed Temporal Operations") {
       result1.push_back(net1->output());
     }
 
-    auto expected1 = std::vector<output_t>({3, 4, 5, 5, 5, 5, 2, 14, 14, 14, 14});
+    auto expected1 =
+        std::vector<output_t>({3, 4, 5, 5, 5, 5, 2, 14, 14, 14, 14});
 
     CHECK(result1 == expected1);
   }
@@ -465,7 +466,8 @@ TEST_CASE("Timed Temporal Operations") {
       result1.push_back(net1->output());
     }
 
-    auto expected1 = std::vector<output_t>({bot, bot, 3, 4, 5, 5, 5, 5, 5, 14, 14});
+    auto expected1 =
+        std::vector<output_t>({bot, bot, 3, 4, 5, 5, 5, 5, 5, 14, 14});
 
     CHECK(result1 == expected1);
   }
@@ -495,7 +497,8 @@ TEST_CASE("Timed Temporal Operations") {
       result1.push_back(net1->output());
     }
 
-    auto expected1 = std::vector<output_t>({top, top, 3, 3, 3, 1, 1, -1, -2, -2, -2});
+    auto expected1 =
+        std::vector<output_t>({top, top, 3, 3, 3, 1, 1, -1, -2, -2, -2});
 
     CHECK(result1 == expected1);
   }
@@ -525,7 +528,8 @@ TEST_CASE("Timed Temporal Operations") {
       result1.push_back(net1->output());
     }
 
-    auto expected1 = std::vector<output_t>({3, 3, 3, 1, 1, -1, -2, -2, -2, -2, 2});
+    auto expected1 =
+        std::vector<output_t>({3, 3, 3, 1, 1, -1, -2, -2, -2, -2, 2});
 
     CHECK(result1 == expected1);
   }
@@ -555,7 +559,8 @@ TEST_CASE("Timed Temporal Operations") {
       result1.push_back(net1->output());
     }
 
-    auto expected1 = std::vector<output_t>({top, top, 3, 3, 3, 1, 1, -1, -2, -2, -2});
+    auto expected1 =
+        std::vector<output_t>({top, top, 3, 3, 3, 1, 1, -1, -2, -2, -2});
 
     CHECK(result1 == expected1);
   }
@@ -591,8 +596,9 @@ TEST_CASE("Timed Temporal Operations") {
       result1.push_back(net1->output());
     }
 
-    auto expected1 = std::vector<output_t>(
-        {bot, bot, -120, 1, -3, -3, -100, -100, -100, -1, -4, -4, -100, -100, 1, 1});
+    auto expected1 =
+        std::vector<output_t>({bot, bot, -120, 1, -3, -3, -100, -100, -100, -1,
+                               -4, -4, -100, -100, 1, 1});
 
     CHECK(result1 == expected1);
   }
@@ -677,7 +683,6 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"p1", "15"}, {"p2", "3"}});
     sequence.push_back(input_t{{"p1", "-3"}, {"p2", "22"}});
 
-
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("p1 since[2:] p2");
 
@@ -688,8 +693,7 @@ TEST_CASE("Timed Temporal Operations") {
       result1.push_back(net1->output());
     }
 
-    auto expected1 =
-        std::vector<output_t>({bot, bot, -6, -5, -5});
+    auto expected1 = std::vector<output_t>({bot, bot, -6, -5, -5});
 
     CHECK(result1 == expected1);
   }

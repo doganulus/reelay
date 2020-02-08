@@ -24,7 +24,7 @@ using robustness_map = reelay::robustness_interval_map<dense_time_t, value_t>;
 value_t top = reelay::infinity<value_t>::value();
 value_t bot = -reelay::infinity<value_t>::value();
 
-TEST_CASE( "Atoms" ) {
+TEST_CASE("Atoms") {
 
   SECTION("Proposition") {
 
@@ -157,109 +157,109 @@ TEST_CASE( "Atoms" ) {
   }
 }
 
-TEST_CASE( "Boolean Operations" ) {
+TEST_CASE("Boolean Operations") {
 
-    SECTION( "Negation" ) {
+  SECTION("Negation") {
 
-        std::vector<input_t> sequence = std::vector<input_t>();
-       
-        sequence.push_back( input_t{{"time", "10"}, {"x", "11"}} );
-        sequence.push_back( input_t{{"time", "20"}, {"x", "15"}} );
+    std::vector<input_t> sequence = std::vector<input_t>();
 
-        auto net1 = reelay::dense_timed<dense_time_t>::robustness<
-            value_t>::monitor<input_t>::from_temporal_logic("not(x >= 12)");
+    sequence.push_back(input_t{{"time", "10"}, {"x", "11"}});
+    sequence.push_back(input_t{{"time", "20"}, {"x", "15"}});
 
-        auto result1 = robustness_map();
+    auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
+        input_t>::from_temporal_logic("not(x >= 12)");
 
-        for (const auto &s : sequence) {
-          net1->update(s);
-          result1 = result1 | net1->output();
-        }
+    auto result1 = robustness_map();
 
-        auto expected1 = robustness_map();
-        expected1.add(std::make_pair(interval::left_open(0, 10), 1));
-        expected1.add(std::make_pair(interval::left_open(10, 20), -3));
-
-        CHECK(result1 == expected1);
+    for (const auto &s : sequence) {
+      net1->update(s);
+      result1 = result1 | net1->output();
     }
 
-    SECTION("Disjunction") {
+    auto expected1 = robustness_map();
+    expected1.add(std::make_pair(interval::left_open(0, 10), 1));
+    expected1.add(std::make_pair(interval::left_open(10, 20), -3));
 
-      std::vector<input_t> sequence = std::vector<input_t>();
+    CHECK(result1 == expected1);
+  }
 
-      sequence.push_back(input_t{{"time", "10"}, {"x", "11"}, {"y", "10"}});
-      sequence.push_back(input_t{{"time", "20"}, {"x", "15"}, {"y", "12"}});
-      sequence.push_back(input_t{{"time", "42"}, {"x", "13"}, {"y", "17"}});
+  SECTION("Disjunction") {
 
-      auto net1 = reelay::dense_timed<dense_time_t>::robustness<
-          value_t>::monitor<input_t>::from_temporal_logic("x or y");
+    std::vector<input_t> sequence = std::vector<input_t>();
 
-      auto result1 = robustness_map();
+    sequence.push_back(input_t{{"time", "10"}, {"x", "11"}, {"y", "10"}});
+    sequence.push_back(input_t{{"time", "20"}, {"x", "15"}, {"y", "12"}});
+    sequence.push_back(input_t{{"time", "42"}, {"x", "13"}, {"y", "17"}});
 
-      for (const auto &s : sequence) {
-        net1->update(s);
-        result1 = result1 | net1->output();
-      }
+    auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
+        input_t>::from_temporal_logic("x or y");
 
-      auto expected1 = robustness_map();
-      expected1.add(std::make_pair(interval::left_open(0, 10), 11));
-      expected1.add(std::make_pair(interval::left_open(10, 20), 15));
-      expected1.add(std::make_pair(interval::left_open(20, 42), 17));
+    auto result1 = robustness_map();
 
-      CHECK(result1 == expected1);
+    for (const auto &s : sequence) {
+      net1->update(s);
+      result1 = result1 | net1->output();
     }
 
-    SECTION("Conjunction") {
+    auto expected1 = robustness_map();
+    expected1.add(std::make_pair(interval::left_open(0, 10), 11));
+    expected1.add(std::make_pair(interval::left_open(10, 20), 15));
+    expected1.add(std::make_pair(interval::left_open(20, 42), 17));
 
-      std::vector<input_t> sequence = std::vector<input_t>();
+    CHECK(result1 == expected1);
+  }
 
-      sequence.push_back(input_t{{"time", "10"}, {"x", "11"}, {"y", "10"}});
-      sequence.push_back(input_t{{"time", "20"}, {"x", "15"}, {"y", "12"}});
-      sequence.push_back(input_t{{"time", "42"}, {"x", "13"}, {"y", "17"}});
+  SECTION("Conjunction") {
 
-      auto net1 = reelay::dense_timed<dense_time_t>::robustness<
-          value_t>::monitor<input_t>::from_temporal_logic("x and y");
+    std::vector<input_t> sequence = std::vector<input_t>();
 
-      auto result1 = robustness_map();
+    sequence.push_back(input_t{{"time", "10"}, {"x", "11"}, {"y", "10"}});
+    sequence.push_back(input_t{{"time", "20"}, {"x", "15"}, {"y", "12"}});
+    sequence.push_back(input_t{{"time", "42"}, {"x", "13"}, {"y", "17"}});
 
-      for (const auto &s : sequence) {
-        net1->update(s);
-        result1 = result1 | net1->output();
-      }
+    auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
+        input_t>::from_temporal_logic("x and y");
 
-      auto expected1 = robustness_map();
-      expected1.add(std::make_pair(interval::left_open(0, 10), 10));
-      expected1.add(std::make_pair(interval::left_open(10, 20), 12));
-      expected1.add(std::make_pair(interval::left_open(20, 42), 13));
+    auto result1 = robustness_map();
 
-      CHECK(result1 == expected1);
+    for (const auto &s : sequence) {
+      net1->update(s);
+      result1 = result1 | net1->output();
     }
 
-    SECTION("Implication") {
+    auto expected1 = robustness_map();
+    expected1.add(std::make_pair(interval::left_open(0, 10), 10));
+    expected1.add(std::make_pair(interval::left_open(10, 20), 12));
+    expected1.add(std::make_pair(interval::left_open(20, 42), 13));
 
-      std::vector<input_t> sequence = std::vector<input_t>();
+    CHECK(result1 == expected1);
+  }
 
-      sequence.push_back(input_t{{"time", "10"}, {"x", "-11"}, {"y", "10"}});
-      sequence.push_back(input_t{{"time", "20"}, {"x", "-15"}, {"y", "12"}});
-      sequence.push_back(input_t{{"time", "42"}, {"x", "-13"}, {"y", "17"}});
+  SECTION("Implication") {
 
-      auto net1 = reelay::dense_timed<dense_time_t>::robustness<
-          value_t>::monitor<input_t>::from_temporal_logic("x implies y");
+    std::vector<input_t> sequence = std::vector<input_t>();
 
-      auto result1 = robustness_map();
+    sequence.push_back(input_t{{"time", "10"}, {"x", "-11"}, {"y", "10"}});
+    sequence.push_back(input_t{{"time", "20"}, {"x", "-15"}, {"y", "12"}});
+    sequence.push_back(input_t{{"time", "42"}, {"x", "-13"}, {"y", "17"}});
 
-      for (const auto &s : sequence) {
-        net1->update(s);
-        result1 = result1 | net1->output();
-      }
+    auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
+        input_t>::from_temporal_logic("x implies y");
 
-      auto expected1 = robustness_map();
-      expected1.add(std::make_pair(interval::left_open(0, 10), 11));
-      expected1.add(std::make_pair(interval::left_open(10, 20), 15));
-      expected1.add(std::make_pair(interval::left_open(20, 42), 17));
+    auto result1 = robustness_map();
 
-      CHECK(result1 == expected1);
+    for (const auto &s : sequence) {
+      net1->update(s);
+      result1 = result1 | net1->output();
     }
+
+    auto expected1 = robustness_map();
+    expected1.add(std::make_pair(interval::left_open(0, 10), 11));
+    expected1.add(std::make_pair(interval::left_open(10, 20), 15));
+    expected1.add(std::make_pair(interval::left_open(20, 42), 17));
+
+    CHECK(result1 == expected1);
+  }
 }
 
 TEST_CASE("Untimed Temporal Operations") {
@@ -321,7 +321,7 @@ TEST_CASE("Untimed Temporal Operations") {
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{{"time", "1"}, {"x", "3"}, {"y", "0"}});
-    sequence.push_back(input_t{{"time", "2"}, {"x", "4"}, {"y", "1"}});//
+    sequence.push_back(input_t{{"time", "2"}, {"x", "4"}, {"y", "1"}}); //
     sequence.push_back(input_t{{"time", "3"}, {"x", "5"}, {"y", "0"}});
     sequence.push_back(input_t{{"time", "4"}, {"x", "1"}, {"y", "0"}});
     sequence.push_back(input_t{{"time", "5"}, {"x", "-3"}, {"y", "0"}});
@@ -452,7 +452,6 @@ TEST_CASE("Timed Temporal Operations") {
       net1->update(s);
       result1 = result1 | net1->output();
     }
-
 
     auto expected1 = robustness_map();
     expected1.add(std::make_pair(interval::left_open(0, 12), bot));
