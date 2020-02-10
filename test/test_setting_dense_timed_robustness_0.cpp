@@ -14,7 +14,7 @@
 #include "reelay/intervals.hpp"
 #include "reelay/monitors.hpp"
 
-using input_t = std::map<std::string, std::string>;
+using input_t = std::unordered_map<std::string, std::string>;
 using value_t = int64_t;
 using dense_time_t = int64_t;
 

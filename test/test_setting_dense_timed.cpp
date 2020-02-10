@@ -15,7 +15,7 @@
 #include "reelay/monitors.hpp"
 
 using dense_time_t = double;
-using input_t = std::map<std::string, std::string>;
+using input_t = std::unordered_map<std::string, std::string>;
 using interval = reelay::interval<dense_time_t>;
 using interval_set = reelay::interval_set<dense_time_t>;
 
@@ -887,7 +887,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", "444"}, {"p1", "1"}});
 
     auto net1 = reelay::dense_timed<dense_time_t>::monitor<
-        input_t>::from_temporal_logic("!p1 since p1");
+        input_t>::from_temporal_logic("!p1 since[10:20] p1");
 
     auto result1 = interval_set();
 

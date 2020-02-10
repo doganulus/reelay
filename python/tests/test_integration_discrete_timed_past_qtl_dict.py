@@ -8,7 +8,7 @@
 import reelay
 
 
-def test_integration_untimed_past_qtl_dict():
+def test_integration_discrete_timed_past_qtl_dict():
 
     my_monitor = reelay.past_qtl.monitor(
         pattern=r"""forall[file].(

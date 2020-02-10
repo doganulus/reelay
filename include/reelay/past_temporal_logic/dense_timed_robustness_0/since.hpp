@@ -53,6 +53,7 @@ struct since : public dense_timed_state<X, robustness_interval_map<T, V>, T> {
                        std::max(p2, std::min(last_pair.begin()->second, p1))));
 
     value = value | last_pair;
+    value = value & interval::closed(previous, infinity<time_t>::value());
   }
 
   void update(const input_t&,
