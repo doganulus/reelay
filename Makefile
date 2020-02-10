@@ -8,7 +8,6 @@ LIB_FLAGS=-lcudd
 INCLUDE_FLAGS=-I. -I./include
 
 NAME=reelay
-VERSION=2001
 
 ROOT_DIR=$(shell pwd)
 PROJECT_INCLUDE=include/reelay
@@ -93,7 +92,7 @@ test_csvparser:
 	multitime -n 10 bin/csvparser/csvparser_fast build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv
 	multitime -n 10 bin/csvparser/csvparser_modern build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv
 
-test: test_main test_untimed test_discrete_timed test_dense_timed test_untimed_robustness test_discrete_timed_robustness test_dense_timed_robustness_0 test_untimed_data test_discrete_timed_data coverage
+test: test_main test_untimed test_discrete_timed test_dense_timed test_untimed_robustness test_discrete_timed_robustness test_dense_timed_robustness_0 test_untimed_data test_discrete_timed_data test_dense_timed_data coverage
 
 test_main:
 	mkdir -p test/build
@@ -127,13 +126,13 @@ test_dense_timed:
 	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_setting_dense_timed.cpp -o test_setting_dense_timed -I$(ROOT_DIR)/include
 	cd test/build && ./test_setting_dense_timed -r compact
 
+test_dense_timed_data:
+	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_setting_dense_timed_data.cpp -o test_setting_dense_timed_data -I$(ROOT_DIR)/include -lcudd
+	cd test/build && ./test_setting_dense_timed_data -r compact
+
 test_dense_timed_robustness_0:
 	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_setting_dense_timed_robustness_0.cpp -o test_setting_dense_timed_robustness_0 -I$(ROOT_DIR)/include
 	cd test/build && ./test_setting_dense_timed_robustness_0 -r compact
-
-test_recipes:
-	$(CXX) $(CXXFLAGS) build/test/main.o test/test_recipes.cpp -o build/test/test_recipes $(INCLUDE_FLAGS) $(LIB_FLAGS)
-	./build/test/test_recipes -r compact
 
 test_mtl_performance_discrete: test/timescales/discrete/multitime/*.txt
 	for batchfile in $^ ; do \
@@ -149,8 +148,9 @@ python:
 	pip install .
 
 python-pypi-upload: 
-	python setup.py sdist
-	twine upload --repository-url https://test.pypi.org/legacy/ dist/reelay-$(VERSION).tar.gz
+	python setup.py sdist bdist_wheel
+	twine check dist/*
+	twine upload dist/*
 
 python-develop: 
 	sudo make uninstall && sudo make install
@@ -160,7 +160,7 @@ main:
 	$(CXX) $(CXXFLAGS) $(FILE) -o bin/main $(INCLUDE_FLAGS) $(LIB_FLAGS) && bin/main $(EXTRA)
 
 coverage:
-	cd test/build && gcov -p -s .. -o . test_setting_untimed.cpp test_setting_discrete_timed.cpp test_setting_dense_timed.cpp test_setting_untimed_robustness.cpp test_setting_discrete_timed_robustness.cpp test_setting_dense_timed_robustness.cpp test_setting_untimed_data.cpp test_setting_discrete_timed_data.cpp
+	cd test/build && gcov -p -s .. -o . test_setting_untimed.cpp test_setting_discrete_timed.cpp test_setting_dense_timed.cpp test_setting_untimed_robustness.cpp test_setting_discrete_timed_robustness.cpp test_setting_dense_timed_robustness.cpp test_setting_untimed_data.cpp test_setting_discrete_timed_data.cpp test_setting_dense_timed_data.cpp
 	cd test/build && lcov --capture --quiet --directory . --output-file lcov.info  
 	cd test/build && lcov --remove lcov.info "/usr/*" "$(ROOT_DIR)/third_party/*" "$(ROOT_DIR)/include/reelay/third_party/*" "$(ROOT_DIR)/test/*" --directory . --output-file lcov.info
 	cd test/build && genhtml --ignore-errors source lcov.info --legend --title "commit SHA1"
