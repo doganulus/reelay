@@ -14,8 +14,10 @@ class monitor(object):
                 time_model="discrete",
                 event_type="dict[str,str]"):
 
-        if time_model == "dense":
-            raise NotImplementedError("Dense time not implemented yet")
+        if time_model == "dense" and event_type == "dict[str,str]":
+            return reelay.recipes.dense_timed_past_qtl_dict_monitor(pattern)
+        elif time_model == "dense" and event_type == "list[str]":
+            return reelay.recipes.dense_timed_past_qtl_list_monitor(pattern)
         elif time_model == "discrete" and event_type == "dict[str,str]":
             return reelay.recipes.discrete_timed_past_qtl_dict_monitor(pattern)
         elif time_model == "discrete" and event_type == "list[str]":

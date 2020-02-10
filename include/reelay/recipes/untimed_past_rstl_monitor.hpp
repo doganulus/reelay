@@ -16,7 +16,7 @@ namespace reelay {
 struct untimed_past_rstl_monitor {
 
   using value_t = double;
-  using input_t = std::map<std::string, value_t>;
+  using input_t = std::unordered_map<std::string, value_t>;
   using factory = untimed_robustness_setting::factory<input_t, value_t>;
 
   using network_t = typename factory::network_t;
