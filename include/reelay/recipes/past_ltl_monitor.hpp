@@ -15,7 +15,7 @@ namespace reelay {
 
 struct past_ltl_monitor{
 
-  using input_t = std::map<std::string, bool>;
+  using input_t = std::unordered_map<std::string, bool>;
   using factory = untimed_setting::factory<input_t>;
 
   using network_t = typename factory::network_t;

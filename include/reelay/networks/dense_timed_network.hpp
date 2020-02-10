@@ -7,6 +7,7 @@
  */
 #pragma once
 
+#include "reelay/timestamp.hpp"
 #include "reelay/intervals.hpp"
 #include "reelay/lexical_cast.hpp"
 #include "reelay/networks/basic_structure.hpp"
@@ -47,16 +48,8 @@ struct dense_timed_network : dense_timed_state<X, Y, T> {
     this->prevargs = prevargs;
   }
 
-  void update(const std::unordered_map<std::string, std::string> &args) {
-    time_t now = boost::lexical_cast<time_t>(args.at("time"));
-    this->previous = this->current;
-    update(this->prevargs, args, this->previous, now);
-    this->current = now;
-    this->prevargs = args;
-  }
-
-  void update(const std::vector<std::string> &args) {
-    time_t now = boost::lexical_cast<time_t>(args.at(0));
+  void update(const input_t &args) {
+    time_t now = reelay::timestamp<input_t, time_t>::from(args);
     this->previous = this->current;
     update(this->prevargs, args, this->previous, now);
     this->current = now;
