@@ -127,11 +127,11 @@ struct discrete_timed {
   };
 };
 
-template <typename time_t, int order=0>
+template <typename time_t, int option=0>
 struct dense_timed {
   template <typename input_t>
   struct monitor {
-    using factory = dense_timed_setting::factory<input_t, time_t, order>;
+    using factory = dense_timed_setting::factory<input_t, time_t, option>;
 
     using network_t = typename factory::network_t;
     using network_ptr_t = typename factory::network_ptr_t;
@@ -148,7 +148,8 @@ struct dense_timed {
 
   struct unordered_data {
     template <typename input_t> struct monitor {
-      using factory = dense_timed_data_setting::factory<input_t, time_t>;
+      using factory =
+          dense_timed_data_setting::factory<input_t, time_t, option>;
 
       using network_t = typename factory::network_t;
       using network_ptr_t = typename factory::network_ptr_t;

@@ -10,5 +10,18 @@
 
 #include "string"
 
-#include "reelay/past_temporal_logic/dense_timed_data/atomic_listing_0.hpp"
-#include "reelay/past_temporal_logic/dense_timed_data/atomic_record_0.hpp"
+namespace reelay {
+namespace dense_timed_data_setting {
+
+template <typename X, typename T, int type>
+struct record : public dense_timed_state<X, data_interval_map<T>, T> {
+  explicit record(const kwargs &) {}
+};
+
+template <typename X, typename T, int type>
+struct listing : public dense_timed_state<X, data_interval_map<T>, T> {
+  explicit listing(const kwargs &) {}
+};
+
+} // namespace dense_timed_data_setting
+} // namespace reelay

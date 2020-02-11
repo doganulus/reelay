@@ -12,17 +12,13 @@
 
 #include "reelay/common.hpp"
 #include "reelay/networks/basic_structure.hpp"
+#include "reelay/past_temporal_logic/dense_timed_data/atoms.hpp"
 
 namespace reelay {
 namespace dense_timed_data_setting {
 
-template <typename X, typename T>
-struct listing : public dense_timed_state<X, data_interval_map<T>, T> {
-  explicit listing(const kwargs &) {}
-};
-
 template <typename T>
-struct listing<std::vector<std::string>, T>
+struct listing<std::vector<std::string>, T, 0>
     : public dense_timed_state<std::vector<std::string>, data_interval_map<T>,
                                T> {
 

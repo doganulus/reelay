@@ -15,7 +15,10 @@
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/networks/dense_timed_network.hpp"
 
-#include "reelay/past_temporal_logic/dense_timed_data/atoms.hpp"
+#include "reelay/past_temporal_logic/dense_timed_data/atomic_listing_0.hpp"
+#include "reelay/past_temporal_logic/dense_timed_data/atomic_record_0.hpp"
+#include "reelay/past_temporal_logic/dense_timed_data/atomic_listing_1.hpp"
+#include "reelay/past_temporal_logic/dense_timed_data/atomic_record_1.hpp"
 
 #include "reelay/past_temporal_logic/dense_timed_data/exists.hpp"
 #include "reelay/past_temporal_logic/dense_timed_data/forall.hpp"
@@ -40,7 +43,7 @@
 namespace reelay {
 namespace dense_timed_data_setting {
 
-template <typename X, typename T> struct factory {
+template <typename X, typename T, int option> struct factory {
   using time_t = T;
   using input_t = X;
   using value_t = data_set_t;
@@ -93,9 +96,9 @@ template <typename X, typename T> struct factory {
     if (name == "proposition") {
       // res = std::make_shared<proposition<input_t, time_t>>(kw);
     } else if (name == "listing") {
-      res = std::make_shared<listing<input_t, time_t>>(kw);
+      res = std::make_shared<listing<input_t, time_t, option>>(kw);
     } else if (name == "record") {
-      res = std::make_shared<record<input_t, time_t>>(kw);
+      res = std::make_shared<record<input_t, time_t, option>>(kw);
     } else if (name == "past_sometime") {
       res = std::make_shared<past_sometime<input_t, time_t>>(kw);
     } else if (name == "past_always") {
