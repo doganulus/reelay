@@ -33,13 +33,13 @@ Reelay is an ongoing project and below is a number of features and plans to expa
 |✅| v.1.5   | STL monitoring application (rystl)                                 |
 |✅| v.1.6   | Python bindings and API                                            |
 |✅| v.1.7   | First-order quantification for untimed past temporal logic         |
-|🤞| v.1.x   | First-order quantification for past metric temporal logic          |
+|✅| v.1.x   | First-order quantification for past metric temporal logic          |
 |🤞| v.1.x   | FOL monitoring application (ryjavu)                                |
 |🤞| v.1.x   | Untimed regular expressions                                        |
 |🤞| v.1.x   | Discrete and dense timed regular expressions                       |
 |🤞| v.1.x   | TRE monitoring application                                         |
 
-## Credits
+<!-- ## Credits
 
 This project has benefited from several other great software at various stages now and in the past.
 
@@ -48,4 +48,4 @@ This project has benefited from several other great software at various stages n
 3. Yuji Hirose's [cpp-peglib](https://github.com/yhirose/cpp-peglib) for specification parsing from C++.
 4. Vincent La's [csv-parser](https://github.com/vincentlaucsb/csv-parser), Andrew DeOrio's [csvstream](https://github.com/awdeorio/csvstream), Ben Strasser's [fast-cpp-csv-parser](https://github.com/ben-strasser/fast-cpp-csv-parser) for CSV parsing from C++.
 5. Pranav Srinivas Kumar's [argparse](https://github.com/p-ranav/argparse) for argument parsing from C++.
-6. [mkdocs](https://github.com/mkdocs/mkdocs) and [mkdocs-material](https://github.com/squidfunk/mkdocs-material) for documentation website generation.
+6. [mkdocs](https://github.com/mkdocs/mkdocs) and [mkdocs-material](https://github.com/squidfunk/mkdocs-material) for documentation website generation. -->

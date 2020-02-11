@@ -57,10 +57,7 @@ struct past_sometime_bounded : public discrete_timed_state<X, V, T> {
     value.add(std::make_pair(
         reelay::interval<time_t>::closed(now + lbound, now + ubound),
         first->output(now)));
-    value = value -
-            interval_map(std::make_pair(
-                reelay::interval<time_t>::right_open(0, now),
-                -reelay::infinity<output_t>::value()));
+    value = value - interval::right_open(-infinity<time_t>::value(), now);
   }
 
   output_t output(time_t now) { return value(now); }

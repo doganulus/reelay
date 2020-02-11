@@ -37,24 +37,17 @@ struct since_bounded_half : public discrete_timed_state<X, data_set_t, T> {
 
   node_ptr_t first;
   node_ptr_t second;
-
-  output_t value0;
-
-  interval_map value1 = interval_map();
-  interval_map value2 = interval_map();
-
+  
   time_t lbound;
+
+  interval_map value = interval_map();
 
   since_bounded_half(const data_mgr_t &mgr, const std::vector<node_ptr_t> &args,
                      time_t l = 0)
-      : manager(mgr), value0(mgr->zero()), first(args[0]), second(args[1]),
-        lbound(l) {
-    value1.add(std::make_pair(
-        interval::closed(-reelay::infinity<time_t>::value(), lbound),
-        mgr->zero()));
-    value2.add(std::make_pair(
-        interval::closed(-reelay::infinity<time_t>::value(), lbound),
-        mgr->zero()));
+      : manager(mgr), first(args[0]), second(args[1]), lbound(l) {
+    value.add(std::make_pair(
+        interval::left_open(-reelay::infinity<time_t>::value(), lbound),
+        manager->zero()));
   }
 
   explicit since_bounded_half(const kwargs &kw)
@@ -65,25 +58,20 @@ struct since_bounded_half : public discrete_timed_state<X, data_set_t, T> {
 
   void update(const input_t &, time_t now) {
 
-    value0 = second->output(now) + (first->output(now) * value0);
+    // Eliminate the first argument from the future if it does not now
+    value = value - interval_map(std::make_pair(
+                        interval::closed(now, infinity<time_t>::value()),
+                        first->output(now)));
 
-    value1.add(std::make_pair(
-        reelay::interval<time_t>::closed(now, now + lbound), ~value0));
+    // Add satisfying bindings to the future
+    value.add(std::make_pair(
+        interval::closed(now + lbound, infinity<time_t>::value()),
+        second->output(now)));
 
-    value2.add(
-        std::make_pair(reelay::interval<time_t>::closed(
-                           now + lbound, reelay::infinity<time_t>::value()),
-                       second->output(now)));
-
-    // Clean-up the past
-    value1 -= interval_map(std::make_pair(
-        reelay::interval<time_t>::right_open(0, now), manager->zero()));
-
-    value2 -= interval_map(std::make_pair(
-        reelay::interval<time_t>::right_open(0, now), manager->zero()));
+    value = value - interval::right_open(-infinity<time_t>::value(), now);
   }
 
-  output_t output(time_t now) { return ~value1(now) * value2(now); }
+  output_t output(time_t now) { return value(now); }
 };
 
 } // namespace discrete_timed_data_setting
