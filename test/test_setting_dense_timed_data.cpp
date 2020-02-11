@@ -1239,47 +1239,6 @@ TEST_CASE("Timed Temporal Operations") {
   }
 
   SECTION("Timed Since") {
-    using input_t = std::vector<std::string>;
-
-    std::vector<input_t> sequence = std::vector<input_t>();
-
-    sequence.push_back(input_t{"1", "open", "a"});
-    sequence.push_back(input_t{"3", "is_open", "a"});
-    sequence.push_back(input_t{"6", "is_open", "a"});
-    sequence.push_back(input_t{"7", "is_open", "a"});
-    sequence.push_back(input_t{"9", "is_open", "a"});
-    sequence.push_back(input_t{"13", "is_open", "a"});
-    sequence.push_back(input_t{"14", "is_open", "a"});
-    sequence.push_back(input_t{"17", "is_open", "b"});
-
-    auto manager = std::make_shared<reelay::binding_manager>();
-    reelay::kwargs extra_args = {{"manager", manager}};
-
-    auto net1 = reelay::dense_timed<time_t, 1>::unordered_data::monitor<
-        input_t>::from_temporal_logic("![close, a] since[:10] [open, a]",
-                                      extra_args);
-
-    auto result = interval_map();
-
-    for (const auto &row : sequence) {
-      net1->update(row);
-      for (const auto &intv : net1->output()) {
-        result.add(intv);
-      }
-    }
-
-    auto t = manager->one();
-    auto f = manager->zero();
-
-    auto expected = interval_map();
-    expected.add(std::make_pair(interval::left_open(0, 3), f));
-    expected.add(std::make_pair(interval::left_open(3, 11), t));
-    expected.add(std::make_pair(interval::left_open(11, 17), f));
-
-    CHECK(result == expected);
-  }
-
-  SECTION("Timed Since") {
     using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();

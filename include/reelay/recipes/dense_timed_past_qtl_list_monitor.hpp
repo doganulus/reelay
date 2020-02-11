@@ -19,7 +19,7 @@ struct dense_timed_past_qtl_list_monitor {
   using input_t = std::vector<std::string>;
   using output_t = std::vector<std::pair<time_t, bool>>;
 
-  using factory = dense_timed_data_setting::factory<input_t, time_t>;
+  using factory = dense_timed_data_setting::factory<input_t, time_t, 0>;
 
   using network_t = typename factory::network_t;
   using network_ptr_t = typename factory::network_ptr_t;
