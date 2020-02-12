@@ -658,9 +658,6 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", "315"}, {"p1", "1"}, {"p2", "0"}});
     sequence.push_back(input_t{{"time", "444"}, {"p1", "1"}, {"p2", "0"}});
 
-    // auto net1 =
-    // reelay::dense_timed<dense_time_t>::monitor<input_t>::from_temporal_logic("p1
-    // since [12:24] p2");
     auto net1 = reelay::dense_timed<dense_time_t>::monitor<
         input_t>::from_temporal_logic("once[12:24] p2");
 

@@ -57,6 +57,7 @@ struct past_always_bounded : public dense_timed_state<X, interval_set<T>, T> {
       value.add(
           interval::left_open(intv.lower() + lbound, intv.upper() + ubound));
     }
+    value = value - interval::closed(-infinity<time_t>::value(), previous);
   }
 
   output_t output(time_t previous, time_t now) override {

@@ -55,6 +55,7 @@ struct past_always_bounded_half
       value.add(interval::left_open(intv.lower() + lbound,
                                     std::numeric_limits<time_t>::max()));
     }
+    value = value - interval::closed(-infinity<time_t>::value(), previous);
   }
 
   output_t output(time_t previous, time_t now) override {

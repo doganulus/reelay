@@ -51,24 +51,13 @@ struct since_bounded_half : public dense_timed_state<X, interval_set<T>, T> {
     if (p1 and p2) {
       value.add(
           interval::left_open(previous + lbound, infinity<time_t>::value()));
-
-      // Comment out the line below for lazy trimming
-      // state = state &
-      // interval_set<T>(interval<T>::left_open(current.begin()->lower(),
-      // std::numeric_limits<T>::max()));
-
     } else if (!p1 and p2) {
-      value = value & interval::left_open(0, previous);
-      value.add(interval::left_open(now + lbound, infinity<time_t>::value()));
-
+      value = interval_set(
+          interval::left_open(now + lbound, infinity<time_t>::value()));
     } else if (p1 and !p2) {
-      // Comment out the line below for lazy trimming
-      // state = state &
-      // interval_set<T>(interval<T>::left_open(current.begin()->lower(),
-      // std::numeric_limits<T>::max()));
-
+      // Nothing needed to do
     } else {
-      value = value & interval::left_open(0, previous);
+      value = interval_set();
     }
   }
 
@@ -110,10 +99,6 @@ struct since_bounded_half : public dense_timed_state<X, interval_set<T>, T> {
     auto it1 = bounds1.begin();
     auto it2 = bounds2.begin();
 
-    value =
-        value &
-        interval_set(interval::left_open(previous, infinity<time_t>::value()));
-
     while (it1 != bounds1.end() and it2 != bounds2.end()) {
       if (*it1 < *it2) {
         // std::cout << time << ' '<< *it1 << '|' << p1 << p2 << std::endl;
@@ -139,6 +124,7 @@ struct since_bounded_half : public dense_timed_state<X, interval_set<T>, T> {
         it2++;
       }
     }
+    value = value - interval::closed(-infinity<time_t>::value(), previous);
   }
 
   output_t output(time_t previous, time_t now) {

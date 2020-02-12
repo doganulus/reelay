@@ -52,15 +52,11 @@ struct dense_timed_network : dense_timed_state<X, Y, T> {
     time_t now = reelay::timestamp<input_t, time_t>::from(args);
     this->previous = this->current;
     update(this->prevargs, args, this->previous, now);
-    this->current = now;
-    this->prevargs = args;
   }
 
   void update(const input_t &args, time_t now) {
     this->previous = this->current;
     update(this->prevargs, args, this->previous, now);
-    this->current = now;
-    this->prevargs = args;
   }
 
   void update(const input_t &pargs, const input_t &args, time_t pre,
@@ -68,6 +64,8 @@ struct dense_timed_network : dense_timed_state<X, Y, T> {
     for (const auto &state : this->states) {
       state->update(pargs, args, pre, now);
     }
+    this->current = now;
+    this->prevargs = args;
   }
 
   output_t output() {

@@ -43,23 +43,16 @@ struct since : public dense_timed_state<X, interval_set<T>, T> {
     if (previous == now) {
       return;
     }
-
     if (p1 and p2) {
       value.add(
           interval::left_open(previous, infinity<time_t>::value()));
-      // Comment out the line below for lazy trimming
-      // value = value & interval_set(interval::left_open(previous,
-      // std::numeric_limits<time_t>::max()));
     } else if (!p1 and p2) {
-      value = value & interval::left_open(0, previous);
-      // Change to previous for reflexive semantics
-      value.add(interval::left_open(now, infinity<time_t>::value()));
+      value = interval_set(
+          interval::left_open(now, infinity<time_t>::value()));
     } else if (p1 and !p2) {
-      // Comment out the line below for lazy trimming
-      // state = state & interval_set(interval::left_open(previous,
-      // std::numeric_limits<time_t>::max()));
+      // Nothing needed to do
     } else {
-      value = value & interval::left_open(0, previous);
+      value = interval_set();
     }
   }
 
@@ -101,26 +94,20 @@ struct since : public dense_timed_state<X, interval_set<T>, T> {
     auto it1 = bounds1.begin();
     auto it2 = bounds2.begin();
 
-    value = value & interval_set(interval::left_open(
-                        previous, std::numeric_limits<time_t>::max()));
-
     while (it1 != bounds1.end() and it2 != bounds2.end()) {
       if (*it1 < *it2) {
-        // std::cout << time << ' '<< *it1 << '|' << p1 << p2 << std::endl;
         update(p1, p2, time, *it1);
         p1 = not p1;
         time = *it1;
         it1++;
 
       } else if (*it1 > *it2) {
-        // std::cout << time << ' '<< *it2 << '|' << p1 << p2 << std::endl;
         update(p1, p2, time, *it2);
         p2 = not p2;
         time = *it2;
         it2++;
 
       } else {  // *it1 == *it2
-        // std::cout << time << ' '<< *it1 << '|' << p1 << p2 << std::endl;
         update(p1, p2, time, *it1);
         p1 = not p1;
         p2 = not p2;
@@ -129,6 +116,7 @@ struct since : public dense_timed_state<X, interval_set<T>, T> {
         it2++;
       }
     }
+    value = value - interval::closed(-infinity<time_t>::value(), previous);
   }
 
   output_t output(time_t previous, time_t now) override {
