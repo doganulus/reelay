@@ -16,17 +16,17 @@
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/networks/untimed_network.hpp"
 
-#include "reelay/past_temporal_logic/untimed_robustness/atoms.hpp"
+#include "reelay/settings/untimed_robustness/atoms.hpp"
 
-#include "reelay/past_temporal_logic/untimed_robustness/conjunction.hpp"
-#include "reelay/past_temporal_logic/untimed_robustness/disjunction.hpp"
-#include "reelay/past_temporal_logic/untimed_robustness/implication.hpp"
-#include "reelay/past_temporal_logic/untimed_robustness/negation.hpp"
+#include "reelay/settings/untimed_robustness/conjunction.hpp"
+#include "reelay/settings/untimed_robustness/disjunction.hpp"
+#include "reelay/settings/untimed_robustness/implication.hpp"
+#include "reelay/settings/untimed_robustness/negation.hpp"
 
-#include "reelay/past_temporal_logic/untimed_robustness/past_always.hpp"
-#include "reelay/past_temporal_logic/untimed_robustness/past_sometime.hpp"
-#include "reelay/past_temporal_logic/untimed_robustness/previous.hpp"
-#include "reelay/past_temporal_logic/untimed_robustness/since.hpp"
+#include "reelay/settings/untimed_robustness/past_always.hpp"
+#include "reelay/settings/untimed_robustness/past_sometime.hpp"
+#include "reelay/settings/untimed_robustness/previous.hpp"
+#include "reelay/settings/untimed_robustness/since.hpp"
 
 namespace reelay {
 namespace untimed_robustness_setting {

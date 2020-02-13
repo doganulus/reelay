@@ -8,7 +8,7 @@
 #pragma once
 
 #include "string"
-#include "reelay/parser/ptl_parser.hpp"
+#include "reelay/parser/ptl.hpp"
 #include "reelay/settings.hpp"
 
 namespace reelay {

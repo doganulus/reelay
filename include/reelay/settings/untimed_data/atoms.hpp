@@ -8,4 +8,8 @@
 
 #pragma once
 
-#include "boost/lexical_cast.hpp"
+#include "string"
+
+#include "reelay/settings/untimed_data/atomic_listing.hpp"
+#include "reelay/settings/untimed_data/atomic_proposition.hpp"
+#include "reelay/settings/untimed_data/atomic_record.hpp"

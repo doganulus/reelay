@@ -16,25 +16,25 @@
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/networks/discrete_timed_network.hpp"
 
-#include "reelay/past_temporal_logic/discrete_timed/atoms.hpp"
+#include "reelay/settings/discrete_timed/atoms.hpp"
 
-#include "reelay/past_temporal_logic/discrete_timed/conjunction.hpp"
-#include "reelay/past_temporal_logic/discrete_timed/disjunction.hpp"
-#include "reelay/past_temporal_logic/discrete_timed/implication.hpp"
-#include "reelay/past_temporal_logic/discrete_timed/negation.hpp"
+#include "reelay/settings/discrete_timed/conjunction.hpp"
+#include "reelay/settings/discrete_timed/disjunction.hpp"
+#include "reelay/settings/discrete_timed/implication.hpp"
+#include "reelay/settings/discrete_timed/negation.hpp"
 
-#include "reelay/past_temporal_logic/discrete_timed/past_always.hpp"
-#include "reelay/past_temporal_logic/discrete_timed/past_sometime.hpp"
-#include "reelay/past_temporal_logic/discrete_timed/previous.hpp"
-#include "reelay/past_temporal_logic/discrete_timed/since.hpp"
+#include "reelay/settings/discrete_timed/past_always.hpp"
+#include "reelay/settings/discrete_timed/past_sometime.hpp"
+#include "reelay/settings/discrete_timed/previous.hpp"
+#include "reelay/settings/discrete_timed/since.hpp"
 
-#include "reelay/past_temporal_logic/discrete_timed/past_always_bounded.hpp"
-#include "reelay/past_temporal_logic/discrete_timed/past_sometime_bounded.hpp"
-#include "reelay/past_temporal_logic/discrete_timed/since_bounded.hpp"
+#include "reelay/settings/discrete_timed/past_always_bounded.hpp"
+#include "reelay/settings/discrete_timed/past_sometime_bounded.hpp"
+#include "reelay/settings/discrete_timed/since_bounded.hpp"
 
-#include "reelay/past_temporal_logic/discrete_timed/past_always_bounded_half.hpp"
-#include "reelay/past_temporal_logic/discrete_timed/past_sometime_bounded_half.hpp"
-#include "reelay/past_temporal_logic/discrete_timed/since_bounded_half.hpp"
+#include "reelay/settings/discrete_timed/past_always_bounded_half.hpp"
+#include "reelay/settings/discrete_timed/past_sometime_bounded_half.hpp"
+#include "reelay/settings/discrete_timed/since_bounded_half.hpp"
 
 namespace reelay {
 namespace discrete_timed_setting {

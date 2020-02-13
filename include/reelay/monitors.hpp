@@ -14,7 +14,8 @@
 #include "string"
 
 #include "reelay/common.hpp"
-#include "reelay/parser/ptl_parser.hpp"
+#include "reelay/parser/ptl.hpp"
+#include "reelay/parser/regex.hpp"
 #include "reelay/networks.hpp"
 #include "reelay/settings.hpp"
 
@@ -35,7 +36,12 @@ struct monitor {
     auto parser = ptl_parser<factory>(kw);
     return parser.parse(pattern);
   }
-  //    static type from_regular_expressions();
+  static network_ptr_t
+  from_regular_expressions(std::string pattern,
+                           reelay::kwargs kw = reelay::kwargs()) {
+    auto parser = regex_parser<factory>(kw);
+    return parser.parse(pattern);
+  }
 };
 
 template <typename output_t>

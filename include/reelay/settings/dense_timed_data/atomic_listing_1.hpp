@@ -12,7 +12,7 @@
 
 #include "reelay/common.hpp"
 #include "reelay/networks/basic_structure.hpp"
-#include "reelay/past_temporal_logic/dense_timed_data/atoms.hpp"
+#include "reelay/settings/dense_timed_data/atoms.hpp"
 
 namespace reelay {
 namespace dense_timed_data_setting {

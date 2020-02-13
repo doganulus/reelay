@@ -16,18 +16,18 @@
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/networks/untimed_network.hpp"
 
-#include "reelay/past_temporal_logic/untimed/atoms.hpp"
+#include "reelay/settings/untimed/atoms.hpp"
 
-#include "reelay/past_temporal_logic/untimed/conjunction.hpp"
-#include "reelay/past_temporal_logic/untimed/disjunction.hpp"
-#include "reelay/past_temporal_logic/untimed/implication.hpp"
-#include "reelay/past_temporal_logic/untimed/negation.hpp"
+#include "reelay/settings/untimed/conjunction.hpp"
+#include "reelay/settings/untimed/disjunction.hpp"
+#include "reelay/settings/untimed/implication.hpp"
+#include "reelay/settings/untimed/negation.hpp"
 
 
-#include "reelay/past_temporal_logic/untimed/past_always.hpp"
-#include "reelay/past_temporal_logic/untimed/past_sometime.hpp"
-#include "reelay/past_temporal_logic/untimed/previous.hpp"
-#include "reelay/past_temporal_logic/untimed/since.hpp"
+#include "reelay/settings/untimed/past_always.hpp"
+#include "reelay/settings/untimed/past_sometime.hpp"
+#include "reelay/settings/untimed/previous.hpp"
+#include "reelay/settings/untimed/since.hpp"
 
 namespace reelay {
 namespace untimed_setting {

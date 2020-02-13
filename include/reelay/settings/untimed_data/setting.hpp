@@ -16,20 +16,20 @@
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/networks/untimed_network.hpp"
 
-#include "reelay/past_temporal_logic/untimed_data/atoms.hpp"
+#include "reelay/settings/untimed_data/atoms.hpp"
 
-#include "reelay/past_temporal_logic/untimed_data/conjunction.hpp"
-#include "reelay/past_temporal_logic/untimed_data/disjunction.hpp"
-#include "reelay/past_temporal_logic/untimed_data/implication.hpp"
-#include "reelay/past_temporal_logic/untimed_data/negation.hpp"
+#include "reelay/settings/untimed_data/conjunction.hpp"
+#include "reelay/settings/untimed_data/disjunction.hpp"
+#include "reelay/settings/untimed_data/implication.hpp"
+#include "reelay/settings/untimed_data/negation.hpp"
 
-#include "reelay/past_temporal_logic/untimed_data/past_always.hpp"
-#include "reelay/past_temporal_logic/untimed_data/past_sometime.hpp"
-#include "reelay/past_temporal_logic/untimed_data/previous.hpp"
-#include "reelay/past_temporal_logic/untimed_data/since.hpp"
+#include "reelay/settings/untimed_data/past_always.hpp"
+#include "reelay/settings/untimed_data/past_sometime.hpp"
+#include "reelay/settings/untimed_data/previous.hpp"
+#include "reelay/settings/untimed_data/since.hpp"
 
-#include "reelay/past_temporal_logic/untimed_data/exists.hpp"
-#include "reelay/past_temporal_logic/untimed_data/forall.hpp"
+#include "reelay/settings/untimed_data/exists.hpp"
+#include "reelay/settings/untimed_data/forall.hpp"
 
 namespace reelay {
 namespace untimed_data_setting {

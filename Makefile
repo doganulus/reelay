@@ -134,6 +134,10 @@ test_dense_timed_robustness_0:
 	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_setting_dense_timed_robustness_0.cpp -o test_setting_dense_timed_robustness_0 -I$(ROOT_DIR)/include
 	cd test/build && ./test_setting_dense_timed_robustness_0 -r compact
 
+test_untimed_regular:
+	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_setting_untimed_regular.cpp -o test_setting_untimed_regular -I$(ROOT_DIR)/include
+	cd test/build && ./test_setting_untimed_regular -r compact
+
 test_recipes:
 	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_recipes.cpp -o test_recipes -I$(ROOT_DIR)/include -lcudd
 	cd test/build && ./test_recipes -r compact

@@ -8,18 +8,14 @@
 
 #pragma once
 
-#include "reelay/past_temporal_logic/dense_timed/setting.hpp"
-#include "reelay/past_temporal_logic/discrete_timed/setting.hpp"
-#include "reelay/past_temporal_logic/untimed/setting.hpp"
+#include "reelay/settings/dense_timed/setting.hpp"
+#include "reelay/settings/discrete_timed/setting.hpp"
+#include "reelay/settings/untimed/setting.hpp"
 
-#include "reelay/past_temporal_logic/dense_timed_robustness_0/setting.hpp"
-#include "reelay/past_temporal_logic/discrete_timed_robustness/setting.hpp"
-#include "reelay/past_temporal_logic/untimed_robustness/setting.hpp"
+#include "reelay/settings/dense_timed_robustness_0/setting.hpp"
+#include "reelay/settings/discrete_timed_robustness/setting.hpp"
+#include "reelay/settings/untimed_robustness/setting.hpp"
 
-#include "reelay/past_temporal_logic/untimed_data/setting.hpp"
-#include "reelay/past_temporal_logic/discrete_timed_data/setting.hpp"
-#include "reelay/past_temporal_logic/dense_timed_data/setting.hpp"
-
-// #include "reelay/regular_expressions/untimed/setting.hpp"
-// #include "reelay/regular_expressions/discrete_timed/setting.hpp"
-// #include "reelay/regular_expressions/dense_timed/setting.hpp"
+#include "reelay/settings/untimed_data/setting.hpp"
+#include "reelay/settings/discrete_timed_data/setting.hpp"
+#include "reelay/settings/dense_timed_data/setting.hpp"

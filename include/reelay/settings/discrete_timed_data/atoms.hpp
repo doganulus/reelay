@@ -10,6 +10,6 @@
 
 #include "string"
 
-#include "reelay/past_temporal_logic/untimed_data/atomic_listing.hpp"
-#include "reelay/past_temporal_logic/untimed_data/atomic_proposition.hpp"
-#include "reelay/past_temporal_logic/untimed_data/atomic_record.hpp"
+#include "reelay/settings/discrete_timed_data/atomic_listing.hpp"
+#include "reelay/settings/discrete_timed_data/atomic_proposition.hpp"
+#include "reelay/settings/discrete_timed_data/atomic_record.hpp"

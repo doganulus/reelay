@@ -16,24 +16,24 @@
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/networks/dense_timed_network.hpp"
 
-#include "reelay/past_temporal_logic/dense_timed_robustness_0/atoms.hpp"
+#include "reelay/settings/dense_timed_robustness_0/atoms.hpp"
 
-#include "reelay/past_temporal_logic/dense_timed_robustness_0/conjunction.hpp"
-#include "reelay/past_temporal_logic/dense_timed_robustness_0/disjunction.hpp"
-#include "reelay/past_temporal_logic/dense_timed_robustness_0/implication.hpp"
-#include "reelay/past_temporal_logic/dense_timed_robustness_0/negation.hpp"
+#include "reelay/settings/dense_timed_robustness_0/conjunction.hpp"
+#include "reelay/settings/dense_timed_robustness_0/disjunction.hpp"
+#include "reelay/settings/dense_timed_robustness_0/implication.hpp"
+#include "reelay/settings/dense_timed_robustness_0/negation.hpp"
 
-#include "reelay/past_temporal_logic/dense_timed_robustness_0/past_always.hpp"
-#include "reelay/past_temporal_logic/dense_timed_robustness_0/past_sometime.hpp"
-#include "reelay/past_temporal_logic/dense_timed_robustness_0/since.hpp"
+#include "reelay/settings/dense_timed_robustness_0/past_always.hpp"
+#include "reelay/settings/dense_timed_robustness_0/past_sometime.hpp"
+#include "reelay/settings/dense_timed_robustness_0/since.hpp"
 
-#include "reelay/past_temporal_logic/dense_timed_robustness_0/past_always_bounded.hpp"
-#include "reelay/past_temporal_logic/dense_timed_robustness_0/past_sometime_bounded.hpp"
-#include "reelay/past_temporal_logic/dense_timed_robustness_0/since_bounded.hpp"
+#include "reelay/settings/dense_timed_robustness_0/past_always_bounded.hpp"
+#include "reelay/settings/dense_timed_robustness_0/past_sometime_bounded.hpp"
+#include "reelay/settings/dense_timed_robustness_0/since_bounded.hpp"
 
-#include "reelay/past_temporal_logic/dense_timed_robustness_0/past_always_bounded_half.hpp"
-#include "reelay/past_temporal_logic/dense_timed_robustness_0/past_sometime_bounded_half.hpp"
-#include "reelay/past_temporal_logic/dense_timed_robustness_0/since_bounded_half.hpp"
+#include "reelay/settings/dense_timed_robustness_0/past_always_bounded_half.hpp"
+#include "reelay/settings/dense_timed_robustness_0/past_sometime_bounded_half.hpp"
+#include "reelay/settings/dense_timed_robustness_0/since_bounded_half.hpp"
 
     namespace reelay {
   namespace dense_timed_robustness_0_setting {

@@ -9,7 +9,7 @@
 
 #include "reelay/timestamp.hpp"
 #include "reelay/intervals.hpp"
-#include "reelay/lexical_cast.hpp"
+#include "reelay/common.hpp"
 #include "reelay/networks/basic_structure.hpp"
 
 namespace reelay {

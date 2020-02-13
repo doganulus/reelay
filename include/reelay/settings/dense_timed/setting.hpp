@@ -16,24 +16,24 @@
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/networks/dense_timed_network.hpp"
 
-#include "reelay/past_temporal_logic/dense_timed/atoms.hpp"
+#include "reelay/settings/dense_timed/atoms.hpp"
 
-#include "reelay/past_temporal_logic/dense_timed/conjunction.hpp"
-#include "reelay/past_temporal_logic/dense_timed/disjunction.hpp"
-#include "reelay/past_temporal_logic/dense_timed/implication.hpp"
-#include "reelay/past_temporal_logic/dense_timed/negation.hpp"
+#include "reelay/settings/dense_timed/conjunction.hpp"
+#include "reelay/settings/dense_timed/disjunction.hpp"
+#include "reelay/settings/dense_timed/implication.hpp"
+#include "reelay/settings/dense_timed/negation.hpp"
 
-#include "reelay/past_temporal_logic/dense_timed/past_always.hpp"
-#include "reelay/past_temporal_logic/dense_timed/past_sometime.hpp"
-#include "reelay/past_temporal_logic/dense_timed/since.hpp"
+#include "reelay/settings/dense_timed/past_always.hpp"
+#include "reelay/settings/dense_timed/past_sometime.hpp"
+#include "reelay/settings/dense_timed/since.hpp"
 
-#include "reelay/past_temporal_logic/dense_timed/past_always_bounded.hpp"
-#include "reelay/past_temporal_logic/dense_timed/past_sometime_bounded.hpp"
-#include "reelay/past_temporal_logic/dense_timed/since_bounded.hpp"
+#include "reelay/settings/dense_timed/past_always_bounded.hpp"
+#include "reelay/settings/dense_timed/past_sometime_bounded.hpp"
+#include "reelay/settings/dense_timed/since_bounded.hpp"
 
-#include "reelay/past_temporal_logic/dense_timed/past_always_bounded_half.hpp"
-#include "reelay/past_temporal_logic/dense_timed/past_sometime_bounded_half.hpp"
-#include "reelay/past_temporal_logic/dense_timed/since_bounded_half.hpp"
+#include "reelay/settings/dense_timed/past_always_bounded_half.hpp"
+#include "reelay/settings/dense_timed/past_sometime_bounded_half.hpp"
+#include "reelay/settings/dense_timed/since_bounded_half.hpp"
 
 namespace reelay {
 namespace dense_timed_setting {

@@ -12,13 +12,13 @@
 
 #include "reelay/common.hpp"
 #include "reelay/networks/basic_structure.hpp"
-#include "reelay/past_temporal_logic/dense_timed_data/atoms.hpp"
+#include "reelay/settings/dense_timed_data/atoms.hpp"
 
 namespace reelay {
 namespace dense_timed_data_setting {
 
 template <typename T>
-struct record<std::unordered_map<std::string, std::string>, T, 0>
+struct record<std::unordered_map<std::string, std::string>, T, 1>
     : public dense_timed_state<std::unordered_map<std::string, std::string>,
                                data_interval_map<T>, T> {
   using time_t = T;
@@ -97,8 +97,9 @@ struct record<std::unordered_map<std::string, std::string>, T, 0>
     for (std::size_t i = 0; i < funcs.size(); i++) {
       base_value *= funcs[i](args);
     }
-    value = interval_map(
-        std::make_pair(interval::left_open(previous, now), base_value));
+    value = interval_map();
+    value.add(std::make_pair(interval::open(previous, now), manager->zero()));
+    value.add(std::make_pair(interval::closed(now, now), base_value));
   }
   output_t output(time_t, time_t) override { return value; }
 };
