@@ -13,31 +13,272 @@
 #include "reelay/common.hpp"
 #include "reelay/monitors.hpp"
 
-    using input_t = std::map <std::string, std::string>;
+using input_t = std::unordered_map <std::string, std::string>;
 using function_t = std::function<bool(const input_t &)>;
 
 TEST_CASE( "Atoms" ) {
 
-    SECTION( "GreaterThan" ) {
+  SECTION("Record Proposition Field") {
+    std::vector<input_t> sequence = std::vector<input_t>();
 
-        std::vector<input_t> sequence = std::vector<input_t>();
-       
-        sequence.push_back( input_t{{"x1", "3.3"}} );
-        sequence.push_back( input_t{{"x1", "3.4"}} );
-        sequence.push_back( input_t{{"x1", "3.5"}} );
+    sequence.push_back(input_t{{"x1", "0"}});
+    sequence.push_back(input_t{{"x1", "0"}});
+    sequence.push_back(input_t{{"x1", "1"}});
 
-        auto net1 = reelay::monitor<input_t>::from_temporal_logic("x1 > 3.4");
+    auto net1 = reelay::monitor<input_t>::from_temporal_logic("{x1}");
 
-        auto result = std::vector<bool>();
+    auto result = std::vector<bool>();
 
-        for(const auto& row : sequence){
-            net1->update(row);
-            result.push_back(net1->output());
-        }
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
 
-        auto expected = std::vector<bool>({0,0,1});
+    auto expected = std::vector<bool>({0, 0, 1});
 
-        CHECK(result == expected);
+    CHECK(result == expected);
+  }
+
+  SECTION("Record Proposition Field") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x1", "0"}});
+    sequence.push_back(input_t{{"x1", "0"}});
+    sequence.push_back(input_t{{"x1", "1"}});
+
+    auto net1 = reelay::monitor<input_t>::from_temporal_logic("{x1:true}");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({0, 0, 1});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Record Proposition Field") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x1", "0"}});
+    sequence.push_back(input_t{{"x1", "0"}});
+    sequence.push_back(input_t{{"x1", "1"}});
+
+    auto net1 = reelay::monitor<input_t>::from_temporal_logic("{x1:false}");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({1, 1, 0});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Record GT") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x1", "3"}});
+    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", "5"}});
+
+    auto net1 = reelay::monitor<input_t>::from_temporal_logic("{x1 > 4}");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({0, 0, 1});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Record GreaterEqual") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x1", "2"}});
+    sequence.push_back(input_t{{"x1", "3"}});
+    sequence.push_back(input_t{{"x1", "4"}});
+
+    auto net1 = reelay::monitor<input_t>::from_temporal_logic("{x1 >= 3}");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({0, 1, 1});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Record LessThan") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x1", "2"}});
+    sequence.push_back(input_t{{"x1", "3"}});
+    sequence.push_back(input_t{{"x1", "4"}});
+
+    auto net1 = reelay::monitor<input_t>::from_temporal_logic("{x1 < 3}");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({1, 0, 0});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Record LessEqual") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x1", "3"}});
+    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", "5"}});
+
+    auto net1 = reelay::monitor<input_t>::from_temporal_logic("{x1 <= 4}");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({1, 1, 0});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Record SimpleString") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x1", "a"}});
+    sequence.push_back(input_t{{"x1", "b"}});
+    sequence.push_back(input_t{{"x1", "c"}});
+
+    auto net1 = reelay::monitor<input_t>::from_temporal_logic("{x1: a}");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({1, 0, 0});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Record SingleQuoted") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x1", "123a"}});
+    sequence.push_back(input_t{{"x1", "b"}});
+    sequence.push_back(input_t{{"x1", "c"}});
+
+    auto net1 = reelay::monitor<input_t>::from_temporal_logic("{x1: '123a'}");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({1, 0, 0});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Record DoubleQuoted") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x1", "123a"}});
+    sequence.push_back(input_t{{"x1", "b"}});
+    sequence.push_back(input_t{{"x1", "c"}});
+
+    auto net1 = reelay::monitor<input_t>::from_temporal_logic(R"({x1: "123a"})");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({1, 0, 0});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Record Double Comparison") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x1", "2"}});
+    sequence.push_back(input_t{{"x1", "3"}});
+    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", "5"}});
+    sequence.push_back(input_t{{"x1", "6"}});
+
+    auto net1 =
+        reelay::monitor<input_t>::from_temporal_logic("{x1 > 3, x1 < 5}");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({0, 0, 1, 0, 0});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("GreaterThan") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x1", "3.3"}});
+    sequence.push_back(input_t{{"x1", "3.4"}});
+    sequence.push_back(input_t{{"x1", "3.5"}});
+
+    auto net1 = reelay::monitor<input_t>::from_temporal_logic("x1 > 3.4");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({0, 0, 1});
+
+    CHECK(result == expected);
     }
 
     SECTION( "GreaterEqual" ) {
@@ -147,10 +388,10 @@ TEST_CASE( "Boolean Operations" ) {
         sequence.push_back( input_t{{"p1", "0"}, {"p2", "1"}} );
         sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
 
+        auto net1 =
+            reelay::monitor<input_t>::from_temporal_logic("{p1} or {p2}");
 
-		auto net1 = reelay::monitor<input_t>::from_temporal_logic("p1 or p2");
-
-		auto result = std::vector<bool>();
+        auto result = std::vector<bool>();
 
     	for(const auto& row : sequence){
         	net1->update(row);
@@ -171,8 +412,8 @@ TEST_CASE( "Boolean Operations" ) {
         sequence.push_back( input_t{{"p1", "0"}, {"p2", "1"}} );
         sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
 
-
-        auto net1 = reelay::monitor<input_t>::from_temporal_logic("p1 and p2");
+        auto net1 =
+            reelay::monitor<input_t>::from_temporal_logic("{p1} and {p2}");
 
         auto result = std::vector<bool>();
 
@@ -195,8 +436,8 @@ TEST_CASE( "Boolean Operations" ) {
         sequence.push_back( input_t{{"p1", "0"}, {"p2", "1"}} );
         sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
 
-
-        auto net1 = reelay::monitor<input_t>::from_temporal_logic("p1 -> p2");
+        auto net1 =
+            reelay::monitor<input_t>::from_temporal_logic("{p1} -> {p2}");
 
         auto result = std::vector<bool>();
 
@@ -218,7 +459,7 @@ TEST_CASE( "Boolean Operations" ) {
         sequence.push_back( input_t{{"p1", "1"}} );
 
 
-        auto net1 = reelay::monitor<input_t>::from_temporal_logic("not p1");
+        auto net1 = reelay::monitor<input_t>::from_temporal_logic("not {p1}");
 
         auto result = std::vector<bool>();
 
@@ -244,8 +485,8 @@ TEST_CASE( "Untimed Temporal Operations" ) {
     sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
     sequence.push_back(input_t{{"p1", "0"}, {"p2", "1"}});
 
-    auto net1 = reelay::monitor<input_t>::from_temporal_logic("pre p1");
-    auto net2 = reelay::monitor<input_t>::from_temporal_logic("pre p2");
+    auto net1 = reelay::monitor<input_t>::from_temporal_logic("pre{p1}");
+    auto net2 = reelay::monitor<input_t>::from_temporal_logic("pre{p2}");
 
     auto result1 = std::vector<bool>();
     auto result2 = std::vector<bool>();
@@ -274,9 +515,9 @@ TEST_CASE( "Untimed Temporal Operations" ) {
     sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
 
     auto net1 =
-        reelay::monitor<input_t>::from_temporal_logic("historically p1");
+        reelay::monitor<input_t>::from_temporal_logic("historically{p1}");
     auto net2 =
-        reelay::monitor<input_t>::from_temporal_logic("historically p2");
+        reelay::monitor<input_t>::from_temporal_logic("historically{p2}");
 
     auto result1 = std::vector<bool>();
     auto result2 = std::vector<bool>();
@@ -304,8 +545,8 @@ TEST_CASE( "Untimed Temporal Operations" ) {
         sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
         sequence.push_back( input_t{{"p1", "0"}, {"p2", "0"}} );
 
-        auto net1 = reelay::monitor<input_t>::from_temporal_logic("once p1");
-        auto net2 = reelay::monitor<input_t>::from_temporal_logic("once p2");
+        auto net1 = reelay::monitor<input_t>::from_temporal_logic("once{p1}");
+        auto net2 = reelay::monitor<input_t>::from_temporal_logic("once{p2}");
 
         auto result1 = std::vector<bool>();
         auto result2 = std::vector<bool>();
@@ -343,7 +584,7 @@ TEST_CASE( "Untimed Temporal Operations" ) {
         sequence.push_back( input_t{{"p1", "1"}, {"p2", "1"}} );
         sequence.push_back( input_t{{"p1", "1"}, {"p2", "0"}} );
 
-        auto net1 = reelay::monitor<input_t>::from_temporal_logic("p1 since p2");
+        auto net1 = reelay::monitor<input_t>::from_temporal_logic("{p1} since {p2}");
 
         auto result1 = std::vector<bool>();
 

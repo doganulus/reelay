@@ -13,7 +13,7 @@
 #include "reelay/common.hpp"
 #include "reelay/monitors.hpp"
 
-using input_t = std::map<std::string, std::string>;
+using input_t = std::unordered_map<std::string, std::string>;
 using function_t = std::function<bool(const input_t &)>;
 
 TEST_CASE("Atoms") {
@@ -22,13 +22,13 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "3.3"}});
-    sequence.push_back(input_t{{"x1", "3.4"}});
-    sequence.push_back(input_t{{"x1", "3.5"}});
+    sequence.push_back(input_t{{"x1", "3"}});
+    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", "5"}});
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "x1 > 3.4");
+            "{x1 > 4}");
 
     auto result = std::vector<bool>();
 
@@ -46,13 +46,13 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "3.3"}});
-    sequence.push_back(input_t{{"x1", "3.4"}});
-    sequence.push_back(input_t{{"x1", "3.5"}});
+    sequence.push_back(input_t{{"x1", "3"}});
+    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", "5"}});
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "x1 >= 3.4");
+            "{x1 >= 4}");
 
     auto result = std::vector<bool>();
 
@@ -70,13 +70,13 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "3.3"}});
-    sequence.push_back(input_t{{"x1", "3.4"}});
-    sequence.push_back(input_t{{"x1", "3.5"}});
+    sequence.push_back(input_t{{"x1", "3"}});
+    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", "5"}});
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "x1 < 3.4");
+            "{x1 < 4}");
 
     auto result = std::vector<bool>();
 
@@ -94,13 +94,13 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "3.3"}});
-    sequence.push_back(input_t{{"x1", "3.4"}});
-    sequence.push_back(input_t{{"x1", "3.5"}});
+    sequence.push_back(input_t{{"x1", "3"}});
+    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", "5"}});
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "x1 <= 3.4");
+            "{x1 <= 4}");
 
     auto result = std::vector<bool>();
 
@@ -158,7 +158,7 @@ TEST_CASE("Boolean Operations") {
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "p1 or p2");
+            "{p1} or {p2}");
 
     auto result = std::vector<bool>();
 
@@ -183,7 +183,7 @@ TEST_CASE("Boolean Operations") {
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "p1 and p2");
+            "{p1} and {p2}");
 
     auto result = std::vector<bool>();
 
@@ -208,7 +208,7 @@ TEST_CASE("Boolean Operations") {
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "p1 -> p2");
+            "{p1} -> {p2}");
 
     auto result = std::vector<bool>();
 
@@ -231,7 +231,7 @@ TEST_CASE("Boolean Operations") {
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "not p1");
+            "not {p1}");
 
     auto result = std::vector<bool>();
 
@@ -259,10 +259,10 @@ TEST_CASE("Untimed Temporal Operations") {
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "pre p1");
+            "pre{p1}");
     auto net2 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "pre p2");
+            "pre{p2}");
 
     auto result1 = std::vector<bool>();
     auto result2 = std::vector<bool>();
@@ -292,10 +292,10 @@ TEST_CASE("Untimed Temporal Operations") {
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "historically p1");
+            "historically{p1}");
     auto net2 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "historically p2");
+            "historically{p2}");
 
     auto result1 = std::vector<bool>();
     auto result2 = std::vector<bool>();
@@ -325,10 +325,10 @@ TEST_CASE("Untimed Temporal Operations") {
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "once p1");
+            "once{p1}");
     auto net2 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "once p2");
+            "once{p2}");
 
     auto result1 = std::vector<bool>();
     auto result2 = std::vector<bool>();
@@ -368,7 +368,7 @@ TEST_CASE("Untimed Temporal Operations") {
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "p1 since p2");
+            "{p1} since {p2}");
 
     auto result1 = std::vector<bool>();
 
@@ -404,7 +404,7 @@ TEST_CASE("Timed Temporal Operations") {
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "once[2:4] p2");
+            "once[2:4]{p2}");
 
     auto result1 = std::vector<bool>();
 
@@ -436,7 +436,7 @@ TEST_CASE("Timed Temporal Operations") {
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "once[:4] p2");
+            "once[:4]{p2}");
 
     auto result1 = std::vector<bool>();
 
@@ -468,7 +468,7 @@ TEST_CASE("Timed Temporal Operations") {
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "once[2:] p2");
+            "once[2:]{p2}");
 
     auto result1 = std::vector<bool>();
 
@@ -499,7 +499,7 @@ TEST_CASE("Timed Temporal Operations") {
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "historically[2:4] p1");
+            "historically[2:4]{p1}");
 
     auto result1 = std::vector<bool>();
 
@@ -530,7 +530,7 @@ TEST_CASE("Timed Temporal Operations") {
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "historically[:4] p1");
+            "historically[:4]{p1}");
 
     auto result1 = std::vector<bool>();
 
@@ -561,7 +561,7 @@ TEST_CASE("Timed Temporal Operations") {
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "historically[2:] p1");
+            "historically[2:]{p1}");
 
     auto result1 = std::vector<bool>();
 
@@ -593,7 +593,7 @@ TEST_CASE("Timed Temporal Operations") {
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "p1 since[2:4] p2");
+            "{p1} since[2:4] {p2}");
 
     auto result1 = std::vector<bool>();
 
@@ -625,7 +625,7 @@ TEST_CASE("Timed Temporal Operations") {
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "p1 since[:4] p2");
+            "{p1} since[:4] {p2}");
 
     auto result1 = std::vector<bool>();
 
@@ -657,7 +657,7 @@ TEST_CASE("Timed Temporal Operations") {
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "p1 since[2:] p2");
+            "{p1} since[2:] {p2}");
 
     auto result1 = std::vector<bool>();
 

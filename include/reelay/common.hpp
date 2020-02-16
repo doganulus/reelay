@@ -15,7 +15,7 @@
 #include "boost/lexical_cast.hpp"
 
 #define PEGLIB_USE_STD_ANY 0
-#include "reelay/third_party/peglib.h"
+#include "reelay/third_party/cpp-peglib/peglib.h"
 
 template <typename K, typename V>
 std::ostream &operator<<(std::ostream &os, const std::unordered_map<K, V> &m) {

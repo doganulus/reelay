@@ -48,27 +48,45 @@ struct record<std::unordered_map<std::string, std::string>, T>
 
     for (std::size_t i = 0; i < fields.size(); i++) {
       auto key_name = fields[i].first;
-      auto value_type = fields[i].second.first;
-      if (value_type == "proposition") {
-        auto name = fields[i].second.second;
-        funcs.push_back([mgr, key_name, name](const input_t &x) {
-          if (x.find(key_name) != x.end() and name == x.at(key_name)) {
+      auto field_value_type = fields[i].second.first;
+      auto field_value_str = fields[i].second.second;
+      if (field_value_type == "bool" and field_value_str == "true") {
+        funcs.push_back([mgr, key_name](const input_t &x) {
+          if (x.find(key_name) != x.end() and
+              field_of<input_t>::as_bool(x, key_name)) {
             return mgr->one();
           } else {
             return mgr->zero();
           }
         });
-      } else if (value_type == "variable_ref") {
-        auto name = fields[i].second.second;
-        mgr->add_variable(name);
-        funcs.push_back([mgr, key_name, name](const input_t &x) {
-          if (x.find(key_name) != x.end()) {
-            return mgr->assign(name, x.at(key_name));
+      } else if (field_value_type == "bool" and field_value_str == "false") {
+        funcs.push_back([mgr, key_name](const input_t &x) {
+          if (x.find(key_name) != x.end() and
+              field_of<input_t>::as_bool(x, key_name)) {
+            return mgr->zero();
+          } else {
+            return mgr->one();
+          }
+        });
+      } else if (field_value_type == "string") {
+        funcs.push_back([mgr, key_name, field_value_str](const input_t &x) {
+          if (x.find(key_name) != x.end() and
+              field_of<input_t>::as_string(x, key_name) == field_value_str) {
+            return mgr->one();
           } else {
             return mgr->zero();
           }
         });
-      } else if (value_type == "ignore_field") {
+      } else if (field_value_type == "variable_ref") {
+        mgr->add_variable(field_value_str);
+        funcs.push_back([mgr, key_name, field_value_str](const input_t &x) {
+          if (x.find(key_name) != x.end()) {
+            return mgr->assign(field_value_str, x.at(key_name));
+          } else {
+            return mgr->zero();
+          }
+        });
+      } else if (field_value_type == "ignore_field") {
         funcs.push_back([mgr, key_name](const input_t &x) {
           if (x.find(key_name) != x.end()) {
             return mgr->one();
@@ -77,6 +95,8 @@ struct record<std::unordered_map<std::string, std::string>, T>
           }
         });
       } else {
+        throw std::runtime_error(
+            "Syntax Error: Unknown atomic field description.");
       }
     }
   }

@@ -7,7 +7,7 @@
  */
 #pragma once
 
-#include "reelay/timestamp.hpp"
+#include "reelay/conversions.hpp"
 #include "reelay/intervals.hpp"
 #include "reelay/common.hpp"
 #include "reelay/networks/basic_structure.hpp"

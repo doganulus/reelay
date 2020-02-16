@@ -12,7 +12,7 @@
 #include <string>
 
 #define PEGLIB_USE_STD_ANY 0
-#include "reelay/third_party/peglib.h"
+#include "reelay/third_party/cpp-peglib/peglib.h"
 
 #include "reelay/networks.hpp"
 #include "reelay/settings.hpp"
@@ -59,25 +59,40 @@ template <class Setting> struct ptl_parser {
 
     ListProposition <- LBRACE NonEmptyValueList RBRACE
     RecordProposition <- LCURLY NonEmptyKeyValuePairs RCURLY
+    EventRecordProposition <- EVENT LCURLY NonEmptyKeyValuePairs RCURLY
 
     NonEmptyVarList <- Name (COMMA Name)*
     NonEmptyValueList <- FieldValue (COMMA FieldValue)*
     NonEmptyKeyValuePairs <- KeyValuePair (COMMA KeyValuePair)*
 
-    FieldProp <- Name
+    FieldValueTrue <- TRUE
+    FieldValueFalse <- FALSE
+    FieldValueString <- SQString / DQString / Name
+    FieldValueNumber <- Number
     FieldKey <- Name (DOT Name)*
-    FieldValue <- VariableRef / UnnamedRef / FieldProp
-    KeyValuePair <- FieldKey ':' FieldValue
+    FieldValue <- FieldValueTrue / FieldValueFalse / FieldValueString / FieldValueNumber / VariableRef / AnyValue
 
-    UnnamedRef <- STAR
+    KeyValuePair <- KeyValuePairST / KeyValuePairEQ / KeyValuePairNE / KeyValuePairLT / KeyValuePairLE / KeyValuePairGT / KeyValuePairGE / KeyValueProp
+    
+    KeyValueProp <- FieldKey
+    KeyValuePairST <- FieldKey ':' FieldValue
+    KeyValuePairEQ <- FieldKey EQ Number
+    KeyValuePairNE <- FieldKey NE Number
+    KeyValuePairLT <- FieldKey LT Number
+    KeyValuePairLE <- FieldKey LE Number
+    KeyValuePairGT <- FieldKey GT Number
+    KeyValuePairGE <- FieldKey GE Number
+
+    AnyValue <- STAR
     VariableRef <- STAR Name
-    VariableDecl <- AMSAND Name
   
     Bound <- FullBound / LowerBound / UpperBound
     FullBound <-  "[" Number ":" Number "]"
     LowerBound <- "[" Number ":" 'inf'? "]"
     UpperBound <- "["        ":" Number "]"
         
+    ~EVENT <- < '@' / 'event' >
+
     ~PREV   <- < 'Y' / 'pre' >
     ~HIST  <- < 'H' / 'historically' >
     ~ONCE  <- < 'P' / 'once' >
@@ -96,15 +111,28 @@ template <class Setting> struct ptl_parser {
     ~RBRACE <- < ']' >
     ~LCURLY <- < '{' >
     ~RCURLY <- < '}' >
-    
+
+    ~LT <- < '<' >
+    ~LE <- < '<=' >
+    ~GT <- < '>' >
+    ~GE <- < '>=' >
+    ~EQ <- < '==' >
+    ~NE <- < '!=' >
+
     ~DOT <- < '.' >
     ~STAR <- < '*' >
     ~AMSAND <- < '&' >
     ~DOLLAR <- < '$' >
     ~SQUARE <- < '#' >
+    ~SQ <- < "'" >
+    ~DQ <- < '"' >
     
     Name   <- <[_a-zA-Z][_a-zA-Z0-9]*>
+    SQString <- SQ <[^']*> SQ
+    DQString <- DQ <[^"]*> DQ
     Number <- <'-'? [0-9]+ ('.' [0-9]+)?>
+    ~TRUE  <- < 'true'>
+    ~FALSE <- < 'false'>    
             
     %whitespace <- [  \t\r\n]*
     )";
@@ -191,8 +219,21 @@ template <class Setting> struct ptl_parser {
       return keyvals;
     };
 
-    parser["FieldProp"] = [&](const peg::SemanticValues &sv) {
-      return std::pair<std::string, std::string>("proposition",
+    parser["FieldValueTrue"] = [&](const peg::SemanticValues &sv) {
+      return std::pair<std::string, std::string>("bool", "true");
+    };
+
+    parser["FieldValueFalse"] = [&](const peg::SemanticValues &sv) {
+      return std::pair<std::string, std::string>("bool", "false");
+    };
+
+    parser["FieldValueNumber"] = [&](const peg::SemanticValues &sv) {
+      return std::pair<std::string, std::string>("number",
+                                                 any_cast<std::string>(sv[0]));
+    };
+
+    parser["FieldValueString"] = [&](const peg::SemanticValues &sv) {
+      return std::pair<std::string, std::string>("string",
                                                  any_cast<std::string>(sv[0]));
     };
 
@@ -201,7 +242,7 @@ template <class Setting> struct ptl_parser {
                                                  any_cast<std::string>(sv[0]));
     };
 
-    parser["UnnamedRef"] = [&](const peg::SemanticValues &) {
+    parser["AnyValue"] = [&](const peg::SemanticValues &) {
       return std::pair<std::string, std::string>("ignore_field","");
     };
 
@@ -213,15 +254,45 @@ template <class Setting> struct ptl_parser {
       return keys;
     };
 
-    parser["KeyValuePair"] = [&](const peg::SemanticValues &sv) {
+    parser["KeyValueProp"] = [&](const peg::SemanticValues &sv) {
+      auto key_path = any_cast<std::vector<std::string>>(sv[0]);
+      return std::pair<std::string, std::pair<std::string, std::string>>(
+          key_path[0], std::pair<std::string, std::string>("bool", "true"));
+    };
+
+    parser["KeyValuePairST"] = [&](const peg::SemanticValues &sv) {
       auto key_path = any_cast<std::vector<std::string>>(sv[0]);
       auto value = any_cast<std::pair<std::string, std::string>>(sv[1]);
-      auto key = key_path[0];
-      for (std::size_t i = 1; i < key_path.size(); i++) {
-        key += '/'+ key_path[i];
-      }
-      return std::pair<std::string, std::pair<std::string, std::string>>(key, value);
-      ;
+      return std::pair<std::string, std::pair<std::string, std::string>>(
+          key_path[0], value);
+    };
+
+    parser["KeyValuePairGE"] = [&](const peg::SemanticValues &sv) {
+      auto key_path = any_cast<std::vector<std::string>>(sv[0]);
+      auto number_str = any_cast<std::string>(sv[1]);
+      return std::pair<std::string, std::pair<std::string, std::string>>(
+          key_path[0], std::pair<std::string, std::string>("ge", number_str));
+    };
+
+    parser["KeyValuePairGT"] = [&](const peg::SemanticValues &sv) {
+      auto key_path = any_cast<std::vector<std::string>>(sv[0]);
+      auto number_str = any_cast<std::string>(sv[1]);
+      return std::pair<std::string, std::pair<std::string, std::string>>(
+          key_path[0], std::pair<std::string, std::string>("gt", number_str));
+    };
+
+    parser["KeyValuePairLE"] = [&](const peg::SemanticValues &sv) {
+      auto key_path = any_cast<std::vector<std::string>>(sv[0]);
+      auto number_str = any_cast<std::string>(sv[1]);
+      return std::pair<std::string, std::pair<std::string, std::string>>(
+          key_path[0], std::pair<std::string, std::string>("le", number_str));
+    };
+
+    parser["KeyValuePairLT"] = [&](const peg::SemanticValues &sv) {
+      auto key_path = any_cast<std::vector<std::string>>(sv[0]);
+      auto number_str = any_cast<std::string>(sv[1]);
+      return std::pair<std::string, std::pair<std::string, std::string>>(
+          key_path[0], std::pair<std::string, std::string>("lt", number_str));
     };
 
     parser["BasicPredicateLT"] = [&](const peg::SemanticValues &sv) {
@@ -532,6 +603,12 @@ template <class Setting> struct ptl_parser {
 
     parser["Name"] = [](const peg::SemanticValues &sv) { return sv.token(); };
     parser["Number"] = [](const peg::SemanticValues &sv) { return sv.token(); };
+    parser["SQString"] = [](const peg::SemanticValues &sv) {
+      return sv.token();
+    };
+    parser["DQString"] = [](const peg::SemanticValues &sv) {
+      return sv.token();
+    };
 
     parser.enable_packrat_parsing(); // Enable packrat parsing.
   }

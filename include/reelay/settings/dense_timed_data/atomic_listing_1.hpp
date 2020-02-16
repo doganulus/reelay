@@ -49,23 +49,51 @@ struct listing<std::vector<std::string>, T, 1>
       const std::vector<std::pair<std::string, std::string>> &fields)
       : manager(mgr) {
     for (std::size_t i = 0; i < fields.size(); i++) {
-      if (fields[i].first == "proposition") {
-        auto name = fields[i].second;
-        funcs.push_back([mgr, name](const input_t &x) {
-          if (std::find(x.begin(), x.end(), name) != x.end())
+      auto field_value_type = fields[i].first;
+      auto field_value_str = fields[i].second;
+      if (field_value_type == "bool" and field_value_str == "true") {
+        funcs.push_back([mgr, i](const input_t &x) {
+          if (field_of<input_t>::as_bool(x, i + 1)) {
             return mgr->one();
-          else
+          } else {
             return mgr->zero();
+          }
         });
-      } else if (fields[i].first == "variable_ref") {
-        auto name = fields[i].second;
-        mgr->add_variable(name);
-        funcs.push_back([mgr, name, i](const input_t &x) {
-          return mgr->assign(name, x[i + 1]);
+      } else if (field_value_type == "bool" and field_value_str == "false") {
+        funcs.push_back([mgr, i](const input_t &x) {
+          if (field_of<input_t>::as_bool(x, i + 1)) {
+            return mgr->zero();
+          } else {
+            return mgr->one();
+          }
         });
-      } else if (fields[i].first == "ignore_field") {
+      } else if (field_value_type == "string") {
+        funcs.push_back([mgr, field_value_str, i](const input_t &x) {
+          if (field_of<input_t>::as_string(x, i + 1) == field_value_str) {
+            return mgr->one();
+          } else {
+            return mgr->zero();
+          }
+        });
+      } else if (field_value_type == "number") {
+        float number = boost::lexical_cast<float>(field_value_str);
+        funcs.push_back([mgr, number, i](const input_t &x) {
+          if (field_of<input_t>::as_float(x, i + 1) == number) {
+            return mgr->one();
+          } else {
+            return mgr->zero();
+          }
+        });
+      } else if (field_value_type == "variable_ref") {
+        mgr->add_variable(field_value_str);
+        funcs.push_back([mgr, field_value_str, i](const input_t &x) {
+          return mgr->assign(field_value_str, x[i + 1]);
+        });
+      } else if (field_value_type == "ignore_field") {
         funcs.push_back([mgr](const input_t &) { return mgr->one(); });
       } else {
+        throw std::runtime_error(
+            "Syntax Error: Unknown atomic field description.");
       }
     }
   }

@@ -13,7 +13,7 @@
 
 #include "reelay/monitors.hpp"
 
-using input_t = std::map<std::string, std::string>;
+using input_t = std::unordered_map<std::string, std::string>;
 using output_t = int64_t;
 using function_t = std::function<output_t(const input_t &)>;
 
