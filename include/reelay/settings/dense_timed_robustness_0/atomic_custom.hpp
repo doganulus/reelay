@@ -12,10 +12,8 @@
 #include "memory"
 #include "vector"
 
-
 #include "reelay/intervals.hpp"
 #include "reelay/networks/basic_structure.hpp"
-
 
 namespace reelay {
 namespace dense_timed_robustness_0_setting {
@@ -36,21 +34,19 @@ struct predicate
 
   using node_ptr_t = std::shared_ptr<node_t>;
   using state_ptr_t = std::shared_ptr<state_t>;
-  
+
   using function_t =
-      std::function<output_t(const input_t&, const input_t&, time_t, time_t)>;
+      std::function<output_t(const input_t &, const input_t &, time_t, time_t)>;
 
   interval_map value = interval_map();
   function_t fn;
 
-  explicit predicate(const function_t& f) : fn(f) {}
+  explicit predicate(const function_t &f) : fn(f) {}
 
   explicit predicate(const kwargs &kw)
       : predicate(reelay::any_cast<function_t>(kw.at("function"))) {}
 
-  void update(const input_t& pargs,
-              const input_t& args,
-              time_t previous,
+  void update(const input_t &pargs, const input_t &args, time_t previous,
               time_t now) override {
     value = fn(pargs, args, previous, now);
   }
@@ -58,5 +54,5 @@ struct predicate
   output_t output(time_t, time_t) override { return value; }
 };
 
-}  // namespace dense_timed_setting
-}  // namespace reelay
+} // namespace dense_timed_robustness_0_setting
+} // namespace reelay

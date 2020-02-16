@@ -11,7 +11,7 @@ import reelay
 def test_integration_past_ltl():
 
     my_monitor = reelay.past_ltl.monitor(
-        pattern="p1 since p2")
+        pattern=r"{p1} since {p2}")
 
     input_sequence = [
         dict(p1=False, p2=False),

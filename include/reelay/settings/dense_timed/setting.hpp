@@ -16,7 +16,9 @@
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/networks/dense_timed_network.hpp"
 
-#include "reelay/settings/dense_timed/atoms.hpp"
+#include "reelay/settings/dense_timed/atomic_custom.hpp"
+#include "reelay/settings/dense_timed/atomic_record_0.hpp"
+#include "reelay/settings/dense_timed/atomic_record_1.hpp"
 
 #include "reelay/settings/dense_timed/conjunction.hpp"
 #include "reelay/settings/dense_timed/disjunction.hpp"
@@ -86,16 +88,10 @@ struct factory {
 
     state_ptr_t result;
 
-    if (name == "proposition") {
-      result = std::make_shared<proposition<input_t, time_t>>(kw);
-    } else if(name == "lt" or name == "<") {
-      result = std::make_shared<basic_predicate_lt<input_t, time_t, order>>(kw);
-    } else if (name == "le" or name == "leq" or name == "<=") {
-      result = std::make_shared<basic_predicate_le<input_t, time_t, order>>(kw);
-    } else if (name == "gt" or name == ">") {
-      result = std::make_shared<basic_predicate_gt<input_t, time_t, order>>(kw);
-    } else if (name == "ge" or name == "geq" or name == ">=") {
-      result = std::make_shared<basic_predicate_ge<input_t, time_t, order>>(kw);
+    if (name == "record" and order == 0) {
+      result = std::make_shared<record0<input_t, time_t>>(kw);
+    } else if (name == "record" and order == 1) {
+      result = std::make_shared<record1<input_t, time_t>>(kw);
     } else if (name == "past_sometime") {
       result = std::make_shared<past_sometime<input_t, time_t>>(kw);
     } else if (name == "past_always") {

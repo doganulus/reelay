@@ -141,17 +141,6 @@ template <class Setting> struct regex_parser {
       return std::static_pointer_cast<node_t>(expr);
     };
 
-    parser["NonEmptyVarList"] = [&](const peg::SemanticValues &sv) {
-      auto vlist = std::vector<std::string>();
-
-      for (std::size_t i = 0; i < sv.size(); i++) {
-        auto child = any_cast<std::string>(sv[i]);
-        vlist.push_back(child);
-      }
-
-      return vlist;
-    };
-
     parser["NonEmptyKeyValuePairs"] = [&](const peg::SemanticValues &sv) {
       auto keyvals = std::vector<
           std::pair<std::string, std::pair<std::string, std::string>>>();
@@ -163,11 +152,6 @@ template <class Setting> struct regex_parser {
       }
 
       return keyvals;
-    };
-
-    parser["FieldProp"] = [&](const peg::SemanticValues &sv) {
-      return std::pair<std::string, std::string>("proposition",
-                                                 any_cast<std::string>(sv[0]));
     };
 
     parser["VariableRef"] = [&](const peg::SemanticValues &sv) {
@@ -195,97 +179,9 @@ template <class Setting> struct regex_parser {
         key += '/'+ key_path[i];
       }
       return std::pair<std::string, std::pair<std::string, std::string>>(key, value);
-      ;
     };
 
-    parser["BasicPredicateLT"] = [&](const peg::SemanticValues &sv) {
-      auto name = any_cast<std::string>(sv[0]);
-      auto constant = std::stof(any_cast<std::string>(sv[1]));
-
-      reelay::kwargs kw = {{"name", name}, {"constant", constant}};
-      kw.insert(meta.begin(), meta.end());
-      auto expr = Setting::make_state("lt", kw);
-
-      this->states.push_back(expr);
-      return std::static_pointer_cast<node_t>(expr);
-    };
-
-    parser["BasicPredicateLE"] = [&](const peg::SemanticValues &sv) {
-      auto name = any_cast<std::string>(sv[0]);
-      auto constant = std::stof(any_cast<std::string>(sv[1]));
-
-      reelay::kwargs kw = {{"name", name}, {"constant", constant}};
-      kw.insert(meta.begin(), meta.end());
-      auto expr = Setting::make_state("le", kw);
-
-      this->states.push_back(expr);
-      return std::static_pointer_cast<node_t>(expr);
-    };
-
-    parser["BasicPredicateGT"] = [&](const peg::SemanticValues &sv) {
-      auto name = any_cast<std::string>(sv[0]);
-      auto constant = std::stof(any_cast<std::string>(sv[1]));
-
-      reelay::kwargs kw = {{"name", name}, {"constant", constant}};
-      kw.insert(meta.begin(), meta.end());
-      auto expr = Setting::make_state("gt", kw);
-
-      this->states.push_back(expr);
-      return std::static_pointer_cast<node_t>(expr);
-    };
-
-    parser["BasicPredicateGE"] = [&](const peg::SemanticValues &sv) {
-      auto name = any_cast<std::string>(sv[0]);
-      auto constant = std::stof(any_cast<std::string>(sv[1]));
-
-      reelay::kwargs kw = {{"name", name}, {"constant", constant}};
-      kw.insert(meta.begin(), meta.end());
-      auto expr = Setting::make_state("ge", kw);
-
-      this->states.push_back(expr);
-      return std::static_pointer_cast<node_t>(expr);
-    };
-
-    parser["CustomPredicate"] = [&](const peg::SemanticValues &sv) {
-      auto name = any_cast<std::string>(sv[0]);
-      auto func = meta[name];
-
-      reelay::kwargs kw = {{"function", func}};
-      kw.insert(meta.begin(), meta.end()); 
-      auto expr = Setting::make_state("predicate", kw);
-
-      this->states.push_back(expr);
-      return std::static_pointer_cast<node_t>(expr);
-    };
-
-    parser["ExistsExpr"] = [&](const peg::SemanticValues &sv) {
-      auto vars = any_cast<std::vector<std::string>>(sv[0]);
-
-      auto child = any_cast<node_ptr_t>(sv[1]);
-      auto args = std::vector<node_ptr_t>({child});
-
-      reelay::kwargs kw = {{"args", args}, {"vars", vars}};
-      kw.insert(meta.begin(), meta.end());
-      auto expr = Setting::make_node("exists", kw);
-
-      return std::static_pointer_cast<node_t>(expr);
-    };
-
-    parser["ForallExpr"] = [&](const peg::SemanticValues &sv) {
-      auto vars = any_cast<std::vector<std::string>>(sv[0]);
-
-      auto child = any_cast<node_ptr_t>(sv[1]);
-      auto args = std::vector<node_ptr_t>({child});
-
-      reelay::kwargs kw = {{"args", args}, {"vars", vars}};
-      kw.insert(meta.begin(), meta.end());
-      auto expr = Setting::make_node("forall", kw);
-
-      return std::static_pointer_cast<node_t>(expr);
-    };
-
-    parser["NotExpr"] = [&](const peg::SemanticValues &sv) {
-      // Rule: NotExpr  <- LNOT Expression
+    parser["BoolNegative"] = [&](const peg::SemanticValues &sv) {
       node_ptr_t child = any_cast<node_ptr_t>(sv[0]);
       auto args = std::vector<node_ptr_t>({child});
 
@@ -296,27 +192,7 @@ template <class Setting> struct regex_parser {
       return std::static_pointer_cast<node_t>(expr);
     };
 
-    parser["Implicative"] = [&](const peg::SemanticValues &sv) {
-      // Rule:
-      if (sv.size() > 1) {
-        std::vector<node_ptr_t> args;
-        for (size_t i = 0; i < sv.size(); i++) {
-          node_ptr_t child = any_cast<node_ptr_t>(sv[i]);
-          args.push_back(child);
-        }
-
-        reelay::kwargs kw = {{"args", args}};
-        kw.insert(meta.begin(), meta.end());
-        auto expr = Setting::make_node("implication", kw);
-
-        return std::static_pointer_cast<node_t>(expr);
-      } else {
-        node_ptr_t child = any_cast<node_ptr_t>(sv[0]);
-        return child;
-      }
-    };
-
-    parser["Disjunctive"] = [&](const peg::SemanticValues &sv) {
+    parser["BoolDisjunctive"] = [&](const peg::SemanticValues &sv) {
       // Rule:
       if (sv.size() > 1) {
         std::vector<node_ptr_t> args;
@@ -336,7 +212,7 @@ template <class Setting> struct regex_parser {
       }
     };
 
-    parser["Conjunctive"] = [&](const peg::SemanticValues &sv) {
+    parser["BoolConjunctive"] = [&](const peg::SemanticValues &sv) {
       // Rule:
       if (sv.size() > 1) {
         std::vector<node_ptr_t> args;
@@ -350,138 +226,6 @@ template <class Setting> struct regex_parser {
         auto expr = Setting::make_node("conjunction", kw);
 
         return std::static_pointer_cast<node_t>(expr);
-      } else {
-        node_ptr_t child = any_cast<node_ptr_t>(sv[0]);
-        return child;
-      }
-    };
-
-    parser["PrevExpr"] = [&](const peg::SemanticValues &sv) {
-      // Rule:
-      node_ptr_t child = any_cast<node_ptr_t>(sv[0]);
-      auto args = std::vector<node_ptr_t>({child});
-
-      reelay::kwargs kw = {{"args", args}};
-      kw.insert(meta.begin(), meta.end());
-      auto expr = Setting::make_state("previous", kw);
-
-      this->states.push_back(expr);
-      return std::static_pointer_cast<node_t>(expr);
-    };
-
-    parser["OnceExpr"] = [&](const peg::SemanticValues &sv) {
-      // Rule:
-      node_ptr_t child = any_cast<node_ptr_t>(sv[0]);
-      auto args = std::vector<node_ptr_t>({child});
-
-      reelay::kwargs kw = {{"args", args}};
-      kw.insert(meta.begin(), meta.end());
-      auto expr = Setting::make_state("past_sometime", kw);
-
-      this->states.push_back(expr);
-      return std::static_pointer_cast<node_t>(expr);
-    };
-
-    parser["TimedOnceExpr"] = [&](const peg::SemanticValues &sv) {
-      // Rule:
-      std::pair<float, float> bound = any_cast<std::pair<float, float>>(sv[0]);
-      node_ptr_t child = any_cast<node_ptr_t>(sv[1]);
-
-      time_t lbound = std::get<0>(bound);
-      time_t ubound = std::get<1>(bound);
-      auto args = std::vector<node_ptr_t>({child});
-
-      reelay::kwargs kw = {{"args", args},
-                           {"lbound", lbound},
-                           {"ubound", ubound}};
-      kw.insert(meta.begin(), meta.end());
-      state_ptr_t expr;
-      if (ubound > 0) {
-        expr = Setting::make_state("past_sometime_bounded", kw);
-      } else {
-        expr = Setting::make_state("past_sometime_bounded_half", kw);
-      }
-
-      this->states.push_back(expr);
-      return std::static_pointer_cast<node_t>(expr);
-    };
-
-    parser["HistExpr"] = [&](const peg::SemanticValues &sv) {
-      // Rule:
-      node_ptr_t child = any_cast<node_ptr_t>(sv[0]);
-      auto args = std::vector<node_ptr_t>({child});
-
-      reelay::kwargs kw = {{"args", args}};
-      kw.insert(meta.begin(), meta.end());
-      auto expr = Setting::make_state("past_always", kw);
-
-      this->states.push_back(expr);
-      return std::static_pointer_cast<node_t>(expr);
-    };
-
-    parser["TimedHistExpr"] = [&](const peg::SemanticValues &sv) {
-      // Rule:
-      std::pair<float, float> bound = any_cast<std::pair<float, float>>(sv[0]);
-      node_ptr_t child = any_cast<node_ptr_t>(sv[1]);
-
-      time_t lbound = std::get<0>(bound);
-      time_t ubound = std::get<1>(bound);
-      auto args = std::vector<node_ptr_t>({child});
-
-      reelay::kwargs kw = {{"args", args},
-                           {"lbound", lbound},
-                           {"ubound", ubound}};
-      kw.insert(meta.begin(), meta.end());
-      state_ptr_t expr;
-      if (ubound > 0) {
-        expr = Setting::make_state("past_always_bounded", kw);
-      } else {
-        expr = Setting::make_state("past_always_bounded_half", kw);
-      }
-
-      this->states.push_back(expr);
-      return std::static_pointer_cast<node_t>(expr);
-    };
-
-    parser["SinceExpr"] = [&](const peg::SemanticValues &sv) {
-      
-      if (sv.size() == 3) {
-        node_ptr_t left = any_cast<node_ptr_t>(sv[0]);
-        std::pair<float, float> bound =
-            any_cast<std::pair<float, float>>(sv[1]);
-        node_ptr_t right = any_cast<node_ptr_t>(sv[2]);
-
-        time_t lbound = std::get<0>(bound);
-        time_t ubound = std::get<1>(bound);
-        auto args = std::vector<node_ptr_t>({left, right});
-
-        reelay::kwargs kw = {{"args", args},
-                             {"lbound", lbound},
-                             {"ubound", ubound}};
-        kw.insert(meta.begin(), meta.end());
-
-        state_ptr_t expr;
-        if (ubound > 0){
-          expr = Setting::make_state("since_bounded", kw);
-        } else {
-          expr = Setting::make_state("since_bounded_half", kw);
-        }
-
-        this->states.push_back(expr);
-        return std::static_pointer_cast<node_t>(expr);
-
-      } else if (sv.size() == 2) {
-        node_ptr_t left = any_cast<node_ptr_t>(sv[0]);
-        node_ptr_t right = any_cast<node_ptr_t>(sv[1]);
-        auto args = std::vector<node_ptr_t>({left, right});
-
-        reelay::kwargs kw = {{"args", args}};
-        kw.insert(meta.begin(), meta.end());
-        auto expr = Setting::make_state("since", kw);
-
-        this->states.push_back(expr);
-        return std::static_pointer_cast<node_t>(expr);
-
       } else {
         node_ptr_t child = any_cast<node_ptr_t>(sv[0]);
         return child;
@@ -505,7 +249,14 @@ template <class Setting> struct regex_parser {
     };
 
     parser["Name"] = [](const peg::SemanticValues &sv) { return sv.token(); };
+    parser["SQString"] = [](const peg::SemanticValues &sv) {
+      return sv.token();
+    };
+    parser["DQString"] = [](const peg::SemanticValues &sv) {
+      return sv.token();
+    };
     parser["Number"] = [](const peg::SemanticValues &sv) { return sv.token(); };
+    parser["Bool"] = [](const peg::SemanticValues &sv) { return sv.token(); };
 
     parser.enable_packrat_parsing(); // Enable packrat parsing.
   }

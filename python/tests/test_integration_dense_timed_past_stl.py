@@ -13,7 +13,7 @@ import reelay
 def test_integration_dense_timed_past_stl():
 
     my_monitor = reelay.past_stl.monitor(
-        pattern="once[:0.1](speed > 0.7)",
+        pattern=r"once[:0.1](speed > 0.7)",
         piecewise="linear"
     )
 

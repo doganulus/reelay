@@ -35,7 +35,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", "42"}, {"x", "13"}});
 
     auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
-        input_t>::from_temporal_logic("x");
+        input_t>::from_temporal_logic("{x>0}");
 
     auto result1 = robustness_map();
 
@@ -61,7 +61,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", "9"}, {"x1", "4"}});
 
     auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
-        input_t>::from_temporal_logic("x1 >= 4");
+        input_t>::from_temporal_logic("{x1 >= 4}");
 
     auto result1 = robustness_map();
 
@@ -87,7 +87,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", "9"}, {"x1", "4"}});
 
     auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
-        input_t>::from_temporal_logic("x1 > 4");
+        input_t>::from_temporal_logic("{x1 > 4}");
 
     auto result1 = robustness_map();
 
@@ -113,7 +113,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", "9"}, {"x1", "4"}});
 
     auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
-        input_t>::from_temporal_logic("x1 <= 4");
+        input_t>::from_temporal_logic("{x1 <= 4}");
 
     auto result1 = robustness_map();
 
@@ -139,7 +139,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", "9"}, {"x1", "4"}});
 
     auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
-        input_t>::from_temporal_logic("x1 <= 4");
+        input_t>::from_temporal_logic("{x1 <= 4}");
 
     auto result1 = robustness_map();
 
@@ -167,7 +167,7 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_t{{"time", "20"}, {"x", "15"}});
 
     auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
-        input_t>::from_temporal_logic("not(x >= 12)");
+        input_t>::from_temporal_logic("not{x >= 12}");
 
     auto result1 = robustness_map();
 
@@ -192,7 +192,7 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_t{{"time", "42"}, {"x", "13"}, {"y", "17"}});
 
     auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
-        input_t>::from_temporal_logic("x or y");
+        input_t>::from_temporal_logic("{x>0} or {y>0}");
 
     auto result1 = robustness_map();
 
@@ -218,7 +218,7 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_t{{"time", "42"}, {"x", "13"}, {"y", "17"}});
 
     auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
-        input_t>::from_temporal_logic("x and y");
+        input_t>::from_temporal_logic("{x>0} and {y>0}");
 
     auto result1 = robustness_map();
 
@@ -244,7 +244,7 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_t{{"time", "42"}, {"x", "-13"}, {"y", "17"}});
 
     auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
-        input_t>::from_temporal_logic("x implies y");
+        input_t>::from_temporal_logic("{x>0} implies {y>0}");
 
     auto result1 = robustness_map();
 
@@ -273,7 +273,7 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_t{{"time", "42"}, {"x", "-13"}, {"y", "7"}});
 
     auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
-        input_t>::from_temporal_logic("historically(x)");
+        input_t>::from_temporal_logic("historically{x>0}");
 
     auto result1 = robustness_map();
 
@@ -299,7 +299,7 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_t{{"time", "42"}, {"x", "13"}, {"y", "7"}});
 
     auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
-        input_t>::from_temporal_logic("once x");
+        input_t>::from_temporal_logic("once{x>0}");
 
     auto result1 = robustness_map();
 
@@ -336,7 +336,7 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_t{{"time", "14"}, {"x", "1"}, {"y", "0"}});
 
     auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
-        input_t>::from_temporal_logic("x since y");
+        input_t>::from_temporal_logic("{x>0} since {y>0}");
 
     auto result1 = robustness_map();
 
@@ -381,7 +381,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", "90"}, {"x", "4"}});
 
     auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
-        input_t>::from_temporal_logic("historically[12:24] x");
+        input_t>::from_temporal_logic("historically[12:24]{x>0}");
 
     auto result1 = robustness_map();
 
@@ -414,7 +414,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", "90"}, {"x", "4"}});
 
     auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
-        input_t>::from_temporal_logic("historically[15:] x");
+        input_t>::from_temporal_logic("historically[15:]{x>0}");
 
     auto result1 = robustness_map();
 
@@ -444,7 +444,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", "90"}, {"x", "4"}});
 
     auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
-        input_t>::from_temporal_logic("once[12:24] x");
+        input_t>::from_temporal_logic("once[12:24]{x>0}");
 
     auto result1 = robustness_map();
 
@@ -475,7 +475,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", "90"}, {"x", "4"}});
 
     auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
-        input_t>::from_temporal_logic("once[15:] x");
+        input_t>::from_temporal_logic("once[15:]{x>0}");
 
     auto result1 = robustness_map();
 
@@ -513,7 +513,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", "14"}, {"x", "1"}, {"y", "0"}});
 
     auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
-        input_t>::from_temporal_logic("x since[:100] y");
+        input_t>::from_temporal_logic("{x>0} since[:100] {y>0}");
 
     auto result1 = robustness_map();
 
@@ -554,7 +554,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", "50"}, {"x", "-3"}, {"y", "22"}});
 
     auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
-        input_t>::from_temporal_logic("x since[5:15] y");
+        input_t>::from_temporal_logic("{x>0} since[5:15] {y>0}");
 
     auto result1 = robustness_map();
 
@@ -586,7 +586,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", "5"}, {"x", "-3"}, {"y", "22"}});
 
     auto net1 = reelay::dense_timed<dense_time_t>::robustness<value_t>::monitor<
-        input_t>::from_temporal_logic("x since[2:] y");
+        input_t>::from_temporal_logic("{x>0} since[2:] {y>0}");
 
     auto result1 = robustness_map();
 

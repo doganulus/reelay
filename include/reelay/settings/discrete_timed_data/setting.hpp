@@ -17,7 +17,8 @@
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/networks/discrete_timed_network.hpp"
 
-#include "reelay/settings/discrete_timed_data/atoms.hpp"
+#include "reelay/settings/discrete_timed_data/atomic_listing.hpp"
+#include "reelay/settings/discrete_timed_data/atomic_record.hpp"
 
 #include "reelay/settings/discrete_timed_data/exists.hpp"
 #include "reelay/settings/discrete_timed_data/forall.hpp"
@@ -85,7 +86,7 @@ struct factory {
       result = std::make_shared<forall<input_t, time_t>>(kw);
     } else {
       throw std::invalid_argument(
-          "Unsupported operator for the untimed setting");
+          "Unsupported operator for the discrete timed data setting");
     }
     return result;
   }
@@ -94,28 +95,10 @@ struct factory {
 
     state_ptr_t result;
 
-    if (name == "proposition") {
-      result = std::make_shared<proposition<input_t, time_t>>(kw);
-    } else if (name == "listing") {
+    if (name == "listing") {
       result = std::make_shared<listing<input_t, time_t>>(kw);
     } else if (name == "record") {
       result = std::make_shared<record<input_t, time_t>>(kw);
-      // } else if (name == "lt" or name == "<") {
-      //   result =
-      //       std::make_shared<basic_predicate_lt<input_t, output_t,
-      //       time_t>>(kw);
-      // } else if (name == "le" or name == "leq" or name == "<=") {
-      //   result =
-      //       std::make_shared<basic_predicate_le<input_t, output_t,
-      //       time_t>>(kw);
-      // } else if (name == "gt" or name == ">") {
-      //   result =
-      //       std::make_shared<basic_predicate_gt<input_t, output_t,
-      //       time_t>>(kw);
-      // } else if (name == "ge" or name == "geq" or name == ">=") {
-      //   result =
-      //       std::make_shared<basic_predicate_ge<input_t, output_t,
-      //       time_t>>(kw);
     } else if (name == "previous") {
       result = std::make_shared<previous<input_t, time_t>>(kw);
     } else if (name == "past_sometime") {

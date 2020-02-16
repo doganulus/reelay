@@ -12,7 +12,7 @@ import reelay
 def test_integration_discrete_timed_past_stl_robustness():
 
     my_monitor = reelay.past_stl.monitor(
-        pattern="historically[:4](speed > 13.0)",
+        pattern=r"historically[:4](speed > 13.0)",
         time_model="discrete",
         semantics="robustness"
     )

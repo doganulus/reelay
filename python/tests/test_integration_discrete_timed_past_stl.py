@@ -11,7 +11,7 @@ import reelay
 def test_integration_discrete_timed_past_stl():
 
     my_monitor = reelay.past_stl.monitor(
-        pattern="(speed > 13.0) since[:3] lights_on",
+        pattern=r"(speed > 13.0) since[:3] lights_on",
         time_model="discrete"
         )
 

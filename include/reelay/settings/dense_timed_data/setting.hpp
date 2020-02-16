@@ -93,9 +93,7 @@ template <typename X, typename T, int option> struct factory {
 
     state_ptr_t res;
 
-    if (name == "proposition") {
-      // res = std::make_shared<proposition<input_t, time_t>>(kw);
-    } else if (name == "listing") {
+    if (name == "listing") {
       res = std::make_shared<listing<input_t, time_t, option>>(kw);
     } else if (name == "record") {
       res = std::make_shared<record<input_t, time_t, option>>(kw);

@@ -142,6 +142,10 @@ test_recipes:
 	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_recipes.cpp -o test_recipes -I$(ROOT_DIR)/include -lcudd
 	cd test/build && ./test_recipes -r compact
 
+test_conversions:
+	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_conversions.cpp -o test_conversions -I$(ROOT_DIR)/include -lcudd
+	cd test/build && ./test_conversions -r compact
+
 test_mtl_performance_discrete: test/timescales/discrete/multitime/*.txt
 	for batchfile in $^ ; do \
         multitime -n 10 -b $${batchfile} ; \

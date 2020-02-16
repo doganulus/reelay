@@ -33,7 +33,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"x1", "5"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("x1 > 4");
+        input_t>::from_temporal_logic("{x1 > 4}");
 
     auto result = std::vector<output_t>();
 
@@ -56,7 +56,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"x1", "5"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("x1 >= 4");
+        input_t>::from_temporal_logic("{x1 >= 4}");
 
     auto result = std::vector<output_t>();
 
@@ -79,7 +79,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"x1", "5"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("x1 < 4");
+        input_t>::from_temporal_logic("{x1 < 4}");
 
     auto result = std::vector<output_t>();
 
@@ -102,7 +102,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"x1", "5"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("x1 <= 4");
+        input_t>::from_temporal_logic("{x1 <= 4}");
 
     auto result = std::vector<output_t>();
 
@@ -158,7 +158,7 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_t{{"p1", "5"}, {"p2", "4"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("p1 or p2");
+        input_t>::from_temporal_logic("{p1>0} or {p2>0}");
 
     auto result = std::vector<output_t>();
 
@@ -182,7 +182,7 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_t{{"p1", "5"}, {"p2", "4"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("p1 and p2");
+        input_t>::from_temporal_logic("{p1>0} and {p2>0}");
 
     auto result = std::vector<output_t>();
 
@@ -206,7 +206,7 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("p1 -> p2");
+        input_t>::from_temporal_logic("{p1>0} -> {p2>0}");
 
     auto result = std::vector<output_t>();
 
@@ -228,7 +228,7 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_t{{"p1", "10"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("not p1");
+        input_t>::from_temporal_logic("not{p1>0}");
 
     auto result = std::vector<output_t>();
 
@@ -255,9 +255,9 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_t{{"p1", "6"}, {"p2", "0"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("pre p1");
+        input_t>::from_temporal_logic("pre{p1>0}");
     auto net2 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("pre p2");
+        input_t>::from_temporal_logic("pre{p2>0}");
 
     auto result1 = std::vector<output_t>();
     auto result2 = std::vector<output_t>();
@@ -286,9 +286,9 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_t{{"p1", "6"}, {"p2", "0"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("historically p1");
+        input_t>::from_temporal_logic("historically{p1>0}");
     auto net2 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("historically p2");
+        input_t>::from_temporal_logic("historically{p2>0}");
 
     auto result1 = std::vector<output_t>();
     auto result2 = std::vector<output_t>();
@@ -317,9 +317,9 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_t{{"p1", "5"}, {"p2", "8"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("once p1");
+        input_t>::from_temporal_logic("once{p1>0}");
     auto net2 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("once p2");
+        input_t>::from_temporal_logic("once{p2>0}");
 
     auto result1 = std::vector<output_t>();
     auto result2 = std::vector<output_t>();
@@ -358,7 +358,7 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("p1 since p2");
+        input_t>::from_temporal_logic("{p1>0} since {p2>0}");
 
     auto result1 = std::vector<output_t>();
 
@@ -395,7 +395,7 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("p1 since[:100] p2");
+        input_t>::from_temporal_logic("{p1>0} since[:100] {p2>0}");
 
     auto result1 = std::vector<output_t>();
 
@@ -430,7 +430,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"p1", "2"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("once[2:4] p1");
+        input_t>::from_temporal_logic("once[2:4]{p1>0}");
 
     auto result1 = std::vector<output_t>();
 
@@ -462,7 +462,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"p1", "2"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("once[:3] p1");
+        input_t>::from_temporal_logic("once[:3]{p1>0}");
 
     auto result1 = std::vector<output_t>();
 
@@ -494,7 +494,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"p1", "2"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("once[2:] p1");
+        input_t>::from_temporal_logic("once[2:]{p1>0}");
 
     auto result1 = std::vector<output_t>();
 
@@ -525,7 +525,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"p1", "2"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("historically[2:4] p1");
+        input_t>::from_temporal_logic("historically[2:4]{p1>0}");
 
     auto result1 = std::vector<output_t>();
 
@@ -556,7 +556,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"p1", "2"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("historically[:3] p1");
+        input_t>::from_temporal_logic("historically[:3]{p1>0}");
 
     auto result1 = std::vector<output_t>();
 
@@ -587,7 +587,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"p1", "2"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("historically[2:] p1");
+        input_t>::from_temporal_logic("historically[2:]{p1>0}");
 
     auto result1 = std::vector<output_t>();
 
@@ -624,7 +624,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("p1 since[2:4] p2");
+        input_t>::from_temporal_logic("{p1>0} since[2:4] {p2>0}");
 
     auto result1 = std::vector<output_t>();
 
@@ -660,7 +660,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("p1 since[:4] p2");
+        input_t>::from_temporal_logic("{p1>0} since[:4] {p2>0}");
 
     auto result1 = std::vector<output_t>();
 
@@ -695,7 +695,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("p1 since[:100] p2");
+        input_t>::from_temporal_logic("{p1>0} since[:100] {p2>0}");
 
     auto result1 = std::vector<output_t>();
 
@@ -721,7 +721,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"p1", "-3"}, {"p2", "22"}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
-        input_t>::from_temporal_logic("p1 since[2:] p2");
+        input_t>::from_temporal_logic("{p1>0} since[2:] {p2>0}");
 
     auto result1 = std::vector<output_t>();
 
