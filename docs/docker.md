@@ -8,6 +8,6 @@ First, pull the latest docker image and run it in a container by typing:
 
 Then you can run `reelay` apps inside the container. For example, 
 
-    rymtl 'p1 since[18:24] p2' reelay/apps/mtl/examples/2.csv --verbose 1
+    rymtl '{p1} since[18:24] {p2}' reelay/apps/mtl/examples/2.csv --verbose 1
 
 Note that you can install Docker engine on Ubuntu by following instructions from [here](https://docs.docker.com/install/linux/docker-ce/ubuntu/) if you don't have it already.

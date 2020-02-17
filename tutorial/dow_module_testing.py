@@ -13,20 +13,20 @@ faulty_sys_behavior = [
     ]
 
 my_monitor_1 = reelay.past_mtl.monitor(
-    pattern="(historically[0:5](door_open) and not dow_suppressed) -> "
+    pattern=r"(historically[0:5]({door_open} and not {dow_suppressed}) -> "
       "door_open_warning", 
     time_model="discrete")
 
 my_monitor_2 = reelay.past_mtl.monitor(
-    pattern="door_open_warning -> historically[0:5](door_open)", 
+    pattern=r"{door_open_warning} -> historically[0:5]{door_open}", 
     time_model="discrete")
 
 my_monitor_3 = reelay.past_mtl.monitor(
-    pattern="door_open_warning -> not dow_suppressed", 
+    pattern=r"{door_open_warning} -> {not dow_suppressed}", 
     time_model="discrete")
 
 my_monitor_4 = reelay.past_mtl.monitor(
-    pattern="door_open_warning -> not(pre(door_open since door_open_warning))", 
+    pattern=r"{door_open_warning} -> not(pre({door_open} since {door_open_warning}))", 
     time_model="discrete")
 
 for x in faulty_sys_behavior:

@@ -51,14 +51,14 @@ int main(int argc, const char *argv[]) {
                                         {"door_open_warning", 1}});
 
   auto my_monitor_1 = reelay::discrete_timed_past_mtl_monitor(
-      "(historically[0:5](door_open) and not dow_suppressed) -> "
-      "door_open_warning");
+      "(historically[0:5]{door_open} and not {dow_suppressed}) -> "
+      "{door_open_warning}");
   auto my_monitor_2 = reelay::discrete_timed_past_mtl_monitor(
-      "door_open_warning -> historically[0:5](door_open)");
+      "{door_open_warning} -> historically[0:5]{door_open}");
   auto my_monitor_3 = reelay::discrete_timed_past_mtl_monitor(
-      "door_open_warning -> not dow_suppressed");
+      "{door_open_warning} -> not {dow_suppressed}");
   auto my_monitor_4 = reelay::discrete_timed_past_mtl_monitor(
-      "door_open_warning -> not(pre(door_open since door_open_warning))");
+      "{door_open_warning} -> not(pre({door_open} since {door_open_warning}))");
 
   for (const auto &message : faulty_sys_behavior) {
 

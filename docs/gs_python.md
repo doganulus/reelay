@@ -3,7 +3,7 @@
 !!! Warning
     Reelay Python API is in its early stage. Everthing in this page is subject to change.
 
-In this part, we show how to instatiate and execute **Reelay** monitors from Python given formal specifications. These monitors would observe the system behavior and report violations at runtime. First recall our specifications for the Door Open Warning (DOW) feature of a home assistant robot as explained in [the introduction](gs_intro.md). 
+In this part, we show how to instatiate and execute **Reelay** monitors from Python given formal specifications. These monitors would observe the system behavior and report violations at runtime. First recall our specifications for the Door Open Warning (DOW) feature of a home assistant robot as explained in [the introduction](gs_intro.md).
 
 The source code of this tutorial can be found [here](https://github.com/doganulus/reelay/blob/master/tutorial/dow_module_testing.py).
 
@@ -11,7 +11,7 @@ The source code of this tutorial can be found [here](https://github.com/doganulu
 
 The core component of Reelay is a header-only template library for C++ supporting several specification languages. In [C++ tutorial](gs_cpp.md), we introduced **Reelay** recipes that instantiate template classes with concrete datatypes. **Reelay** Python package is essentially Python bindings of these recipes together with a thin layer of Pythonic user interface. In this tutorial, we will use **Reelay** Python package imported into your project as follows:
 ```python
-import reelay 
+import reelay
 ```
 Some of these recipes are given below in the table together with predefined datatypes. Main differences between these monitor classes are the time model, either `discrete` or `dense` (roughly meaning-- might have time gaps between samples), and the input type whether we monitor Boolean signals (as in `past_ltl_monitor`) or numerical signals (as in `past_stl_monitor`).
 
@@ -21,7 +21,7 @@ Some of these recipes are given below in the table together with predefined data
 |`reelay.past_mtl.monitor` | `dict[str, int]`  | `discrete` |
 |`reelay.past_stl.monitor` | `dict[str, float]` | `dense` |
 
-Please also check [the User Manual](user_manual.md) for the information regarding Python API. We provide further information on [time models](time_models.md) and [temporal logics](temporal_logic.md) under advanced topics. 
+Please also check [the User Manual](user_manual.md) for the information regarding Python API. We provide further information on [time models](time_models.md) and [temporal logics](temporal_logic.md) under advanced topics.
 
 ## Check Requirements over System Behaviors
 
@@ -43,8 +43,8 @@ correct_sys_behavior = [
 The use of `reelay` monitors is pretty straighforward and we construct an online monitor for our first specification as follows: 
 ```python
 my_monitor_1 = reelay.past_mtl.monitor(
-    pattern="(historically[0:5](door_open) and not dow_suppressed) -> "
-      "door_open_warning", 
+    pattern=r"(historically[0:5]{door_open} and not {dow_suppressed} -> "
+      "door_open_warning",
     time_model="discrete")
 ```
 
