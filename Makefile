@@ -45,19 +45,19 @@ cudd-uninstall:
 benchmark: timescales rvbc2018
 
 timescales:
-	mkdir -p build
-	cd build && rm -rf timescales && git clone https://github.com/doganulus/timescales.git
-	cd build/timescales && make full
+	mkdir -p test/build
+	cd test/build && rm -rf timescales && git clone https://github.com/doganulus/timescales.git
+	cd test/build/timescales && make full
 
 timescales-clean:
-	rm -rf build/timescales
+	rm -rf test/build/timescales
 
 rvbc2018:
-	mkdir -p build
-	cd build && rm -rf benchmark-challenge-2018 && git clone https://github.com/runtime-verification/benchmark-challenge-2018.git
+	mkdir -p test/build
+	cd test/build && rm -rf benchmark-challenge-2018 && git clone https://github.com/runtime-verification/benchmark-challenge-2018.git
 
 rvbc2018-clean:
-	rm -rf build/benchmark-challenge-2018
+	rm -rf test/build/benchmark-challenge-2018
 
 apps: rymtl rystl ryjavu
 

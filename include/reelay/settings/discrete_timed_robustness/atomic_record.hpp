@@ -111,7 +111,7 @@ struct record : public discrete_timed_state<X, V, T> {
   void update(const input_t &args, time_t) override {
     value = funcs[0](args);
     for (std::size_t i = 1; i < funcs.size(); i++) {
-      value &= funcs[i](args);
+      value = std::min(value, funcs[i](args));
     }
   }
   output_t output(time_t) override { return value; }

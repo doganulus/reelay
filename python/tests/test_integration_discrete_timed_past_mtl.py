@@ -11,7 +11,7 @@ import reelay
 def test_integration_discrete_timed_past_mtl():
 
     my_monitor = reelay.past_mtl.monitor(
-        pattern=r"p1 since[2:4] p2",
+        pattern=r"{p1} since[2:4] {p2}",
         time_model="discrete")
 
     input_sequence = [

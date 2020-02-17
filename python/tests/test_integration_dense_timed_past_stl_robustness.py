@@ -12,7 +12,7 @@ import reelay
 def test_integration_dense_timed_past_stl_robustness():
 
     my_monitor = reelay.past_stl.monitor(
-        pattern=r"historically[:4.2](speed < 13.0)",
+        pattern=r"historically[:4.2]{speed < 13.0}",
         time_model="dense",
         piecewise="constant",
         semantics="robustness"

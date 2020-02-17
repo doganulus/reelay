@@ -118,6 +118,32 @@ TEST_CASE("Atoms") {
     CHECK(result == expected);
   }
 
+  SECTION("Record Double Comparison") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x1", "2"}});
+    sequence.push_back(input_t{{"x1", "3"}});
+    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", "5"}});
+    sequence.push_back(input_t{{"x1", "6"}});
+
+    auto net1 =
+        reelay::robustness<output_t>::monitor<input_t>::from_temporal_logic(
+            "{x1 > 3, x1 < 5}");
+
+    auto result = std::vector<output_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<output_t>({-1, 0, 1, 0, -1});
+
+    CHECK(result == expected);
+  }
+
   SECTION("CustomPredicates") {
 
     std::vector<input_t> sequence = std::vector<input_t>();

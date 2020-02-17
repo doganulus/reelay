@@ -78,6 +78,24 @@ template <> struct field_of<std::unordered_map<std::string, std::string>> {
   }
 };
 
+template <> struct field_of<std::unordered_map<std::string, int>> {
+  static const std::unordered_set<std::string> falsity;
+  inline static bool as_bool(const std::unordered_map<std::string, int> &args,
+                             const std::string &key) {
+    return args.at(key);
+  }
+  inline static double
+  as_float(const std::unordered_map<std::string, int> &args,
+           const std::string &key) {
+    return args.at(key);
+  }
+  inline static std::string
+  as_string(const std::unordered_map<std::string, int> &args,
+            const std::string &key) {
+    return std::to_string(args.at(key));
+  }
+};
+
 template <> struct field_of<std::unordered_map<std::string, double>> {
   static const std::unordered_set<std::string> falsity;
   inline static bool

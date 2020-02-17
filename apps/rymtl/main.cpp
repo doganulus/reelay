@@ -12,13 +12,28 @@
 #include "memory"
 
 #include "reelay/monitors.hpp"
+#include "reelay/conversions.hpp"
 #include "reelay/targets/stdout/formatter.hpp"
 
 #include "../third_party/argparse.hpp"
 #include "../third_party/csvparser_modern.hpp"
 
-    int
-    main(int argc, const char *argv[]) {
+template <> struct reelay::field_of<csv::CSVRow> {
+  static const std::unordered_set<std::string> falsity;
+  inline static bool as_bool(const csv::CSVRow &args, const std::string &key) {
+    return args.at(key) != "0";
+  }
+  inline static double as_float(const csv::CSVRow &args,
+                                const std::string &key) {
+    return std::stod(args.at(key));
+  }
+  inline static std::string as_string(const csv::CSVRow &args,
+                                      const std::string &key) {
+    return args.at(key);
+  }
+};
+
+int main(int argc, const char *argv[]) {
   using time_t = int64_t;
   using input_t = csv::CSVRow;
   using interval_set = reelay::interval_set<time_t>;
