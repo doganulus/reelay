@@ -31,9 +31,7 @@ nav:
     - 'Use Reelay from CLI' : 'gs_cli.md'
 
   - User Manual: 
-    - 'Temporal Behaviors' : 'behaviors.md'
-    - 'Formal Specifications' : 'specification.md'
-    - 'PTL Cheatsheet' : 'past_temporal_logic.md'
+    - 'Rye Format' : 'rye.md'
     - 'C++ API' : 'cpp_api.md'
     - 'Python API' : 'python_api.md'
     - 'Benchmarking' : 'performance.md'

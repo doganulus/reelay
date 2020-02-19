@@ -6,7 +6,7 @@ First, pull the latest docker image and run it in a container by typing:
     docker pull doganulus/reelay
     docker run -it doganulus/reelay
 
-Then you can run `reelay` apps inside the container. For example, 
+Then you can run `reelay` apps inside the container. For example,
 
     rymtl '{p1} since[18:24] {p2}' reelay/apps/mtl/examples/2.csv --verbose 1
 

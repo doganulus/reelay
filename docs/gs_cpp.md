@@ -25,6 +25,7 @@ Please also check [the User Manual](user_manual.md) for the information regardin
 ## Check Requirements over System Behaviors
 
 Let's put correct system behavior into a container for demo purposes. Later we will read one-by-one it as if it comes from a real-time system.
+
 ```cpp
 using input_t = std::map<std::string, int64_t>;
 std::vector<input_t> correct_sys_behavior = std::vector<input_t>();

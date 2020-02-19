@@ -2,7 +2,7 @@
 
 This initial part of the tutorial is about why we have system requirements and how to write them in the specification languages that Reelay support. The remaining parts will about how to check these specifications over temporal streams using **Reelay**.
 
-Let’s start with an example from the robotics such that we are designing a home assistant robot as our next big product. Besides we also think our customers would love our robots with a door open warning feature! 
+Let’s start with an example from the robotics such that we are designing a home assistant robot as our next big product. Besides we also think our customers would love our robots with a door open warning feature!
 
 ## An Example Feature
 
@@ -41,27 +41,31 @@ The next sections will be about writing these requirements in a non-ambigious (a
 
 ## Specify Requirements
 
-In this tutorial, we will use Past Temporal Logic (PTL) to specify our requirements. Temporal logics such as PTL are commonly used to describe temporal patterns over signals in a precise and non-ambigious manner. **Reelay** can compile PTL specifications into efficient runtime monitors.
+In this tutorial, we will use Reelay Expression (RYE) format to specify our requirements. RYE format is a temporal logic based formal language commonly used to describe temporal patterns over signals in a precise and non-ambigious manner. **Reelay** can compile RYE specifications into efficient runtime monitors.
 
 Let's specify!
 
-Our first requirement `SYS-REQ-01` says that the system shall issue a warning if the door is open at least 5 minutes. This of course should be under understood under a condition that the warning is not suppressed as `SYS-REQ-02` will require. This often goes without saying as humans can relate two requirements easily. However, when specifiying requirements for the machine, we have to be more explicit. Below is the first part of `SYS-REQ-01` expressed in PTL:
-```
+Our first requirement `SYS-REQ-01` says that the system shall issue a warning if the door is open at least 5 minutes. This of course should be under understood under a condition that the warning is not suppressed as `SYS-REQ-02` will require. This often goes without saying as humans can relate two requirements easily. However, when specifiying requirements for the machine, we have to be more explicit. Below is the first part of `SYS-REQ-01` expressed in RYE:
+
+```rye
 (historically[0:5]{door_open} and not {dow_suppressed}) -> {door_open_warning}
 ```
-The implication operator `->` says the right hand side must be true if the left hand side is true. The temporal operator `historically[a:b]{cond}` tells that the condition `cond` must be always true between time points `[now-b, now-a]`. Therefore, the part `historically[0:5]{door_open}` is true if `door_open` is always true from `5` minutes ago to `now`. The cheatsheet for PTL is available [here](past_temporal_logic.md), which includes other temporal and Boolean operators. Overall this specification verifies `SYS-REQ-01` and its violation would be considered as a false negative.
 
-In plain English, the conditional connective `if` has sometimes a bi-directional meaning where the reverse case also goes without saying. This is also the case for `SYS-REQ-01`. The remaining two specifications verify `SYS-REQ-01` in a reverse way, for false positives, respectively. 
-```
+The implication operator `->` says the right hand side must be true if the left hand side is true. The temporal operator `historically[a:b]{cond}` tells that the condition `cond` must be always true between time points `[now-b, now-a]`. Therefore, the part `historically[0:5]{door_open}` is true if `door_open` is always true from `5` minutes ago to `now`. The reference for Reelay expression format is available [here](rye.md), which includes other temporal and Boolean operators. Overall this specification verifies `SYS-REQ-01` and its violation would be considered as a false negative.
+
+In plain English, the conditional connective `if` has sometimes a bi-directional meaning where the reverse case also goes without saying. This is also the case for `SYS-REQ-01`. The remaining two specifications verify `SYS-REQ-01` in a reverse way, for false positives, respectively.
+
+```rye
 {door_open_warning} -> historically[0:5]{door_open}
 ```
-```
+
+```rye
 {door_open_warning} -> not{dow_suppressed}
 ```
 
 Finally, the second requirement `SYS-REQ-02` describes a behavior that involves slightly more complex temporal ordering of events. Here we see the use of temporal operators `pre` (meaning previously) and `since`.
 
-```
+```rye
 {door_open_warning} -> not(pre({door_open} since {door_open_warning}))
 ```
 

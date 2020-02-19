@@ -12,6 +12,11 @@ Reelay is a header-only C++ library and set of tools for system-level verificati
 * Simple but non-restrictive user interface
 * Available for C++, Python, and the command line
 
+## Reelay Expression Format
+
+Reelay reads executable specifications written in plain text and verifies that the system does what those specifications say at runtime. In order to construct runtime monitors automatically, those specifications must follow some basic syntax rules, called Reelay Expression (RYE) format. See [RYE reference](docs/rye.md) for more details.
+
+
 ## Get Started
 
 The next steps for you are to install Reelay [from source](docs/install.md) and follow through [the tutorial](docs/gs_intro.md) to learn how to use Reelay monitors from [C++](docs/gs_cpp.md), [Python](docs/gs_python.md), and the [command line interface](docs/gs_cli.md). Check out [the documentation](https://doganulus.github.io/reelay/) for more details.
