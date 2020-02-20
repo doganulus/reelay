@@ -10,13 +10,14 @@
 #include "string"
 #include "reelay/parser/ptl.hpp"
 #include "reelay/settings.hpp"
+#include "reelay/json.hpp"
 
 namespace reelay {
 
 struct dense_timed_past_qtl_dict_monitor {
 
   using time_t = int64_t;
-  using input_t = std::unordered_map<std::string, std::string>;
+  using input_t = reelay::json;
   using output_t = std::vector<std::pair<time_t, bool>>;
 
   using factory = dense_timed_data_setting::factory<input_t, time_t, 0>;

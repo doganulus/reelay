@@ -10,12 +10,13 @@
 #include "string"
 #include "reelay/parser/ptl.hpp"
 #include "reelay/settings.hpp"
+#include "reelay/json.hpp"
 
 namespace reelay {
 
 struct past_ltl_monitor{
 
-  using input_t = std::unordered_map<std::string, bool>;
+  using input_t = reelay::json;
   using factory = untimed_setting::factory<input_t>;
 
   using network_t = typename factory::network_t;

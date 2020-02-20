@@ -10,13 +10,15 @@
 #include "string"
 #include "reelay/parser/ptl.hpp"
 #include "reelay/settings.hpp"
+#include "reelay/json.hpp"
+
 
 namespace reelay {
 
 struct dense_timed_past_mtl_monitor {
 
   using time_t = double;
-  using input_t = std::unordered_map<std::string, time_t>;
+  using input_t = reelay::json;
   using output_t = std::vector<std::pair<time_t, bool>>;
   using factory = dense_timed_setting::factory<input_t, time_t>;
 

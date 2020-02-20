@@ -10,13 +10,14 @@
 #include "string"
 #include "reelay/parser/ptl.hpp"
 #include "reelay/settings.hpp"
+#include "reelay/json.hpp"
 
 namespace reelay {
 
 struct discrete_timed_past_qtl_dict_monitor {
 
   using time_t = int64_t;
-  using input_t = std::unordered_map<std::string, std::string>;
+  using input_t = reelay::json;
   using factory = discrete_timed_data_setting::factory<input_t, time_t>;
 
   using network_t = typename factory::network_t;

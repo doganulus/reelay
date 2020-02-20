@@ -10,6 +10,7 @@
 #include "string"
 #include "reelay/parser/ptl.hpp"
 #include "reelay/settings.hpp"
+#include "reelay/json.hpp"
 
 namespace reelay {
 
@@ -17,7 +18,7 @@ struct dense_timed_past_rstl0_monitor {
 
   using time_t = double;
   using value_t = double;
-  using input_t = std::unordered_map<std::string, time_t>;
+  using input_t = reelay::json;
   using output_t = std::vector<std::pair<time_t, value_t>>;
   using factory = dense_timed_robustness_0_setting::factory<input_t, value_t, time_t>;
 
