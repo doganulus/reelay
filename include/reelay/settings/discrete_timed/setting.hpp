@@ -16,8 +16,21 @@
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/networks/discrete_timed_network.hpp"
 
-#include "reelay/settings/discrete_timed/atomic_record.hpp"
 #include "reelay/settings/discrete_timed/atomic_custom.hpp"
+#include "reelay/settings/discrete_timed/atomic_any.hpp"
+#include "reelay/settings/discrete_timed/atomic_false.hpp"
+#include "reelay/settings/discrete_timed/atomic_ge.hpp"
+#include "reelay/settings/discrete_timed/atomic_gt.hpp"
+#include "reelay/settings/discrete_timed/atomic_le.hpp"
+#include "reelay/settings/discrete_timed/atomic_lt.hpp"
+#include "reelay/settings/discrete_timed/atomic_ne.hpp"
+#include "reelay/settings/discrete_timed/atomic_number.hpp"
+#include "reelay/settings/discrete_timed/atomic_prop.hpp"
+#include "reelay/settings/discrete_timed/atomic_string.hpp"
+#include "reelay/settings/discrete_timed/atomic_true.hpp"
+
+// #include "reelay/settings/discrete_timed/atomic_list.hpp"
+#include "reelay/settings/discrete_timed/atomic_map.hpp"
 
 #include "reelay/settings/discrete_timed/conjunction.hpp"
 #include "reelay/settings/discrete_timed/disjunction.hpp"
@@ -88,8 +101,34 @@ struct factory {
 
     state_ptr_t result;
 
-    if (name == "record") {
-      result = std::make_shared<record<input_t, time_t>>(kw);
+    if (name == "atomic_map") {
+      result = std::make_shared<atomic_map<input_t, time_t>>(kw);
+    } else if (name == "atomic_list") {
+      // result = std::make_shared<atomic_list<input_t, time_t>>(kw);
+    } else if (name == "mapping_prop") {
+      result = std::make_shared<atomic_prop<input_t, time_t>>(kw);
+    } else if (name == "mapping_false") {
+      result = std::make_shared<atomic_false<input_t, time_t>>(kw);
+    } else if (name == "mapping_true") {
+      result = std::make_shared<atomic_true<input_t, time_t>>(kw);
+    } else if (name == "mapping_string") {
+      result = std::make_shared<atomic_string<input_t, time_t>>(kw);
+    } else if (name == "mapping_number") {
+      result = std::make_shared<atomic_number<input_t, time_t>>(kw);
+    } else if (name == "mapping_eq") {
+      result = std::make_shared<atomic_number<input_t, time_t>>(kw);
+    } else if (name == "mapping_ne") {
+      result = std::make_shared<atomic_ne<input_t, time_t>>(kw);
+    } else if (name == "mapping_ge") {
+      result = std::make_shared<atomic_ge<input_t, time_t>>(kw);
+    } else if (name == "mapping_gt") {
+      result = std::make_shared<atomic_gt<input_t, time_t>>(kw);
+    } else if (name == "mapping_le") {
+      result = std::make_shared<atomic_le<input_t, time_t>>(kw);
+    } else if (name == "mapping_lt") {
+      result = std::make_shared<atomic_lt<input_t, time_t>>(kw);
+    } else if (name == "mapping_any") {
+      result = std::make_shared<atomic_any<input_t, time_t>>(kw);
     } else if (name == "previous") {
       result = std::make_shared<previous<input_t, time_t>>(kw);
     } else if (name == "past_sometime") {

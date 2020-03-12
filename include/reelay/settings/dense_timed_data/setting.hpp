@@ -15,10 +15,22 @@
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/networks/dense_timed_network.hpp"
 
-#include "reelay/settings/dense_timed_data/atomic_listing_0.hpp"
-#include "reelay/settings/dense_timed_data/atomic_record_0.hpp"
-#include "reelay/settings/dense_timed_data/atomic_listing_1.hpp"
-#include "reelay/settings/dense_timed_data/atomic_record_1.hpp"
+#include "reelay/settings/dense_timed_data/atomic_any.hpp"
+#include "reelay/settings/dense_timed_data/atomic_false.hpp"
+#include "reelay/settings/dense_timed_data/atomic_ge_0.hpp"
+#include "reelay/settings/dense_timed_data/atomic_gt_0.hpp"
+#include "reelay/settings/dense_timed_data/atomic_le_0.hpp"
+#include "reelay/settings/dense_timed_data/atomic_lt_0.hpp"
+// #include "reelay/settings/dense_timed_data/atomic_ne_fwd.hpp"
+// #include "reelay/settings/dense_timed_data/atomic_eq_fwd.hpp"
+#include "reelay/settings/dense_timed_data/atomic_number.hpp"
+#include "reelay/settings/dense_timed_data/atomic_prop.hpp"
+#include "reelay/settings/dense_timed_data/atomic_ref.hpp"
+#include "reelay/settings/dense_timed_data/atomic_string.hpp"
+#include "reelay/settings/dense_timed_data/atomic_true.hpp"
+
+#include "reelay/settings/dense_timed_data/atomic_list.hpp"
+#include "reelay/settings/dense_timed_data/atomic_map.hpp"
 
 #include "reelay/settings/dense_timed_data/exists.hpp"
 #include "reelay/settings/dense_timed_data/forall.hpp"
@@ -43,7 +55,7 @@
 namespace reelay {
 namespace dense_timed_data_setting {
 
-template <typename X, typename T, int option> struct factory {
+template <typename X, typename T, int order=0> struct factory {
   using time_t = T;
   using input_t = X;
   using value_t = data_set_t;
@@ -89,14 +101,75 @@ template <typename X, typename T, int option> struct factory {
     return result;
   }
 
-  static state_ptr_t make_state(const std::string &name, const kwargs &kw) {
+  static state_ptr_t make_state(const std::string &name, kwargs &kw) {
 
     state_ptr_t res;
 
-    if (name == "listing") {
-      res = std::make_shared<listing<input_t, time_t, option>>(kw);
-    } else if (name == "record") {
-      res = std::make_shared<record<input_t, time_t, option>>(kw);
+    if (name == "atomic_map") {
+      res = std::make_shared<atomic_map<input_t, time_t>>(kw);
+    } else if (name == "atomic_list") {
+      res = std::make_shared<atomic_list<input_t, time_t>>(kw);
+    } else if (name == "mapping_prop") {
+      res = std::make_shared<atomic_prop<input_t, time_t, std::string>>(kw);
+    } else if (name == "mapping_false") {
+      res = std::make_shared<atomic_false<input_t, time_t, std::string>>(kw);
+    } else if (name == "mapping_true") {
+      res = std::make_shared<atomic_true<input_t, time_t, std::string>>(kw);
+    } else if (name == "mapping_string") {
+      res = std::make_shared<atomic_string<input_t, time_t, std::string>>(kw);
+    } else if (name == "mapping_number") {
+      res = std::make_shared<atomic_number<input_t, time_t, std::string>>(kw);
+    } else if (name == "mapping_eq") {
+      res = std::make_shared<atomic_number<input_t, time_t, std::string>>(kw);
+    // } else if (name == "mapping_ne") {
+    //   res = std::make_shared<atomic_ne<input_t, time_t, std::string>>(kw);
+    } else if (name == "mapping_ge" and order == 0) {
+      res = std::make_shared<atomic_ge_0<input_t, time_t, std::string>>(kw);
+    } else if (name == "mapping_gt" and order == 0) {
+      res = std::make_shared<atomic_gt_0<input_t, time_t, std::string>>(kw);
+    } else if (name == "mapping_le" and order == 0) {
+      res = std::make_shared<atomic_le_0<input_t, time_t, std::string>>(kw);
+    } else if (name == "mapping_lt" and order == 0) {
+      res = std::make_shared<atomic_lt_0<input_t, time_t, std::string>>(kw);
+    } else if (name == "mapping_any") {
+      res = std::make_shared<atomic_any<input_t, time_t, std::string>>(kw);
+    } else if (name == "mapping_ref") {
+      res = std::make_shared<atomic_ref<input_t, time_t, std::string>>(kw);
+    } else if (name == "listing_false") {
+      kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1;
+      res = std::make_shared<atomic_false<input_t, time_t, int>>(kw);
+    } else if (name == "listing_true") {
+      kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1;
+      res = std::make_shared<atomic_true<input_t, time_t, int>>(kw);
+    } else if (name == "listing_string") {
+      kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1; 
+      res = std::make_shared<atomic_string<input_t, time_t, int>>(kw);
+    } else if (name == "listing_number") {
+      res = std::make_shared<atomic_number<input_t, time_t, int>>(kw);
+    } else if (name == "listing_eq") {
+      kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1;
+      res = std::make_shared<atomic_number<input_t, time_t, int>>(kw);
+    // } else if (name == "listing_ne") {
+    // kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1; 
+    // res = std::make_shared<atomic_ne<input_t, time_t, int>>(kw);
+    } else if (name == "listing_ge" and order == 0) {
+      kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1;
+      res = std::make_shared<atomic_ge_0<input_t, time_t, int>>(kw);
+    } else if (name == "listing_gt" and order == 0) {
+      kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1;
+      res = std::make_shared<atomic_gt_0<input_t, time_t, int>>(kw);
+    } else if (name == "listing_le" and order == 0) {
+      kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1;
+      res = std::make_shared<atomic_le_0<input_t, time_t, int>>(kw);
+    } else if (name == "listing_lt" and order == 0) {
+      kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1;
+      res = std::make_shared<atomic_lt_0<input_t, time_t, int>>(kw);
+    } else if (name == "listing_any") {
+      kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1;
+      res = std::make_shared<atomic_any<input_t, time_t, int>>(kw);
+    } else if (name == "listing_ref") {
+      kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1;
+      res = std::make_shared<atomic_ref<input_t, time_t, int>>(kw);
     } else if (name == "past_sometime") {
       res = std::make_shared<past_sometime<input_t, time_t>>(kw);
     } else if (name == "past_always") {

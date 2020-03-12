@@ -48,34 +48,38 @@ template <class Setting> struct ptl_parser {
     HistExpr <- HIST Atom / HIST '(' Expression ')'
     TimedOnceExpr <- ONCE Bound Atom / ONCE Bound '(' Expression ')'
     TimedHistExpr <- HIST Bound Atom / HIST Bound '(' Expression ')'
-    Atom <- CustomPredicate / BasicPredicateLE / BasicPredicateLT / BasicPredicateGE / BasicPredicateGT / ListProposition / RecordProposition / Proposition
+    Atom <- CustomPredicate / ListProposition / RecordProposition 
             
-    Proposition <- Name
-    BasicPredicateLE <- Name "<=" Number
-    BasicPredicateLT <- Name "<" Number
-    BasicPredicateGE <- Name ">=" Number
-    BasicPredicateGT <- Name ">" Number
-    CustomPredicate <- '$' Name
+    CustomPredicate <- '$' LCURLY Name RCURLY
 
-    ListProposition <- LBRACE NonEmptyValueList RBRACE
-    RecordProposition <- LCURLY NonEmptyKeyValuePairs RCURLY
-    EventRecordProposition <- EVENT LCURLY NonEmptyKeyValuePairs RCURLY
+    ListProposition <- LBRACE ListingValue (COMMA ListingValue)* RBRACE
+    RecordProposition <- LCURLY KeyValuePair (COMMA KeyValuePair)* RCURLY
 
-    NonEmptyVarList <- Name (COMMA Name)*
-    NonEmptyValueList <- FieldValue (COMMA FieldValue)*
-    NonEmptyKeyValuePairs <- KeyValuePair (COMMA KeyValuePair)*
+    ListingValue <- ListingTrue / ListingFalse / ListingNumber / ListingString / ListingReference / ListingAnyValue / ListingEQ / ListingNE / ListingLT / ListingLE / ListingGT / ListingGE
 
-    FieldValueTrue <- TRUE
-    FieldValueFalse <- FALSE
-    FieldValueString <- SQString / DQString / Name
-    FieldValueNumber <- Number
+    KeyValuePair <- KeyValuePairTrue / KeyValuePairFalse / KeyValuePairNumber / KeyValuePairString / KeyValuePairEQ / KeyValuePairNE / KeyValuePairLT / KeyValuePairLE / KeyValuePairGT / KeyValuePairGE / KeyValuePairReference / KeyValuePairAnyValue / KeyValueProp 
+
+    ListingTrue <- TRUE
+    ListingFalse <- FALSE
+    ListingNumber <- Number
+    ListingString <- String
+    ListingAnyValue <- STAR 
+    ListingReference <- STAR Name
+    ListingEQ <- STAR EQ Number
+    ListingNE <- STAR NE Number
+    ListingLT <- STAR LT Number
+    ListingLE <- STAR LE Number
+    ListingGT <- STAR GT Number
+    ListingGE <- STAR GE Number
+
     FieldKey <- Name (DOT Name)*
-    FieldValue <- FieldValueTrue / FieldValueFalse / FieldValueString / FieldValueNumber / VariableRef / AnyValue
-
-    KeyValuePair <- KeyValuePairST / KeyValuePairEQ / KeyValuePairNE / KeyValuePairLT / KeyValuePairLE / KeyValuePairGT / KeyValuePairGE / KeyValueProp
-    
     KeyValueProp <- FieldKey
-    KeyValuePairST <- FieldKey ':' FieldValue
+    KeyValuePairTrue <- FieldKey ':' TRUE
+    KeyValuePairFalse <- FieldKey ':' FALSE
+    KeyValuePairNumber <- FieldKey ':' Number
+    KeyValuePairString <- FieldKey ':' String
+    KeyValuePairAnyValue <- FieldKey ':' STAR
+    KeyValuePairReference <- FieldKey ':' STAR Name
     KeyValuePairEQ <- FieldKey EQ Number
     KeyValuePairNE <- FieldKey NE Number
     KeyValuePairLT <- FieldKey LT Number
@@ -83,14 +87,19 @@ template <class Setting> struct ptl_parser {
     KeyValuePairGT <- FieldKey GT Number
     KeyValuePairGE <- FieldKey GE Number
 
-    AnyValue <- STAR
-    VariableRef <- STAR Name
+    NonEmptyVarList <- Name (COMMA Name)*
   
     Bound <- FullBound / LowerBound / UpperBound
     FullBound <-  "[" Number ":" Number "]"
     LowerBound <- "[" Number ":" 'inf'? "]"
     UpperBound <- "["        ":" Number "]"
-        
+
+    String <-  SQString / DQString / Name
+    SQString <- SQ <[^']*> SQ
+    DQString <- DQ <[^"]*> DQ
+    Name   <- <[_a-zA-Z][_a-zA-Z0-9]*>
+    Number <- <'-'? [0-9]+ ('.' [0-9]+)?>
+
     ~EVENT <- < '@' / 'event' >
 
     ~PREV   <- < 'Y' / 'pre' >
@@ -126,13 +135,9 @@ template <class Setting> struct ptl_parser {
     ~SQUARE <- < '#' >
     ~SQ <- < "'" >
     ~DQ <- < '"' >
-    
-    Name   <- <[_a-zA-Z][_a-zA-Z0-9]*>
-    SQString <- SQ <[^']*> SQ
-    DQString <- DQ <[^"]*> DQ
-    Number <- <'-'? [0-9]+ ('.' [0-9]+)?>
-    ~TRUE  <- < 'true'>
-    ~FALSE <- < 'false'>    
+
+    ~TRUE <- < 'true' >
+    ~FALSE <- < 'false' >
             
     %whitespace <- [  \t\r\n]*
     )";
@@ -150,194 +155,342 @@ template <class Setting> struct ptl_parser {
       std::cerr << line << ":" << col << ": " << msg << std::endl;
     };
 
-    parser["Proposition"] = [&](const peg::SemanticValues &sv) {
-      auto name = any_cast<std::string>(sv[0]);
-
-      reelay::kwargs kw = {{"name", name}};
-      kw.insert(meta.begin(), meta.end());
-      auto expr = Setting::make_state("proposition", kw);
-
-      this->states.push_back(expr);
-      return std::static_pointer_cast<node_t>(expr);
+    parser["ListProposition"].enter = [&](const char *s, size_t n, any &dt) {
+      this->meta.insert({{"key", 0}});
     };
 
     parser["ListProposition"] = [&](const peg::SemanticValues &sv) {
-      auto fields =
-          any_cast<std::vector<std::pair<std::string, std::string>>>(sv[0]);
-      reelay::kwargs kw = {{"fields", fields}};
-      kw.insert(meta.begin(), meta.end());
-      auto expr = Setting::make_state("listing", kw);
+      if (sv.size() > 1) {
+        std::vector<node_ptr_t> args;
+        for (size_t i = 0; i < sv.size(); i++) {
+          this->meta["key"] = i;
+          node_ptr_t child = reelay::any_cast<node_ptr_t>(sv[i]);
+          args.push_back(child);
+        }
+        reelay::kwargs kw = {{"args", args}};
+        kw.insert(meta.begin(), meta.end());
+        auto expr = Setting::make_state("atomic_list", kw);
 
-      this->states.push_back(expr);
-      return std::static_pointer_cast<node_t>(expr);
+        this->states.push_back(expr);
+        return std::static_pointer_cast<node_t>(expr);
+
+      } else {
+        node_ptr_t child = reelay::any_cast<node_ptr_t>(sv[0]);
+
+        return child;
+      }
     };
+
+    parser["ListProposition"].leave =
+        [&](const char *s, size_t n, size_t matchlen, any &value, any &dt) {
+          this->meta.erase("key");
+        };
 
     parser["RecordProposition"] = [&](const peg::SemanticValues &sv) {
-      auto fields = any_cast<std::vector<
-          std::pair<std::string, std::pair<std::string, std::string>>>>(sv[0]);
+      if (sv.size() > 1) {
+        std::vector<node_ptr_t> args;
+        for (size_t i = 0; i < sv.size(); i++) {
+          node_ptr_t child = reelay::any_cast<node_ptr_t>(sv[i]);
+          args.push_back(child);
+        }
+        reelay::kwargs kw = {{"args", args}};
+        kw.insert(meta.begin(), meta.end());
+        auto expr = Setting::make_state("atomic_map", kw);
 
-      reelay::kwargs kw = {{"fields", fields}};
+        this->states.push_back(expr);
+        return std::static_pointer_cast<node_t>(expr);
+
+      } else {
+        node_ptr_t child = reelay::any_cast<node_ptr_t>(sv[0]);
+
+        return child;
+      }
+    };
+
+    parser["KeyValueProp"] = [&](const peg::SemanticValues &sv) {
+      auto keys = reelay::any_cast<std::vector<std::string>>(sv[0]);
+
+      reelay::kwargs kw = {{"key", keys[0]}};
       kw.insert(meta.begin(), meta.end());
-      auto expr = Setting::make_state("record", kw);
+      auto expr = Setting::make_state("mapping_prop", kw);
 
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
 
-    parser["NonEmptyVarList"] = [&](const peg::SemanticValues &sv) {
-      auto vlist = std::vector<std::string>();
+    parser["KeyValuePairTrue"] = [&](const peg::SemanticValues &sv) {
+      auto keys = reelay::any_cast<std::vector<std::string>>(sv[0]);
 
-      for (std::size_t i = 0; i < sv.size(); i++) {
-        auto child = any_cast<std::string>(sv[i]);
-        vlist.push_back(child);
-      }
+      reelay::kwargs kw = {{"key", keys[0]}};
+      kw.insert(meta.begin(), meta.end());
+      auto expr = Setting::make_state("mapping_true", kw);
 
-      return vlist;
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
     };
 
-    parser["NonEmptyValueList"] = [&](const peg::SemanticValues &sv) {
-      auto vlist = std::vector<std::pair<std::string, std::string>>();
+    parser["KeyValuePairFalse"] = [&](const peg::SemanticValues &sv) {
+      auto keys = reelay::any_cast<std::vector<std::string>>(sv[0]);
 
-      for (std::size_t i = 0; i < sv.size(); i++) {
-        auto child = any_cast<std::pair<std::string, std::string>>(sv[i]);
-        vlist.push_back(child);
-      }
+      reelay::kwargs kw = {{"key", keys[0]}};
+      kw.insert(meta.begin(), meta.end());
+      auto expr = Setting::make_state("mapping_false", kw);
 
-      return vlist;
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
     };
 
-    parser["NonEmptyKeyValuePairs"] = [&](const peg::SemanticValues &sv) {
-      auto keyvals = std::vector<
-          std::pair<std::string, std::pair<std::string, std::string>>>();
+    parser["KeyValuePairNumber"] = [&](const peg::SemanticValues &sv) {
+      auto keys = reelay::any_cast<std::vector<std::string>>(sv[0]);
+      auto cstr = reelay::any_cast<std::string>(sv[1]);
 
-      for (std::size_t i = 0; i < sv.size(); i++) {
-        auto child = any_cast<
-            std::pair<std::string, std::pair<std::string, std::string>>>(sv[i]);
-        keyvals.push_back(child);
-      }
+      reelay::kwargs kw = {{"key", keys[0]}, {"constant", cstr}};
+      kw.insert(meta.begin(), meta.end());
+      auto expr = Setting::make_state("mapping_number", kw);
 
-      return keyvals;
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
     };
 
-    parser["FieldValueTrue"] = [&](const peg::SemanticValues &sv) {
-      return std::pair<std::string, std::string>("bool", "true");
+    parser["KeyValuePairString"] = [&](const peg::SemanticValues &sv) {
+      auto keys = reelay::any_cast<std::vector<std::string>>(sv[0]);
+      auto cstr = reelay::any_cast<std::string>(sv[1]);
+
+      reelay::kwargs kw = {{"key", keys[0]}, {"constant", cstr}};
+      kw.insert(meta.begin(), meta.end());
+      auto expr = Setting::make_state("mapping_string", kw);
+
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
     };
 
-    parser["FieldValueFalse"] = [&](const peg::SemanticValues &sv) {
-      return std::pair<std::string, std::string>("bool", "false");
+    parser["KeyValuePairEQ"] = [&](const peg::SemanticValues &sv) {
+      auto keys = reelay::any_cast<std::vector<std::string>>(sv[0]);
+      auto cstr = reelay::any_cast<std::string>(sv[1]);
+
+      reelay::kwargs kw = {{"key", keys[0]}, {"constant", cstr}};
+      kw.insert(meta.begin(), meta.end());
+      auto expr = Setting::make_state("mapping_eq", kw);
+
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
     };
 
-    parser["FieldValueNumber"] = [&](const peg::SemanticValues &sv) {
-      return std::pair<std::string, std::string>("number",
-                                                 any_cast<std::string>(sv[0]));
+    parser["KeyValuePairNE"] = [&](const peg::SemanticValues &sv) {
+      auto keys = reelay::any_cast<std::vector<std::string>>(sv[0]);
+      auto cstr = reelay::any_cast<std::string>(sv[1]);
+
+      reelay::kwargs kw = {{"key", keys[0]}, {"constant", cstr}};
+      kw.insert(meta.begin(), meta.end());
+      auto expr = Setting::make_state("mapping_ne", kw);
+
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
     };
 
-    parser["FieldValueString"] = [&](const peg::SemanticValues &sv) {
-      return std::pair<std::string, std::string>("string",
-                                                 any_cast<std::string>(sv[0]));
+    parser["KeyValuePairGE"] = [&](const peg::SemanticValues &sv) {
+      auto keys = reelay::any_cast<std::vector<std::string>>(sv[0]);
+      auto cstr = reelay::any_cast<std::string>(sv[1]);
+
+      reelay::kwargs kw = {{"key", keys[0]}, {"constant", cstr}};
+      kw.insert(meta.begin(), meta.end());
+      auto expr = Setting::make_state("mapping_ge", kw);
+
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
     };
 
-    parser["VariableRef"] = [&](const peg::SemanticValues &sv) {
-      return std::pair<std::string, std::string>("variable_ref",
-                                                 any_cast<std::string>(sv[0]));
+    parser["KeyValuePairGT"] = [&](const peg::SemanticValues &sv) {
+      auto keys = reelay::any_cast<std::vector<std::string>>(sv[0]);
+      auto cstr = reelay::any_cast<std::string>(sv[1]);
+
+      reelay::kwargs kw = {{"key", keys[0]}, {"constant", cstr}};
+      kw.insert(meta.begin(), meta.end());
+      auto expr = Setting::make_state("mapping_gt", kw);
+
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
     };
 
-    parser["AnyValue"] = [&](const peg::SemanticValues &) {
-      return std::pair<std::string, std::string>("ignore_field","");
+    parser["KeyValuePairLE"] = [&](const peg::SemanticValues &sv) {
+      auto keys = reelay::any_cast<std::vector<std::string>>(sv[0]);
+      auto cstr = reelay::any_cast<std::string>(sv[1]);
+
+      reelay::kwargs kw = {{"key", keys[0]}, {"constant", cstr}};
+      kw.insert(meta.begin(), meta.end());
+      auto expr = Setting::make_state("mapping_le", kw);
+
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
+    };
+
+    parser["KeyValuePairLT"] = [&](const peg::SemanticValues &sv) {
+      auto keys = reelay::any_cast<std::vector<std::string>>(sv[0]);
+      auto cstr = reelay::any_cast<std::string>(sv[1]);
+
+      reelay::kwargs kw = {{"key", keys[0]}, {"constant", cstr}};
+      kw.insert(meta.begin(), meta.end());
+      auto expr = Setting::make_state("mapping_lt", kw);
+
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
+    };
+
+    parser["KeyValuePairAnyValue"] = [&](const peg::SemanticValues &sv) {
+      auto keys = reelay::any_cast<std::vector<std::string>>(sv[0]);
+
+      reelay::kwargs kw = {{"key", keys[0]}};
+      kw.insert(meta.begin(), meta.end());
+      auto expr = Setting::make_state("mapping_any", kw);
+
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
+    };
+
+    parser["KeyValuePairReference"] = [&](const peg::SemanticValues &sv) {
+      auto keys = reelay::any_cast<std::vector<std::string>>(sv[0]);
+      auto cstr = reelay::any_cast<std::string>(sv[1]);
+
+      reelay::kwargs kw = {{"key", keys[0]}, {"constant", cstr}};
+      kw.insert(meta.begin(), meta.end());
+      auto expr = Setting::make_state("mapping_ref", kw);
+
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
     };
 
     parser["FieldKey"] = [&](const peg::SemanticValues &sv) {
       auto keys = std::vector<std::string>();
       for (std::size_t i = 0; i < sv.size(); i++) {
-        keys.push_back(any_cast<std::string>(sv[i]));
+        keys.push_back(reelay::any_cast<std::string>(sv[i]));
       }
       return keys;
     };
 
-    parser["KeyValueProp"] = [&](const peg::SemanticValues &sv) {
-      auto key_path = any_cast<std::vector<std::string>>(sv[0]);
-      return std::pair<std::string, std::pair<std::string, std::string>>(
-          key_path[0], std::pair<std::string, std::string>("bool", "true"));
-    };
+    parser["ListingTrue"] = [&](const peg::SemanticValues &sv) {
+      auto index = reelay::any_cast<int>(this->meta["key"]);
 
-    parser["KeyValuePairST"] = [&](const peg::SemanticValues &sv) {
-      auto key_path = any_cast<std::vector<std::string>>(sv[0]);
-      auto value = any_cast<std::pair<std::string, std::string>>(sv[1]);
-      return std::pair<std::string, std::pair<std::string, std::string>>(
-          key_path[0], value);
-    };
-
-    parser["KeyValuePairGE"] = [&](const peg::SemanticValues &sv) {
-      auto key_path = any_cast<std::vector<std::string>>(sv[0]);
-      auto number_str = any_cast<std::string>(sv[1]);
-      return std::pair<std::string, std::pair<std::string, std::string>>(
-          key_path[0], std::pair<std::string, std::string>("ge", number_str));
-    };
-
-    parser["KeyValuePairGT"] = [&](const peg::SemanticValues &sv) {
-      auto key_path = any_cast<std::vector<std::string>>(sv[0]);
-      auto number_str = any_cast<std::string>(sv[1]);
-      return std::pair<std::string, std::pair<std::string, std::string>>(
-          key_path[0], std::pair<std::string, std::string>("gt", number_str));
-    };
-
-    parser["KeyValuePairLE"] = [&](const peg::SemanticValues &sv) {
-      auto key_path = any_cast<std::vector<std::string>>(sv[0]);
-      auto number_str = any_cast<std::string>(sv[1]);
-      return std::pair<std::string, std::pair<std::string, std::string>>(
-          key_path[0], std::pair<std::string, std::string>("le", number_str));
-    };
-
-    parser["KeyValuePairLT"] = [&](const peg::SemanticValues &sv) {
-      auto key_path = any_cast<std::vector<std::string>>(sv[0]);
-      auto number_str = any_cast<std::string>(sv[1]);
-      return std::pair<std::string, std::pair<std::string, std::string>>(
-          key_path[0], std::pair<std::string, std::string>("lt", number_str));
-    };
-
-    parser["BasicPredicateLT"] = [&](const peg::SemanticValues &sv) {
-      auto name = any_cast<std::string>(sv[0]);
-      auto constant = std::stof(any_cast<std::string>(sv[1]));
-
-      reelay::kwargs kw = {{"name", name}, {"constant", constant}};
+      reelay::kwargs kw = {};
       kw.insert(meta.begin(), meta.end());
-      auto expr = Setting::make_state("lt", kw);
+
+      auto expr = Setting::make_state("listing_true", kw);
+      this->meta["key"] = index + 1; // Increase the index for the next item
 
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
 
-    parser["BasicPredicateLE"] = [&](const peg::SemanticValues &sv) {
-      auto name = any_cast<std::string>(sv[0]);
-      auto constant = std::stof(any_cast<std::string>(sv[1]));
+    parser["ListingFalse"] = [&](const peg::SemanticValues &sv) {
+      auto index = reelay::any_cast<int>(this->meta["key"]);
 
-      reelay::kwargs kw = {{"name", name}, {"constant", constant}};
+      reelay::kwargs kw = {};
       kw.insert(meta.begin(), meta.end());
-      auto expr = Setting::make_state("le", kw);
+
+      auto expr = Setting::make_state("listing_false", kw);
+      this->meta["key"] = index + 1; // Increase the index for the next item
 
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
 
-    parser["BasicPredicateGT"] = [&](const peg::SemanticValues &sv) {
-      auto name = any_cast<std::string>(sv[0]);
-      auto constant = std::stof(any_cast<std::string>(sv[1]));
-
-      reelay::kwargs kw = {{"name", name}, {"constant", constant}};
+    parser["ListingNumber"] = [&](const peg::SemanticValues &sv) {
+      auto cstr = reelay::any_cast<std::string>(sv[0]);
+      auto index = reelay::any_cast<int>(this->meta["key"]);
+      reelay::kwargs kw = {{"constant", cstr}};
       kw.insert(meta.begin(), meta.end());
-      auto expr = Setting::make_state("gt", kw);
+
+      auto expr = Setting::make_state("listing_number", kw);
+      this->meta["key"] = index + 1; // Increase the index for the next item
 
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
 
-    parser["BasicPredicateGE"] = [&](const peg::SemanticValues &sv) {
-      auto name = any_cast<std::string>(sv[0]);
-      auto constant = std::stof(any_cast<std::string>(sv[1]));
-
-      reelay::kwargs kw = {{"name", name}, {"constant", constant}};
+    parser["ListingGE"] = [&](const peg::SemanticValues &sv) {
+      auto cstr = reelay::any_cast<std::string>(sv[0]);
+      auto index = reelay::any_cast<int>(this->meta["key"]);
+      reelay::kwargs kw = {{"constant", cstr}};
       kw.insert(meta.begin(), meta.end());
-      auto expr = Setting::make_state("ge", kw);
+
+      auto expr = Setting::make_state("listing_ge", kw);
+      this->meta["key"] = index + 1; // Increase the index for the next item
+
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
+    };
+
+    parser["ListingGT"] = [&](const peg::SemanticValues &sv) {
+      auto cstr = reelay::any_cast<std::string>(sv[0]);
+      auto index = reelay::any_cast<int>(this->meta["key"]);
+      reelay::kwargs kw = {{"constant", cstr}};
+      kw.insert(meta.begin(), meta.end());
+
+      auto expr = Setting::make_state("listing_gt", kw);
+      this->meta["key"] = index + 1; // Increase the index for the next item
+
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
+    };
+
+    parser["ListingLE"] = [&](const peg::SemanticValues &sv) {
+      auto cstr = reelay::any_cast<std::string>(sv[0]);
+      auto index = reelay::any_cast<int>(this->meta["key"]);
+      reelay::kwargs kw = {{"constant", cstr}};
+      kw.insert(meta.begin(), meta.end());
+
+      auto expr = Setting::make_state("listing_le", kw);
+      this->meta["key"] = index + 1; // Increase the index for the next item
+
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
+    };
+
+    parser["ListingLT"] = [&](const peg::SemanticValues &sv) {
+      auto cstr = reelay::any_cast<std::string>(sv[0]);
+      auto index = reelay::any_cast<int>(this->meta["key"]);
+      reelay::kwargs kw = {{"constant", cstr}};
+      kw.insert(meta.begin(), meta.end());
+
+      auto expr = Setting::make_state("listing_lt", kw);
+      this->meta["key"] = index + 1; // Increase the index for the next item
+
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
+    };
+
+    parser["ListingString"] = [&](const peg::SemanticValues &sv) {
+      auto cstr = reelay::any_cast<std::string>(sv[0]);
+      auto index = reelay::any_cast<int>(this->meta["key"]);
+      reelay::kwargs kw = {{"constant", cstr}};
+      kw.insert(meta.begin(), meta.end());
+
+      auto expr = Setting::make_state("listing_string", kw);
+      this->meta["key"] = index + 1; // Increase the index for the next item
+
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
+    };
+
+    parser["ListingAnyValue"] = [&](const peg::SemanticValues &sv) {
+      auto index = reelay::any_cast<int>(this->meta["key"]);
+      reelay::kwargs kw = {};
+      kw.insert(meta.begin(), meta.end());
+
+      auto expr = Setting::make_state("listing_any", kw);
+      this->meta["key"] = index + 1; // Increase the index for the next item
+
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
+    };
+
+    parser["ListingReference"] = [&](const peg::SemanticValues &sv) {
+      auto cstr = reelay::any_cast<std::string>(sv[0]);
+      auto index = reelay::any_cast<int>(this->meta["key"]);
+      reelay::kwargs kw = {{"constant", cstr}};
+      kw.insert(meta.begin(), meta.end());
+
+      auto expr = Setting::make_state("listing_ref", kw);
+      this->meta["key"] = index + 1; // Increase the index for the next item
 
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
@@ -599,6 +752,17 @@ template <class Setting> struct ptl_parser {
     parser["UpperBound"] = [](const peg::SemanticValues &sv) {
       float u = std::stof(any_cast<std::string>(sv[0]));
       return std::make_pair(0.0f, u);
+    };
+
+    parser["NonEmptyVarList"] = [&](const peg::SemanticValues &sv) {
+      auto vlist = std::vector<std::string>();
+
+      for (std::size_t i = 0; i < sv.size(); i++) {
+        auto child = reelay::any_cast<std::string>(sv[i]);
+        vlist.push_back(child);
+      }
+
+      return vlist;
     };
 
     parser["Name"] = [](const peg::SemanticValues &sv) { return sv.token(); };

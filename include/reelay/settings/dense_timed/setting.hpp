@@ -16,9 +16,26 @@
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/networks/dense_timed_network.hpp"
 
+#include "reelay/settings/dense_timed/atomic_any.hpp"
 #include "reelay/settings/dense_timed/atomic_custom.hpp"
-#include "reelay/settings/dense_timed/atomic_record_0.hpp"
-#include "reelay/settings/dense_timed/atomic_record_1.hpp"
+#include "reelay/settings/dense_timed/atomic_false.hpp"
+#include "reelay/settings/dense_timed/atomic_ge_0.hpp"
+#include "reelay/settings/dense_timed/atomic_ge_1.hpp"
+#include "reelay/settings/dense_timed/atomic_gt_0.hpp"
+#include "reelay/settings/dense_timed/atomic_gt_1.hpp"
+#include "reelay/settings/dense_timed/atomic_le_0.hpp"
+#include "reelay/settings/dense_timed/atomic_le_1.hpp"
+#include "reelay/settings/dense_timed/atomic_lt_0.hpp"
+#include "reelay/settings/dense_timed/atomic_lt_1.hpp"
+// #include "reelay/settings/dense_timed/atomic_ne.hpp"
+// #include "reelay/settings/dense_timed/atomic_eq.hpp"
+#include "reelay/settings/dense_timed/atomic_number.hpp"
+#include "reelay/settings/dense_timed/atomic_prop.hpp"
+#include "reelay/settings/dense_timed/atomic_string.hpp"
+#include "reelay/settings/dense_timed/atomic_true.hpp"
+
+// #include "reelay/settings/discrete_timed/atomic_list.hpp"
+#include "reelay/settings/dense_timed/atomic_map.hpp"
 
 #include "reelay/settings/dense_timed/conjunction.hpp"
 #include "reelay/settings/dense_timed/disjunction.hpp"
@@ -88,10 +105,42 @@ struct factory {
 
     state_ptr_t result;
 
-    if (name == "record" and order == 0) {
-      result = std::make_shared<record0<input_t, time_t>>(kw);
-    } else if (name == "record" and order == 1) {
-      result = std::make_shared<record1<input_t, time_t>>(kw);
+    if (name == "atomic_map") {
+      result = std::make_shared<atomic_map<input_t, time_t>>(kw);
+    } else if (name == "atomic_list") {
+      // result = std::make_shared<atomic_list<input_t, time_t>>(kw);
+    } else if (name == "mapping_prop") {
+      result = std::make_shared<atomic_prop<input_t, time_t>>(kw);
+    } else if (name == "mapping_false") {
+      result = std::make_shared<atomic_false<input_t, time_t>>(kw);
+    } else if (name == "mapping_true") {
+      result = std::make_shared<atomic_true<input_t, time_t>>(kw);
+    } else if (name == "mapping_string") {
+      result = std::make_shared<atomic_string<input_t, time_t>>(kw);
+    } else if (name == "mapping_number") {
+      result = std::make_shared<atomic_number<input_t, time_t>>(kw);
+    } else if (name == "mapping_eq") {
+      // result = std::make_shared<atomic_number<input_t, time_t>>(kw);
+    } else if (name == "mapping_ne") {
+      // result = std::make_shared<atomic_ne<input_t, time_t>>(kw);
+    } else if (name == "mapping_ge" and order == 0) {
+      result = std::make_shared<atomic_ge_0<input_t, time_t>>(kw);
+    } else if (name == "mapping_gt" and order == 0) {
+      result = std::make_shared<atomic_gt_0<input_t, time_t>>(kw);
+    } else if (name == "mapping_le" and order == 0) {
+      result = std::make_shared<atomic_le_0<input_t, time_t>>(kw);
+    } else if (name == "mapping_lt" and order == 0) {
+      result = std::make_shared<atomic_lt_0<input_t, time_t>>(kw);
+    } else if (name == "mapping_ge" and order == 1) {
+      result = std::make_shared<atomic_ge_1<input_t, time_t>>(kw);
+    } else if (name == "mapping_gt" and order == 1) {
+      result = std::make_shared<atomic_gt_1<input_t, time_t>>(kw);
+    } else if (name == "mapping_le" and order == 1) {
+      result = std::make_shared<atomic_le_1<input_t, time_t>>(kw);
+    } else if (name == "mapping_lt" and order == 1) {
+      result = std::make_shared<atomic_lt_1<input_t, time_t>>(kw);
+    } else if (name == "mapping_any") {
+      result = std::make_shared<atomic_any<input_t, time_t>>(kw);
     } else if (name == "past_sometime") {
       result = std::make_shared<past_sometime<input_t, time_t>>(kw);
     } else if (name == "past_always") {

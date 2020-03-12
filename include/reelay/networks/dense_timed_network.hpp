@@ -26,7 +26,7 @@ struct dense_timed_network : dense_timed_state<X, Y, T> {
   using node_t = dense_timed_node<output_t, time_t>;
   using state_t = dense_timed_state<input_t, output_t, time_t>;
 
-  time_t previous = 0;
+  time_t previous = -infinity<time_t>::value();
   time_t current = 0;
 
   input_t prevargs;
@@ -37,16 +37,6 @@ struct dense_timed_network : dense_timed_state<X, Y, T> {
   dense_timed_network(std::shared_ptr<node_t> n,
                       const std::vector<std::shared_ptr<state_t>> &ss)
       : output_node(n), states(ss) {}
-
-  void setup(const input_t &prevargs) {
-    this->previous = boost::lexical_cast<time_t>(prevargs.at("time"));
-    this->prevargs = prevargs;
-  }
-
-  void setup(const input_t &prevargs, time_t previous) {
-    this->previous = previous;
-    this->prevargs = prevargs;
-  }
 
   void update(const input_t &args) {
     time_t now = reelay::timestamp<input_t, time_t>::from(args);

@@ -16,6 +16,6 @@
 #include "reelay/settings/discrete_timed_robustness/setting.hpp"
 #include "reelay/settings/untimed_robustness/setting.hpp"
 
-#include "reelay/settings/untimed_data/setting.hpp"
-#include "reelay/settings/discrete_timed_data/setting.hpp"
 #include "reelay/settings/dense_timed_data/setting.hpp"
+#include "reelay/settings/discrete_timed_data/setting.hpp"
+#include "reelay/settings/untimed_data/setting.hpp"
