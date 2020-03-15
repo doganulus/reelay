@@ -50,14 +50,12 @@ struct atomic_le_0 : public dense_timed_state<X, interval_set<T>, T> {
   void update(const input_t &pargs, const input_t &args, time_t previous,
               time_t now) override {
 
-    double new_data;
-
-    try {
-      new_data = datafield<input_t>::as_floating(args, key);
-    } catch (const std::out_of_range &e) {
+    if (not datafield<input_t>::contains(args, key)) {
       return; // Do nothing if the key does not exist - existing value persists
     }
-    
+
+    double new_data = datafield<input_t>::as_floating(args, key);
+
     value = value & interval::left_open(previous, now);
     if (new_data <= constant) {
       value.add(interval::left_open(now, reelay::infinity<time_t>::value()));

@@ -49,13 +49,11 @@ struct atomic_ge_0
   void update(const input_t &pargs, const input_t &args, time_t previous,
               time_t now) override {
 
-    double new_data;
-
-    try {
-      new_data = datafield<input_t>::as_floating(args, key);
-    } catch (const std::out_of_range &e) {
+    if (not datafield<input_t>::contains(args, key)) {
       return; // Do nothing if the key does not exist - existing value persists
     }
+
+    double new_data = datafield<input_t>::as_floating(args, key);
 
     value = value & interval::left_open(previous, now);
     value.add(std::make_pair(

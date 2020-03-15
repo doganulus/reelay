@@ -40,7 +40,7 @@ struct conjunction
   explicit conjunction(const kwargs &kw)
       : conjunction(reelay::any_cast<std::vector<node_ptr_t>>(kw.at("args"))) {}
 
-  output_t output(time_t previous, time_t now) {
+  output_t output(time_t previous, time_t now) override {
     auto result = args[0]->output(previous, now);
     for (size_t i = 1; i < args.size(); i++) {
       result -= args[i]->output(previous, now);

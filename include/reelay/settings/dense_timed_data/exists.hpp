@@ -12,7 +12,6 @@
 
 #include "reelay/common.hpp"
 #include "reelay/networks/basic_structure.hpp"
-#include "reelay/networks/discrete_timed_network.hpp"
 
 namespace reelay {
 namespace dense_timed_data_setting {

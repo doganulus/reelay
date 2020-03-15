@@ -40,15 +40,13 @@ struct atomic_le : public discrete_timed_state<X, V, T> {
                    reelay::any_cast<std::string>(kw.at("constant"))) {}
 
   void update(const input_t &args, time_t) override {
-
-    double new_data;
-
-    try {
-      new_data = datafield<input_t>::as_floating(args, key);
-    } catch (const std::out_of_range &e) {
+    
+    if (not datafield<input_t>::contains(args, key)) {
       return; // Do nothing if the key does not exist - existing value persists
     }
-    
+
+    double new_data = datafield<input_t>::as_floating(args, key);
+
     value = constant - new_data;
   }
 

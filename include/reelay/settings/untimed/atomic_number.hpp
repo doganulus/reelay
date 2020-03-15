@@ -43,13 +43,11 @@ struct atomic_number : public untimed_state<X, bool> {
 
   void update(const input_t &args) override {
 
-    double new_data;
-
-    try {
-      new_data = datafield<input_t>::as_floating(args, key);
-    } catch (const std::out_of_range &e) {
+    if (not datafield<input_t>::contains(args, key)) {
       return; // Do nothing if the key does not exist - existing value persists
     }
+
+    double new_data = datafield<input_t>::as_floating(args, key);
 
     if (new_data == constant) {
       value = true;

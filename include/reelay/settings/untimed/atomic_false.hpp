@@ -40,15 +40,11 @@ struct atomic_false : public untimed_state<X, bool> {
 
   void update(const input_t &args) override {
 
-    bool new_data;
-
-    try {
-      new_data = datafield<input_t>::as_bool(args, key);
-    } catch (const std::out_of_range &e) {
+    if(not datafield<input_t>::contains(args, key)){
       return; // Do nothing if the key does not exist - existing value persists
     }
 
-    value = not new_data;
+    value = not datafield<input_t>::as_bool(args, key);
   }
 
   output_t output() override { return value; }

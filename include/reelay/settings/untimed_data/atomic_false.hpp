@@ -44,13 +44,11 @@ struct atomic_false : public untimed_state<X, data_set_t> {
 
   void update(const input_t &args) override {
 
-    bool new_data;
-
-    try {
-      new_data = datafield<input_t>::as_bool(args, key);
-    } catch (const std::out_of_range &e) {
+    if (not datafield<input_t>::contains(args, key)) {
       return; // Do nothing if the key does not exist - existing value persists
     }
+
+    bool new_data = datafield<input_t>::as_bool(args, key);
 
     if (new_data) {
       value = manager->zero();

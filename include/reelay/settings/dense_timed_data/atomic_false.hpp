@@ -52,13 +52,11 @@ struct atomic_false : public dense_timed_state<X, data_interval_map<T>, T> {
               time_t previous,
               time_t now) override {
 
-    bool new_data;
-
-    try {
-      new_data = datafield<input_t>::as_bool(args, key);
-    } catch (const std::out_of_range &e) {
+    if (not datafield<input_t>::contains(args, key)) {
       return; // Do nothing if the key does not exist - existing value persists
     }
+
+    bool new_data = datafield<input_t>::as_bool(args, key);
 
     value = value - interval::left_open(0, previous);
     value = value - interval::left_open(now, infinity<time_t>::value());

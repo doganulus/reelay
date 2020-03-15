@@ -41,13 +41,11 @@ struct atomic_string : public discrete_timed_state<X, bool, T> {
 
   void update(const input_t &args, time_t) override {
 
-    std::string new_data;
-
-    try {
-      new_data = datafield<input_t>::as_string(args, key);
-    } catch (const std::out_of_range &e) {
+    if (not datafield<input_t>::contains(args, key)) {
       return; // Do nothing if the key does not exist - existing value persists
     }
+
+    std::string new_data = datafield<input_t>::as_string(args, key);
 
     if (new_data == constant) {
       value = true;

@@ -38,13 +38,11 @@ struct atomic_false : public discrete_timed_state<X, bool, T> {
 
   void update(const input_t &args, time_t) override {
 
-    bool new_data;
-
-    try {
-      new_data = datafield<input_t>::as_bool(args, key);
-    } catch (const std::out_of_range &e) {
+    if (not datafield<input_t>::contains(args, key)) {
       return; // Do nothing if the key does not exist - existing value persists
     }
+
+    bool new_data = datafield<input_t>::as_bool(args, key);
 
     value = not new_data;
   }
