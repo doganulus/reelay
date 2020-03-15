@@ -230,6 +230,377 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
+    sequence.push_back(input_t{{"x", "true"}});
+    sequence.push_back(input_t{{"x", "false"}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"x", "true"}});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "{x}", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({t, f, f, t});
+    CHECK(result == expected);
+  }
+
+  SECTION("AtomicTrue") {
+
+    using input_t = std::unordered_map<std::string, std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x", "true"}});
+    sequence.push_back(input_t{{"x", "false"}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"x", "true"}});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "{x: true}", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({t, f, f, t});
+    CHECK(result == expected);
+  }
+
+  SECTION("AtomicFalse") {
+
+    using input_t = std::unordered_map<std::string, std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x", "true"}});
+    sequence.push_back(input_t{{"x", "false"}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"x", "true"}});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "{x: false}", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({f, t, t, f});
+    CHECK(result == expected);
+  }
+
+  SECTION("AtomicString") {
+
+    using input_t = std::unordered_map<std::string, std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x", "a"}});
+    sequence.push_back(input_t{{"x", "b"}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"x", "c"}});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "{x: b}", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({f, t, t, f});
+    CHECK(result == expected);
+  }
+
+  SECTION("AtomicNumber") {
+
+    using input_t = std::unordered_map<std::string, std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x", "1"}});
+    sequence.push_back(input_t{{"x", "2"}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"x", "3"}});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "{x: 2}", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({f, t, t, f});
+    CHECK(result == expected);
+  }
+
+  SECTION("GreaterThan") {
+
+    using input_t = std::unordered_map<std::string, std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x", "1"}});
+    sequence.push_back(input_t{{"x", "2"}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"x", "3"}});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "{x > 2}", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({f, f, f, t});
+    CHECK(result == expected);
+  }
+
+  SECTION("GreaterEqual") {
+
+    using input_t = std::unordered_map<std::string, std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x", "1"}});
+    sequence.push_back(input_t{{"x", "2"}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"x", "3"}});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "{x >= 2}", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({f, t, t, t});
+    CHECK(result == expected);
+  }
+
+  SECTION("LessThan") {
+
+    using input_t = std::unordered_map<std::string, std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x", "1"}});
+    sequence.push_back(input_t{{"x", "2"}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"x", "3"}});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "{x < 2}", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({t, f, f, f});
+    CHECK(result == expected);
+  }
+
+  SECTION("LessEqual") {
+
+    using input_t = std::unordered_map<std::string, std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x", "1"}});
+    sequence.push_back(input_t{{"x", "2"}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"x", "3"}});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "{x <= 2}", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({t, t, t, f});
+    CHECK(result == expected);
+  }
+
+  SECTION("Equal") {
+
+    using input_t = std::unordered_map<std::string, std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x", "1"}});
+    sequence.push_back(input_t{{"x", "2"}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"x", "3"}});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "{x == 2}", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({f, t, t, f});
+    CHECK(result == expected);
+  }
+
+  SECTION("NotEqual") {
+
+    using input_t = std::unordered_map<std::string, std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x", "1"}});
+    sequence.push_back(input_t{{"x", "2"}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"x", "3"}});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "{x != 2}", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({t, f, f, t});
+    CHECK(result == expected);
+  }
+
+  SECTION("AtomicAny") {
+
+    using input_t = std::unordered_map<std::string, std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x", "1"}});
+    sequence.push_back(input_t{{"y", "2"}});
+    sequence.push_back(input_t{{"x", "3"}});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "{x: *}", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({t, f, t});
+    CHECK(result == expected);
+  }
+
+  SECTION("Record Proposition 0") {
+
+    using input_t = std::unordered_map<std::string, std::string>;
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
     sequence.push_back(input_t{
         {"event", "access"}, {"user", "alice"}, {"file", "wonderland"}});
     sequence.push_back(input_t{

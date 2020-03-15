@@ -18,12 +18,85 @@ using function_t = std::function<bool(const input_t &)>;
 
 TEST_CASE("Atoms") {
 
+  SECTION("AtomicProposition") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x1", "false"}});
+    sequence.push_back(input_t{{"x1", "false"}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"x1", "true"}});
+
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "{x1}");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({0, 0, 0, 1});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("AtomicTrue") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x1", "false"}});
+    sequence.push_back(input_t{{"x1", "false"}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"x1", "true"}});
+
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "{x1:true}");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({0, 0, 0, 1});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("AtomicFalse") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x1", "false"}});
+    sequence.push_back(input_t{{"x1", "false"}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"x1", "true"}});
+
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "{x1:false}");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({1, 1, 1, 0});
+
+    CHECK(result == expected);
+  }
+
   SECTION("GreaterThan") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{{"x1", "3"}});
     sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{});
     sequence.push_back(input_t{{"x1", "5"}});
 
     auto net1 =
@@ -37,7 +110,7 @@ TEST_CASE("Atoms") {
       result.push_back(net1->output());
     }
 
-    auto expected = std::vector<bool>({0, 0, 1});
+    auto expected = std::vector<bool>({0, 0, 0, 1});
 
     CHECK(result == expected);
   }
@@ -48,6 +121,7 @@ TEST_CASE("Atoms") {
 
     sequence.push_back(input_t{{"x1", "3"}});
     sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{});
     sequence.push_back(input_t{{"x1", "5"}});
 
     auto net1 =
@@ -61,7 +135,7 @@ TEST_CASE("Atoms") {
       result.push_back(net1->output());
     }
 
-    auto expected = std::vector<bool>({0, 1, 1});
+    auto expected = std::vector<bool>({0, 1, 1, 1});
 
     CHECK(result == expected);
   }
@@ -72,6 +146,7 @@ TEST_CASE("Atoms") {
 
     sequence.push_back(input_t{{"x1", "3"}});
     sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{});
     sequence.push_back(input_t{{"x1", "5"}});
 
     auto net1 =
@@ -85,7 +160,7 @@ TEST_CASE("Atoms") {
       result.push_back(net1->output());
     }
 
-    auto expected = std::vector<bool>({1, 0, 0});
+    auto expected = std::vector<bool>({1, 0, 0, 0});
 
     CHECK(result == expected);
   }
@@ -96,6 +171,7 @@ TEST_CASE("Atoms") {
 
     sequence.push_back(input_t{{"x1", "3"}});
     sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{});
     sequence.push_back(input_t{{"x1", "5"}});
 
     auto net1 =
@@ -109,7 +185,105 @@ TEST_CASE("Atoms") {
       result.push_back(net1->output());
     }
 
-    auto expected = std::vector<bool>({1, 1, 0});
+    auto expected = std::vector<bool>({1, 1, 1, 0});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("AtomicNotEqual") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x1", "3"}});
+    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"x1", "5"}});
+
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "{x1 != 4}");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({1, 0, 0, 1});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("AtomicSimpleString") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x1", "a"}});
+    sequence.push_back(input_t{{"x1", "b"}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"x1", "c"}});
+
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "{x1: a}");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({1, 0, 0, 0});
+
+    CHECK(result == expected);
+  }
+  SECTION("AtomicNumber") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x1", "3"}});
+    sequence.push_back(input_t{{"x1", "1"}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"x1", "3"}});
+
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "{x1: 3}");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({1, 0, 0, 1});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("AtomicAny") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x1", "3"}, {"x2", "a"}});
+    sequence.push_back(input_t{{"x1", "1"}});
+    sequence.push_back(input_t{{"x1", "3"}, {"x2", "c"}});
+
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "{x2: *}");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({1, 0, 1});
 
     CHECK(result == expected);
   }
@@ -130,7 +304,7 @@ TEST_CASE("Atoms") {
 
     auto net1 =
         reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
-            "$sum_x1_and_x2_gt_5", predicates);
+            "${sum_x1_and_x2_gt_5}", predicates);
 
     auto result = std::vector<bool>();
 
@@ -140,6 +314,32 @@ TEST_CASE("Atoms") {
     }
 
     auto expected = std::vector<bool>({0, 0, 1});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Record Double Comparison") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"x1", "2"}});
+    sequence.push_back(input_t{{"x1", "3"}});
+    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", "5"}});
+    sequence.push_back(input_t{{"x1", "6"}});
+
+    auto net1 =
+        reelay::discrete_timed<int>::monitor<input_t>::from_temporal_logic(
+            "{x1 > 3, x1 < 5}");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({0, 0, 1, 0, 0});
 
     CHECK(result == expected);
   }
