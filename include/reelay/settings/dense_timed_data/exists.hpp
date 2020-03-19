@@ -17,7 +17,7 @@ namespace reelay {
 namespace dense_timed_data_setting {
 
 template <typename X, typename T>
-struct exists : public dense_timed_node<reelay::data_interval_map<time_t>, T> {
+struct exists : public dense_timed_node<data_interval_map<T>, T> {
   using time_t = T;
   using input_t = X;
   using value_t = data_set_t;
