@@ -7,7 +7,7 @@ import setuptools
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 
-__version__ = '2001.0'
+__version__ = '2003.0'
 
 cxxflags = [
     '--std=c++11',          # C++11 required for manylinux2014
@@ -59,8 +59,8 @@ class get_pybind_include(object):
         return pybind11.get_include(self.user)
 
 
-ext_recipes = Extension(
-    'recipes',
+ext_cpp_library = Extension(
+    'library',
     sources=['python/src/main.cpp'],
     include_dirs=[
         "include",
@@ -102,7 +102,7 @@ setup(
     setup_requires=['pybind11>=2.4'],
     tests_require=['pytest'],
     ext_package='reelay',
-    ext_modules=[ext_recipes],
+    ext_modules=[ext_cpp_library],
     cmdclass=dict(build_ext=BuildWithCudd),
     include_package_data=True,
     zip_safe=False

@@ -8,105 +8,100 @@
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
 
-#include "reelay/recipes.hpp"
+#include "reelay/parser/ptl_inspector.hpp"
 
-PYBIND11_MODULE(recipes, m) {
-    m.doc() = "This package provides Python bindings of runtime monitors constructed from formal specifications using Reelay library."; // optional module docstring
+#include "recipes/monitor_discrete_categ.hpp"
+#include "recipes/monitor_discrete_prop.hpp"
+#include "recipes/monitor_discrete_robust.hpp"
 
-    pybind11::class_<reelay::past_ltl_monitor>(m, "past_ltl_monitor")
-        .def(pybind11::init<const std::string &>())
-        .def("now", &reelay::past_ltl_monitor::now)
-        .def("update", &reelay::past_ltl_monitor::update);
+#include "recipes/monitor_dense_categ_const_float64.hpp"
+#include "recipes/monitor_dense_categ_const_int64.hpp"
+#include "recipes/monitor_dense_prop_const_float64.hpp"
+#include "recipes/monitor_dense_prop_const_int64.hpp"
+#include "recipes/monitor_dense_prop_linear_float64.hpp"
+#include "recipes/monitor_dense_robust_const_float64.hpp"
+#include "recipes/monitor_dense_robust_const_int64.hpp"
 
-    pybind11::class_<reelay::discrete_timed_past_mtl_monitor>(
-        m, "discrete_timed_past_mtl_monitor")
-        .def(pybind11::init<const std::string &>())
-        .def("now", &reelay::discrete_timed_past_mtl_monitor::now)
-        .def("update", &reelay::discrete_timed_past_mtl_monitor::update);
+namespace py = pybind11;
+namespace ry = reelay;
 
-    pybind11::class_<reelay::dense_timed_past_mtl_monitor>(
-        m, "dense_timed_past_mtl_monitor")
-        .def(pybind11::init<const std::string &>())
-        .def("now", &reelay::dense_timed_past_mtl_monitor::now)
-        .def("update", &reelay::dense_timed_past_mtl_monitor::update);
+py::dict inspect(const std::string & pattern) {
+  auto gadget = reelay::ptl_inspector();
+  auto result = gadget.inspect(pattern);
 
-    pybind11::class_<reelay::untimed_past_stl_monitor>(
-        m, "untimed_past_stl_monitor")
-        .def(pybind11::init<const std::string &>())
-        .def("now", &reelay::untimed_past_stl_monitor::now)
-        .def("update", &reelay::untimed_past_stl_monitor::update);
+  bool timed = reelay::any_cast<bool>(result["timed"]);
+  bool has_references = reelay::any_cast<bool>(result["has_references"]);
 
-    pybind11::class_<reelay::discrete_timed_past_stl_monitor>(
-        m, "discrete_timed_past_stl_monitor")
-        .def(pybind11::init<const std::string &>())
-        .def("now", &reelay::discrete_timed_past_stl_monitor::now)
-        .def("update", &reelay::discrete_timed_past_stl_monitor::update);
+  return py::dict(py::arg("timed") = timed,
+                  py::arg("has_references") = has_references);
+}
 
-    pybind11::class_<reelay::dense_timed_past_stl0_monitor>(
-        m, "dense_timed_past_stl0_monitor")
-        .def(pybind11::init<const std::string &>())
-        .def("now", &reelay::dense_timed_past_stl0_monitor::now)
-        .def("update", &reelay::dense_timed_past_stl0_monitor::update);
+PYBIND11_MODULE(library, m) {
+    m.doc() = "This package provides Python bindings of runtime monitors constructed from formal specifications using Reelay library.";
 
-    pybind11::class_<reelay::dense_timed_past_stl1_monitor>(
-        m, "dense_timed_past_stl1_monitor")
-        .def(pybind11::init<const std::string &>())
-        .def("now", &reelay::dense_timed_past_stl1_monitor::now)
-        .def("update", &reelay::dense_timed_past_stl1_monitor::update)
-        .def("init_update",
-             &reelay::dense_timed_past_stl1_monitor::init_update);
+    m.def("inspect", &inspect, "A function to inspect specifications");
 
-    pybind11::class_<reelay::untimed_past_rstl_monitor>(
-        m, "untimed_past_rstl_monitor")
-        .def(pybind11::init<const std::string &>())
-        .def("now", &reelay::untimed_past_rstl_monitor::now)
-        .def("update", &reelay::untimed_past_rstl_monitor::update);
+    py::class_<ry::monitor_discrete_prop>(m, "monitor_discrete_prop")
+        .def(py::init<const std::string &, const std::string &>())
+        .def("now", &ry::monitor_discrete_prop::now)
+        .def("update", &ry::monitor_discrete_prop::update);
 
-    pybind11::class_<reelay::discrete_timed_past_rstl_monitor>(
-        m, "discrete_timed_past_rstl_monitor")
-        .def(pybind11::init<const std::string &>())
-        .def("now", &reelay::discrete_timed_past_rstl_monitor::now)
-        .def("update", &reelay::discrete_timed_past_rstl_monitor::update);
+    py::class_<ry::monitor_discrete_categ>(m, "monitor_discrete_categ")
+        .def(py::init<const std::string &, const std::string &>())
+        .def("now", &ry::monitor_discrete_categ::now)
+        .def("update", &ry::monitor_discrete_categ::update);
 
-    pybind11::class_<reelay::dense_timed_past_rstl0_monitor>(
-        m, "dense_timed_past_rstl0_monitor")
-        .def(pybind11::init<const std::string &>())
-        .def("now", &reelay::dense_timed_past_rstl0_monitor::now)
-        .def("update", &reelay::dense_timed_past_rstl0_monitor::update);
+    py::class_<ry::monitor_discrete_robust>(m, "monitor_discrete_robust")
+        .def(py::init<const std::string &, const std::string &>())
+        .def("now", &ry::monitor_discrete_robust::now)
+        .def("update", &ry::monitor_discrete_robust::update);
 
-    pybind11::class_<reelay::untimed_past_qtl_list_monitor>(
-        m, "untimed_past_qtl_list_monitor")
-        .def(pybind11::init<const std::string &>())
-        .def("now", &reelay::untimed_past_qtl_list_monitor::now)
-        .def("update", &reelay::untimed_past_qtl_list_monitor::update);
+    py::class_<ry::monitor_dense_prop_const_int64>(
+        m, "monitor_dense_prop_const_int64")
+        .def(py::init<const std::string &, const std::string &,
+                      const std::string &>())
+        .def("now", &ry::monitor_dense_prop_const_int64::now)
+        .def("update", &ry::monitor_dense_prop_const_int64::update);
 
-    pybind11::class_<reelay::untimed_past_qtl_dict_monitor>(
-        m, "untimed_past_qtl_dict_monitor")
-        .def(pybind11::init<const std::string &>())
-        .def("now", &reelay::untimed_past_qtl_dict_monitor::now)
-        .def("update", &reelay::untimed_past_qtl_dict_monitor::update);
+    py::class_<ry::monitor_dense_prop_const_float64>(
+        m, "monitor_dense_prop_const_float64")
+        .def(py::init<const std::string &, const std::string &,
+                      const std::string &>())
+        .def("now", &ry::monitor_dense_prop_const_float64::now)
+        .def("update", &ry::monitor_dense_prop_const_float64::update);
 
-    pybind11::class_<reelay::discrete_timed_past_qtl_list_monitor>(
-        m, "discrete_timed_past_qtl_list_monitor")
-        .def(pybind11::init<const std::string &>())
-        .def("now", &reelay::discrete_timed_past_qtl_list_monitor::now)
-        .def("update", &reelay::discrete_timed_past_qtl_list_monitor::update);
+    py::class_<ry::monitor_dense_prop_linear_float64>(
+        m, "monitor_dense_prop_linear_float64")
+        .def(py::init<const std::string &, const std::string &,
+                      const std::string &>())
+        .def("now", &ry::monitor_dense_prop_linear_float64::now)
+        .def("update", &ry::monitor_dense_prop_linear_float64::update);
 
-    pybind11::class_<reelay::discrete_timed_past_qtl_dict_monitor>(
-        m, "discrete_timed_past_qtl_dict_monitor")
-        .def(pybind11::init<const std::string &>())
-        .def("now", &reelay::discrete_timed_past_qtl_dict_monitor::now)
-        .def("update", &reelay::discrete_timed_past_qtl_dict_monitor::update);
+    py::class_<ry::monitor_dense_categ_const_int64>(
+        m, "monitor_dense_categ_const_int64")
+        .def(py::init<const std::string &, const std::string &,
+                      const std::string &>())
+        .def("now", &ry::monitor_dense_categ_const_int64::now)
+        .def("update", &ry::monitor_dense_categ_const_int64::update);
 
-    pybind11::class_<reelay::dense_timed_past_qtl_list_monitor>(
-        m, "dense_timed_past_qtl_list_monitor")
-        .def(pybind11::init<const std::string &>())
-        .def("now", &reelay::dense_timed_past_qtl_list_monitor::now)
-        .def("update", &reelay::dense_timed_past_qtl_list_monitor::update);
+    py::class_<ry::monitor_dense_categ_const_float64>(
+        m, "monitor_dense_categ_const_float64")
+        .def(py::init<const std::string &, const std::string &,
+                      const std::string &>())
+        .def("now", &ry::monitor_dense_categ_const_float64::now)
+        .def("update", &ry::monitor_dense_categ_const_float64::update);
 
-    pybind11::class_<reelay::dense_timed_past_qtl_dict_monitor>(
-        m, "dense_timed_past_qtl_dict_monitor")
-        .def(pybind11::init<const std::string &>())
-        .def("now", &reelay::dense_timed_past_qtl_dict_monitor::now)
-        .def("update", &reelay::dense_timed_past_qtl_dict_monitor::update);
+    py::class_<ry::monitor_dense_robust_const_int64>(
+        m, "monitor_dense_robust_const_int64")
+        .def(py::init<const std::string &, const std::string &,
+                      const std::string &>())
+        .def("now", &ry::monitor_dense_robust_const_int64::now)
+        .def("update", &ry::monitor_dense_robust_const_int64::update);
+
+    py::class_<ry::monitor_dense_robust_const_float64>(
+        m, "monitor_dense_robust_const_float64")
+        .def(py::init<const std::string &, const std::string &,
+                      const std::string &>())
+        .def("now", &ry::monitor_dense_robust_const_float64::now)
+        .def("update", &ry::monitor_dense_robust_const_float64::update);
 }
