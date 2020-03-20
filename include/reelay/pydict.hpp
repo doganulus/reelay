@@ -12,40 +12,53 @@
 
 #pragma once
 
+#include "vector"
 #include "unordered_set"
 
+#include "pybind11/pybind11.h"
+
 #include "reelay/datafield.hpp"
-#include "reelay/third_party/nlohmann/json.hpp"
+#include "reelay/conversions.hpp"
+
+using namespace pybind11::literals;
 
 namespace reelay {
 
-using json = nlohmann::json;
+using pydict = pybind11::dict;
 
-template <> struct datafield<json> {
-  using input_t = json;
+template <typename time_t>
+struct timestamp<pydict, time_t> {
+  inline static time_t
+  from(const pydict &args) {
+    return args["time"].cast<time_t>();
+  }
+};
+
+template <> struct datafield<pydict> {
+  using input_t = pydict;
   static const std::unordered_set<std::string> falsity;
 
   inline static bool contains(const input_t &container, const std::string &key){
-    return container.find(key) != container.end();
+    return container.contains(key);
   }
 
   inline static bool as_bool(const input_t &container, const std::string &key) {
-    return container.at(key);
+    return container[key.c_str()].cast<bool>();
   }
 
   inline static int as_integer(const input_t &container,
                                   const std::string &key) {
-    return container.at(key);
+    return container[key.c_str()].cast<long>();
   }
 
   inline static double as_floating(const input_t &container,
                                   const std::string &key) {
-    return container.at(key);
+    return container[key.c_str()].cast<double>();
   }
 
   inline static std::string as_string(const input_t &container,
                                       const std::string &key) {
-    return container.at(key);
+    return container[key.c_str()].cast<std::string>();
   }
 
   inline static bool contains(const input_t &container, std::size_t index) {
@@ -72,12 +85,12 @@ template <> struct datafield<json> {
 
   template <typename time_t>
   inline static time_t timestamp(const input_t &container) {
-    return container.at("time");
+    return container["time"].cast<time_t>();
   }
 };
 
 const std::unordered_set<std::string>
-    datafield<json>::falsity = {
+    datafield<pydict>::falsity = {
         "0", "false", "False"};
 
 } // namespace reelay

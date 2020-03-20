@@ -11,9 +11,11 @@
  */
 #pragma once
 
-#include "vector"
+#include "algorithm"
 #include "unordered_map"
 #include "unordered_set"
+#include "vector"
+
 
 #include "boost/lexical_cast.hpp"
 
