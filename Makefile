@@ -1,11 +1,11 @@
 CC=gcc#
 CXX=g++#
 CXXFLAGS=-std=c++11 -fPIC -O2 -pthread
-CXXFLAGS_APPS=-std=c++17 -fPIC -O2 -pthread -fno-new-ttp-matching -Wall -Wextra
-CXXFLAGS_TEST=-g -std=c++11 -fPIC -O0 -pthread --coverage -fno-inline -fno-inline-small-functions -fno-default-inline#-Wall -Wextra
+CXXFLAGS_APPS=-std=c++17 -fPIC -O2 -pthread -fno-new-ttp-matching#-Wall -Wextra
+CXXFLAGS_TEST=-g -std=c++11 -fPIC -O0 -pthread --coverage -fno-inline -fno-inline-small-functions -fno-default-inline -fvisibility=hidden#-Wall -Wextra
 
 LIB_FLAGS=-lcudd
-INCLUDE_FLAGS=-I. -I./include
+INCLUDE_FLAGS=-I$(ROOT_DIR) -I$(ROOT_DIR)/include -I/home/ulus/anaconda3/include/python3.6m
 
 NAME=reelay
 
@@ -59,29 +59,29 @@ rvbc2018:
 rvbc2018-clean:
 	rm -rf test/build/benchmark-challenge-2018
 
-apps: rymtl rystl ryjavu
+# apps: rymtl rystl ryjavu
 
-rymtl:
-	mkdir -p bin
-	$(CXX) $(CXXFLAGS_APPS) apps/rymtl/main.cpp -o bin/rymtl $(INCLUDE_FLAGS)
+# rymtl:
+# 	mkdir -p bin
+# 	$(CXX) $(CXXFLAGS_APPS) apps/rymtl/main.cpp -o bin/rymtl $(INCLUDE_FLAGS)
 
-rystl:
-	mkdir -p bin
-	$(CXX) $(CXXFLAGS_APPS) apps/rystl/main.cpp -o bin/rystl $(INCLUDE_FLAGS)
+# rystl:
+# 	mkdir -p bin
+# 	$(CXX) $(CXXFLAGS_APPS) apps/rystl/main.cpp -o bin/rystl $(INCLUDE_FLAGS)
 
-ryjavu:
-	mkdir -p bin
-	$(CXX) $(CXXFLAGS_APPS) apps/ryjavu/main.cpp /usr/local/lib/libcudd.a -o bin/ryjavu $(INCLUDE_FLAGS)
+# ryjavu:
+# 	mkdir -p bin
+# 	$(CXX) $(CXXFLAGS_APPS) apps/ryjavu/main.cpp /usr/local/lib/libcudd.a -o bin/ryjavu $(INCLUDE_FLAGS)
 
-apps-install:
-	cp -p bin/rymtl /usr/local/bin/rymtl
-	cp -p bin/rystl /usr/local/bin/rystl
-	cp -p bin/rystl /usr/local/bin/ryjavu
+# apps-install:
+# 	cp -p bin/rymtl /usr/local/bin/rymtl
+# 	cp -p bin/rystl /usr/local/bin/rystl
+# 	cp -p bin/rystl /usr/local/bin/ryjavu
 
-apps-uninstall:
-	rm /usr/local/bin/rymtl
-	rm /usr/local/bin/rystl
-	rm /usr/local/bin/ryjavu
+# apps-uninstall:
+# 	rm /usr/local/bin/rymtl
+# 	rm /usr/local/bin/rystl
+# 	rm /usr/local/bin/ryjavu
 
 test_csvparser:
 	mkdir -p bin/csvparser
@@ -138,23 +138,23 @@ test_untimed_regular:
 	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_setting_untimed_regular.cpp -o test_setting_untimed_regular -I$(ROOT_DIR)/include
 	cd test/build && ./test_setting_untimed_regular -r compact
 
+test_random:
+	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_random.cpp -o test_random $(INCLUDE_FLAGS) -L/home/ulus/anaconda3/lib -lcudd -lpython3.6m
+	cd test/build && ./test_random -r compact
+
 test_recipes:
-	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_recipes.cpp -o test_recipes -I$(ROOT_DIR)/include -lcudd
+	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_recipes.cpp -o test_recipes $(INCLUDE_FLAGS) -L/home/ulus/anaconda3/lib -lcudd -lpython3.6m
 	cd test/build && ./test_recipes -r compact
 
-test_conversions:
-	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_conversions.cpp -o test_conversions -I$(ROOT_DIR)/include -lcudd
-	cd test/build && ./test_conversions -r compact
+# test_mtl_performance_discrete: test/timescales/discrete/multitime/*.txt
+# 	for batchfile in $^ ; do \
+#         multitime -n 10 -b $${batchfile} ; \
+#     done
 
-test_mtl_performance_discrete: test/timescales/discrete/multitime/*.txt
-	for batchfile in $^ ; do \
-        multitime -n 10 -b $${batchfile} ; \
-    done
-
-test_qtl_performance_discrete: test/dejavu/*.txt
-	for batchfile in $^ ; do \
-        multitime -n 10 -b $${batchfile} ; \
-    done
+# test_qtl_performance_discrete: test/dejavu/*.txt
+# 	for batchfile in $^ ; do \
+#         multitime -n 10 -b $${batchfile} ; \
+#     done
 
 python: 
 	pip install .

@@ -25,8 +25,9 @@ RUN ldconfig
 RUN make install
 
 # Build Apps
-RUN make apps
-RUN make apps-install
+# RUN make apps
+# RUN make apps-install
+
 WORKDIR /home
 
 ENTRYPOINT /bin/bash

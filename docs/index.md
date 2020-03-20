@@ -9,9 +9,9 @@ Reelay is a header-only C++ library and set of tools for system-level verificati
 * Simple but non-restrictive user interface 
 * Available for C++, Python, and the command line
 
-## Reelay Expression Format
+## Rye Format
 
-Reelay reads executable specifications written in plain text and verifies at runtime that the system does what those specifications describe. In order to construct runtime monitors automatically, those specifications must follow some basic syntax rules, called Reelay Expression (RYE) format. See [RYE reference](rye.md) for more details.
+Reelay reads executable specifications written in plain text and verifies at runtime that the system does what those specifications describe. In order to construct runtime monitors automatically, those specifications must follow some basic syntax rules, called Reelay Expression (Rye) format. See [Rye format reference](rye.md) for more details.
 
 ## Get Started
 

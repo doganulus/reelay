@@ -28,7 +28,6 @@ nav:
     - 'Tutorial: Introduction' : 'gs_intro.md'
     - 'Use Reelay from C++' : 'gs_cpp.md'
     - 'Use Reelay from Python' : 'gs_python.md'
-    - 'Use Reelay from CLI' : 'gs_cli.md'
 
   - User Manual: 
     - 'Rye Format' : 'rye.md'

@@ -60,14 +60,14 @@ Finally you can build and install CUDD library by typing:
 
 These commands will build the shared library `libcudd.so` and place it under `/usr/local/lib` directory by default. Programs that use Reelay data monitors have to link this library at the compilation.
 
-## Install Reelay Apps
+<!-- ## Install Reelay Apps
 
 The following command will compile and install command-line applications using `reelay` library to monitor formal specifications over CSV files:
 
     make apps
     sudo make apps-install
 
-Currently available applications are `rymtl` for past MTL specifications, `rystl` for past STL specifications, and `ryjavu` for past QTL specifications. Note that `C++17` support is needed to build Reelay apps.
+Currently available applications are `rymtl` for past MTL specifications, `rystl` for past STL specifications, and `ryjavu` for past QTL specifications. Note that `C++17` support is needed to build Reelay apps. -->
 
 ## Install Reelay Python Package
 

@@ -1,6 +1,6 @@
 # Reelay Monitors
 
-![library](https://github.com/doganulus/reelay/workflows/library/badge.svg)![apps](https://github.com/doganulus/reelay/workflows/apps/badge.svg)![python](https://github.com/doganulus/reelay/workflows/python/badge.svg)![docs](https://github.com/doganulus/reelay/workflows/docs/badge.svg)[![Coverage](https://coveralls.io/repos/github/doganulus/reelay/badge.svg?branch=master)](https://coveralls.io/github/doganulus/reelay?branch=master)[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9493a2a1ed2b47e6a0cfdcf6a68cd9b8)](https://www.codacy.com/manual/doganulus/reelay?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=doganulus/reelay&amp;utm_campaign=Badge_Grade)
+![library](https://github.com/doganulus/reelay/workflows/library/badge.svg)![python](https://github.com/doganulus/reelay/workflows/python/badge.svg)![docs](https://github.com/doganulus/reelay/workflows/docs/badge.svg)[![Coverage](https://coveralls.io/repos/github/doganulus/reelay/badge.svg?branch=master)](https://coveralls.io/github/doganulus/reelay?branch=master)[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9493a2a1ed2b47e6a0cfdcf6a68cd9b8)](https://www.codacy.com/manual/doganulus/reelay?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=doganulus/reelay&amp;utm_campaign=Badge_Grade)
 
 Reelay is a header-only C++ library and set of tools for system-level verification and testing of real-time systems. Reelay implements state-of-the-art [runtime verification](https://en.wikipedia.org/wiki/Runtime_verification) techniques to construct runtime monitors that check temporal behaviors of the system against system-level requirements. Hence, Reelay can be used to enhance rigorous systems engineering practices by formalizing and automating the assessment phase.
 
@@ -10,22 +10,21 @@ Reelay is a header-only C++ library and set of tools for system-level verificati
 * Provably correct monitor construction from the specification
 * Fast and frugal runtime requirement checking (very low overhead)
 * Simple but non-restrictive user interface
-* Available for C++, Python, and the command line
+* Available for C++ and Python
 
-## Reelay Expression Format
+## Rye Format
 
-Reelay reads executable specifications written in plain text and verifies that the system does what those specifications say at runtime. In order to construct runtime monitors automatically, those specifications must follow some basic syntax rules, called Reelay Expression (RYE) format. See [RYE reference](docs/rye.md) for more details.
-
+Reelay reads executable specifications written in plain text and verifies that the system does what those specifications say at runtime. In order to construct runtime monitors automatically, those specifications must follow some basic syntax rules, called Reelay Expression (Rye) format. See the reference for the [Rye format](docs/rye.md) for more details.
 
 ## Get Started
 
-The next steps for you are to install Reelay [from source](docs/install.md) and follow through [the tutorial](docs/gs_intro.md) to learn how to use Reelay monitors from [C++](docs/gs_cpp.md), [Python](docs/gs_python.md), and the [command line interface](docs/gs_cli.md). Check out [the documentation](https://doganulus.github.io/reelay/) for more details.
+The next steps for you are to install Reelay [from source](docs/install.md) and follow through [the tutorial](docs/gs_intro.md) to learn how to use Reelay monitors from [C++](docs/gs_cpp.md) and [Python](docs/gs_python.md). Check out [the documentation](https://doganulus.github.io/reelay/) for more details.
 
 ## Contribute
 
-Currently Reelay does not have a contribution guideline. However, we always welcome bug reports, enhancements, and comments regarding the project. Please use the [Issues](https://github.com/doganulus/reelay/issues) page if you have a bug report, enhancement, or comment. Thanks for your interest!
+Currently Reelay does not have a contribution guideline. However, we always welcome bug reports, enhancements, and comments regarding the project. Please use the [Issues](https://github.com/doganulus/reelay/issues) page if you have a bug report, enhancement, or comment.
 
-## Roadmap
+<!-- ## Roadmap
 
 Reelay is an ongoing project and below is a number of features and plans to expand the scope and improve the usability of the library.
 
@@ -42,7 +41,7 @@ Reelay is an ongoing project and below is a number of features and plans to expa
 |🤞| v.1.x   | FOL monitoring application (ryjavu)                                |
 |🤞| v.1.x   | Untimed regular expressions                                        |
 |🤞| v.1.x   | Discrete and dense timed regular expressions                       |
-|🤞| v.1.x   | TRE monitoring application                                         |
+|🤞| v.1.x   | TRE monitoring application                                         | -->
 
 <!-- ## Credits
 
