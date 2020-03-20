@@ -26,8 +26,8 @@ struct dense_timed_network : dense_timed_state<X, Y, T> {
   using node_t = dense_timed_node<output_t, time_t>;
   using state_t = dense_timed_state<input_t, output_t, time_t>;
 
-  time_t previous = -infinity<time_t>::value();
-  time_t current = 0; // Time Zero
+  time_t previous = 0; // Time Zero
+  time_t current = 0;  // Time Zero
 
   input_t prevargs;
 
@@ -71,79 +71,6 @@ struct dense_timed_network : dense_timed_state<X, Y, T> {
                interval<time_t>::left_open(this->previous, this->current)) -
            this->output();
   }
-
-  /*
-   * Below are output adapters from interval_set and interval_maps to STL
-   * structures. This is to standarize interface and make bindings easier.
-   */
-
-  // std::vector<std::pair<time_t, value_t>> voutput() {
-  //   time_t t;
-  //   reelay::interval_set<time_t> result = this->output();
-  //   auto vresult = std::vector<std::pair<time_t, value_t>>();
-
-  //   if (result.empty()) {
-  //     vresult.push_back(std::pair<time_t, value_t>(this->current, 0));
-  //   } else {
-  //     for (const auto &intv : result) {
-  //       t = intv.upper();
-  //       if (intv.lower() > this->previous) {
-  //         vresult.push_back(std::pair<time_t, value_t>(intv.lower(), 0));
-  //         vresult.push_back(std::pair<time_t, value_t>(intv.upper(), 1));
-  //       } else {
-  //         vresult.push_back(std::pair<time_t, value_t>(intv.upper(), 1));
-  //       }
-  //     }
-
-  //     if (t < this->current) {
-  //       vresult.push_back(std::pair<time_t, value_t>(this->current, 0));
-  //     }
-  //   }
-  //   return vresult;
-  // }
-
-  // std::vector<std::pair<time_t, value_t>> moutput() {
-  //   auto result = this->output();
-  //   auto mresult = std::vector<std::pair<time_t, value_t>>();
-  //   for (const auto &intv : result) {
-  //     mresult.push_back(std::make_pair(intv.first.lower(), intv.second));
-  //   }
-  //   return mresult;
-  // }
-
-  // std::vector<std::pair<time_t, value_t>> nvoutput() {
-  //   time_t t;
-  //   reelay::interval_set<time_t> result = this->noutput();
-  //   auto vresult = std::vector<std::pair<time_t, value_t>>();
-
-  //   if (result.empty()) {
-  //     vresult.push_back(std::pair<time_t, value_t>(this->current, 0));
-  //   } else {
-  //     for (const auto &intv : result) {
-  //       t = intv.upper();
-  //       if (intv.lower() > this->previous) {
-  //         vresult.push_back(std::pair<time_t, value_t>(intv.lower(), 0));
-  //         vresult.push_back(std::pair<time_t, value_t>(intv.upper(), 1));
-  //       } else {
-  //         vresult.push_back(std::pair<time_t, value_t>(intv.upper(), 1));
-  //       }
-  //     }
-
-  //     if (t < this->current) {
-  //       vresult.push_back(std::pair<time_t, value_t>(this->current, 0));
-  //     }
-  //   }
-  //   return vresult;
-  // }
-
-  // std::vector<std::pair<time_t, value_t>> nmoutput() {
-  //   auto result = this->output();
-  //   auto mresult = std::vector<std::pair<time_t, value_t>>();
-  //   for (const auto &intv : result) {
-  //     mresult.push_back(std::make_pair(intv.first.upper(), -intv.second));
-  //   }
-  //   return mresult;
-  // }
 
   std::pair<time_t, time_t> now() {
     return std::pair<time_t, time_t>(previous, current);
