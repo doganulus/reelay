@@ -32,11 +32,16 @@ struct ptl_grammar {
     CustomPredicate <- '$' LCURLY Name RCURLY
 
     ListProposition <- LBRACE ListingValue (COMMA ListingValue)* RBRACE
-    RecordProposition <- LCURLY KeyValuePair (COMMA KeyValuePair)* RCURLY
 
+    RecordProposition <- NestedAnyRecordProposition / NestedAllRecordProposition / NestedRecordProposition / SimpleRecordProposition
+    NestedAnyRecordProposition <- PathKey 'any' LCURLY KeyValuePair (COMMA KeyValuePair)* RCURLY
+    NestedAllRecordProposition <- PathKey 'all' LCURLY KeyValuePair (COMMA KeyValuePair)* RCURLY
+    NestedRecordProposition <- PathKey LCURLY KeyValuePair (COMMA KeyValuePair)* RCURLY
+    SimpleRecordProposition <- LCURLY KeyValuePair (COMMA KeyValuePair)* RCURLY
+ 
     ListingValue <- ListingTrue / ListingFalse / ListingNumber / ListingString / ListingReference / ListingAnyValue / ListingEQ / ListingNE / ListingLT / ListingLE / ListingGT / ListingGE
 
-    KeyValuePair <- KeyValuePairTrue / KeyValuePairFalse / KeyValuePairNumber / KeyValuePairString / KeyValuePairEQ / KeyValuePairNE / KeyValuePairLT / KeyValuePairLE / KeyValuePairGT / KeyValuePairGE / KeyValuePairReference / KeyValuePairAnyValue / KeyValueProp 
+    KeyValuePair <- RecordProposition/ KeyValuePairTrue / KeyValuePairFalse / KeyValuePairNumber / KeyValuePairString / KeyValuePairEQ / KeyValuePairNE / KeyValuePairLT / KeyValuePairLE / KeyValuePairGT / KeyValuePairGE / KeyValuePairReference / KeyValuePairAnyValue / KeyValueProp 
 
     ListingTrue <- TRUE
     ListingFalse <- FALSE
@@ -51,7 +56,9 @@ struct ptl_grammar {
     ListingGT <- STAR GT Number
     ListingGE <- STAR GE Number
 
-    FieldKey <- Name (DOT Name)*
+    ArrayKey <- DOLLAR [0-9]+
+    FieldKey <- String
+    PathKey <- (String COLCOL)+
     KeyValueProp <- FieldKey
     KeyValuePairTrue <- FieldKey ':' TRUE
     KeyValuePairFalse <- FieldKey ':' FALSE
@@ -112,6 +119,7 @@ struct ptl_grammar {
     ~AMSAND <- < '&' >
     ~DOLLAR <- < '$' >
     ~SQUARE <- < '#' >
+    ~COLCOL <- < '::' >
     ~SQ <- < "'" >
     ~DQ <- < '"' >
 

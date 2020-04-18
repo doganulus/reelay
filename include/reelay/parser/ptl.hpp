@@ -79,7 +79,8 @@ template <class Setting> struct ptl_parser : ptl_grammar{
           this->meta.erase("key");
         };
 
-    parser["RecordProposition"] = [&](const peg::SemanticValues &sv) {
+    parser["SimpleRecordProposition"] = [&](const peg::SemanticValues &sv) {
+
       if (sv.size() > 1) {
         std::vector<node_ptr_t> args;
         for (size_t i = 0; i < sv.size(); i++) {
@@ -98,6 +99,57 @@ template <class Setting> struct ptl_parser : ptl_grammar{
 
         return child;
       }
+    };
+
+    parser["NestedRecordProposition"] = [&](const peg::SemanticValues &sv) {
+      auto path = reelay::any_cast<std::vector<std::string>>(sv[0]);
+
+      std::vector<state_ptr_t> args;
+      for (size_t i = 1; i < sv.size(); i++) {
+        node_ptr_t child = reelay::any_cast<node_ptr_t>(sv[i]);
+        args.push_back(std::static_pointer_cast<state_t>(child));
+      }
+
+      reelay::kwargs kw = {{"args", args}, {"path", path}};
+      kw.insert(meta.begin(), meta.end());
+      auto expr = Setting::make_state("atomic_nested", kw);
+
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
+    };
+
+    parser["NestedAnyRecordProposition"] = [&](const peg::SemanticValues &sv) {
+      auto path = reelay::any_cast<std::vector<std::string>>(sv[0]);
+
+      std::vector<state_ptr_t> args;
+      for (size_t i = 1; i < sv.size(); i++) {
+        node_ptr_t child = reelay::any_cast<node_ptr_t>(sv[i]);
+        args.push_back(std::static_pointer_cast<state_t>(child));
+      }
+
+      reelay::kwargs kw = {{"args", args}, {"path", path}};
+      kw.insert(meta.begin(), meta.end());
+      auto expr = Setting::make_state("atomic_nested_any", kw);
+
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
+    };
+
+    parser["NestedAllRecordProposition"] = [&](const peg::SemanticValues &sv) {
+      auto path = reelay::any_cast<std::vector<std::string>>(sv[0]);
+
+      std::vector<state_ptr_t> args;
+      for (size_t i = 1; i < sv.size(); i++) {
+        node_ptr_t child = reelay::any_cast<node_ptr_t>(sv[i]);
+        args.push_back(std::static_pointer_cast<state_t>(child));
+      }
+
+      reelay::kwargs kw = {{"args", args}, {"path", path}};
+      kw.insert(meta.begin(), meta.end());
+      auto expr = Setting::make_state("atomic_nested_all", kw);
+
+      this->states.push_back(expr);
+      return std::static_pointer_cast<node_t>(expr);
     };
 
     parser["KeyValueProp"] = [&](const peg::SemanticValues &sv) {
@@ -653,6 +705,14 @@ template <class Setting> struct ptl_parser : ptl_grammar{
       }
 
       return vlist;
+    };
+
+    parser["PathKey"] = [](const peg::SemanticValues &sv) {
+      std::vector<std::string> path;
+      for (std::size_t i = 0; i < sv.size(); i++) {
+        path.push_back(any_cast<std::string>(sv[i]));
+      }
+      return path;
     };
 
     parser["Name"] = [](const peg::SemanticValues &sv) { return sv.token(); };
