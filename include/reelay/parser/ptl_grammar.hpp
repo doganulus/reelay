@@ -27,38 +27,35 @@ struct ptl_grammar {
     HistExpr <- HIST Atom / HIST '(' Expression ')'
     TimedOnceExpr <- ONCE Bound Atom / ONCE Bound '(' Expression ')'
     TimedHistExpr <- HIST Bound Atom / HIST Bound '(' Expression ')'
-    Atom <- CustomPredicate / ListProposition / RecordProposition 
+    Atom <- CustomPredicate / RecordProposition 
             
     CustomPredicate <- '$' LCURLY Name RCURLY
-
-    ListProposition <- LBRACE ListingValue (COMMA ListingValue)* RBRACE
-
+    
     RecordProposition <- NestedAnyRecordProposition / NestedAllRecordProposition / NestedRecordProposition / SimpleRecordProposition
     NestedAnyRecordProposition <- PathKey 'any' LCURLY KeyValuePair (COMMA KeyValuePair)* RCURLY
     NestedAllRecordProposition <- PathKey 'all' LCURLY KeyValuePair (COMMA KeyValuePair)* RCURLY
     NestedRecordProposition <- PathKey LCURLY KeyValuePair (COMMA KeyValuePair)* RCURLY
     SimpleRecordProposition <- LCURLY KeyValuePair (COMMA KeyValuePair)* RCURLY
  
-    ListingValue <- ListingTrue / ListingFalse / ListingNumber / ListingString / ListingReference / ListingAnyValue / ListingEQ / ListingNE / ListingLT / ListingLE / ListingGT / ListingGE
+    KeyValuePair <- RecordProposition/ KeyValuePairTrue / KeyValuePairFalse / KeyValuePairNumber / KeyValuePairString / KeyValuePairEQ / KeyValuePairNE / KeyValuePairLT / KeyValuePairLE / KeyValuePairGT / KeyValuePairGE / KeyValuePairReference / KeyValuePairAnyValue / KeyValueProp /ListingTrue / ListingFalse / ListingNumber / ListingString / ListingReference / ListingAnyValue / ListingEQ / ListingNE / ListingLT / ListingLE / ListingGT / ListingGE
 
-    KeyValuePair <- RecordProposition/ KeyValuePairTrue / KeyValuePairFalse / KeyValuePairNumber / KeyValuePairString / KeyValuePairEQ / KeyValuePairNE / KeyValuePairLT / KeyValuePairLE / KeyValuePairGT / KeyValuePairGE / KeyValuePairReference / KeyValuePairAnyValue / KeyValueProp 
-
-    ListingTrue <- TRUE
-    ListingFalse <- FALSE
-    ListingNumber <- Number
-    ListingString <- String
-    ListingAnyValue <- STAR 
-    ListingReference <- STAR Name
-    ListingEQ <- STAR EQ Number
-    ListingNE <- STAR NE Number
-    ListingLT <- STAR LT Number
-    ListingLE <- STAR LE Number
-    ListingGT <- STAR GT Number
-    ListingGE <- STAR GE Number
-
-    ArrayKey <- DOLLAR [0-9]+
+    ArrayKey <- DOLLAR <[0-9]+>
     FieldKey <- String
     PathKey <- (String COLCOL)+
+
+    ListingTrue <- ArrayKey ':' TRUE
+    ListingFalse <- ArrayKey ':' FALSE
+    ListingNumber <- ArrayKey ':' Number
+    ListingString <- ArrayKey ':' String
+    ListingAnyValue <- ArrayKey ':' STAR 
+    ListingReference <- ArrayKey ':' STAR Name
+    ListingEQ <- ArrayKey EQ Number
+    ListingNE <- ArrayKey NE Number
+    ListingLT <- ArrayKey LT Number
+    ListingLE <- ArrayKey LE Number
+    ListingGT <- ArrayKey GT Number
+    ListingGE <- ArrayKey GE Number
+
     KeyValueProp <- FieldKey
     KeyValuePairTrue <- FieldKey ':' TRUE
     KeyValuePairFalse <- FieldKey ':' FALSE

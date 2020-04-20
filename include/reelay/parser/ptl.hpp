@@ -48,39 +48,7 @@ template <class Setting> struct ptl_parser : ptl_grammar{
       std::cerr << line << ":" << col << ": " << msg << std::endl;
     };
 
-    parser["ListProposition"].enter = [&](const char *s, size_t n, any &dt) {
-      this->meta.insert({{"key", 0}});
-    };
-
-    parser["ListProposition"] = [&](const peg::SemanticValues &sv) {
-      if (sv.size() > 1) {
-        std::vector<node_ptr_t> args;
-        for (size_t i = 0; i < sv.size(); i++) {
-          this->meta["key"] = i;
-          node_ptr_t child = reelay::any_cast<node_ptr_t>(sv[i]);
-          args.push_back(child);
-        }
-        reelay::kwargs kw = {{"args", args}};
-        kw.insert(meta.begin(), meta.end());
-        auto expr = Setting::make_state("atomic_list", kw);
-
-        this->states.push_back(expr);
-        return std::static_pointer_cast<node_t>(expr);
-
-      } else {
-        node_ptr_t child = reelay::any_cast<node_ptr_t>(sv[0]);
-
-        return child;
-      }
-    };
-
-    parser["ListProposition"].leave =
-        [&](const char *s, size_t n, size_t matchlen, any &value, any &dt) {
-          this->meta.erase("key");
-        };
-
     parser["SimpleRecordProposition"] = [&](const peg::SemanticValues &sv) {
-
       if (sv.size() > 1) {
         std::vector<node_ptr_t> args;
         for (size_t i = 0; i < sv.size(); i++) {
@@ -304,6 +272,11 @@ template <class Setting> struct ptl_parser : ptl_grammar{
       return std::static_pointer_cast<node_t>(expr);
     };
 
+    parser["ArrayKey"] = [&](const peg::SemanticValues &sv) {
+      auto index = std::stoi(any_cast<std::string>(sv.token()));
+      return index;
+    };
+
     parser["FieldKey"] = [&](const peg::SemanticValues &sv) {
       auto keys = std::vector<std::string>();
       for (std::size_t i = 0; i < sv.size(); i++) {
@@ -313,129 +286,120 @@ template <class Setting> struct ptl_parser : ptl_grammar{
     };
 
     parser["ListingTrue"] = [&](const peg::SemanticValues &sv) {
-      auto index = reelay::any_cast<int>(this->meta["key"]);
+      auto index = reelay::any_cast<int>(sv[0]);
 
-      reelay::kwargs kw = {};
+      reelay::kwargs kw = {{"key", index}};
       kw.insert(meta.begin(), meta.end());
 
       auto expr = Setting::make_state("listing_true", kw);
-      this->meta["key"] = index + 1; // Increase the index for the next item
 
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
 
     parser["ListingFalse"] = [&](const peg::SemanticValues &sv) {
-      auto index = reelay::any_cast<int>(this->meta["key"]);
+      auto index = reelay::any_cast<int>(sv[0]);
 
-      reelay::kwargs kw = {};
+      reelay::kwargs kw = {{"key", index}};
       kw.insert(meta.begin(), meta.end());
 
       auto expr = Setting::make_state("listing_false", kw);
-      this->meta["key"] = index + 1; // Increase the index for the next item
 
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
 
     parser["ListingNumber"] = [&](const peg::SemanticValues &sv) {
-      auto cstr = reelay::any_cast<std::string>(sv[0]);
-      auto index = reelay::any_cast<int>(this->meta["key"]);
-      reelay::kwargs kw = {{"constant", cstr}};
+      auto index = reelay::any_cast<int>(sv[0]);
+      auto cstr = reelay::any_cast<std::string>(sv[1]);
+      reelay::kwargs kw = {{"key", index}, {"constant", cstr}};
       kw.insert(meta.begin(), meta.end());
 
       auto expr = Setting::make_state("listing_number", kw);
-      this->meta["key"] = index + 1; // Increase the index for the next item
 
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
 
     parser["ListingGE"] = [&](const peg::SemanticValues &sv) {
-      auto cstr = reelay::any_cast<std::string>(sv[0]);
-      auto index = reelay::any_cast<int>(this->meta["key"]);
-      reelay::kwargs kw = {{"constant", cstr}};
+      auto index = reelay::any_cast<int>(sv[0]);
+      auto cstr = reelay::any_cast<std::string>(sv[1]);
+      reelay::kwargs kw = {{"key", index}, {"constant", cstr}};
       kw.insert(meta.begin(), meta.end());
 
       auto expr = Setting::make_state("listing_ge", kw);
-      this->meta["key"] = index + 1; // Increase the index for the next item
 
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
 
     parser["ListingGT"] = [&](const peg::SemanticValues &sv) {
-      auto cstr = reelay::any_cast<std::string>(sv[0]);
-      auto index = reelay::any_cast<int>(this->meta["key"]);
-      reelay::kwargs kw = {{"constant", cstr}};
+      auto index = reelay::any_cast<int>(sv[0]);
+      auto cstr = reelay::any_cast<std::string>(sv[1]);
+      reelay::kwargs kw = {{"key", index}, {"constant", cstr}};
       kw.insert(meta.begin(), meta.end());
 
       auto expr = Setting::make_state("listing_gt", kw);
-      this->meta["key"] = index + 1; // Increase the index for the next item
 
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
 
     parser["ListingLE"] = [&](const peg::SemanticValues &sv) {
-      auto cstr = reelay::any_cast<std::string>(sv[0]);
-      auto index = reelay::any_cast<int>(this->meta["key"]);
-      reelay::kwargs kw = {{"constant", cstr}};
+      auto index = reelay::any_cast<int>(sv[0]);
+      auto cstr = reelay::any_cast<std::string>(sv[1]);
+      reelay::kwargs kw = {{"key", index}, {"constant", cstr}};
       kw.insert(meta.begin(), meta.end());
 
       auto expr = Setting::make_state("listing_le", kw);
-      this->meta["key"] = index + 1; // Increase the index for the next item
 
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
 
     parser["ListingLT"] = [&](const peg::SemanticValues &sv) {
-      auto cstr = reelay::any_cast<std::string>(sv[0]);
-      auto index = reelay::any_cast<int>(this->meta["key"]);
-      reelay::kwargs kw = {{"constant", cstr}};
+      auto index = reelay::any_cast<int>(sv[0]);
+      auto cstr = reelay::any_cast<std::string>(sv[1]);
+      reelay::kwargs kw = {{"key", index}, {"constant", cstr}};
       kw.insert(meta.begin(), meta.end());
 
       auto expr = Setting::make_state("listing_lt", kw);
-      this->meta["key"] = index + 1; // Increase the index for the next item
 
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
 
     parser["ListingString"] = [&](const peg::SemanticValues &sv) {
-      auto cstr = reelay::any_cast<std::string>(sv[0]);
-      auto index = reelay::any_cast<int>(this->meta["key"]);
-      reelay::kwargs kw = {{"constant", cstr}};
+      auto index = reelay::any_cast<int>(sv[0]);
+      auto cstr = reelay::any_cast<std::string>(sv[1]);
+      reelay::kwargs kw = {{"key", index}, {"constant", cstr}};
       kw.insert(meta.begin(), meta.end());
 
       auto expr = Setting::make_state("listing_string", kw);
-      this->meta["key"] = index + 1; // Increase the index for the next item
 
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
 
     parser["ListingAnyValue"] = [&](const peg::SemanticValues &sv) {
-      auto index = reelay::any_cast<int>(this->meta["key"]);
-      reelay::kwargs kw = {};
+      auto index = reelay::any_cast<int>(sv[0]);
+
+      reelay::kwargs kw = {{"key", index}};
       kw.insert(meta.begin(), meta.end());
 
       auto expr = Setting::make_state("listing_any", kw);
-      this->meta["key"] = index + 1; // Increase the index for the next item
 
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
     };
 
     parser["ListingReference"] = [&](const peg::SemanticValues &sv) {
-      auto cstr = reelay::any_cast<std::string>(sv[0]);
-      auto index = reelay::any_cast<int>(this->meta["key"]);
-      reelay::kwargs kw = {{"constant", cstr}};
+      auto index = reelay::any_cast<int>(sv[0]);
+      auto cstr = reelay::any_cast<std::string>(sv[1]);
+      reelay::kwargs kw = {{"key", index}, {"constant", cstr}};
       kw.insert(meta.begin(), meta.end());
 
       auto expr = Setting::make_state("listing_ref", kw);
-      this->meta["key"] = index + 1; // Increase the index for the next item
 
       this->states.push_back(expr);
       return std::static_pointer_cast<node_t>(expr);
@@ -715,7 +679,7 @@ template <class Setting> struct ptl_parser : ptl_grammar{
       return path;
     };
 
-    parser["Name"] = [](const peg::SemanticValues &sv) { return sv.token(); };
+    parser["Name"] = [](const peg::SemanticValues &sv) {  return sv.token(); };
     parser["Number"] = [](const peg::SemanticValues &sv) { return sv.token(); };
     parser["SQString"] = [](const peg::SemanticValues &sv) {
       return sv.token();
@@ -729,6 +693,7 @@ template <class Setting> struct ptl_parser : ptl_grammar{
 
   std::shared_ptr<network_t> parse(const std::string &pattern) {
     node_ptr_t output_func;
+
     parser.parse(pattern.c_str(), output_func);
 
     auto network = std::make_shared<network_t>(output_func, states);
