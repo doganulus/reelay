@@ -19,7 +19,7 @@ struct monitor_dense_robust_const_int64 {
 
   using time_t = int64_t;
   using value_t = double;
-  using input_t = pybind11::dict;
+  using input_t = pybind11::object;
   using output_t = pybind11::list;
 
   using factory =
@@ -53,8 +53,8 @@ struct monitor_dense_robust_const_int64 {
     for (const auto &intv : result) {
       if (lastval != intv.second or network->current == 0) {
         vresult.append(
-            pydict(pybind11::arg(t_name.c_str()) = intv.first.lower(),
-                   pybind11::arg(y_name.c_str()) = intv.second));
+            pybind11::dict(pybind11::arg(t_name.c_str()) = intv.first.lower(),
+                           pybind11::arg(y_name.c_str()) = intv.second));
         lastval = intv.second;
       }
     }

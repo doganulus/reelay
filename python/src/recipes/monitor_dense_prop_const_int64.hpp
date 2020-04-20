@@ -21,7 +21,7 @@ struct monitor_dense_prop_const_int64 {
 
   using time_t = int64_t;
   using value_t = bool;
-  using input_t = pybind11::dict;
+  using input_t = pybind11::object;
   using output_t = pybind11::list;
 
   using factory = dense_timed_setting::factory<input_t, time_t>;

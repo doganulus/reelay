@@ -24,19 +24,26 @@ using namespace pybind11::literals;
 
 namespace reelay {
 
-using pydict = pybind11::dict;
+using pyobj = pybind11::object;
 
-template <typename time_t>
-struct timestamp<pydict, time_t> {
+template <typename time_t> struct timestamp<pybind11::object, time_t> {
   inline static time_t
-  from(const pydict &args) {
+  from(const pybind11::object &args) {
     return args["time"].cast<time_t>();
   }
 };
 
-template <> struct datafield<pydict> {
-  using input_t = pydict;
+template <> struct datafield<pybind11::object> {
+  using input_t = pybind11::object;
   static const std::unordered_set<std::string> falsity;
+
+  inline static input_t at(const input_t &container, const std::string &key) {
+    return container[key.c_str()];
+  }
+
+  inline static input_t at(const input_t &container, int index) {
+    return container[pybind11::int_(index)];
+  }
 
   inline static bool contains(const input_t &container, const std::string &key){
     return container.contains(key);
@@ -61,25 +68,23 @@ template <> struct datafield<pydict> {
     return container[key.c_str()].cast<std::string>();
   }
 
-  inline static bool contains(const input_t &container, std::size_t index) {
+  inline static bool contains(const input_t &container, int index) {
     throw std::runtime_error("");
   }
 
-  inline static bool as_bool(const input_t &container, std::size_t index) {
+  inline static bool as_bool(const input_t &container, int index) {
     throw std::runtime_error("");
   }
 
-  inline static int as_integer(const input_t &container, std::size_t index) {
+  inline static int as_integer(const input_t &container, int index) {
     throw std::runtime_error("");
   }
 
-  inline static double as_floating(const input_t &container,
-                                   std::size_t index) {
+  inline static double as_floating(const input_t &container, int index) {
     throw std::runtime_error("");
   }
 
-  inline static std::string as_string(const input_t &container,
-                                      std::size_t index) {
+  inline static std::string as_string(const input_t &container, int index) {
     throw std::runtime_error("");
   }
 
@@ -89,8 +94,7 @@ template <> struct datafield<pydict> {
   }
 };
 
-const std::unordered_set<std::string>
-    datafield<pydict>::falsity = {
-        "0", "false", "False"};
+const std::unordered_set<std::string> datafield<pyobj>::falsity = {"0", "false",
+                                                                   "False"};
 
 } // namespace reelay

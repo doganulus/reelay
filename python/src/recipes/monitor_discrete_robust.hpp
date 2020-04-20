@@ -18,7 +18,7 @@ struct monitor_discrete_robust {
 
   using time_t = int64_t;
   using value_t = double;
-  using input_t = pybind11::dict;
+  using input_t = pybind11::object;
   using output_t = pybind11::dict;
 
   using factory =

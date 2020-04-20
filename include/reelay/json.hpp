@@ -25,6 +25,14 @@ template <> struct datafield<json> {
   using input_t = json;
   static const std::unordered_set<std::string> falsity;
 
+  inline static input_t at(const input_t &container, const std::string &key) {
+    return container[key];
+  }
+
+  inline static input_t at(const input_t &container, std::size_t index) {
+    return container[index];
+  }
+
   inline static bool contains(const input_t &container, const std::string &key){
     return container.find(key) != container.end();
   }
@@ -49,25 +57,25 @@ template <> struct datafield<json> {
   }
 
   inline static bool contains(const input_t &container, std::size_t index) {
-    throw std::runtime_error("");
+    return index < container.size();
   }
 
   inline static bool as_bool(const input_t &container, std::size_t index) {
-    throw std::runtime_error("");
+    return container.at(index);
   }
 
   inline static int as_integer(const input_t &container, std::size_t index) {
-    throw std::runtime_error("");
+    return container.at(index);
   }
 
   inline static double as_floating(const input_t &container,
                                    std::size_t index) {
-    throw std::runtime_error("");
+    return container.at(index);
   }
 
   inline static std::string as_string(const input_t &container,
                                       std::size_t index) {
-    throw std::runtime_error("");
+    return container.at(index);
   }
 
   template <typename time_t>

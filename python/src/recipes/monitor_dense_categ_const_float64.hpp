@@ -18,7 +18,7 @@ namespace reelay {
 struct monitor_dense_categ_const_float64 {
 
   using time_t = double;
-  using input_t = pybind11::dict;
+  using input_t = pybind11::object;
   using output_t = pybind11::list;
 
   using factory = dense_timed_data_setting::factory<input_t, time_t>;
@@ -53,7 +53,7 @@ struct monitor_dense_categ_const_float64 {
     for (const auto &intv : this->network->output()) {
       bool value = (intv.second == manager->one());
       if (lastval != value or network->current == 0) {
-        vresult.append(pydict(
+        vresult.append(pybind11::dict(
             pybind11::arg(t_name.c_str()) = intv.first.lower(),
             pybind11::arg(y_name.c_str()) = (intv.second == manager->one())));
         lastval = value;

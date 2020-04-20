@@ -17,7 +17,7 @@ namespace reelay {
 struct monitor_discrete_prop {
 
   using time_t  = int64_t;
-  using input_t = pybind11::dict;
+  using input_t = pybind11::object;
   using output_t = pybind11::dict;
 
   using factory = discrete_timed_setting::factory<input_t, time_t>;

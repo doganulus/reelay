@@ -21,7 +21,7 @@ struct monitor_dense_prop_linear_float64 {
 
   using time_t = double;
   using value_t = bool;
-  using input_t = pybind11::dict;
+  using input_t = pybind11::object;
   using output_t = pybind11::list;
 
   std::string name;
