@@ -11,9 +11,10 @@
 #include "catch.hpp"
 
 #include "reelay/common.hpp"
+#include "reelay/json.hpp"
 #include "reelay/monitors.hpp"
 
-using input_t = std::unordered_map<std::string, std::string>;
+using input_t = reelay::json;
 using function_t = std::function<bool(const input_t &)>;
 
 TEST_CASE("Atoms") {
@@ -21,10 +22,10 @@ TEST_CASE("Atoms") {
   SECTION("AtomicProposition") {
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "0"}});
-    sequence.push_back(input_t{{"x1", "0"}});
+    sequence.push_back(input_t{{"x1", false}});
+    sequence.push_back(input_t{{"x1", false}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x1", "1"}});
+    sequence.push_back(input_t{{"x1", true}});
 
     auto net1 = reelay::monitor<input_t>::from_temporal_logic("{x1}");
 
@@ -43,10 +44,10 @@ TEST_CASE("Atoms") {
   SECTION("AtomicTrue") {
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "0"}});
-    sequence.push_back(input_t{{"x1", "0"}});
+    sequence.push_back(input_t{{"x1", false}});
+    sequence.push_back(input_t{{"x1", false}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x1", "1"}});
+    sequence.push_back(input_t{{"x1", true}});
 
     auto net1 = reelay::monitor<input_t>::from_temporal_logic("{x1:true}");
 
@@ -65,10 +66,10 @@ TEST_CASE("Atoms") {
   SECTION("AtomicFalse") {
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "0"}});
-    sequence.push_back(input_t{{"x1", "0"}});
+    sequence.push_back(input_t{{"x1", false}});
+    sequence.push_back(input_t{{"x1", false}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x1", "1"}});
+    sequence.push_back(input_t{{"x1", true}});
 
     auto net1 = reelay::monitor<input_t>::from_temporal_logic("{x1:false}");
 
@@ -87,10 +88,10 @@ TEST_CASE("Atoms") {
   SECTION("AtomicGreaterThan") {
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "3"}});
-    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", 3}});
+    sequence.push_back(input_t{{"x1", 4}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x1", "5"}});
+    sequence.push_back(input_t{{"x1", 5}});
 
     auto net1 = reelay::monitor<input_t>::from_temporal_logic("{x1 > 4}");
 
@@ -110,10 +111,10 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "2"}});
-    sequence.push_back(input_t{{"x1", "3"}});
+    sequence.push_back(input_t{{"x1", 2}});
+    sequence.push_back(input_t{{"x1", 3}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", 4}});
 
     auto net1 = reelay::monitor<input_t>::from_temporal_logic("{x1 >= 3}");
 
@@ -133,10 +134,10 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "2"}});
-    sequence.push_back(input_t{{"x1", "3"}});
+    sequence.push_back(input_t{{"x1", 2}});
+    sequence.push_back(input_t{{"x1", 3}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", 4}});
 
     auto net1 = reelay::monitor<input_t>::from_temporal_logic("{x1 < 3}");
 
@@ -156,10 +157,10 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "3"}});
-    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", 3}});
+    sequence.push_back(input_t{{"x1", 4}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x1", "5"}});
+    sequence.push_back(input_t{{"x1", 5}});
 
     auto net1 = reelay::monitor<input_t>::from_temporal_logic("{x1 <= 4}");
 
@@ -179,10 +180,10 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "3"}});
-    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", 3}});
+    sequence.push_back(input_t{{"x1", 4}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x1", "5"}});
+    sequence.push_back(input_t{{"x1", 5}});
 
     auto net1 = reelay::monitor<input_t>::from_temporal_logic("{x1 != 4}");
 
@@ -226,7 +227,7 @@ TEST_CASE("Atoms") {
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{{"x1", "3"}, {"x2", "a"}});
-    sequence.push_back(input_t{{"x1", "1"}});
+    sequence.push_back(input_t{{"x1", true}});
     sequence.push_back(input_t{{"x1", "3"}, {"x2", "c"}});
 
     auto net1 = reelay::monitor<input_t>::from_temporal_logic("{x2: *}");
@@ -247,10 +248,10 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "3"}});
-    sequence.push_back(input_t{{"x1", "1"}});
+    sequence.push_back(input_t{{"x1", 3}});
+    sequence.push_back(input_t{{"x1", 1}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x1", "3"}});
+    sequence.push_back(input_t{{"x1", 3}});
 
     auto net1 = reelay::monitor<input_t>::from_temporal_logic("{x1: 3}");
 
@@ -261,7 +262,7 @@ TEST_CASE("Atoms") {
       result.push_back(net1->output());
     }
 
-    auto expected = std::vector<bool>({1, 0, 0,  1});
+    auto expected = std::vector<bool>({1, 0, 0, 1});
 
     CHECK(result == expected);
   }
@@ -315,11 +316,11 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "2"}});
-    sequence.push_back(input_t{{"x1", "3"}});
-    sequence.push_back(input_t{{"x1", "4"}});
-    sequence.push_back(input_t{{"x1", "5"}});
-    sequence.push_back(input_t{{"x1", "6"}});
+    sequence.push_back(input_t{{"x1", 2}});
+    sequence.push_back(input_t{{"x1", 3}});
+    sequence.push_back(input_t{{"x1", 4}});
+    sequence.push_back(input_t{{"x1", 5}});
+    sequence.push_back(input_t{{"x1", 6}});
 
     auto net1 =
         reelay::monitor<input_t>::from_temporal_logic("{x1 > 3, x1 < 5}");
@@ -340,12 +341,12 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "3.3"}, {"x2", "1.7"}});
-    sequence.push_back(input_t{{"x1", "3.4"}, {"x2", "1.6"}});
-    sequence.push_back(input_t{{"x1", "3.5"}, {"x2", "1.9"}});
+    sequence.push_back(input_t{{"x1", 3.3}, {"x2", 1.7}});
+    sequence.push_back(input_t{{"x1", 3.4}, {"x2", 1.6}});
+    sequence.push_back(input_t{{"x1", 3.5}, {"x2", 1.9}});
 
     function_t sum_x1_and_x2_gt_5 = [](const input_t &row) {
-      return (std::stof(row.at("x1")) + std::stof(row.at("x2"))) > 5.0;
+      return (row.at("x1").get<double>() + row.at("x2").get<double>()) > 5.0;
     };
 
     reelay::kwargs predicates = {{"sum_x1_and_x2_gt_5", sum_x1_and_x2_gt_5}};
@@ -366,16 +367,123 @@ TEST_CASE("Atoms") {
   }
 }
 
+TEST_CASE("Nested Inputs") {
+
+  SECTION("Deep Object") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"obj", {{"flag", false}}}});
+    sequence.push_back(input_t{{"obj", {{"flag", false}}}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"obj", {{"flag", true}}}});
+    sequence.push_back(input_t{});
+
+    auto net1 =
+        reelay::monitor<input_t>::from_temporal_logic(
+            "obj::{flag}");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({0, 0, 0, 1, 1});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Deep Object 2") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(
+        input_t{{"obj1", {{"obj2", {{"flag1", false}, {"flag2", false}}}}}});
+    sequence.push_back(
+        input_t{{"obj1", {{"obj2", {{"flag1", false}, {"flag2", true}}}}}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"obj1", {{"obj2", {{"flag2", false}}}}}});
+    sequence.push_back(input_t{});
+
+    auto net1 =
+        reelay::monitor<input_t>::from_temporal_logic(
+            "obj1::obj2::{flag2}");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({0, 1, 1, 0, 0});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Deep List Any") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{
+        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 9}, {"b", 2}}}}}}});
+    sequence.push_back(input_t{
+        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
+    sequence.push_back(input_t{
+        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
+
+    auto net1 =
+        reelay::monitor<input_t>::from_temporal_logic(
+            "obj1::obj2::any{a < 6}");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({0, 1, 1});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Deep List All") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{
+        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 9}, {"b", 2}}}}}}});
+    sequence.push_back(input_t{
+        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
+    sequence.push_back(input_t{
+        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 0}}}}}}});
+
+    auto net1 =
+        reelay::monitor<input_t>::from_temporal_logic(
+            "obj1::obj2::all{b > 1}");
+
+    auto result = std::vector<bool>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<bool>({1, 1, 0});
+
+    CHECK(result == expected);
+  }
+}
+
 TEST_CASE("Boolean Operations") {
 
   SECTION("Disjunction") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", false}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", false}, {"p2", true}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", true}});
 
     auto net1 = reelay::monitor<input_t>::from_temporal_logic("{p1} or {p2}");
 
@@ -395,10 +503,10 @@ TEST_CASE("Boolean Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", false}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", false}, {"p2", true}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", true}});
 
     auto net1 = reelay::monitor<input_t>::from_temporal_logic("{p1} and {p2}");
 
@@ -418,10 +526,10 @@ TEST_CASE("Boolean Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", false}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", false}, {"p2", true}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", true}});
 
     auto net1 = reelay::monitor<input_t>::from_temporal_logic("{p1} -> {p2}");
 
@@ -441,8 +549,8 @@ TEST_CASE("Boolean Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}});
+    sequence.push_back(input_t{{"p1", false}});
+    sequence.push_back(input_t{{"p1", true}});
 
     auto net1 = reelay::monitor<input_t>::from_temporal_logic("not {p1}");
 
@@ -465,10 +573,10 @@ TEST_CASE("Untimed Temporal Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", false}, {"p2", true}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", false}, {"p2", true}});
 
     auto net1 = reelay::monitor<input_t>::from_temporal_logic("pre{p1}");
     auto net2 = reelay::monitor<input_t>::from_temporal_logic("pre{p2}");
@@ -494,10 +602,10 @@ TEST_CASE("Untimed Temporal Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", true}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", true}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", false}});
 
     auto net1 =
         reelay::monitor<input_t>::from_temporal_logic("historically{p1}");
@@ -525,10 +633,10 @@ TEST_CASE("Untimed Temporal Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", false}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", false}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", false}, {"p2", false}});
 
     auto net1 = reelay::monitor<input_t>::from_temporal_logic("once{p1}");
     auto net2 = reelay::monitor<input_t>::from_temporal_logic("once{p2}");
@@ -554,20 +662,20 @@ TEST_CASE("Untimed Temporal Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", false}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", true}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", false}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", true}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", false}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", false}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", true}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", false}});
 
     auto net1 =
         reelay::monitor<input_t>::from_temporal_logic("{p1} since {p2}");
@@ -592,20 +700,20 @@ TEST_CASE("Persistance") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
-    sequence.push_back(input_t{             {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", false}, {"p2", false}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", true}});
+    sequence.push_back(input_t{             {"p2", false}});
     sequence.push_back(input_t{                        });
     sequence.push_back(input_t{                        });
-    sequence.push_back(input_t{{"p1", "0"},            });
-    sequence.push_back(input_t{{"p1", "1"},            });
-    sequence.push_back(input_t{             {"p2", "1"}});
-    sequence.push_back(input_t{             {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", false},            });
+    sequence.push_back(input_t{{"p1", true},            });
+    sequence.push_back(input_t{             {"p2", true}});
+    sequence.push_back(input_t{             {"p2", false}});
     sequence.push_back(input_t{                        });
-    sequence.push_back(input_t{{"p1", "0"},            });
+    sequence.push_back(input_t{{"p1", false},            });
     sequence.push_back(input_t{                        });
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
-    sequence.push_back(input_t{             {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", true}, {"p2", true}});
+    sequence.push_back(input_t{             {"p2", false}});
 
     auto net1 =
         reelay::monitor<input_t>::from_temporal_logic("{p1} since {p2}");

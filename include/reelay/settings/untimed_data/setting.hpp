@@ -29,8 +29,10 @@
 #include "reelay/settings/untimed_data/atomic_string.hpp"
 #include "reelay/settings/untimed_data/atomic_true.hpp"
 
-#include "reelay/settings/untimed_data/atomic_list.hpp"
 #include "reelay/settings/untimed_data/atomic_map.hpp"
+#include "reelay/settings/untimed_data/atomic_nested.hpp"
+#include "reelay/settings/untimed_data/atomic_nested_all.hpp"
+#include "reelay/settings/untimed_data/atomic_nested_any.hpp"
 
 #include "reelay/settings/untimed_data/conjunction.hpp"
 #include "reelay/settings/untimed_data/disjunction.hpp"
@@ -106,8 +108,12 @@ struct factory {
 
     if (name == "atomic_map") {
       result = std::make_shared<atomic_map<input_t>>(kw);
-    } else if (name == "atomic_list") {
-      result = std::make_shared<atomic_list<input_t>>(kw);
+    } else if (name == "atomic_nested") {
+      result = std::make_shared<atomic_nested<input_t>>(kw);
+    } else if (name == "atomic_nested_all") {
+      result = std::make_shared<atomic_nested_all<input_t>>(kw);
+    } else if (name == "atomic_nested_any") {
+      result = std::make_shared<atomic_nested_any<input_t>>(kw);
     } else if (name == "mapping_prop") {
       result = std::make_shared<atomic_prop<input_t, std::string>>(kw);
     } else if (name == "mapping_false") {

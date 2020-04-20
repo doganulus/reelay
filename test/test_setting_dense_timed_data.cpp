@@ -11,28 +11,28 @@
 #include "catch.hpp"
 
 #include "reelay/common.hpp"
+#include "reelay/json.hpp"
 #include "reelay/monitors.hpp"
 
+using input_t = reelay::json;
 using time_t = int64_t;
-using value_t = BDD;
+
 using interval = reelay::interval<time_t>;
 using interval_map = reelay::data_interval_map<time_t>;
 
 TEST_CASE("Atoms") {
 
   SECTION("Proposition_ZeroHoldForward") {
-    
-    using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"}, {"x1", "true"}});
-    sequence.push_back(input_t{{"time", "31"}});
-    sequence.push_back(input_t{{"time", "33"}, {"x1", "false"}});
-    sequence.push_back(input_t{{"time", "35"}, {"x1", "false"}});
-    sequence.push_back(input_t{{"time", "40"}});
-    sequence.push_back(input_t{{"time", "52"}, {"x1", "true"}});
-    sequence.push_back(input_t{{"time", "55"}});
+    sequence.push_back(input_t{{"time", 0}, {"x1", true}});
+    sequence.push_back(input_t{{"time", 31}});
+    sequence.push_back(input_t{{"time", 33}, {"x1", false}});
+    sequence.push_back(input_t{{"time", 35}, {"x1", false}});
+    sequence.push_back(input_t{{"time", 40}});
+    sequence.push_back(input_t{{"time", 52}, {"x1", true}});
+    sequence.push_back(input_t{{"time", 55}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -62,17 +62,15 @@ TEST_CASE("Atoms") {
 
   SECTION("AtomicAny_ZeroHoldForward") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"}, {"x1", "true"}});
-    sequence.push_back(input_t{{"time", "31"}});
-    sequence.push_back(input_t{{"time", "33"}, {"x1", "false"}});
-    sequence.push_back(input_t{{"time", "35"}, {"x1", "false"}});
-    sequence.push_back(input_t{{"time", "40"}});
-    sequence.push_back(input_t{{"time", "52"}, {"x1", "true"}});
-    sequence.push_back(input_t{{"time", "55"}});
+    sequence.push_back(input_t{{"time", 0}, {"x1", true}});
+    sequence.push_back(input_t{{"time", 31}});
+    sequence.push_back(input_t{{"time", 33}, {"x1", false}});
+    sequence.push_back(input_t{{"time", 35}, {"x1", false}});
+    sequence.push_back(input_t{{"time", 40}});
+    sequence.push_back(input_t{{"time", 52}, {"x1", true}});
+    sequence.push_back(input_t{{"time", 55}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -104,17 +102,15 @@ TEST_CASE("Atoms") {
 
   SECTION("BooleanTrue_ZeroHoldForward") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"}, {"x1", "true"}});
-    sequence.push_back(input_t{{"time", "31"}});
-    sequence.push_back(input_t{{"time", "33"}, {"x1", "false"}});
-    sequence.push_back(input_t{{"time", "35"}, {"x1", "false"}});
-    sequence.push_back(input_t{{"time", "40"}});
-    sequence.push_back(input_t{{"time", "52"}, {"x1", "true"}});
-    sequence.push_back(input_t{{"time", "55"}});
+    sequence.push_back(input_t{{"time", 0}, {"x1", true}});
+    sequence.push_back(input_t{{"time", 31}});
+    sequence.push_back(input_t{{"time", 33}, {"x1", false}});
+    sequence.push_back(input_t{{"time", 35}, {"x1", false}});
+    sequence.push_back(input_t{{"time", 40}});
+    sequence.push_back(input_t{{"time", 52}, {"x1", true}});
+    sequence.push_back(input_t{{"time", 55}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -144,17 +140,15 @@ TEST_CASE("Atoms") {
 
   SECTION("BooleanFalse_ZeroHoldForward") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"}, {"x1", "true"}});
-    sequence.push_back(input_t{{"time", "31"}});
-    sequence.push_back(input_t{{"time", "33"}, {"x1", "false"}});
-    sequence.push_back(input_t{{"time", "35"}, {"x1", "false"}});
-    sequence.push_back(input_t{{"time", "40"}});
-    sequence.push_back(input_t{{"time", "52"}, {"x1", "true"}});
-    sequence.push_back(input_t{{"time", "55"}});
+    sequence.push_back(input_t{{"time", 0}, {"x1", true}});
+    sequence.push_back(input_t{{"time", 31}});
+    sequence.push_back(input_t{{"time", 33}, {"x1", false}});
+    sequence.push_back(input_t{{"time", 35}, {"x1", false}});
+    sequence.push_back(input_t{{"time", 40}});
+    sequence.push_back(input_t{{"time", 52}, {"x1", true}});
+    sequence.push_back(input_t{{"time", 55}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -184,17 +178,15 @@ TEST_CASE("Atoms") {
 
   SECTION("AtomicString_ZeroHoldForward") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"}, {"x1", "veritas"}});
-    sequence.push_back(input_t{{"time", "31"}});
-    sequence.push_back(input_t{{"time", "33"}, {"x1", "fortuna"}});
-    sequence.push_back(input_t{{"time", "35"}, {"x1", "fortuna"}});
-    sequence.push_back(input_t{{"time", "40"}});
-    sequence.push_back(input_t{{"time", "52"}, {"x1", "veritas"}});
-    sequence.push_back(input_t{{"time", "55"}});
+    sequence.push_back(input_t{{"time", 0}, {"x1", "veritas"}});
+    sequence.push_back(input_t{{"time", 31}});
+    sequence.push_back(input_t{{"time", 33}, {"x1", "fortuna"}});
+    sequence.push_back(input_t{{"time", 35}, {"x1", "fortuna"}});
+    sequence.push_back(input_t{{"time", 40}});
+    sequence.push_back(input_t{{"time", 52}, {"x1", "veritas"}});
+    sequence.push_back(input_t{{"time", 55}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -224,17 +216,15 @@ TEST_CASE("Atoms") {
 
   SECTION("AtomicNumber_ZeroHoldForward") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"}, {"x1", "12"}});
-    sequence.push_back(input_t{{"time", "31"}});
-    sequence.push_back(input_t{{"time", "33"}, {"x1", "11"}});
-    sequence.push_back(input_t{{"time", "35"}, {"x1", "12.5"}});
-    sequence.push_back(input_t{{"time", "40"}});
-    sequence.push_back(input_t{{"time", "52"}, {"x1", "12.5"}});
-    sequence.push_back(input_t{{"time", "55"}});
+    sequence.push_back(input_t{{"time", 0}, {"x1", 12}});
+    sequence.push_back(input_t{{"time", 31}});
+    sequence.push_back(input_t{{"time", 33}, {"x1", 11}});
+    sequence.push_back(input_t{{"time", 35}, {"x1", 12.5}});
+    sequence.push_back(input_t{{"time", 40}});
+    sequence.push_back(input_t{{"time", 52}, {"x1", 12.5}});
+    sequence.push_back(input_t{{"time", 55}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -263,15 +253,13 @@ TEST_CASE("Atoms") {
 
   SECTION("LessThan_ZeroHoldForward") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"}, {"x1", "3"}});
-    sequence.push_back(input_t{{"time", "31"}, {"x1", "3"}});
-    sequence.push_back(input_t{{"time", "33"}, {"x1", "5"}});
-    sequence.push_back(input_t{{"time", "35"}, {"x1", "4"}});
-    sequence.push_back(input_t{{"time", "40"}});
+    sequence.push_back(input_t{{"time", 0}, {"x1", 3}});
+    sequence.push_back(input_t{{"time", 31}, {"x1", 3}});
+    sequence.push_back(input_t{{"time", 33}, {"x1", 5}});
+    sequence.push_back(input_t{{"time", 35}, {"x1", 4}});
+    sequence.push_back(input_t{{"time", 40}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -300,15 +288,13 @@ TEST_CASE("Atoms") {
 
   SECTION("LessEqual_ZeroHoldForward") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"}, {"x1", "3"}});
-    sequence.push_back(input_t{{"time", "31"}, {"x1", "3"}});
-    sequence.push_back(input_t{{"time", "33"}, {"x1", "5"}});
-    sequence.push_back(input_t{{"time", "35"}, {"x1", "4"}});
-    sequence.push_back(input_t{{"time", "40"}});
+    sequence.push_back(input_t{{"time", 0}, {"x1", 3}});
+    sequence.push_back(input_t{{"time", 31}, {"x1", 3}});
+    sequence.push_back(input_t{{"time", 33}, {"x1", 5}});
+    sequence.push_back(input_t{{"time", 35}, {"x1", 4}});
+    sequence.push_back(input_t{{"time", 40}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -338,15 +324,13 @@ TEST_CASE("Atoms") {
 
   SECTION("GreaterThan_ZeroHoldForward") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"}, {"x1", "3"}});
-    sequence.push_back(input_t{{"time", "31"}, {"x1", "3"}});
-    sequence.push_back(input_t{{"time", "33"}, {"x1", "5"}});
-    sequence.push_back(input_t{{"time", "35"}, {"x1", "4"}});
-    sequence.push_back(input_t{{"time", "40"}});
+    sequence.push_back(input_t{{"time", 0}, {"x1", 3}});
+    sequence.push_back(input_t{{"time", 31}, {"x1", 3}});
+    sequence.push_back(input_t{{"time", 33}, {"x1", 5}});
+    sequence.push_back(input_t{{"time", 35}, {"x1", 4}});
+    sequence.push_back(input_t{{"time", 40}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -376,15 +360,13 @@ TEST_CASE("Atoms") {
 
   SECTION("GreaterEqual_ZeroHoldForward") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"}, {"x1", "3"}});
-    sequence.push_back(input_t{{"time", "31"}, {"x1", "3"}});
-    sequence.push_back(input_t{{"time", "33"}, {"x1", "5"}});
-    sequence.push_back(input_t{{"time", "35"}, {"x1", "4"}});
-    sequence.push_back(input_t{{"time", "40"}});
+    sequence.push_back(input_t{{"time", 0}, {"x1", 3}});
+    sequence.push_back(input_t{{"time", 31}, {"x1", 3}});
+    sequence.push_back(input_t{{"time", 33}, {"x1", 5}});
+    sequence.push_back(input_t{{"time", 35}, {"x1", 4}});
+    sequence.push_back(input_t{{"time", 40}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -411,91 +393,86 @@ TEST_CASE("Atoms") {
     CHECK(result1 == expected1);
   }
 
-  SECTION("List Proposition 1") {
-
-    using input_t = std::vector<std::string>;
-
-    std::vector<input_t> sequence = std::vector<input_t>();
-
-    sequence.push_back(input_t{"0", "open"});
-    sequence.push_back(input_t{"3", "open"});
-    sequence.push_back(input_t{"6", "open"});
-    sequence.push_back(input_t{"10", "closed"});
-    sequence.push_back(input_t{"14", "closed"});
-
-    auto manager = std::make_shared<reelay::binding_manager>();
-    reelay::kwargs extra_args = {{"manager", manager}};
-
-    auto net1 = reelay::dense_timed<time_t>::unordered_data::monitor<
-        input_t>::from_temporal_logic("[open]", extra_args);
-
-    auto result = interval_map();
-
-    for (const auto &row : sequence) {
-      net1->update(row);
-      for (const auto &intv : net1->output()) {
-        result.add(intv);
-      }
-    }
-
-    auto t = manager->one();
-    auto f = manager->zero();
-
-    auto expected = interval_map();
-    expected.add(std::make_pair(interval::left_open(0, 10), t));
-    expected.add(std::make_pair(interval::left_open(10, 14), f));
-
-    CHECK(result == expected);
-  }
-
-  SECTION("List Proposition 2") {
-
-    using input_t = std::vector<std::string>;
-
-    std::vector<input_t> sequence = std::vector<input_t>();
-
-    sequence.push_back(input_t{"0", "open", "abc"});
-    sequence.push_back(input_t{"3", "open", "cdf"});
-    sequence.push_back(input_t{"6", "open", "efg"});
-    sequence.push_back(input_t{"10", "closed"});
-    sequence.push_back(input_t{"14", "closed"});
-
-    auto manager = std::make_shared<reelay::binding_manager>();
-    reelay::kwargs extra_args = {{"manager", manager}};
-
-    auto net1 = reelay::dense_timed<time_t>::unordered_data::monitor<
-        input_t>::from_temporal_logic("[open, abc]", extra_args);
-
-    auto result = interval_map();
-
-    for (const auto &row : sequence) {
-      net1->update(row);
-      for (const auto &intv : net1->output()) {
-        result.add(intv);
-      }
-    }
-
-    auto t = manager->one();
-    auto f = manager->zero();
-
-    auto expected = interval_map();
-    expected.add(std::make_pair(interval::left_open(0, 3), t));
-    expected.add(std::make_pair(interval::left_open(3, 14), f));
-
-    CHECK(result == expected);
-  }
-
-  // SECTION("List Proposition 3") {
-
-  //   using input_t = std::vector<std::string>;
+  // SECTION("List Proposition 1") {
 
   //   std::vector<input_t> sequence = std::vector<input_t>();
 
-  //   sequence.push_back(input_t{"1", "open", "abc"});
-  //   sequence.push_back(input_t{"3", "open", "abc"});
-  //   sequence.push_back(input_t{"6", "open", "cdf"});
-  //   sequence.push_back(input_t{"10", "closed"});
-  //   sequence.push_back(input_t{"14", "closed"});
+  //   sequence.push_back(input_t{{"time", 0}, {"event", {"open"}}});
+  //   sequence.push_back(input_t{{"time", 3}, {"event", {"open"}}});
+  //   sequence.push_back(input_t{{"time", 6}, {"event", {"open"}}});
+  //   sequence.push_back(input_t{{"time", 10}, {"event", {"closed"}}});
+  //   sequence.push_back(input_t{{"time", 14}, {"event", {"closed"}}});
+
+  //   auto manager = std::make_shared<reelay::binding_manager>();
+  //   reelay::kwargs extra_args = {{"manager", manager}};
+
+  //   auto net1 = reelay::dense_timed<time_t>::unordered_data::monitor<
+  //       input_t>::from_temporal_logic("event::{$0: open}", extra_args);
+
+  //   auto result = interval_map();
+
+  //   for (const auto &row : sequence) {
+  //     net1->update(row);
+  //     for (const auto &intv : net1->output()) {
+  //       result.add(intv);
+  //     }
+  //   }
+
+  //   auto t = manager->one();
+  //   auto f = manager->zero();
+
+  //   auto expected = interval_map();
+  //   expected.add(std::make_pair(interval::left_open(0, 10), t));
+  //   expected.add(std::make_pair(interval::left_open(10, 14), f));
+
+  //   CHECK(result == expected);
+  // }
+
+  // SECTION("List Proposition 2") {
+
+  //   std::vector<input_t> sequence = std::vector<input_t>();
+
+  //   sequence.push_back(input_t{{"time", 0}, {"event", {"open", "abc"}}});
+  //   sequence.push_back(input_t{{"time", 3}, {"event", {"open", "cdf"}}});
+  //   sequence.push_back(input_t{{"time", 6}, {"event", {"open", "efg"}}});
+  //   sequence.push_back(input_t{{"time", 10}, {"event", {"closed"}}});
+  //   sequence.push_back(input_t{{"time", 14}, {"event", {"closed"}}});
+
+  //   auto manager = std::make_shared<reelay::binding_manager>();
+  //   reelay::kwargs extra_args = {{"manager", manager}};
+
+  //   auto net1 = reelay::dense_timed<time_t>::unordered_data::monitor<
+  //       input_t>::from_temporal_logic("event::{$0: open, $1: abc}", extra_args);
+
+  //   auto result = interval_map();
+
+  //   for (const auto &row : sequence) {
+  //     net1->update(row);
+  //     for (const auto &intv : net1->output()) {
+  //       result.add(intv);
+  //     }
+  //   }
+
+  //   auto t = manager->one();
+  //   auto f = manager->zero();
+
+  //   auto expected = interval_map();
+  //   expected.add(std::make_pair(interval::left_open(0, 3), t));
+  //   expected.add(std::make_pair(interval::left_open(3, 14), f));
+
+  //   CHECK(result == expected);
+  // }
+
+  // SECTION("List Proposition 3") {
+
+  //
+  //   std::vector<input_t> sequence = std::vector<input_t>();
+
+  //   sequence.push_back(input_t{1, "open", "abc"});
+  //   sequence.push_back(input_t{3, "open", "abc"});
+  //   sequence.push_back(input_t{6, "open", "cdf"});
+  //   sequence.push_back(input_t{10, "closed"});
+  //   sequence.push_back(input_t{14, "closed"});
 
   //   auto manager = std::make_shared<reelay::binding_manager>();
   //   reelay::kwargs extra_args = {{"manager", manager}};
@@ -528,15 +505,14 @@ TEST_CASE("Atoms") {
 
   // SECTION("List Proposition Event") {
 
-  //   using input_t = std::vector<std::string>;
-
+  //
   //   std::vector<input_t> sequence = std::vector<input_t>();
 
-  //   sequence.push_back(input_t{"1", "open"});
-  //   sequence.push_back(input_t{"3", "open"});
-  //   sequence.push_back(input_t{"6", "open"});
-  //   sequence.push_back(input_t{"10", "closed"});
-  //   sequence.push_back(input_t{"14", "closed"});
+  //   sequence.push_back(input_t{1, "open"});
+  //   sequence.push_back(input_t{3, "open"});
+  //   sequence.push_back(input_t{6, "open"});
+  //   sequence.push_back(input_t{10, "closed"});
+  //   sequence.push_back(input_t{14, "closed"});
 
   //   auto manager = std::make_shared<reelay::binding_manager>();
   //   reelay::kwargs extra_args = {{"manager", manager}};
@@ -568,28 +544,24 @@ TEST_CASE("Atoms") {
   //   CHECK(result == expected);
   // }
 
-  
-
   SECTION("Record Proposition 0") {
-
-    using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"},
+    sequence.push_back(input_t{{"time", 0},
                                {"event", "access"},
                                {"user", "alice"},
                                {"file", "wonderland"}});
-    sequence.push_back(input_t{{"time", "3"},
+    sequence.push_back(input_t{{"time", 3},
                                {"event", "access"},
                                {"user", "alice"},
                                {"file", "feed_your_head"}});
-    sequence.push_back(input_t{{"time", "6"},
+    sequence.push_back(input_t{{"time", 6},
                                {"event", "access"},
                                {"user", "alice"},
                                {"file", "wonderland"},
                                {"dummy_field", "v2"}});
-    sequence.push_back(input_t{{"time", "9"}});
+    sequence.push_back(input_t{{"time", 9}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -620,23 +592,21 @@ TEST_CASE("Atoms") {
 
   SECTION("Record Proposition 1") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"},
+    sequence.push_back(input_t{{"time", 0},
                                {"event", "access"},
                                {"user", "alice"},
                                {"file", "wonderland"}});
-    sequence.push_back(input_t{{"time", "3"},
+    sequence.push_back(input_t{{"time", 3},
                                {"event", "access"},
                                {"user", "bob"},
                                {"file", "feed_your_head"}});
-    sequence.push_back(input_t{{"time", "6"},
+    sequence.push_back(input_t{{"time", 6},
                                {"event", "access"},
                                {"user", "charlotte"},
                                {"file", "wonderland"}});
-    sequence.push_back(input_t{{"time", "9"}});
+    sequence.push_back(input_t{{"time", 9}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -670,26 +640,23 @@ TEST_CASE("Atoms") {
 
   SECTION("Record Proposition 2") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"},
+    sequence.push_back(input_t{{"time", 0},
                                {"event", "access"},
                                {"user", "alice"},
                                {"file", "wonderland"}});
-    sequence.push_back(input_t{{"time", "3"},
+    sequence.push_back(input_t{{"time", 3},
                                {"event", "access"},
                                {"user", "bob"},
                                {"file", "feed_your_head"}});
-    sequence.push_back(input_t{{"time", "6"},
+    sequence.push_back(input_t{{"time", 6},
                                {"event", "access"},
                                {"user", "charlotte"},
                                {"file", "wonderland"}});
-    sequence.push_back(input_t{{"time", "9"}, 
-                               {"event", "access"}, 
-                               {"user", "charlotte"}});
-    sequence.push_back(input_t{{"time", "11"}});
+    sequence.push_back(
+        input_t{{"time", 9}, {"event", "access"}, {"user", "charlotte"}});
+    sequence.push_back(input_t{{"time", 11}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -725,21 +692,17 @@ TEST_CASE("Atoms") {
 
   SECTION("Record Proposition 2") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"}, 
-                               {"event", "access"}, 
-                               {"user", "alice"}});
-    sequence.push_back(input_t{{"time", "3"}, 
-                               {"event", "access"}, 
-                               {"user", "bob"}});
-    sequence.push_back(input_t{{"time", "6"},
+    sequence.push_back(
+        input_t{{"time", 0}, {"event", "access"}, {"user", "alice"}});
+    sequence.push_back(
+        input_t{{"time", 3}, {"event", "access"}, {"user", "bob"}});
+    sequence.push_back(input_t{{"time", 6},
                                {"event", "access"},
                                {"user", "charlotte"},
                                {"file", "wonderland"}});
-    sequence.push_back(input_t{{"time", "9"}});
+    sequence.push_back(input_t{{"time", 9}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -768,19 +731,17 @@ TEST_CASE("Atoms") {
 
   SECTION("Record Proposition") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(
-        input_t{{"time", "0"}, {"event", "access"}, {"user", "alice"}});
+        input_t{{"time", 0}, {"event", "access"}, {"user", "alice"}});
     sequence.push_back(
-        input_t{{"time", "3"}, {"event", "access"}, {"file", "wonderland"}});
-    sequence.push_back(input_t{{"time", "6"},
+        input_t{{"time", 3}, {"event", "access"}, {"file", "wonderland"}});
+    sequence.push_back(input_t{{"time", 6},
                                {"event", "access"},
                                {"user", "charlotte"},
                                {"file", "wonderland"}});
-    sequence.push_back(input_t{{"time", "9"}});
+    sequence.push_back(input_t{{"time", 9}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -808,37 +769,173 @@ TEST_CASE("Atoms") {
   }
 }
 
-TEST_CASE("Boolean Operations") {
+TEST_CASE("Nested Inputs") {
 
-  SECTION("Negation") {
-
-    using input_t = std::unordered_map<std::string, std::string>;
-
+  SECTION("Deep Object") {
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"},
-                               {"event", "access"},
-                               {"user", "alice"},
-                               {"file", "wonderland"}});
-    sequence.push_back(input_t{{"time", "1"},
-                               {"event", "access"},
-                               {"user", "alice"},
-                               {"file", "feed_your_head"}});
-    sequence.push_back(input_t{{"time", "3"},
-                               {"event", "access"},
-                               {"user", "charlotte"},
-                               {"file", "wonderland"}});
-    sequence.push_back(input_t{{"time", "6"},
-                               {"event", "logout"},
-                               {"user", "alice"},
-                               {"file", "wonderland"}});
-    sequence.push_back(input_t{{"time", "10"}});
+    sequence.push_back(input_t{{"time", 0}, {"obj", {{"x", 2}}}});
+    sequence.push_back(input_t{{"time", 10}, {"obj", {{"x", 4}}}});
+    sequence.push_back(input_t{{"time", 20}});
+    sequence.push_back(input_t{{"time", 30}, {"obj", {{"x", 6}}}});
+    sequence.push_back(input_t{{"time", 40}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
     auto net1 = reelay::dense_timed<time_t>::unordered_data::monitor<
-        input_t>::from_temporal_logic("!{event: access, user: alice}", extra_args);
+        input_t>::from_temporal_logic("obj::{x > 4}", extra_args);
+
+    auto result = interval_map();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      for (const auto &intv : net1->output()) {
+        result.add(intv);
+      }
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = interval_map();
+    expected.add(std::make_pair(interval::left_open(0, 30), f));
+    expected.add(std::make_pair(interval::left_open(30, 40), t));
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Deep Object 2") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{
+        {"time", 0}, {"obj1", {{"obj2", {{"flag1", false}, {"flag2", 2}}}}}});
+    sequence.push_back(input_t{
+        {"time", 10}, {"obj1", {{"obj2", {{"flag1", false}, {"flag2", 4}}}}}});
+    sequence.push_back(input_t{{"time", 20}});
+    sequence.push_back(
+        input_t{{"time", 30}, {"obj1", {{"obj2", {{"flag2", 6}}}}}});
+    sequence.push_back(input_t{{"time", 40}});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::dense_timed<time_t>::unordered_data::monitor<
+        input_t>::from_temporal_logic("obj1::obj2::{flag2 > 4}", extra_args);
+
+    auto result = interval_map();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      for (const auto &intv : net1->output()) {
+        result.add(intv);
+      }
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = interval_map();
+    expected.add(std::make_pair(interval::left_open(0, 30), f));
+    expected.add(std::make_pair(interval::left_open(30, 40), t));
+
+    CHECK(result == expected);
+  }
+
+  // SECTION("Deep List Any") {
+  //   std::vector<input_t> sequence = std::vector<input_t>();
+
+  //   sequence.push_back(input_t{
+  //       {"time", 0},
+  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 9}, {"b", 2}}}}}}});
+  //   sequence.push_back(input_t{
+  //       {"time", 10},
+  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
+  //   sequence.push_back(input_t{
+  //       {"time", 20},
+  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
+  //   sequence.push_back(input_t{{"time", 40}});
+
+  //   auto net1 =
+  //   reelay::dense_timed<time_t>::unordered_data::monitor<
+  //       input_t>::from_temporal_logic("obj1::obj2::any{a < 6}");
+
+  //   auto result = interval_map();
+
+  //   for (const auto &s : sequence) {
+  //     net1->update(s);
+  //     result = result | net1->output();
+  //   }
+
+  //   auto expected = interval_map();
+  //   expected.add(std::make_pair(interval::left_open(0, 10), -1));
+  //   expected.add(std::make_pair(interval::left_open(10, 40), 1));
+
+  //   CHECK(result == expected);
+  // }
+
+  // SECTION("Deep List All") {
+  //   std::vector<input_t> sequence = std::vector<input_t>();
+
+  //   sequence.push_back(input_t{
+  //       {"time", 0},
+  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 9}, {"b", 2}}}}}}});
+  //   sequence.push_back(input_t{
+  //       {"time", 10},
+  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
+  //   sequence.push_back(input_t{
+  //       {"time", 20},
+  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 0}}}}}}});
+  //   sequence.push_back(input_t{{"time", 40}});
+
+  //   auto net1 =
+  //   reelay::dense_timed<time_t>::unordered_data::monitor<
+  //       input_t>::from_temporal_logic("obj1::obj2::all{b > 1}");
+
+  //   auto result = interval_map();
+
+  //   for (const auto &s : sequence) {
+  //     net1->update(s);
+  //     result = result | net1->output();
+  //   }
+
+  //   auto expected = interval_map();
+  //   expected.add(std::make_pair(interval::left_open(0, 10), 1));
+
+  //   CHECK(result == expected);
+  // }
+}
+
+TEST_CASE("Boolean Operations") {
+
+  SECTION("Negation") {
+
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"time", 0},
+                               {"event", "access"},
+                               {"user", "alice"},
+                               {"file", "wonderland"}});
+    sequence.push_back(input_t{{"time", 1},
+                               {"event", "access"},
+                               {"user", "alice"},
+                               {"file", "feed_your_head"}});
+    sequence.push_back(input_t{{"time", 3},
+                               {"event", "access"},
+                               {"user", "charlotte"},
+                               {"file", "wonderland"}});
+    sequence.push_back(input_t{{"time", 6},
+                               {"event", "logout"},
+                               {"user", "alice"},
+                               {"file", "wonderland"}});
+    sequence.push_back(input_t{{"time", 10}});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::dense_timed<time_t>::unordered_data::monitor<
+        input_t>::from_temporal_logic("!{event: access, user: alice}",
+                                      extra_args);
 
     auto result = interval_map();
 
@@ -861,26 +958,23 @@ TEST_CASE("Boolean Operations") {
 
   SECTION("Conjunction") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"},
+    sequence.push_back(input_t{{"time", 0},
                                {"event", "access"},
                                {"user", "alice"},
                                {"file", "wonderland"}});
-    sequence.push_back(input_t{{"time", "1"},
+    sequence.push_back(input_t{{"time", 1},
                                {"event", "access"},
                                {"user", "alice"},
                                {"file", "feed_your_head"}});
-    sequence.push_back(input_t{{"time", "3"},
+    sequence.push_back(input_t{{"time", 3},
                                {"event", "access"},
                                {"user", "charlotte"},
                                {"file", "wonderland"}});
-    sequence.push_back(input_t{{"time", "6"},
-                               {"event", "logout"},
-                               {"user", "alice"}});
-    sequence.push_back(input_t{{"time", "10"}});
+    sequence.push_back(
+        input_t{{"time", 6}, {"event", "logout"}, {"user", "alice"}});
+    sequence.push_back(input_t{{"time", 10}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -915,27 +1009,25 @@ TEST_CASE("Boolean Operations") {
 
   SECTION("Disjunction") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"},
+    sequence.push_back(input_t{{"time", 0},
                                {"event", "access"},
                                {"user", "alice"},
                                {"file", "wonderland"}});
-    sequence.push_back(input_t{{"time", "1"},
+    sequence.push_back(input_t{{"time", 1},
                                {"event", "access"},
                                {"user", "alice"},
                                {"file", "feed_your_head"}});
-    sequence.push_back(input_t{{"time", "3"},
+    sequence.push_back(input_t{{"time", 3},
                                {"event", "access"},
                                {"user", "charlotte"},
                                {"file", "wonderland"}});
-    sequence.push_back(input_t{{"time", "6"},
+    sequence.push_back(input_t{{"time", 6},
                                {"event", "access"},
                                {"user", "square"},
                                {"file", "flatland"}});
-    sequence.push_back(input_t{{"time", "10"}});
+    sequence.push_back(input_t{{"time", 10}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -957,11 +1049,11 @@ TEST_CASE("Boolean Operations") {
     auto t = manager->one();
     auto f = manager->zero();
 
-    auto datum1 = (manager->assign("e", "access") *
-                   manager->assign("f", "wonderland")) +
-                  manager->assign("u", "alice");
-    auto datum2 = manager->assign("e", "access") *
-                  manager->assign("f", "feed_your_head");
+    auto datum1 =
+        (manager->assign("e", "access") * manager->assign("f", "wonderland")) +
+        manager->assign("u", "alice");
+    auto datum2 =
+        manager->assign("e", "access") * manager->assign("f", "feed_your_head");
     auto datum3 = manager->assign("u", "charlotte");
 
     auto expected = interval_map();
@@ -975,27 +1067,25 @@ TEST_CASE("Boolean Operations") {
 
   SECTION("Implication") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"},
+    sequence.push_back(input_t{{"time", 0},
                                {"event", "access"},
                                {"user", "alice"},
                                {"file", "wonderland"}});
-    sequence.push_back(input_t{{"time", "1"},
+    sequence.push_back(input_t{{"time", 1},
                                {"event", "access"},
                                {"user", "alice"},
                                {"file", "feed_your_head"}});
-    sequence.push_back(input_t{{"time", "3"},
+    sequence.push_back(input_t{{"time", 3},
                                {"event", "access"},
                                {"user", "charlotte"},
                                {"file", "wonderland"}});
-    sequence.push_back(input_t{{"time", "6"},
+    sequence.push_back(input_t{{"time", 6},
                                {"event", "access"},
                                {"user", "square"},
                                {"file", "flatland"}});
-    sequence.push_back(input_t{{"time", "10"}});
+    sequence.push_back(input_t{{"time", 10}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -1035,27 +1125,25 @@ TEST_CASE("Boolean Operations") {
 
   SECTION("Existential Quantification") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"},
+    sequence.push_back(input_t{{"time", 0},
                                {"event", "access"},
                                {"user", "alice"},
                                {"file", "wonderland"}});
-    sequence.push_back(input_t{{"time", "1"},
+    sequence.push_back(input_t{{"time", 1},
                                {"event", "access"},
                                {"user", "alice"},
                                {"file", "feed_your_head"}});
-    sequence.push_back(input_t{{"time", "3"},
+    sequence.push_back(input_t{{"time", 3},
                                {"event", "access"},
                                {"user", "charlotte"},
                                {"file", "wonderland"}});
-    sequence.push_back(input_t{{"time", "6"},
+    sequence.push_back(input_t{{"time", 6},
                                {"event", "access"},
                                {"user", "square"},
                                {"file", "flatland"}});
-    sequence.push_back(input_t{{"time", "10"}});
+    sequence.push_back(input_t{{"time", 10}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -1089,27 +1177,25 @@ TEST_CASE("Boolean Operations") {
 
   SECTION("Existential Quantification") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"},
+    sequence.push_back(input_t{{"time", 0},
                                {"event", "access"},
                                {"user", "alice"},
                                {"file", "wonderland"}});
-    sequence.push_back(input_t{{"time", "1"},
+    sequence.push_back(input_t{{"time", 1},
                                {"event", "access"},
                                {"user", "alice"},
                                {"file", "feed_your_head"}});
-    sequence.push_back(input_t{{"time", "3"},
+    sequence.push_back(input_t{{"time", 3},
                                {"event", "access"},
                                {"user", "charlotte"},
                                {"file", "wonderland"}});
-    sequence.push_back(input_t{{"time", "6"},
+    sequence.push_back(input_t{{"time", 6},
                                {"event", "access"},
                                {"user", "square"},
                                {"file", "flatland"}});
-    sequence.push_back(input_t{{"time", "10"}});
+    sequence.push_back(input_t{{"time", 10}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -1146,19 +1232,18 @@ TEST_CASE("Boolean Operations") {
 TEST_CASE("Untimed Temporal Operations") {
 
   SECTION("Once") {
-    using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(
-        input_t{{"time", "0"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 0}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "4"}, {"state", "open"}, {"arg1", "c"}});
+        input_t{{"time", 4}, {"state", "open"}, {"arg1", "c"}});
     sequence.push_back(
-        input_t{{"time", "6"}, {"state", "close"}, {"arg1", "c"}});
+        input_t{{"time", 6}, {"state", "close"}, {"arg1", "c"}});
     sequence.push_back(
-        input_t{{"time", "7"}, {"state", "close"}, {"arg1", "a"}});
-    sequence.push_back(input_t{{"time", "9"}});
+        input_t{{"time", 7}, {"state", "close"}, {"arg1", "a"}});
+    sequence.push_back(input_t{{"time", 9}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -1186,19 +1271,18 @@ TEST_CASE("Untimed Temporal Operations") {
   }
 
   SECTION("Once") {
-    using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(
-        input_t{{"time", "0"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 0}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "4"}, {"state", "open"}, {"arg1", "c"}});
+        input_t{{"time", 4}, {"state", "open"}, {"arg1", "c"}});
     sequence.push_back(
-        input_t{{"time", "6"}, {"state", "close"}, {"arg1", "c"}});
+        input_t{{"time", 6}, {"state", "close"}, {"arg1", "c"}});
     sequence.push_back(
-        input_t{{"time", "7"}, {"state", "close"}, {"arg1", "a"}});
-    sequence.push_back(input_t{{"time", "9"}});
+        input_t{{"time", 7}, {"state", "close"}, {"arg1", "a"}});
+    sequence.push_back(input_t{{"time", 9}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -1230,19 +1314,18 @@ TEST_CASE("Untimed Temporal Operations") {
   }
 
   SECTION("Historically") {
-    using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(
-        input_t{{"time", "0"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 0}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "4"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 4}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "6"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 6}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "7"}, {"state", "close"}, {"arg1", "c"}});
-    sequence.push_back(input_t{{"time", "9"}});
+        input_t{{"time", 7}, {"state", "close"}, {"arg1", "c"}});
+    sequence.push_back(input_t{{"time", 9}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -1271,19 +1354,18 @@ TEST_CASE("Untimed Temporal Operations") {
   }
 
   SECTION("Historically") {
-    using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(
-        input_t{{"time", "0"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 0}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "4"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 4}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "6"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 6}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "7"}, {"state", "close"}, {"arg1", "c"}});
-    sequence.push_back(input_t{{"time", "9"}});
+        input_t{{"time", 7}, {"state", "close"}, {"arg1", "c"}});
+    sequence.push_back(input_t{{"time", 9}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -1314,21 +1396,18 @@ TEST_CASE("Untimed Temporal Operations") {
   }
 
   SECTION("Since") {
-    using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
+    sequence.push_back(input_t{{"time", 0}, {"state", "arrived"}});
     sequence.push_back(
-        input_t{{"time", "0"}, {"state", "arrived"}});
+        input_t{{"time", 1}, {"state", "open"}, {"arg1", "b"}});
     sequence.push_back(
-        input_t{{"time", "1"}, {"state", "open"}, {"arg1", "b"}});
+        input_t{{"time", 4}, {"state", "open"}, {"arg1", "c"}});
     sequence.push_back(
-        input_t{{"time", "4"}, {"state", "open"}, {"arg1", "c"}});
-    sequence.push_back(
-        input_t{{"time", "6"}, {"state", "open"}, {"arg1", "a"}});
-    sequence.push_back(
-        input_t{{"time", "7"}, {"state", "close"}});
-    sequence.push_back(input_t{{"time", "9"}});
+        input_t{{"time", 6}, {"state", "open"}, {"arg1", "a"}});
+    sequence.push_back(input_t{{"time", 7}, {"state", "close"}});
+    sequence.push_back(input_t{{"time", 9}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -1357,20 +1436,19 @@ TEST_CASE("Untimed Temporal Operations") {
   }
 
   SECTION("Since") {
-    using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(
-        input_t{{"time", "0"}, {"state", "arrived"}, {"arg1", "a"}});
+        input_t{{"time", 0}, {"state", "arrived"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "1"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 1}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "4"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 4}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "6"}, {"state", "open"}, {"arg1", "a"}});
-    sequence.push_back(input_t{{"time", "7"}, {"state", "close"}});
-    sequence.push_back(input_t{{"time", "9"}});
+        input_t{{"time", 6}, {"state", "open"}, {"arg1", "a"}});
+    sequence.push_back(input_t{{"time", 7}, {"state", "close"}});
+    sequence.push_back(input_t{{"time", 9}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -1402,25 +1480,24 @@ TEST_CASE("Untimed Temporal Operations") {
   }
 
   SECTION("Since") {
-    using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"}});
-    sequence.push_back(input_t{{"time", "3"},
+    sequence.push_back(input_t{{"time", 0}});
+    sequence.push_back(input_t{{"time", 3},
                                {"visitor1", "alice"},
                                {"visitor2", "charlotte"},
                                {"visiting1", "alice"},
                                {"where", "wonderland"}});
-    sequence.push_back(input_t{{"time", "9"},
+    sequence.push_back(input_t{{"time", 9},
                                {"visiting1", "alice"},
                                {"visiting2", "charlotte"},
                                {"where", "wonderland"}});
-    sequence.push_back(input_t{{"time", "13"},
+    sequence.push_back(input_t{{"time", 13},
                                {"visiting1", "alice"},
                                {"visiting2", "charlotte"},
                                {"where", "wonderland"}});
-    sequence.push_back(input_t{{"time", "21"},
+    sequence.push_back(input_t{{"time", 21},
                                {"visiting1", "alice"},
                                {"visiting2", "charlotte"},
                                {"where", "wonderland"}});
@@ -1429,10 +1506,9 @@ TEST_CASE("Untimed Temporal Operations") {
     reelay::kwargs extra_args = {{"manager", manager}};
 
     auto net1 = reelay::dense_timed<time_t>::unordered_data::monitor<input_t>::
-        from_temporal_logic(
-            "({visiting1: *name} or {visiting2: *name}) "
-            "since ({visitor1: *name} or {visitor2: *name})",
-            extra_args);
+        from_temporal_logic("({visiting1: *name} or {visiting2: *name}) "
+                            "since ({visitor1: *name} or {visitor2: *name})",
+                            extra_args);
 
     auto result = interval_map();
 
@@ -1460,32 +1536,31 @@ TEST_CASE("Untimed Temporal Operations") {
 TEST_CASE("Timed Temporal Operations") {
 
   SECTION("Timed Once") {
-    using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(
-        input_t{{"time", "0"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 0}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "1"}, {"state", "open"}, {"arg1", "c"}});
+        input_t{{"time", 1}, {"state", "open"}, {"arg1", "c"}});
     sequence.push_back(
-        input_t{{"time", "3"}, {"state", "close"}, {"arg1", "c"}});
+        input_t{{"time", 3}, {"state", "close"}, {"arg1", "c"}});
     sequence.push_back(
-        input_t{{"time", "6"}, {"state", "close"}, {"arg1", "a"}});
+        input_t{{"time", 6}, {"state", "close"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "7"}, {"state", "close"}, {"arg1", "c"}});
+        input_t{{"time", 7}, {"state", "close"}, {"arg1", "c"}});
     sequence.push_back(
-        input_t{{"time", "9"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 9}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "12"}, {"state", "close"}, {"arg1", "c"}});
-    sequence.push_back(
-        input_t{{"time", "17"}});
+        input_t{{"time", 12}, {"state", "close"}, {"arg1", "c"}});
+    sequence.push_back(input_t{{"time", 17}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
     auto net1 = reelay::dense_timed<time_t>::unordered_data::monitor<
-        input_t>::from_temporal_logic("once[2:8]{state: open, arg1: c}", extra_args);
+        input_t>::from_temporal_logic("once[2:8]{state: open, arg1: c}",
+                                      extra_args);
 
     auto result = interval_map();
 
@@ -1508,25 +1583,24 @@ TEST_CASE("Timed Temporal Operations") {
   }
 
   SECTION("Timed Once Zero") {
-    using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(
-        input_t{{"time", "0"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 0}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "1"}, {"state", "open"}, {"arg1", "c"}});
+        input_t{{"time", 1}, {"state", "open"}, {"arg1", "c"}});
     sequence.push_back(
-        input_t{{"time", "3"}, {"state", "close"}, {"arg1", "c"}});
+        input_t{{"time", 3}, {"state", "close"}, {"arg1", "c"}});
     sequence.push_back(
-        input_t{{"time", "6"}, {"state", "close"}, {"arg1", "a"}});
+        input_t{{"time", 6}, {"state", "close"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "7"}, {"state", "close"}, {"arg1", "c"}});
+        input_t{{"time", 7}, {"state", "close"}, {"arg1", "c"}});
     sequence.push_back(
-        input_t{{"time", "9"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 9}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "12"}, {"state", "close"}, {"arg1", "c"}});
-    sequence.push_back(input_t{{"time", "17"}});
+        input_t{{"time", 12}, {"state", "close"}, {"arg1", "c"}});
+    sequence.push_back(input_t{{"time", 17}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -1556,25 +1630,24 @@ TEST_CASE("Timed Temporal Operations") {
   }
 
   SECTION("Timed Once Inf") {
-    using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(
-        input_t{{"time", "0"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 0}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "1"}, {"state", "open"}, {"arg1", "c"}});
+        input_t{{"time", 1}, {"state", "open"}, {"arg1", "c"}});
     sequence.push_back(
-        input_t{{"time", "3"}, {"state", "close"}, {"arg1", "c"}});
+        input_t{{"time", 3}, {"state", "close"}, {"arg1", "c"}});
     sequence.push_back(
-        input_t{{"time", "6"}, {"state", "close"}, {"arg1", "a"}});
+        input_t{{"time", 6}, {"state", "close"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "7"}, {"state", "close"}, {"arg1", "c"}});
+        input_t{{"time", 7}, {"state", "close"}, {"arg1", "c"}});
     sequence.push_back(
-        input_t{{"time", "9"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 9}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "12"}, {"state", "close"}, {"arg1", "c"}});
-    sequence.push_back(input_t{{"time", "17"}});
+        input_t{{"time", 12}, {"state", "close"}, {"arg1", "c"}});
+    sequence.push_back(input_t{{"time", 17}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -1603,26 +1676,24 @@ TEST_CASE("Timed Temporal Operations") {
   }
 
   SECTION("Timed Historically") {
-    using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(
-        input_t{{"time", "0"}, {"state", "open"}, {"arg1", "b"}});
+        input_t{{"time", 0}, {"state", "open"}, {"arg1", "b"}});
     sequence.push_back(
-        input_t{{"time", "1"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 1}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "3"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 3}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "4"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 4}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "7"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 7}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "11"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 11}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "12"}, {"state", "close"}, {"arg1", "a"}});
-    sequence.push_back(
-        input_t{{"time", "14"}});
+        input_t{{"time", 12}, {"state", "close"}, {"arg1", "a"}});
+    sequence.push_back(input_t{{"time", 14}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -1652,24 +1723,21 @@ TEST_CASE("Timed Temporal Operations") {
   }
 
   SECTION("Timed Historically") {
-    using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(
-        input_t{{"time", "0"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 0}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "3"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 3}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "4"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 4}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "7"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 7}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "11"}, {"state", "open"}, {"arg1", "a"}});
-    sequence.push_back(
-        input_t{{"time", "12"}, {"state", "close"}});
-    sequence.push_back(
-        input_t{{"time", "19"}});
+        input_t{{"time", 11}, {"state", "open"}, {"arg1", "a"}});
+    sequence.push_back(input_t{{"time", 12}, {"state", "close"}});
+    sequence.push_back(input_t{{"time", 19}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -1698,22 +1766,21 @@ TEST_CASE("Timed Temporal Operations") {
   }
 
   SECTION("Timed Historically") {
-    using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(
-        input_t{{"time", "0"}, {"state", "open"}, {"arg1", "b"}});
+        input_t{{"time", 0}, {"state", "open"}, {"arg1", "b"}});
     sequence.push_back(
-        input_t{{"time", "3"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 3}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "4"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 4}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "7"}, {"state", "open"}, {"arg1", "a"}});
+        input_t{{"time", 7}, {"state", "open"}, {"arg1", "a"}});
     sequence.push_back(
-        input_t{{"time", "11"}, {"state", "open"}, {"arg1", "a"}});
-    sequence.push_back(input_t{{"time", "12"}, {"state", "close"}});
-    sequence.push_back(input_t{{"time", "19"}});
+        input_t{{"time", 11}, {"state", "open"}, {"arg1", "a"}});
+    sequence.push_back(input_t{{"time", 12}, {"state", "close"}});
+    sequence.push_back(input_t{{"time", 19}});
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
@@ -1743,31 +1810,30 @@ TEST_CASE("Timed Temporal Operations") {
   }
 
   SECTION("Timed Since") {
-    using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"}});
-    sequence.push_back(input_t{{"time", "1"},
+    sequence.push_back(input_t{{"time", 0}});
+    sequence.push_back(input_t{{"time", 1},
                                {"visitor1", "alice"},
                                {"visitor2", "charlotte"},
                                {"visiting1", "alice"},
                                {"where", "wonderland"}});
-    sequence.push_back(input_t{{"time", "3"},
+    sequence.push_back(input_t{{"time", 3},
                                {"visitor1", ""},
                                {"visitor2", ""},
                                {"visiting1", "alice"},
                                {"visiting2", "charlotte"},
                                {"where", "wonderland"}});
-    sequence.push_back(input_t{{"time", "9"},
+    sequence.push_back(input_t{{"time", 9},
                                {"visiting1", "alice"},
                                {"visiting2", "charlotte"},
                                {"where", "wonderland"}});
-    sequence.push_back(input_t{{"time", "13"},
+    sequence.push_back(input_t{{"time", 13},
                                {"visiting1", "alice"},
                                {"visiting2", "charlotte"},
                                {"where", "wonderland"}});
-    sequence.push_back(input_t{{"time", "21"}});
+    sequence.push_back(input_t{{"time", 21}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -1803,34 +1869,32 @@ TEST_CASE("Timed Temporal Operations") {
   }
 
   SECTION("Timed Since Inf") {
-    using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"time", "0"}});
-    sequence.push_back(input_t{{"time", "1"},
+    sequence.push_back(input_t{{"time", 0}});
+    sequence.push_back(input_t{{"time", 1},
                                {"visitor1", "alice"},
                                {"visitor2", "charlotte"},
                                {"visiting1", "alice"},
                                {"where", "wonderland"}});
-    sequence.push_back(input_t{{"time", "3"},
+    sequence.push_back(input_t{{"time", 3},
                                {"visitor1", "alice"},
                                {"visitor2", "charlotte"},
                                {"visiting1", "alice"},
                                {"visiting2", "charlotte"},
                                {"where", "wonderland"}});
-    sequence.push_back(input_t{{"time", "9"},
+    sequence.push_back(input_t{{"time", 9},
                                {"visiting1", "alice"},
                                {"visiting2", "charlotte"},
                                {"where", "wonderland"}});
-    sequence.push_back(input_t{{"time", "13"},
+    sequence.push_back(input_t{{"time", 13},
                                {"visiting1", "alice"},
                                {"visiting2", "charlotte"},
                                {"where", "wonderland"}});
     sequence.push_back(input_t{
-        {"time", "21"}, {"visiting1", "charlotte"}, {"where", "wonderland"}});
-    sequence.push_back(input_t{
-        {"time", "23"}});
+        {"time", 21}, {"visiting1", "charlotte"}, {"where", "wonderland"}});
+    sequence.push_back(input_t{{"time", 23}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};

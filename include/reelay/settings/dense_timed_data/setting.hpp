@@ -29,8 +29,10 @@
 #include "reelay/settings/dense_timed_data/atomic_string.hpp"
 #include "reelay/settings/dense_timed_data/atomic_true.hpp"
 
-#include "reelay/settings/dense_timed_data/atomic_list.hpp"
 #include "reelay/settings/dense_timed_data/atomic_map.hpp"
+#include "reelay/settings/dense_timed_data/atomic_nested.hpp"
+#include "reelay/settings/dense_timed_data/atomic_nested_all.hpp"
+#include "reelay/settings/dense_timed_data/atomic_nested_any.hpp"
 
 #include "reelay/settings/dense_timed_data/exists.hpp"
 #include "reelay/settings/dense_timed_data/forall.hpp"
@@ -107,8 +109,12 @@ template <typename X, typename T, int order=0> struct factory {
 
     if (name == "atomic_map") {
       res = std::make_shared<atomic_map<input_t, time_t>>(kw);
-    } else if (name == "atomic_list") {
-      res = std::make_shared<atomic_list<input_t, time_t>>(kw);
+    } else if (name == "atomic_nested") {
+      res = std::make_shared<atomic_nested<input_t, time_t>>(kw);
+    // } else if (name == "atomic_nested_all") {
+    //   res = std::make_shared<atomic_nested_all<input_t, time_t>>(kw);
+    // } else if (name == "atomic_nested_any") {
+    //   res = std::make_shared<atomic_nested_any<input_t, time_t>>(kw);
     } else if (name == "mapping_prop") {
       res = std::make_shared<atomic_prop<input_t, time_t, std::string>>(kw);
     } else if (name == "mapping_false") {
@@ -136,21 +142,16 @@ template <typename X, typename T, int order=0> struct factory {
     } else if (name == "mapping_ref") {
       res = std::make_shared<atomic_ref<input_t, time_t, std::string>>(kw);
     } else if (name == "listing_false") {
-      kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1;
       res = std::make_shared<atomic_false<input_t, time_t, int>>(kw);
     } else if (name == "listing_true") {
-      kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1;
       res = std::make_shared<atomic_true<input_t, time_t, int>>(kw);
     } else if (name == "listing_string") {
-      kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1; 
       res = std::make_shared<atomic_string<input_t, time_t, int>>(kw);
     } else if (name == "listing_number") {
       res = std::make_shared<atomic_number<input_t, time_t, int>>(kw);
     } else if (name == "listing_eq") {
-      kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1;
       res = std::make_shared<atomic_number<input_t, time_t, int>>(kw);
     // } else if (name == "listing_ne") {
-    // kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1; 
     // res = std::make_shared<atomic_ne<input_t, time_t, int>>(kw);
     } else if (name == "listing_ge" and order == 0) {
       kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1;

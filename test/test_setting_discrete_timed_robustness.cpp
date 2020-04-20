@@ -13,9 +13,10 @@
 
 #include "reelay/common.hpp"
 #include "reelay/monitors.hpp"
+#include "reelay/json.hpp"
 
 using time_t = int64_t;
-using input_t = std::unordered_map<std::string, std::string>;
+using input_t = reelay::json;
 using output_t = int64_t;
 using function_t = std::function<output_t(const input_t &)>;
 
@@ -28,10 +29,10 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "3"}});
-    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", 3}});
+    sequence.push_back(input_t{{"x1", 4}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x1", "5"}});
+    sequence.push_back(input_t{{"x1", 5}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("{x1}");
@@ -52,10 +53,10 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "true"}});
-    sequence.push_back(input_t{{"x1", "true"}});
+    sequence.push_back(input_t{{"x1", true}});
+    sequence.push_back(input_t{{"x1", true}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x1", "false"}});
+    sequence.push_back(input_t{{"x1", false}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("{x1: true}");
@@ -76,10 +77,10 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "true"}});
-    sequence.push_back(input_t{{"x1", "true"}});
+    sequence.push_back(input_t{{"x1", true}});
+    sequence.push_back(input_t{{"x1", true}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x1", "false"}});
+    sequence.push_back(input_t{{"x1", false}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("{x1: false}");
@@ -124,10 +125,10 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "1"}});
-    sequence.push_back(input_t{{"x1", "2"}});
+    sequence.push_back(input_t{{"x1", 1}});
+    sequence.push_back(input_t{{"x1", 2}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", 4}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("{x1: 2}");
@@ -172,10 +173,10 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "3"}});
-    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", 3}});
+    sequence.push_back(input_t{{"x1", 4}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x1", "5"}});
+    sequence.push_back(input_t{{"x1", 5}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("{x1 > 4}");
@@ -196,11 +197,11 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "2"}});
-    sequence.push_back(input_t{{"x1", "3"}});
-    sequence.push_back(input_t{{"x1", "4"}});
-    sequence.push_back(input_t{{"x1", "5"}});
-    sequence.push_back(input_t{{"x1", "6"}});
+    sequence.push_back(input_t{{"x1", 2}});
+    sequence.push_back(input_t{{"x1", 3}});
+    sequence.push_back(input_t{{"x1", 4}});
+    sequence.push_back(input_t{{"x1", 5}});
+    sequence.push_back(input_t{{"x1", 6}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("{x1 > 3, x1 < 5}");
@@ -221,10 +222,10 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "3"}});
-    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", 3}});
+    sequence.push_back(input_t{{"x1", 4}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x1", "5"}});
+    sequence.push_back(input_t{{"x1", 5}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("{x1 >= 4}");
@@ -245,10 +246,10 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "3"}});
-    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", 3}});
+    sequence.push_back(input_t{{"x1", 4}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x1", "5"}});
+    sequence.push_back(input_t{{"x1", 5}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("{x1 < 4}");
@@ -269,10 +270,10 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "3"}});
-    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", 3}});
+    sequence.push_back(input_t{{"x1", 4}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x1", "5"}});
+    sequence.push_back(input_t{{"x1", 5}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("{x1 <= 4}");
@@ -293,10 +294,10 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "3"}});
-    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", 3}});
+    sequence.push_back(input_t{{"x1", 4}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x1", "5"}});
+    sequence.push_back(input_t{{"x1", 5}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("{x1 == 4}");
@@ -317,10 +318,10 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "3"}});
-    sequence.push_back(input_t{{"x1", "4"}});
+    sequence.push_back(input_t{{"x1", 3}});
+    sequence.push_back(input_t{{"x1", 4}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x1", "5"}});
+    sequence.push_back(input_t{{"x1", 5}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("{x1 != 4}");
@@ -341,12 +342,12 @@ TEST_CASE("Atoms") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x1", "3"}, {"x2", "7"}});
-    sequence.push_back(input_t{{"x1", "4"}, {"x2", "6"}});
-    sequence.push_back(input_t{{"x1", "5"}, {"x2", "9"}});
+    sequence.push_back(input_t{{"x1", 3}, {"x2", 7}});
+    sequence.push_back(input_t{{"x1", 4}, {"x2", 6}});
+    sequence.push_back(input_t{{"x1", 5}, {"x2", 9}});
 
     function_t sum_x1_and_x2_gt_5 = [](const input_t &row) {
-      return (std::stof(row.at("x1")) + std::stof(row.at("x2"))) - 11.0;
+      return (row.at("x1").get<double>() + row.at("x2").get<double>()) - 11.0;
     };
 
     reelay::kwargs predicates = {{"sum_x1_and_x2_gt_5", sum_x1_and_x2_gt_5}};
@@ -367,16 +368,119 @@ TEST_CASE("Atoms") {
   }
 }
 
+TEST_CASE("Nested Inputs") {
+
+  SECTION("Deep Object") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"obj", {{"flag", 3}}}});
+    sequence.push_back(input_t{{"obj", {{"flag", 4}}}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"obj", {{"flag", 5}}}});
+    sequence.push_back(input_t{});
+
+    auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
+        input_t>::from_temporal_logic("obj::{flag > 4}");
+
+    auto result = std::vector<output_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<output_t>({-1, 0, 0, 1, 1});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Deep Object 2") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(
+        input_t{{"obj1", {{"obj2", {{"flag1", false}, {"flag2", 3}}}}}});
+    sequence.push_back(
+        input_t{{"obj1", {{"obj2", {{"flag1", false}, {"flag2", 4}}}}}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"obj1", {{"obj2", {{"flag2", 5}}}}}});
+    sequence.push_back(input_t{});
+
+    auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
+        input_t>::from_temporal_logic("obj1::obj2::{flag2 > 4}");
+
+    auto result = std::vector<output_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<output_t>({-1, 0, 0, 1, 1});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Deep List Any") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{
+        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 9}, {"b", 2}}}}}}});
+    sequence.push_back(input_t{
+        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
+    sequence.push_back(input_t{
+        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
+
+    auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
+        input_t>::from_temporal_logic("obj1::obj2::any{a < 6}");
+
+    auto result = std::vector<output_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<output_t>({-1, 1, 1});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Deep List All") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{
+        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 9}, {"b", 2}}}}}}});
+    sequence.push_back(input_t{
+        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
+    sequence.push_back(input_t{
+        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 0}}}}}}});
+
+    auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
+        input_t>::from_temporal_logic("obj1::obj2::all{b > 1}");
+
+    auto result = std::vector<output_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto expected = std::vector<output_t>({1, 1, -1});
+
+    CHECK(result == expected);
+  }
+}
+
 TEST_CASE("Boolean Operations") {
 
   SECTION("Disjunction") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "3"}});
-    sequence.push_back(input_t{{"p1", "5"}, {"p2", "4"}});
+    sequence.push_back(input_t{{"p1", 0}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 0}, {"p2", 3}});
+    sequence.push_back(input_t{{"p1", 5}, {"p2", 4}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("{p1>0} or {p2>0}");
@@ -397,10 +501,10 @@ TEST_CASE("Boolean Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "3"}});
-    sequence.push_back(input_t{{"p1", "5"}, {"p2", "4"}});
+    sequence.push_back(input_t{{"p1", 0}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 0}, {"p2", 3}});
+    sequence.push_back(input_t{{"p1", 5}, {"p2", 4}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("{p1>0} and {p2>0}");
@@ -421,10 +525,10 @@ TEST_CASE("Boolean Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "1"}});
+    sequence.push_back(input_t{{"p1", 0}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 0}, {"p2", 1}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 1}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("{p1>0} -> {p2>0}");
@@ -445,8 +549,8 @@ TEST_CASE("Boolean Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "-10"}});
-    sequence.push_back(input_t{{"p1", "10"}});
+    sequence.push_back(input_t{{"p1", -10}});
+    sequence.push_back(input_t{{"p1", 10}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("not{p1>0}");
@@ -470,10 +574,10 @@ TEST_CASE("Untimed Temporal Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "8"}, {"p2", "-1"}});
-    sequence.push_back(input_t{{"p1", "7"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "5"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "6"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", 8}, {"p2", -1}});
+    sequence.push_back(input_t{{"p1", 7}, {"p2", 1}});
+    sequence.push_back(input_t{{"p1", 5}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 6}, {"p2", 0}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("pre{p1>0}");
@@ -501,10 +605,10 @@ TEST_CASE("Untimed Temporal Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "8"}, {"p2", "-1"}});
-    sequence.push_back(input_t{{"p1", "7"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "5"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "6"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", 8}, {"p2", -1}});
+    sequence.push_back(input_t{{"p1", 7}, {"p2", 1}});
+    sequence.push_back(input_t{{"p1", 5}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 6}, {"p2", 0}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("historically{p1>0}");
@@ -532,10 +636,10 @@ TEST_CASE("Untimed Temporal Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "0"}, {"p2", "4"}});
-    sequence.push_back(input_t{{"p1", "6"}, {"p2", "5"}});
-    sequence.push_back(input_t{{"p1", "7"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "5"}, {"p2", "8"}});
+    sequence.push_back(input_t{{"p1", 0}, {"p2", 4}});
+    sequence.push_back(input_t{{"p1", 6}, {"p2", 5}});
+    sequence.push_back(input_t{{"p1", 7}, {"p2", 1}});
+    sequence.push_back(input_t{{"p1", 5}, {"p2", 8}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("once{p1>0}");
@@ -563,20 +667,20 @@ TEST_CASE("Untimed Temporal Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "3"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "4"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "5"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "-3"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "-1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "4"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "-1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "6"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "5"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", 3}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 4}, {"p2", 1}});
+    sequence.push_back(input_t{{"p1", 5}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", -3}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", -1}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 4}, {"p2", 1}});
+    sequence.push_back(input_t{{"p1", -1}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 6}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 5}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 0}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("{p1>0} since {p2>0}");
@@ -598,22 +702,22 @@ TEST_CASE("Untimed Temporal Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "3"}, {"p2", "-120"}});
-    sequence.push_back(input_t{{"p1", "4"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "5"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "-3"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "-1"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "4"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "-1"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "-4"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "5"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
+    sequence.push_back(input_t{{"p1", 3}, {"p2", -120}});
+    sequence.push_back(input_t{{"p1", 4}, {"p2", 1}});
+    sequence.push_back(input_t{{"p1", 5}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", -3}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", -1}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", 4}, {"p2", 1}});
+    sequence.push_back(input_t{{"p1", -1}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", -4}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 5}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", -100}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("{p1>0} since[:100] {p2>0}");
@@ -638,17 +742,17 @@ TEST_CASE("Timed Temporal Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "3"}});
-    sequence.push_back(input_t{{"p1", "4"}});
-    sequence.push_back(input_t{{"p1", "5"}});
-    sequence.push_back(input_t{{"p1", "1"}});
-    sequence.push_back(input_t{{"p1", "2"}});
-    sequence.push_back(input_t{{"p1", "-1"}});
-    sequence.push_back(input_t{{"p1", "-2"}});
-    sequence.push_back(input_t{{"p1", "14"}});
-    sequence.push_back(input_t{{"p1", "4"}});
-    sequence.push_back(input_t{{"p1", "4"}});
-    sequence.push_back(input_t{{"p1", "2"}});
+    sequence.push_back(input_t{{"p1", 3}});
+    sequence.push_back(input_t{{"p1", 4}});
+    sequence.push_back(input_t{{"p1", 5}});
+    sequence.push_back(input_t{{"p1", 1}});
+    sequence.push_back(input_t{{"p1", 2}});
+    sequence.push_back(input_t{{"p1", -1}});
+    sequence.push_back(input_t{{"p1", -2}});
+    sequence.push_back(input_t{{"p1", 14}});
+    sequence.push_back(input_t{{"p1", 4}});
+    sequence.push_back(input_t{{"p1", 4}});
+    sequence.push_back(input_t{{"p1", 2}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("once[2:4]{p1>0}");
@@ -670,17 +774,17 @@ TEST_CASE("Timed Temporal Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "3"}});
-    sequence.push_back(input_t{{"p1", "4"}});
-    sequence.push_back(input_t{{"p1", "5"}});
-    sequence.push_back(input_t{{"p1", "1"}});
-    sequence.push_back(input_t{{"p1", "2"}});
-    sequence.push_back(input_t{{"p1", "-1"}});
-    sequence.push_back(input_t{{"p1", "-2"}});
-    sequence.push_back(input_t{{"p1", "14"}});
-    sequence.push_back(input_t{{"p1", "4"}});
-    sequence.push_back(input_t{{"p1", "4"}});
-    sequence.push_back(input_t{{"p1", "2"}});
+    sequence.push_back(input_t{{"p1", 3}});
+    sequence.push_back(input_t{{"p1", 4}});
+    sequence.push_back(input_t{{"p1", 5}});
+    sequence.push_back(input_t{{"p1", 1}});
+    sequence.push_back(input_t{{"p1", 2}});
+    sequence.push_back(input_t{{"p1", -1}});
+    sequence.push_back(input_t{{"p1", -2}});
+    sequence.push_back(input_t{{"p1", 14}});
+    sequence.push_back(input_t{{"p1", 4}});
+    sequence.push_back(input_t{{"p1", 4}});
+    sequence.push_back(input_t{{"p1", 2}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("once[:3]{p1>0}");
@@ -702,17 +806,17 @@ TEST_CASE("Timed Temporal Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "3"}});
-    sequence.push_back(input_t{{"p1", "4"}});
-    sequence.push_back(input_t{{"p1", "5"}});
-    sequence.push_back(input_t{{"p1", "1"}});
-    sequence.push_back(input_t{{"p1", "2"}});
-    sequence.push_back(input_t{{"p1", "-1"}});
-    sequence.push_back(input_t{{"p1", "-2"}});
-    sequence.push_back(input_t{{"p1", "14"}});
-    sequence.push_back(input_t{{"p1", "4"}});
-    sequence.push_back(input_t{{"p1", "4"}});
-    sequence.push_back(input_t{{"p1", "2"}});
+    sequence.push_back(input_t{{"p1", 3}});
+    sequence.push_back(input_t{{"p1", 4}});
+    sequence.push_back(input_t{{"p1", 5}});
+    sequence.push_back(input_t{{"p1", 1}});
+    sequence.push_back(input_t{{"p1", 2}});
+    sequence.push_back(input_t{{"p1", -1}});
+    sequence.push_back(input_t{{"p1", -2}});
+    sequence.push_back(input_t{{"p1", 14}});
+    sequence.push_back(input_t{{"p1", 4}});
+    sequence.push_back(input_t{{"p1", 4}});
+    sequence.push_back(input_t{{"p1", 2}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("once[2:]{p1>0}");
@@ -733,17 +837,17 @@ TEST_CASE("Timed Temporal Operations") {
   SECTION("Timed Always") {
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "3"}});
-    sequence.push_back(input_t{{"p1", "4"}});
-    sequence.push_back(input_t{{"p1", "5"}});
-    sequence.push_back(input_t{{"p1", "1"}});
-    sequence.push_back(input_t{{"p1", "2"}});
-    sequence.push_back(input_t{{"p1", "-1"}});
-    sequence.push_back(input_t{{"p1", "-2"}});
-    sequence.push_back(input_t{{"p1", "14"}});
-    sequence.push_back(input_t{{"p1", "4"}});
-    sequence.push_back(input_t{{"p1", "4"}});
-    sequence.push_back(input_t{{"p1", "2"}});
+    sequence.push_back(input_t{{"p1", 3}});
+    sequence.push_back(input_t{{"p1", 4}});
+    sequence.push_back(input_t{{"p1", 5}});
+    sequence.push_back(input_t{{"p1", 1}});
+    sequence.push_back(input_t{{"p1", 2}});
+    sequence.push_back(input_t{{"p1", -1}});
+    sequence.push_back(input_t{{"p1", -2}});
+    sequence.push_back(input_t{{"p1", 14}});
+    sequence.push_back(input_t{{"p1", 4}});
+    sequence.push_back(input_t{{"p1", 4}});
+    sequence.push_back(input_t{{"p1", 2}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("historically[2:4]{p1>0}");
@@ -764,17 +868,17 @@ TEST_CASE("Timed Temporal Operations") {
   SECTION("Timed Always Zero") {
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "3"}});
-    sequence.push_back(input_t{{"p1", "4"}});
-    sequence.push_back(input_t{{"p1", "5"}});
-    sequence.push_back(input_t{{"p1", "1"}});
-    sequence.push_back(input_t{{"p1", "2"}});
-    sequence.push_back(input_t{{"p1", "-1"}});
-    sequence.push_back(input_t{{"p1", "-2"}});
-    sequence.push_back(input_t{{"p1", "14"}});
-    sequence.push_back(input_t{{"p1", "4"}});
-    sequence.push_back(input_t{{"p1", "4"}});
-    sequence.push_back(input_t{{"p1", "2"}});
+    sequence.push_back(input_t{{"p1", 3}});
+    sequence.push_back(input_t{{"p1", 4}});
+    sequence.push_back(input_t{{"p1", 5}});
+    sequence.push_back(input_t{{"p1", 1}});
+    sequence.push_back(input_t{{"p1", 2}});
+    sequence.push_back(input_t{{"p1", -1}});
+    sequence.push_back(input_t{{"p1", -2}});
+    sequence.push_back(input_t{{"p1", 14}});
+    sequence.push_back(input_t{{"p1", 4}});
+    sequence.push_back(input_t{{"p1", 4}});
+    sequence.push_back(input_t{{"p1", 2}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("historically[:3]{p1>0}");
@@ -795,17 +899,17 @@ TEST_CASE("Timed Temporal Operations") {
   SECTION("Timed Always Inf") {
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "3"}});
-    sequence.push_back(input_t{{"p1", "4"}});
-    sequence.push_back(input_t{{"p1", "5"}});
-    sequence.push_back(input_t{{"p1", "1"}});
-    sequence.push_back(input_t{{"p1", "2"}});
-    sequence.push_back(input_t{{"p1", "-1"}});
-    sequence.push_back(input_t{{"p1", "-2"}});
-    sequence.push_back(input_t{{"p1", "14"}});
-    sequence.push_back(input_t{{"p1", "4"}});
-    sequence.push_back(input_t{{"p1", "4"}});
-    sequence.push_back(input_t{{"p1", "2"}});
+    sequence.push_back(input_t{{"p1", 3}});
+    sequence.push_back(input_t{{"p1", 4}});
+    sequence.push_back(input_t{{"p1", 5}});
+    sequence.push_back(input_t{{"p1", 1}});
+    sequence.push_back(input_t{{"p1", 2}});
+    sequence.push_back(input_t{{"p1", -1}});
+    sequence.push_back(input_t{{"p1", -2}});
+    sequence.push_back(input_t{{"p1", 14}});
+    sequence.push_back(input_t{{"p1", 4}});
+    sequence.push_back(input_t{{"p1", 4}});
+    sequence.push_back(input_t{{"p1", 2}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("historically[2:]{p1>0}");
@@ -827,22 +931,22 @@ TEST_CASE("Timed Temporal Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "3"}, {"p2", "-120"}});
-    sequence.push_back(input_t{{"p1", "4"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "5"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "-3"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "-1"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "4"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "-1"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "-4"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "5"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "-100"}});
+    sequence.push_back(input_t{{"p1", 3}, {"p2", -120}});
+    sequence.push_back(input_t{{"p1", 4}, {"p2", 1}});
+    sequence.push_back(input_t{{"p1", 5}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", -3}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", -1}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", 4}, {"p2", 1}});
+    sequence.push_back(input_t{{"p1", -1}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", -4}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 5}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", -100}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", -100}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("{p1>0} since[2:4] {p2>0}");
@@ -865,20 +969,20 @@ TEST_CASE("Timed Temporal Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "3"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "4"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "5"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "-3"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "-1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "4"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "-1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "6"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "5"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", 3}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 4}, {"p2", 1}});
+    sequence.push_back(input_t{{"p1", 5}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", -3}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", -1}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 4}, {"p2", 1}});
+    sequence.push_back(input_t{{"p1", -1}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 6}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 5}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 0}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("{p1>0} since[:4] {p2>0}");
@@ -900,20 +1004,20 @@ TEST_CASE("Timed Temporal Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "3"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "4"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "5"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "-3"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "-1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "4"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "-1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "6"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "5"}});
-    sequence.push_back(input_t{{"p1", "1"}, {"p2", "0"}});
+    sequence.push_back(input_t{{"p1", 3}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 4}, {"p2", 1}});
+    sequence.push_back(input_t{{"p1", 5}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", -3}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", -1}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 4}, {"p2", 1}});
+    sequence.push_back(input_t{{"p1", -1}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 6}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 0}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 5}});
+    sequence.push_back(input_t{{"p1", 1}, {"p2", 0}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("{p1>0} since[:100] {p2>0}");
@@ -935,11 +1039,11 @@ TEST_CASE("Timed Temporal Operations") {
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"p1", "-3"}, {"p2", "-6"}});
-    sequence.push_back(input_t{{"p1", "-4"}, {"p2", "1"}});
-    sequence.push_back(input_t{{"p1", "-5"}, {"p2", "-8"}});
-    sequence.push_back(input_t{{"p1", "15"}, {"p2", "3"}});
-    sequence.push_back(input_t{{"p1", "-3"}, {"p2", "22"}});
+    sequence.push_back(input_t{{"p1", -3}, {"p2", -6}});
+    sequence.push_back(input_t{{"p1", -4}, {"p2", 1}});
+    sequence.push_back(input_t{{"p1", -5}, {"p2", -8}});
+    sequence.push_back(input_t{{"p1", 15}, {"p2", 3}});
+    sequence.push_back(input_t{{"p1", -3}, {"p2", 22}});
 
     auto net1 = reelay::discrete_timed<time_t>::robustness<output_t>::monitor<
         input_t>::from_temporal_logic("{p1>0} since[2:] {p2>0}");

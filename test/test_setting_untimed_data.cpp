@@ -12,7 +12,9 @@
 
 #include "reelay/common.hpp"
 #include "reelay/monitors.hpp"
+#include "reelay/json.hpp"
 
+using input_t = reelay::json;
 // using input_t = std::vector<std::vector<std::string>>;
 // using input_t = std::vector<std::unordered_map<std::string,
 // std::string>>;
@@ -20,8 +22,6 @@
 TEST_CASE("Atoms") {
 
   SECTION("List Proposition 0") {
-
-    using input_t = std::vector<std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
@@ -35,7 +35,7 @@ TEST_CASE("Atoms") {
     reelay::kwargs extra_args = {{"manager", manager}};
 
     auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
-        "[access, bob, white_rabbit]", extra_args);
+        "{$0: access, $1: bob, $2: white_rabbit}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
 
@@ -53,8 +53,6 @@ TEST_CASE("Atoms") {
 
   SECTION("List Proposition 1") {
 
-    using input_t = std::vector<std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"access", "alice", "wonderland"});
@@ -67,39 +65,7 @@ TEST_CASE("Atoms") {
     reelay::kwargs extra_args = {{"manager", manager}};
 
     auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
-        "[access, alice]", extra_args);
-
-    auto result = std::vector<reelay::data_set_t>();
-
-    for (const auto &row : sequence) {
-      net1->update(row);
-      result.push_back(net1->output());
-    }
-
-    auto t = manager->one();
-    auto f = manager->zero();
-
-    auto expected = std::vector<reelay::data_set_t>({f, f, f, f, f});
-    CHECK(result == expected);
-  }
-
-  SECTION("List Proposition 2") {
-
-    using input_t = std::vector<std::string>;
-
-    std::vector<input_t> sequence = std::vector<input_t>();
-
-    sequence.push_back(input_t{"access", "alice", "wonderland"});
-    sequence.push_back(input_t{"access", "bob", "white_rabbit"});
-    sequence.push_back(input_t{"access", "alice", "feed_your_head"});
-    sequence.push_back(input_t{"logout", "alice"});
-    sequence.push_back(input_t{"tritiny", "bob", "humpie", "dumpie"});
-
-    auto manager = std::make_shared<reelay::binding_manager>();
-    reelay::kwargs extra_args = {{"manager", manager}};
-
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
-        "[access, alice, *]", extra_args);
+        "{$0: access, $1: alice, $2: *}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
 
@@ -117,8 +83,6 @@ TEST_CASE("Atoms") {
 
   SECTION("List Proposition 3") {
 
-    using input_t = std::vector<std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"access", "alice", "wonderland"});
@@ -131,7 +95,7 @@ TEST_CASE("Atoms") {
     reelay::kwargs extra_args = {{"manager", manager}};
 
     auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
-        "[*, alice, *]", extra_args);
+        "{$0: *, $1: alice, $2: *}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
 
@@ -149,8 +113,6 @@ TEST_CASE("Atoms") {
 
   SECTION("List Proposition 4") {
 
-    using input_t = std::vector<std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"access", "alice", "wonderland"});
@@ -163,7 +125,7 @@ TEST_CASE("Atoms") {
     reelay::kwargs extra_args = {{"manager", manager}};
 
     auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
-        "[*event, alice, *]", extra_args);
+        "{$0: *event, $1: alice, $2: *}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
 
@@ -183,8 +145,6 @@ TEST_CASE("Atoms") {
 
   SECTION("List Proposition 5") {
 
-    using input_t = std::vector<std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"access", "alice", "wonderland"});
@@ -197,7 +157,7 @@ TEST_CASE("Atoms") {
     reelay::kwargs extra_args = {{"manager", manager}};
 
     auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
-        "[access, *user, *file]", extra_args);
+        "{$0: access, $1: *user, $2: *file}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
 
@@ -226,14 +186,12 @@ TEST_CASE("Atoms") {
 
   SECTION("Record Proposition 0") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x", "true"}});
-    sequence.push_back(input_t{{"x", "false"}});
+    sequence.push_back(input_t{{"x", true}});
+    sequence.push_back(input_t{{"x", false}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x", "true"}});
+    sequence.push_back(input_t{{"x", true}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -257,14 +215,12 @@ TEST_CASE("Atoms") {
 
   SECTION("AtomicTrue") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x", "true"}});
-    sequence.push_back(input_t{{"x", "false"}});
+    sequence.push_back(input_t{{"x", true}});
+    sequence.push_back(input_t{{"x", false}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x", "true"}});
+    sequence.push_back(input_t{{"x", true}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -288,14 +244,12 @@ TEST_CASE("Atoms") {
 
   SECTION("AtomicFalse") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x", "true"}});
-    sequence.push_back(input_t{{"x", "false"}});
+    sequence.push_back(input_t{{"x", true}});
+    sequence.push_back(input_t{{"x", false}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x", "true"}});
+    sequence.push_back(input_t{{"x", true}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -318,8 +272,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("AtomicString") {
-
-    using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
@@ -350,14 +302,12 @@ TEST_CASE("Atoms") {
 
   SECTION("AtomicNumber") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x", "1"}});
-    sequence.push_back(input_t{{"x", "2"}});
+    sequence.push_back(input_t{{"x", 1}});
+    sequence.push_back(input_t{{"x", 2}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x", "3"}});
+    sequence.push_back(input_t{{"x", 3}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -381,14 +331,12 @@ TEST_CASE("Atoms") {
 
   SECTION("GreaterThan") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x", "1"}});
-    sequence.push_back(input_t{{"x", "2"}});
+    sequence.push_back(input_t{{"x", 1}});
+    sequence.push_back(input_t{{"x", 2}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x", "3"}});
+    sequence.push_back(input_t{{"x", 3}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -412,14 +360,12 @@ TEST_CASE("Atoms") {
 
   SECTION("GreaterEqual") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x", "1"}});
-    sequence.push_back(input_t{{"x", "2"}});
+    sequence.push_back(input_t{{"x", 1}});
+    sequence.push_back(input_t{{"x", 2}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x", "3"}});
+    sequence.push_back(input_t{{"x", 3}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -443,14 +389,12 @@ TEST_CASE("Atoms") {
 
   SECTION("LessThan") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x", "1"}});
-    sequence.push_back(input_t{{"x", "2"}});
+    sequence.push_back(input_t{{"x", 1}});
+    sequence.push_back(input_t{{"x", 2}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x", "3"}});
+    sequence.push_back(input_t{{"x", 3}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -474,14 +418,12 @@ TEST_CASE("Atoms") {
 
   SECTION("LessEqual") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x", "1"}});
-    sequence.push_back(input_t{{"x", "2"}});
+    sequence.push_back(input_t{{"x", 1}});
+    sequence.push_back(input_t{{"x", 2}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x", "3"}});
+    sequence.push_back(input_t{{"x", 3}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -505,14 +447,12 @@ TEST_CASE("Atoms") {
 
   SECTION("Equal") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x", "1"}});
-    sequence.push_back(input_t{{"x", "2"}});
+    sequence.push_back(input_t{{"x", 1}});
+    sequence.push_back(input_t{{"x", 2}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x", "3"}});
+    sequence.push_back(input_t{{"x", 3}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -536,14 +476,12 @@ TEST_CASE("Atoms") {
 
   SECTION("NotEqual") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{{"x", "1"}});
-    sequence.push_back(input_t{{"x", "2"}});
+    sequence.push_back(input_t{{"x", 1}});
+    sequence.push_back(input_t{{"x", 2}});
     sequence.push_back(input_t{});
-    sequence.push_back(input_t{{"x", "3"}});
+    sequence.push_back(input_t{{"x", 3}});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
@@ -566,8 +504,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("AtomicAny") {
-
-    using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
@@ -596,8 +532,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("Record Proposition 0") {
-
-    using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
@@ -632,8 +566,6 @@ TEST_CASE("Atoms") {
 
   SECTION("Record Proposition 1") {
 
-    using input_t = std::unordered_map<std::string, std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{
@@ -667,8 +599,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("Record Proposition 1") {
-
-    using input_t = std::unordered_map<std::string, std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
@@ -705,11 +635,136 @@ TEST_CASE("Atoms") {
   }
 }
 
+TEST_CASE("Nested Inputs") {
+
+  SECTION("Deep Object") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{{"obj", {{"flag", false}}}});
+    sequence.push_back(input_t{{"obj", {{"flag", false}}}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"obj", {{"flag", true}}}});
+    sequence.push_back(input_t{});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "obj::{flag}", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({f, f, f, t, t});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Deep Object 2") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(
+        input_t{{"obj1", {{"obj2", {{"flag1", false}, {"flag2", false}}}}}});
+    sequence.push_back(
+        input_t{{"obj1", {{"obj2", {{"flag1", false}, {"flag2", true}}}}}});
+    sequence.push_back(input_t{});
+    sequence.push_back(input_t{{"obj1", {{"obj2", {{"flag2", false}}}}}});
+    sequence.push_back(input_t{});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "obj1::obj2::{flag2}", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({f, t, t, f, f});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Deep List Any") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{
+        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 9}, {"b", 2}}}}}}});
+    sequence.push_back(input_t{
+        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
+    sequence.push_back(input_t{
+        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "obj1::obj2::any{a < 6}", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({f, t, t});
+
+    CHECK(result == expected);
+  }
+
+  SECTION("Deep List All") {
+    std::vector<input_t> sequence = std::vector<input_t>();
+
+    sequence.push_back(input_t{
+        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 9}, {"b", 2}}}}}}});
+    sequence.push_back(input_t{
+        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
+    sequence.push_back(input_t{
+        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 0}}}}}}});
+
+    auto manager = std::make_shared<reelay::binding_manager>();
+    reelay::kwargs extra_args = {{"manager", manager}};
+
+    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+        "obj1::obj2::all{b > 1}", extra_args);
+
+    auto result = std::vector<reelay::data_set_t>();
+
+    for (const auto &row : sequence) {
+      net1->update(row);
+      result.push_back(net1->output());
+    }
+
+    auto t = manager->one();
+    auto f = manager->zero();
+
+    auto expected = std::vector<reelay::data_set_t>({t, t, f});
+
+    CHECK(result == expected);
+  }
+}
+
 TEST_CASE("Boolean Operations") {
 
   SECTION("Negation") {
-
-    using input_t = std::vector<std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
@@ -723,7 +778,7 @@ TEST_CASE("Boolean Operations") {
     reelay::kwargs extra_args = {{"manager", manager}};
 
     auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
-        "![access, alice, *]", extra_args);
+        "!{$0: access, $1: alice}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
 
@@ -742,8 +797,6 @@ TEST_CASE("Boolean Operations") {
 
   SECTION("Conjunction") {
 
-    using input_t = std::vector<std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"access", "alice", "wonderland"});
@@ -756,7 +809,9 @@ TEST_CASE("Boolean Operations") {
     reelay::kwargs extra_args = {{"manager", manager}};
 
     auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
-        "[*event, alice, *file] and [access, *user, wonderland]", extra_args);
+        "{$0: *event, $1: alice, $2: *file} and {$0: access, $1: *user, "
+        "$2: wonderland}",
+        extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
 
@@ -780,8 +835,6 @@ TEST_CASE("Boolean Operations") {
 
   SECTION("Disjunction") {
 
-    using input_t = std::vector<std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"access", "alice", "wonderland"});
@@ -794,7 +847,9 @@ TEST_CASE("Boolean Operations") {
     reelay::kwargs extra_args = {{"manager", manager}};
 
     auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
-        "[*event, alice, *file] or [access, *user, wonderland]", extra_args);
+        "{$0: access, $1 :alice, $2: *file} or {$0: access, $1: *user, "
+        "$2: wonderland}",
+        extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
 
@@ -806,12 +861,10 @@ TEST_CASE("Boolean Operations") {
     auto t = manager->one();
     auto f = manager->zero();
 
-    auto datum1 = (manager->assign("event", "access") *
-                   manager->assign("file", "wonderland")) +
+    auto datum1 = manager->assign("file", "wonderland") +
                   manager->assign("user", "alice");
 
-    auto datum3 = manager->assign("event", "access") *
-                  manager->assign("file", "feed_your_head");
+    auto datum3 = manager->assign("file", "feed_your_head");
 
     auto expected = std::vector<reelay::data_set_t>({datum1, f, datum3, f, f});
 
@@ -823,21 +876,19 @@ TEST_CASE("Quantification") {
 
   SECTION("Existence") {
 
-    using input_t = std::vector<std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"access", "alice", "wonderland"});
     sequence.push_back(input_t{"access", "bob", "white_rabbit"});
     sequence.push_back(input_t{"access", "alice", "feed_your_head"});
-    sequence.push_back(input_t{"logout", "alice"});
+    sequence.push_back(input_t{"logout", "charlotte"});
     sequence.push_back(input_t{"meet", "bob", "humpty", "dumpty"});
 
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
     auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
-        "exists[event]. [*event, alice, *file]", extra_args);
+        "exists[event]. {$0: *event, $1: alice, $2: *file}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
 
@@ -861,7 +912,6 @@ TEST_CASE("Quantification") {
 TEST_CASE("Temporal Operations") {
 
   SECTION("Previous") {
-    using input_t = std::vector<std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
@@ -874,7 +924,7 @@ TEST_CASE("Temporal Operations") {
     reelay::kwargs extra_args = {{"manager", manager}};
 
     auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
-        "pre([open, *])", extra_args);
+        "pre({$0: open, $1: *})", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
 
@@ -892,7 +942,6 @@ TEST_CASE("Temporal Operations") {
   }
 
   SECTION("Once") {
-    using input_t = std::vector<std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
@@ -905,7 +954,7 @@ TEST_CASE("Temporal Operations") {
     reelay::kwargs extra_args = {{"manager", manager}};
 
     auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
-        "once([open, c])", extra_args);
+        "once{$0: open, $1: c}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
 
@@ -923,7 +972,6 @@ TEST_CASE("Temporal Operations") {
   }
 
   SECTION("Once") {
-    using input_t = std::vector<std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
@@ -936,7 +984,7 @@ TEST_CASE("Temporal Operations") {
     reelay::kwargs extra_args = {{"manager", manager}};
 
     auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
-        "once([open, *file])", extra_args);
+        "once{$0: open, $1: *file}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
 
@@ -962,7 +1010,6 @@ TEST_CASE("Temporal Operations") {
   }
 
   SECTION("Historically") {
-    using input_t = std::vector<std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
@@ -975,7 +1022,7 @@ TEST_CASE("Temporal Operations") {
     reelay::kwargs extra_args = {{"manager", manager}};
 
     auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
-        "historically([is_open, a])", extra_args);
+        "historically{$0: is_open, $1: a}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
 
@@ -993,7 +1040,6 @@ TEST_CASE("Temporal Operations") {
   }
 
   SECTION("Since") {
-    using input_t = std::vector<std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
@@ -1007,7 +1053,7 @@ TEST_CASE("Temporal Operations") {
     reelay::kwargs extra_args = {{"manager", manager}};
 
     auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
-        "[is_open, a] since [open, a]", extra_args);
+        "{$0: is_open, $1: a} since {$0: open, $1: a}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
 
@@ -1024,48 +1070,11 @@ TEST_CASE("Temporal Operations") {
     CHECK(result == expected);
   }
 
-  SECTION("Existential Quantification") {
-
-    using input_t = std::vector<std::string>;
-
-    std::vector<input_t> sequence = std::vector<input_t>();
-
-    sequence.push_back(input_t{"access", "alice", "wonderland"});
-    sequence.push_back(input_t{"access", "bob", "white_rabbit"});
-    sequence.push_back(input_t{"access", "alice", "feed_your_head"});
-    sequence.push_back(input_t{"logout", "alice"});
-    sequence.push_back(input_t{"meet", "bob", "humpty", "dumpty"});
-
-    auto manager = std::make_shared<reelay::binding_manager>();
-    reelay::kwargs extra_args = {{"manager", manager}};
-
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
-        "exists[event]. [*event, alice, *file]", extra_args);
-
-    auto result = std::vector<reelay::data_set_t>();
-
-    for (const auto &row : sequence) {
-      net1->update(row);
-      result.push_back(net1->output());
-    }
-
-    auto t = manager->one();
-    auto f = manager->zero();
-
-    auto datum1 = manager->assign("file", "wonderland");
-    auto datum3 = manager->assign("file", "feed_your_head");
-
-    auto expected = std::vector<reelay::data_set_t>({datum1, f, datum3, f, f});
-
-    CHECK(result == expected);
-  }
 }
 
 TEST_CASE("Some complex formulas") {
 
   SECTION("Attempt to access a closed file") {
-
-    using input_t = std::vector<std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
@@ -1080,8 +1089,9 @@ TEST_CASE("Some complex formulas") {
     reelay::kwargs extra_args = {{"manager", manager}};
 
     auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
-        "forall[user,file]. [access, *user, *file] implies (![logout, *user] "
-        "since [login, *user] and ![close, *file] since [open, *file])",
+        "forall[user,file]. {$0: access, $1: *user, $2: *file} implies "
+        "(!{$0: logout, $1: *user} since {$0: login, $1: *user} and !{$0: "
+        "close, $1: *file} since {$0: open, $1: *file})",
         extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -1100,8 +1110,6 @@ TEST_CASE("Some complex formulas") {
   }
 
   SECTION("Neither Open Nor Close") {
-
-    using input_t = std::vector<std::string>;
 
     std::vector<input_t> sequence = std::vector<input_t>();
 
@@ -1122,8 +1130,8 @@ TEST_CASE("Some complex formulas") {
     reelay::kwargs extra_args = {{"manager", manager}};
 
     auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
-        "forall[file]. [close, *file] implies (exists[mode]. pre(![close, "
-        "*file] since [open, *file, *mode]))",
+        "forall[file]. {$0: close, $1: *file} implies (exists[mode]. "
+        "pre(!{$0: close, $1: *file} since {$0: open, $1: *file, $2: *mode}))",
         extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -1144,8 +1152,6 @@ TEST_CASE("Some complex formulas") {
 
   SECTION("First In-n-Out") {
 
-    using input_t = std::vector<std::string>;
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"enter", "a"});
@@ -1164,8 +1170,8 @@ TEST_CASE("Some complex formulas") {
     reelay::kwargs extra_args = {{"manager", manager}};
 
     auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
-        "forall[x,y].([exit, *y] and once([enter, *y] and pre(once[enter, "
-        "*x])) implies pre(once[exit, *x]))",
+        "forall[x,y].({$0: exit, $1: *y} and once({$0: enter, $1: *y} and "
+        "pre(once{$0: enter, $1: *x})) implies pre(once{$0: exit, $1: *x}))",
         extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
