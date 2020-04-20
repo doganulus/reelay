@@ -59,7 +59,7 @@ struct atomic_nested
         updatable = false;
         break; // Do nothing if the key does not exist
       }
-      deep_args = deep_args.at(key);
+      deep_args = datafield<input_t>::at(deep_args, key);
     }
 
     if (updatable) {

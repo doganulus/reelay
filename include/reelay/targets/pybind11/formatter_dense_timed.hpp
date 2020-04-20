@@ -18,7 +18,7 @@ struct formatter_dense_timed {
 
   using time_t = T;
   using value_t = bool;
-  using input_t = pybind11::dict;
+  using input_t = pybind11::object;
   using output_t = pybind11::list;
 
   using interval = reelay::interval<time_t>;
@@ -57,23 +57,25 @@ struct formatter_dense_timed {
     auto vresult = pybind11::list();
 
     if (result.empty()) {
-      vresult.append(pydict(pybind11::arg(t_name.c_str()) = previous,
-                            pybind11::arg(y_name.c_str()) = false));
+      vresult.append(pybind11::dict(pybind11::arg(t_name.c_str()) = previous,
+                                  pybind11::arg(y_name.c_str()) = false));
       lastval = false;
     } else {
       if (result.begin()->lower() != previous) {
-        vresult.append(pydict(pybind11::arg(t_name.c_str()) = previous,
-                              pybind11::arg(y_name.c_str()) = false));
+        vresult.append(pybind11::dict(pybind11::arg(t_name.c_str()) = previous,
+                                    pybind11::arg(y_name.c_str()) = false));
         lastval = false;
       }
       for (const auto &intv : result) {
-        vresult.append(pydict(pybind11::arg(t_name.c_str()) = intv.lower(),
-                              pybind11::arg(y_name.c_str()) = true));
+        vresult.append(
+            pybind11::dict(pybind11::arg(t_name.c_str()) = intv.lower(),
+                         pybind11::arg(y_name.c_str()) = true));
         lastval = true;
 
         if (intv.upper() != now) {
-          vresult.append(pydict(pybind11::arg(t_name.c_str()) = intv.upper(),
-                                pybind11::arg(y_name.c_str()) = false));
+          vresult.append(
+              pybind11::dict(pybind11::arg(t_name.c_str()) = intv.upper(),
+                           pybind11::arg(y_name.c_str()) = false));
           lastval = false;
         }
       }
@@ -93,20 +95,22 @@ struct formatter_dense_timed {
 
     if (result.empty()) {
       if (lastval) {
-        vresult.append(pydict(pybind11::arg(t_name.c_str()) = previous,
-                              pybind11::arg(y_name.c_str()) = false));
+        vresult.append(pybind11::dict(pybind11::arg(t_name.c_str()) = previous,
+                                      pybind11::arg(y_name.c_str()) = false));
         lastval = false;
       }
     } else {
       for (const auto &intv : result) {
         if (not lastval) {
-          vresult.append(pydict(pybind11::arg(t_name.c_str()) = intv.lower(),
-                                pybind11::arg(y_name.c_str()) = true));
+          vresult.append(
+              pybind11::dict(pybind11::arg(t_name.c_str()) = intv.lower(),
+                             pybind11::arg(y_name.c_str()) = true));
           lastval = true;
         }
         if (intv.upper() != now) {
-          vresult.append(pydict(pybind11::arg(t_name.c_str()) = intv.upper(),
-                                pybind11::arg(y_name.c_str()) = false));
+          vresult.append(
+              pybind11::dict(pybind11::arg(t_name.c_str()) = intv.upper(),
+                             pybind11::arg(y_name.c_str()) = false));
           lastval = false;
         }
       }

@@ -699,67 +699,67 @@ TEST_CASE("Nested Inputs") {
     CHECK(result == expected);
   }
 
-  SECTION("Deep List Any") {
-    std::vector<input_t> sequence = std::vector<input_t>();
+  // SECTION("Deep List Any") {
+  //   std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{
-        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 9}, {"b", 2}}}}}}});
-    sequence.push_back(input_t{
-        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
-    sequence.push_back(input_t{
-        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
+  //   sequence.push_back(input_t{
+  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 9}, {"b", 2}}}}}}});
+  //   sequence.push_back(input_t{
+  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
+  //   sequence.push_back(input_t{
+  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
 
-    auto manager = std::make_shared<reelay::binding_manager>();
-    reelay::kwargs extra_args = {{"manager", manager}};
+  //   auto manager = std::make_shared<reelay::binding_manager>();
+  //   reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
-        "obj1::obj2::any{a < 6}", extra_args);
+  //   auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+  //       "obj1::obj2::any{a < 6}", extra_args);
 
-    auto result = std::vector<reelay::data_set_t>();
+  //   auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
-      net1->update(row);
-      result.push_back(net1->output());
-    }
+  //   for (const auto &row : sequence) {
+  //     net1->update(row);
+  //     result.push_back(net1->output());
+  //   }
 
-    auto t = manager->one();
-    auto f = manager->zero();
+  //   auto t = manager->one();
+  //   auto f = manager->zero();
 
-    auto expected = std::vector<reelay::data_set_t>({f, t, t});
+  //   auto expected = std::vector<reelay::data_set_t>({f, t, t});
 
-    CHECK(result == expected);
-  }
+  //   CHECK(result == expected);
+  // }
 
-  SECTION("Deep List All") {
-    std::vector<input_t> sequence = std::vector<input_t>();
+  // SECTION("Deep List All") {
+  //   std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{
-        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 9}, {"b", 2}}}}}}});
-    sequence.push_back(input_t{
-        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
-    sequence.push_back(input_t{
-        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 0}}}}}}});
+  //   sequence.push_back(input_t{
+  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 9}, {"b", 2}}}}}}});
+  //   sequence.push_back(input_t{
+  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
+  //   sequence.push_back(input_t{
+  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 0}}}}}}});
 
-    auto manager = std::make_shared<reelay::binding_manager>();
-    reelay::kwargs extra_args = {{"manager", manager}};
+  //   auto manager = std::make_shared<reelay::binding_manager>();
+  //   reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
-        "obj1::obj2::all{b > 1}", extra_args);
+  //   auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+  //       "obj1::obj2::all{b > 1}", extra_args);
 
-    auto result = std::vector<reelay::data_set_t>();
+  //   auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
-      net1->update(row);
-      result.push_back(net1->output());
-    }
+  //   for (const auto &row : sequence) {
+  //     net1->update(row);
+  //     result.push_back(net1->output());
+  //   }
 
-    auto t = manager->one();
-    auto f = manager->zero();
+  //   auto t = manager->one();
+  //   auto f = manager->zero();
 
-    auto expected = std::vector<reelay::data_set_t>({t, t, f});
+  //   auto expected = std::vector<reelay::data_set_t>({t, t, f});
 
-    CHECK(result == expected);
-  }
+  //   CHECK(result == expected);
+  // }
 }
 
 TEST_CASE("Boolean Operations") {

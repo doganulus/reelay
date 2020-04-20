@@ -110,10 +110,10 @@ struct factory {
       result = std::make_shared<atomic_map<input_t>>(kw);
     } else if (name == "atomic_nested") {
       result = std::make_shared<atomic_nested<input_t>>(kw);
-    } else if (name == "atomic_nested_all") {
-      result = std::make_shared<atomic_nested_all<input_t>>(kw);
-    } else if (name == "atomic_nested_any") {
-      result = std::make_shared<atomic_nested_any<input_t>>(kw);
+    // } else if (name == "atomic_nested_all") {
+    //   result = std::make_shared<atomic_nested_all<input_t>>(kw);
+    // } else if (name == "atomic_nested_any") {
+    //   result = std::make_shared<atomic_nested_any<input_t>>(kw);
     } else if (name == "mapping_prop") {
       result = std::make_shared<atomic_prop<input_t, std::string>>(kw);
     } else if (name == "mapping_false") {

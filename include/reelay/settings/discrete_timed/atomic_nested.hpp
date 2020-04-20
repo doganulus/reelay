@@ -49,7 +49,7 @@ struct atomic_nested : public discrete_timed_state<X, bool, T> {
       if (not datafield<input_t>::contains(deep_args, key)) {
         return; // Do nothing if the key does not exist 
       }
-      deep_args = deep_args.at(key);
+      deep_args = datafield<input_t>::at(deep_args, key);
     }
     for (const auto &state : this->states) {
       state->update(deep_args, now);

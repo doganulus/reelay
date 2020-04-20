@@ -421,57 +421,57 @@ TEST_CASE("Nested Inputs") {
     CHECK(result == expected);
   }
 
-  SECTION("Deep List Any") {
-    std::vector<input_t> sequence = std::vector<input_t>();
+  // SECTION("Deep List Any") {
+  //   std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{
-        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 9}, {"b", 2}}}}}}});
-    sequence.push_back(input_t{
-        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
-    sequence.push_back(input_t{
-        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
+  //   sequence.push_back(input_t{
+  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 9}, {"b", 2}}}}}}});
+  //   sequence.push_back(input_t{
+  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
+  //   sequence.push_back(input_t{
+  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
 
-    auto net1 =
-        reelay::monitor<input_t>::from_temporal_logic(
-            "obj1::obj2::any{a < 6}");
+  //   auto net1 =
+  //       reelay::monitor<input_t>::from_temporal_logic(
+  //           "obj1::obj2::any{a < 6}");
 
-    auto result = std::vector<bool>();
+  //   auto result = std::vector<bool>();
 
-    for (const auto &row : sequence) {
-      net1->update(row);
-      result.push_back(net1->output());
-    }
+  //   for (const auto &row : sequence) {
+  //     net1->update(row);
+  //     result.push_back(net1->output());
+  //   }
 
-    auto expected = std::vector<bool>({0, 1, 1});
+  //   auto expected = std::vector<bool>({0, 1, 1});
 
-    CHECK(result == expected);
-  }
+  //   CHECK(result == expected);
+  // }
 
-  SECTION("Deep List All") {
-    std::vector<input_t> sequence = std::vector<input_t>();
+  // SECTION("Deep List All") {
+  //   std::vector<input_t> sequence = std::vector<input_t>();
 
-    sequence.push_back(input_t{
-        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 9}, {"b", 2}}}}}}});
-    sequence.push_back(input_t{
-        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
-    sequence.push_back(input_t{
-        {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 0}}}}}}});
+  //   sequence.push_back(input_t{
+  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 9}, {"b", 2}}}}}}});
+  //   sequence.push_back(input_t{
+  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
+  //   sequence.push_back(input_t{
+  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 0}}}}}}});
 
-    auto net1 =
-        reelay::monitor<input_t>::from_temporal_logic(
-            "obj1::obj2::all{b > 1}");
+  //   auto net1 =
+  //       reelay::monitor<input_t>::from_temporal_logic(
+  //           "obj1::obj2::all{b > 1}");
 
-    auto result = std::vector<bool>();
+  //   auto result = std::vector<bool>();
 
-    for (const auto &row : sequence) {
-      net1->update(row);
-      result.push_back(net1->output());
-    }
+  //   for (const auto &row : sequence) {
+  //     net1->update(row);
+  //     result.push_back(net1->output());
+  //   }
 
-    auto expected = std::vector<bool>({1, 1, 0});
+  //   auto expected = std::vector<bool>({1, 1, 0});
 
-    CHECK(result == expected);
-  }
+  //   CHECK(result == expected);
+  // }
 }
 
 TEST_CASE("Boolean Operations") {

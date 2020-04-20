@@ -25,7 +25,10 @@ struct atomic_map : public discrete_timed_state<X, data_set_t, T> {
   using output_t = data_set_t;
 
   using node_t = discrete_timed_node<output_t, time_t>;
+  using state_t = discrete_timed_state<input_t, output_t, time_t>;
+
   using node_ptr_t = std::shared_ptr<node_t>;
+  using state_ptr_t = std::shared_ptr<state_t>;
 
   using function_t = std::function<data_set_t(const input_t &)>;
 

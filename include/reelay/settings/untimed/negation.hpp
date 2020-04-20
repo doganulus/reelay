@@ -21,8 +21,8 @@ struct negation : public untimed_node<bool> {
   using input_t = X;
   using output_t = bool;
 
-  using Node = untimed_node<output_t>;
-  using node_ptr_t = std::shared_ptr<Node>;
+  using node_t = untimed_node<output_t>;
+  using node_ptr_t = std::shared_ptr<node_t>;
 
   node_ptr_t arg1;
 

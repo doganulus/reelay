@@ -47,7 +47,7 @@ struct atomic_nested_all : public untimed_state<X, V> {
       if (not datafield<input_t>::contains(deep_args, key)) {
         return; // Do nothing if the key does not exist
       }
-      deep_args = deep_args.at(key);
+      deep_args = datafield<input_t>::at(deep_args, key);
     }
 
     value = reelay::infinity<output_t>::value();

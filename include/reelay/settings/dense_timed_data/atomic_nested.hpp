@@ -61,7 +61,7 @@ struct atomic_nested : public dense_timed_state<X, data_interval_map<T>, T> {
         updatable = false;
         break; // Do nothing if the key does not exist
       }
-      deep_args = deep_args.at(key);
+      deep_args = datafield<input_t>::at(deep_args, key);
     }
 
     if (updatable) {
