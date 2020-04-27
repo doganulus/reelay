@@ -9,7 +9,7 @@
  #pragma once
 
 #include "reelay/intervals.hpp"
-#include "reelay/pydict.hpp"
+#include "reelay/pybind11.hpp"
 
 namespace reelay {
 
