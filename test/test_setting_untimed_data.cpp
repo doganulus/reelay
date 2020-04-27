@@ -11,7 +11,7 @@
 #include "catch.hpp"
 
 #include "reelay/common.hpp"
-#include "reelay/monitors.hpp"
+#include "reelay/networks.hpp"
 #include "reelay/json.hpp"
 
 using input_t = reelay::json;
@@ -34,7 +34,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{$0: access, $1: bob, $2: white_rabbit}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -64,7 +64,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{$0: access, $1: alice, $2: *}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -94,7 +94,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{$0: *, $1: alice, $2: *}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -124,7 +124,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{$0: *event, $1: alice, $2: *}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -156,7 +156,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{$0: access, $1: *user, $2: *file}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -196,7 +196,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{x}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -225,7 +225,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{x: true}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -254,7 +254,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{x: false}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -283,7 +283,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{x: b}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -312,7 +312,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{x: 2}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -341,7 +341,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{x > 2}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -370,7 +370,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{x >= 2}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -399,7 +399,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{x < 2}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -428,7 +428,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{x <= 2}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -457,7 +457,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{x == 2}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -486,7 +486,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{x != 2}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -514,7 +514,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{x: *}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -547,7 +547,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{event: access, user: alice, file: wonderland}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -578,7 +578,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{event: access, user: *name, file: wonderland}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -613,7 +613,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{event: access, user: *name, file:*}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -649,7 +649,7 @@ TEST_CASE("Nested Inputs") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "obj::{flag}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -681,7 +681,7 @@ TEST_CASE("Nested Inputs") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "obj1::obj2::{flag2}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -712,7 +712,7 @@ TEST_CASE("Nested Inputs") {
   //   auto manager = std::make_shared<reelay::binding_manager>();
   //   reelay::kwargs extra_args = {{"manager", manager}};
 
-  //   auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+  //   auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
   //       "obj1::obj2::any{a < 6}", extra_args);
 
   //   auto result = std::vector<reelay::data_set_t>();
@@ -743,7 +743,7 @@ TEST_CASE("Nested Inputs") {
   //   auto manager = std::make_shared<reelay::binding_manager>();
   //   reelay::kwargs extra_args = {{"manager", manager}};
 
-  //   auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+  //   auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
   //       "obj1::obj2::all{b > 1}", extra_args);
 
   //   auto result = std::vector<reelay::data_set_t>();
@@ -777,7 +777,7 @@ TEST_CASE("Boolean Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "!{$0: access, $1: alice}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -808,7 +808,7 @@ TEST_CASE("Boolean Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{$0: *event, $1: alice, $2: *file} and {$0: access, $1: *user, "
         "$2: wonderland}",
         extra_args);
@@ -846,7 +846,7 @@ TEST_CASE("Boolean Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{$0: access, $1 :alice, $2: *file} or {$0: access, $1: *user, "
         "$2: wonderland}",
         extra_args);
@@ -887,7 +887,7 @@ TEST_CASE("Quantification") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "exists[event]. {$0: *event, $1: alice, $2: *file}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -923,7 +923,7 @@ TEST_CASE("Temporal Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "pre({$0: open, $1: *})", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -953,7 +953,7 @@ TEST_CASE("Temporal Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "once{$0: open, $1: c}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -983,7 +983,7 @@ TEST_CASE("Temporal Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "once{$0: open, $1: *file}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -1021,7 +1021,7 @@ TEST_CASE("Temporal Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "historically{$0: is_open, $1: a}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -1052,7 +1052,7 @@ TEST_CASE("Temporal Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "{$0: is_open, $1: a} since {$0: open, $1: a}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -1088,7 +1088,7 @@ TEST_CASE("Some complex formulas") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "forall[user,file]. {$0: access, $1: *user, $2: *file} implies "
         "(!{$0: logout, $1: *user} since {$0: login, $1: *user} and !{$0: "
         "close, $1: *file} since {$0: open, $1: *file})",
@@ -1129,7 +1129,7 @@ TEST_CASE("Some complex formulas") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "forall[file]. {$0: close, $1: *file} implies (exists[mode]. "
         "pre(!{$0: close, $1: *file} since {$0: open, $1: *file, $2: *mode}))",
         extra_args);
@@ -1169,7 +1169,7 @@ TEST_CASE("Some complex formulas") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::unordered_data::monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::unordered_data::network<input_t>::from_temporal_logic(
         "forall[x,y].({$0: exit, $1: *y} and once({$0: enter, $1: *y} and "
         "pre(once{$0: enter, $1: *x})) implies pre(once{$0: exit, $1: *x}))",
         extra_args);

@@ -5,22 +5,18 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include "iostream"
-#include "vector"
-
 #include "catch.hpp"
-
+#include "iostream"
 #include "reelay/common.hpp"
 #include "reelay/json.hpp"
-#include "reelay/monitors.hpp"
+#include "reelay/networks.hpp"
+#include "vector"
 
 using input_t = reelay::json;
 using time_t = int64_t;
 
 TEST_CASE("Atoms") {
-
   SECTION("AtomicProposition") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{{"x", true}});
@@ -31,7 +27,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("{x}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -49,7 +45,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("AtomicTrue") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{{"x", true}});
@@ -60,7 +55,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("{x: true}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -78,7 +73,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("AtomicFalse") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{{"x", true}});
@@ -89,7 +83,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("{x: false}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -107,7 +101,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("AtomicString") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{{"x", "a"}});
@@ -118,7 +111,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("{x: b}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -136,7 +129,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("AtomicNumber") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{{"x", 1}});
@@ -147,7 +139,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("{x: 2}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -165,7 +157,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("GreaterThan") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{{"x", 1}});
@@ -176,7 +167,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("{x > 2}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -194,7 +185,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("GreaterEqual") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{{"x", 1}});
@@ -205,7 +195,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("{x >= 2}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -223,7 +213,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("LessThan") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{{"x", 1}});
@@ -234,7 +223,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("{x < 2}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -252,7 +241,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("LessEqual") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{{"x", 1}});
@@ -263,7 +251,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("{x <= 2}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -281,7 +269,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("Equal") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{{"x", 1}});
@@ -292,7 +279,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("{x == 2}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -310,7 +297,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("NotEqual") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{{"x", 1}});
@@ -321,7 +307,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("{x != 2}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -339,7 +325,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("AtomicAny") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{{"x", "1"}});
@@ -349,7 +334,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("{x: *}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -367,7 +352,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("List Proposition 0") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"access", "alice", "wonderland"});
@@ -379,7 +363,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("{$0: access, $1: bob, $2: white_rabbit}",
                                       extra_args);
 
@@ -398,7 +382,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("List Proposition 1") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"access", "alice", "wonderland"});
@@ -410,7 +393,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("{$0: access, $1: alice}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -428,7 +411,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("List Proposition 3") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"access", "alice", "wonderland"});
@@ -440,7 +422,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("{$0: *, $1: alice, $2: *}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -458,7 +440,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("List Proposition 4") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"access", "alice", "wonderland"});
@@ -470,7 +451,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("{$0: *event, $1: alice,  $2: *}",
                                       extra_args);
 
@@ -491,7 +472,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("List Proposition 5") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"access", "alice", "wonderland"});
@@ -503,7 +483,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("{$0: access, $1: *user, $2: *file}",
                                       extra_args);
 
@@ -533,7 +513,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("Record Proposition 0") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{
@@ -548,8 +527,8 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::
-        monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::
+        network<input_t>::from_temporal_logic(
             "{event: access, user: alice, file: wonderland}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -567,7 +546,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("Record Proposition 1") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{
@@ -580,8 +558,8 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::
-        monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::
+        network<input_t>::from_temporal_logic(
             "{event: access, user: *name, file: wonderland}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -602,7 +580,6 @@ TEST_CASE("Atoms") {
   }
 
   SECTION("Record Proposition 1") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{
@@ -616,7 +593,7 @@ TEST_CASE("Atoms") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("{event: access, user: *name, file:*}",
                                       extra_args);
 
@@ -640,7 +617,6 @@ TEST_CASE("Atoms") {
 }
 
 TEST_CASE("Nested Inputs") {
-
   SECTION("Deep Object") {
     std::vector<input_t> sequence = std::vector<input_t>();
 
@@ -653,7 +629,7 @@ TEST_CASE("Nested Inputs") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("obj::{flag}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -685,7 +661,7 @@ TEST_CASE("Nested Inputs") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("obj1::obj2::{flag2}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -716,7 +692,8 @@ TEST_CASE("Nested Inputs") {
   //   auto manager = std::make_shared<reelay::binding_manager>();
   //   reelay::kwargs extra_args = {{"manager", manager}};
 
-  //   auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+  //   auto net1 =
+  //   reelay::detail::discrete_timed<time_t>::unordered_data::network<
   //       input_t>::from_temporal_logic("obj1::obj2::any{a < 6}", extra_args);
 
   //   auto result = std::vector<reelay::data_set_t>();
@@ -747,7 +724,8 @@ TEST_CASE("Nested Inputs") {
   //   auto manager = std::make_shared<reelay::binding_manager>();
   //   reelay::kwargs extra_args = {{"manager", manager}};
 
-  //   auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+  //   auto net1 =
+  //   reelay::detail::discrete_timed<time_t>::unordered_data::network<
   //       input_t>::from_temporal_logic("obj1::obj2::all{b > 1}", extra_args);
 
   //   auto result = std::vector<reelay::data_set_t>();
@@ -767,9 +745,7 @@ TEST_CASE("Nested Inputs") {
 }
 
 TEST_CASE("Boolean Operations") {
-
   SECTION("Negation") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"access", "alice", "wonderland"});
@@ -781,7 +757,7 @@ TEST_CASE("Boolean Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("!{$0: access, $1: alice, $2: *}",
                                       extra_args);
 
@@ -801,7 +777,6 @@ TEST_CASE("Boolean Operations") {
   }
 
   SECTION("Conjunction") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"access", "alice", "wonderland"});
@@ -813,10 +788,11 @@ TEST_CASE("Boolean Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
-        input_t>::from_temporal_logic("{$0: *event, $1: alice, $2: *file} and "
-                                      "{$0: access, $1: *user, $2: wonderland}",
-                                      extra_args);
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::
+        network<input_t>::from_temporal_logic(
+            "{$0: *event, $1: alice, $2: *file} and "
+            "{$0: access, $1: *user, $2: wonderland}",
+            extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
 
@@ -839,7 +815,6 @@ TEST_CASE("Boolean Operations") {
   }
 
   SECTION("Disjunction") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"access", "alice", "wonderland"});
@@ -851,10 +826,11 @@ TEST_CASE("Boolean Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
-        input_t>::from_temporal_logic("{$0: *event, $1: alice, $2: *file} or "
-                                      "{$0: access, $1: *user, $2: wonderland}",
-                                      extra_args);
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::
+        network<input_t>::from_temporal_logic(
+            "{$0: *event, $1: alice, $2: *file} or "
+            "{$0: access, $1: *user, $2: wonderland}",
+            extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
 
@@ -879,7 +855,6 @@ TEST_CASE("Boolean Operations") {
   }
 
   SECTION("Implication") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"access", "alice", "wonderland"});
@@ -891,11 +866,11 @@ TEST_CASE("Boolean Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 =
-        reelay::discrete_timed<time_t>::unordered_data::monitor<input_t>::
-            from_temporal_logic("!{$0: *event, $1: alice, $2: *file} implies "
-                                "{$0: access, $1: *user, $2: wonderland}",
-                                extra_args);
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::
+        network<input_t>::from_temporal_logic(
+            "!{$0: *event, $1: alice, $2: *file} implies "
+            "{$0: access, $1: *user, $2: wonderland}",
+            extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
 
@@ -921,9 +896,7 @@ TEST_CASE("Boolean Operations") {
 }
 
 TEST_CASE("Untimed Temporal Operations") {
-
   SECTION("Previous") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"open", "1"});
@@ -934,7 +907,7 @@ TEST_CASE("Untimed Temporal Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("pre{$0: open,  $1: *}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -953,7 +926,6 @@ TEST_CASE("Untimed Temporal Operations") {
   }
 
   SECTION("Once") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"open", "a"});
@@ -964,7 +936,7 @@ TEST_CASE("Untimed Temporal Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("once{$0: open, $1: c}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -983,7 +955,6 @@ TEST_CASE("Untimed Temporal Operations") {
   }
 
   SECTION("Historically") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"is_open", "a"});
@@ -994,7 +965,7 @@ TEST_CASE("Untimed Temporal Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("historically{$0: is_open, $1: a}",
                                       extra_args);
 
@@ -1014,7 +985,6 @@ TEST_CASE("Untimed Temporal Operations") {
   }
 
   SECTION("Since") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"open", "a"});
@@ -1026,8 +996,8 @@ TEST_CASE("Untimed Temporal Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::
-        monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::
+        network<input_t>::from_temporal_logic(
             "{$0: is_open, $1: a} since {$0: open, $1: a}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -1046,7 +1016,6 @@ TEST_CASE("Untimed Temporal Operations") {
   }
 
   SECTION("Existential Quantification") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"access", "alice", "wonderland"});
@@ -1058,8 +1027,8 @@ TEST_CASE("Untimed Temporal Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::
-        monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::
+        network<input_t>::from_temporal_logic(
             "exists[event]. {$0: *event, $1: alice, $2: *file}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -1081,7 +1050,6 @@ TEST_CASE("Untimed Temporal Operations") {
   }
 
   SECTION("Universal Quantification") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"access", "alice", "wonderland"});
@@ -1093,8 +1061,8 @@ TEST_CASE("Untimed Temporal Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::
-        monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::
+        network<input_t>::from_temporal_logic(
             "not(forall[event].(!{$0: *event, $1: alice, $2: *file}))",
             extra_args);
 
@@ -1118,9 +1086,7 @@ TEST_CASE("Untimed Temporal Operations") {
 }
 
 TEST_CASE("Timed Temporal Operations") {
-
   SECTION("Timed Once") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"open", "a"});
@@ -1134,9 +1100,8 @@ TEST_CASE("Timed Temporal Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
-        input_t>::from_temporal_logic("once[2:4]{$0: open, $1: c}",
-                                      extra_args);
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
+        input_t>::from_temporal_logic("once[2:4]{$0: open, $1: c}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
 
@@ -1154,7 +1119,6 @@ TEST_CASE("Timed Temporal Operations") {
   }
 
   SECTION("Timed Once") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"open", "a"});
@@ -1168,7 +1132,7 @@ TEST_CASE("Timed Temporal Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("once[:4]{$0: open, $1: c}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -1187,7 +1151,6 @@ TEST_CASE("Timed Temporal Operations") {
   }
 
   SECTION("Timed Once") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"open", "a"});
@@ -1201,7 +1164,7 @@ TEST_CASE("Timed Temporal Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("once[2:]{$0: open, $1: c}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -1220,7 +1183,6 @@ TEST_CASE("Timed Temporal Operations") {
   }
 
   SECTION("Timed Historically") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"is_open", "b"});
@@ -1234,7 +1196,7 @@ TEST_CASE("Timed Temporal Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("historically[:4]{$0:is_open, $1:a}",
                                       extra_args);
 
@@ -1254,7 +1216,6 @@ TEST_CASE("Timed Temporal Operations") {
   }
 
   SECTION("Timed Historically") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"is_open", "b"});
@@ -1270,7 +1231,7 @@ TEST_CASE("Timed Temporal Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("historically[2:4]{$0:is_open, $1:a}",
                                       extra_args);
 
@@ -1291,7 +1252,6 @@ TEST_CASE("Timed Temporal Operations") {
   }
 
   SECTION("Timed Historically") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"is_open", "a"});
@@ -1306,7 +1266,7 @@ TEST_CASE("Timed Temporal Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::monitor<
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::network<
         input_t>::from_temporal_logic("historically[2:]{$0:is_open, $1:a}",
                                       extra_args);
 
@@ -1326,7 +1286,6 @@ TEST_CASE("Timed Temporal Operations") {
   }
 
   SECTION("Timed Since") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"open", "a"});
@@ -1341,8 +1300,8 @@ TEST_CASE("Timed Temporal Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::
-        monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::
+        network<input_t>::from_temporal_logic(
             "{$0:is_open, $1:a} since[2:4] {$0: open, $1: a}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -1361,7 +1320,6 @@ TEST_CASE("Timed Temporal Operations") {
   }
 
   SECTION("Timed Since") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"open", "a"});
@@ -1376,8 +1334,8 @@ TEST_CASE("Timed Temporal Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::
-        monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::
+        network<input_t>::from_temporal_logic(
             "{$0:is_open, $1:a} since[:4] {$0: open, $1: a}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();
@@ -1396,7 +1354,6 @@ TEST_CASE("Timed Temporal Operations") {
   }
 
   SECTION("Timed Since") {
-
     std::vector<input_t> sequence = std::vector<input_t>();
 
     sequence.push_back(input_t{"open", "a"});
@@ -1411,8 +1368,8 @@ TEST_CASE("Timed Temporal Operations") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto net1 = reelay::discrete_timed<time_t>::unordered_data::
-        monitor<input_t>::from_temporal_logic(
+    auto net1 = reelay::detail::discrete_timed<time_t>::unordered_data::
+        network<input_t>::from_temporal_logic(
             "{$0:is_open, $1:a} since[2:] {$0: open, $1: a}", extra_args);
 
     auto result = std::vector<reelay::data_set_t>();

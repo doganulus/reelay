@@ -12,7 +12,7 @@
 
 #include "reelay/common.hpp"
 #include "reelay/intervals.hpp"
-#include "reelay/monitors.hpp"
+#include "reelay/networks.hpp"
 #include "reelay/json.hpp"
 
 using dense_time_t = double;
@@ -34,7 +34,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 5.2}, {"x1", true}});
     sequence.push_back(input_t{{"time", 5.5}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("{x1}");
 
     auto result1 = interval_set();
@@ -63,7 +63,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 5.2}, {"x1", true}});
     sequence.push_back(input_t{{"time", 5.5}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("{x1:*}");
 
     auto result1 = interval_set();
@@ -93,7 +93,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 5.2}, {"x1", true}});
     sequence.push_back(input_t{{"time", 5.5}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("{x1: true}");
 
     auto result1 = interval_set();
@@ -122,7 +122,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 5.2}, {"x1", true}});
     sequence.push_back(input_t{{"time", 5.5}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("{x1: false}");
 
     auto result1 = interval_set();
@@ -150,7 +150,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 5.2}, {"x1", "veritas"}});
     sequence.push_back(input_t{{"time", 5.5}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("{x1: veritas}");
 
     auto result1 = interval_set();
@@ -179,7 +179,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 5.2}, {"x1", "lorem ipsum"}});
     sequence.push_back(input_t{{"time", 5.5}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("{x1: 'lorem ipsum'}");
 
     auto result1 = interval_set();
@@ -208,7 +208,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 5.2}, {"x1", 12.5}});
     sequence.push_back(input_t{{"time", 5.5}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("{x1: 12.5}");
 
     auto result1 = interval_set();
@@ -234,7 +234,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 3.5}, {"x1", 4}});
     sequence.push_back(input_t{{"time", 4}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("{x1 < 4}");
 
     auto result1 = interval_set();
@@ -260,7 +260,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 3.5}, {"x1", 4}});
     sequence.push_back(input_t{{"time", 4}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("{x1 <= 4}");
 
     auto result1 = interval_set();
@@ -287,7 +287,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 3.5}, {"x1", 4}});
     sequence.push_back(input_t{{"time", 4}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("{x1 > 4}");
 
     auto result1 = interval_set();
@@ -313,7 +313,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 3.5}, {"x1", 4}});
     sequence.push_back(input_t{{"time", 4}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("{x1 >= 4}");
 
     auto result1 = interval_set();
@@ -339,7 +339,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 3.5}, {"x1", 4}});
     sequence.push_back(input_t{{"time", 4}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("{x1 > 3.5, x1 < 4.5}");
 
     auto result1 = interval_set();
@@ -374,7 +374,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 14}, {"x1", 0}});
     sequence.push_back(input_t{{"time", 15}, {"x1", -2}});
 
-    auto net1 = reelay::dense_timed<dense_time_t, 1>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t, 1>::network<
         input_t>::from_temporal_logic("{x1 < 0}");
 
     auto result1 = interval_set();
@@ -411,7 +411,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 14}, {"x1", 0}});
     sequence.push_back(input_t{{"time", 15}, {"x1", -2}});
 
-    auto net1 = reelay::dense_timed<dense_time_t, 1>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t, 1>::network<
         input_t>::from_temporal_logic("{x1 <= 0}");
 
     auto result1 = interval_set();
@@ -448,7 +448,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 14}, {"x1", 0}});
     sequence.push_back(input_t{{"time", 15}, {"x1", -2}});
 
-    auto net1 = reelay::dense_timed<dense_time_t, 1>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t, 1>::network<
         input_t>::from_temporal_logic("{x1 > 0}");
 
     auto result1 = interval_set();
@@ -484,7 +484,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 14}, {"x1", 0}});
     sequence.push_back(input_t{{"time", 15}, {"x1", -2}});
 
-    auto net1 = reelay::dense_timed<dense_time_t, 1>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t, 1>::network<
         input_t>::from_temporal_logic("{x1 >= 0}");
 
     auto result1 = interval_set();
@@ -513,7 +513,7 @@ TEST_CASE("Nested Inputs") {
     sequence.push_back(input_t{{"time", 30}, {"obj", {{"flag", true}}}});
     sequence.push_back(input_t{{"time", 40}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("obj::{flag}");
 
     auto result = interval_set();
@@ -543,7 +543,7 @@ TEST_CASE("Nested Inputs") {
         input_t{{"time", 30}, {"obj1", {{"obj2", {{"flag2", false}}}}}});
     sequence.push_back(input_t{{"time", 40}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("obj1::obj2::{flag2}");
 
     auto result = interval_set();
@@ -573,7 +573,7 @@ TEST_CASE("Nested Inputs") {
   //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
   //   sequence.push_back(input_t{{"time", 40}});
 
-  //   auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+  //   auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
   //       input_t>::from_temporal_logic("obj1::obj2::any{a < 6}");
 
   //   auto result = interval_set();
@@ -603,7 +603,7 @@ TEST_CASE("Nested Inputs") {
   //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 0}}}}}}});
   //   sequence.push_back(input_t{{"time", 40}});
 
-  //   auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+  //   auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
   //       input_t>::from_temporal_logic("obj1::obj2::all{b > 1}");
 
   //   auto result = interval_set();
@@ -632,7 +632,7 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_t{{"time", 30}, {"p1", true}, {"p2", true}});
     sequence.push_back(input_t{{"time", 40}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("{p1} or {p2}");
 
     auto result = interval_set();
@@ -658,7 +658,7 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_t{{"time", 30}, {"p1", true}, {"p2", true}});
     sequence.push_back(input_t{{"time", 40}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("{p1} and {p2}");
 
     auto result = interval_set();
@@ -684,7 +684,7 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_t{{"time", 30}, {"p1", true}, {"p2", true}});
     sequence.push_back(input_t{{"time", 40}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("{p1} -> {p2}");
 
     auto result = interval_set();
@@ -709,7 +709,7 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_t{{"time", 10}, {"p1", true}});
     sequence.push_back(input_t{{"time", 20}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("not{p1}");
 
     auto result = interval_set();
@@ -741,7 +741,7 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_t{{"time", 90}, {"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"time", 120}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("historically{p1}");
 
     auto result1 = interval_set();
@@ -771,7 +771,7 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_t{{"time", 115}, {"p1", false}, {"p2", false}});
     sequence.push_back(input_t{{"time", 125}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("once{p1}");
 
     auto result1 = interval_set();
@@ -808,7 +808,7 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_t{{"time", 315}, {"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"time", 444}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("{p1} since {p2}");
 
     auto result1 = interval_set();
@@ -849,9 +849,9 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", 444}});
 
     // auto net1 =
-    // reelay::dense_timed<dense_time_t>::monitor<input_t>::from_temporal_logic("not
+    // reelay::detail::dense_timed<dense_time_t>::network<input_t>::from_temporal_logic("not
     // (p1 since [12:24] not p2)");
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("historically[12:24]{p2}");
 
     auto result1 = interval_set();
@@ -891,9 +891,9 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", 444}});
 
     // auto net1 =
-    // reelay::dense_timed<dense_time_t>::monitor<input_t>::from_temporal_logic("not
+    // reelay::detail::dense_timed<dense_time_t>::network<input_t>::from_temporal_logic("not
     // (p1 since [12:24] not p2)");
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("historically[0:24]{p2}");
 
     auto result1 = interval_set();
@@ -932,9 +932,9 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", 444}});
 
     // auto net1 =
-    // reelay::dense_timed<dense_time_t>::monitor<input_t>::from_temporal_logic("not
+    // reelay::detail::dense_timed<dense_time_t>::network<input_t>::from_temporal_logic("not
     // (p1 since [12:24] not p2)");
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("historically[12:]{p2}");
 
     auto result1 = interval_set();
@@ -971,7 +971,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", 315}, {"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"time", 444}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("once[12:24]{p2}");
 
     auto result1 = interval_set();
@@ -1011,9 +1011,9 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", 315}, {"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"time", 444}});
     // auto net1 =
-    // reelay::dense_timed<dense_time_t>::monitor<input_t>::from_temporal_logic("p1
+    // reelay::detail::dense_timed<dense_time_t>::network<input_t>::from_temporal_logic("p1
     // since [12:24] p2");
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("once[:24]{p2}");
 
     auto result1 = interval_set();
@@ -1054,9 +1054,9 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", 444}});
 
     // auto net1 =
-    // reelay::dense_timed<dense_time_t>::monitor<input_t>::from_temporal_logic("p1
+    // reelay::detail::dense_timed<dense_time_t>::network<input_t>::from_temporal_logic("p1
     // since [12:24] p2");
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("once[12:]{p2}");
 
     auto result1 = interval_set();
@@ -1093,7 +1093,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", 315}, {"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"time", 444}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("{p1} since[18:24]{p2}");
 
     auto result1 = interval_set();
@@ -1129,7 +1129,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", 315}, {"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"time", 444}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("{p1} since[:24]{p2}");
 
     auto result1 = interval_set();
@@ -1165,7 +1165,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", 315}, {"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"time", 444}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("{p1} since[18:]{p2}");
 
     auto result1 = interval_set();
@@ -1201,7 +1201,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", 315}, {"p1", true}});
     sequence.push_back(input_t{{"time", 444}});
 
-    auto net1 = reelay::dense_timed<dense_time_t>::monitor<
+    auto net1 = reelay::detail::dense_timed<dense_time_t>::network<
         input_t>::from_temporal_logic("!{p1} since[10:20] {p1}");
 
     auto result1 = interval_set();
