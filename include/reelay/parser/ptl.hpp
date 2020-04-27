@@ -14,7 +14,6 @@
 #define PEGLIB_USE_STD_ANY 0
 #include "reelay/third_party/cpp-peglib/peglib.h"
 
-#include "reelay/networks.hpp"
 #include "reelay/settings.hpp"
 
 #include "reelay/parser/ptl_grammar.hpp"
@@ -273,7 +272,7 @@ template <class Setting> struct ptl_parser : ptl_grammar{
     };
 
     parser["ArrayKey"] = [&](const peg::SemanticValues &sv) {
-      auto index = std::stoi(any_cast<std::string>(sv.token()));
+      auto index = std::atoi(sv.token().c_str());
       return index;
     };
 

@@ -33,7 +33,10 @@ develop:
 cudd:
 	mkdir -p build
 	cd build && rm -rf cudd && git clone https://github.com/doganulus/cudd.git
-	cd build/cudd && aclocal && autoconf &&./configure CC=gcc CXX=g++ --enable-silent-rules --enable-shared --enable-obj
+	cd build/cudd && ./configure
+	cd build/cudd && aclocal
+	cd build/cudd && autoconf
+	cd build/cudd && ./configure --enable-silent-rules --enable-shared --enable-obj
 	cd build/cudd && make
 
 cudd-install:
@@ -92,7 +95,7 @@ test_csvparser:
 	multitime -n 10 bin/csvparser/csvparser_fast build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv
 	multitime -n 10 bin/csvparser/csvparser_modern build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv
 
-test: test_main test_untimed test_discrete_timed test_dense_timed test_untimed_robustness test_discrete_timed_robustness test_dense_timed_robustness_0 test_untimed_data test_discrete_timed_data test_dense_timed_data coverage
+test: test_main test_untimed test_discrete_timed test_dense_timed test_untimed_robustness test_discrete_timed_robustness test_dense_timed_robustness_0 test_untimed_data test_discrete_timed_data test_dense_timed_data test_json_monitors coverage
 
 test_main:
 	mkdir -p test/build
@@ -138,13 +141,17 @@ test_untimed_regular:
 	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_setting_untimed_regular.cpp -o test_setting_untimed_regular -I$(ROOT_DIR)/include
 	cd test/build && ./test_setting_untimed_regular -r compact
 
+test_nested_input:
+	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_nested_input.cpp -o test_nested_input $(INCLUDE_FLAGS) -lcudd
+	cd test/build && ./test_nested_input -r compact
+
 test_random:
 	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_random.cpp -o test_random $(INCLUDE_FLAGS) -L/home/ulus/anaconda3/lib -lcudd -lpython3.6m
 	cd test/build && ./test_random -r compact
 
-test_recipes:
-	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_recipes.cpp -o test_recipes $(INCLUDE_FLAGS) -L/home/ulus/anaconda3/lib -lcudd -lpython3.6m
-	cd test/build && ./test_recipes -r compact
+test_json_monitors:
+	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_json_monitors.cpp -o test_json_monitors $(INCLUDE_FLAGS) -L/home/ulus/anaconda3/lib -lcudd 
+	cd test/build && ./test_json_monitors -r compact
 
 # test_mtl_performance_discrete: test/timescales/discrete/multitime/*.txt
 # 	for batchfile in $^ ; do \

@@ -9,183 +9,53 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-
 #pragma once
 
-#include "functional"
-#include "map"
-#include "memory"
-#include "string"
+#include <functional>
+#include <map>
+#include <memory>
+#include <string>
 
 #include "reelay/common.hpp"
+#include "reelay/json.hpp"
+#include "reelay/json_monitors/base_json_monitor.hpp"
+#include "reelay/json_monitors/discrete_timed_data_json_monitor.hpp"
+#include "reelay/json_monitors/discrete_timed_json_monitor.hpp"
+#include "reelay/json_monitors/untimed_data_json_monitor.hpp"
+#include "reelay/json_monitors/untimed_json_monitor.hpp"
 #include "reelay/parser/ptl.hpp"
-// #include "reelay/parser/regex.hpp"
-#include "reelay/networks.hpp"
-#include "reelay/settings.hpp"
-
-#include "reelay/intervals.hpp"
+#include "reelay/parser/ptl_inspector.hpp"
 
 namespace reelay {
 
-template <typename input_t>
-struct monitor {
-  using factory = untimed_setting::factory<input_t>;
-
-  using network_t = typename factory::network_t;
-  using network_ptr_t = typename factory::network_ptr_t;
-
-  static network_ptr_t
-  from_temporal_logic(std::string pattern,
-                      reelay::kwargs kw = reelay::kwargs()) {
-    auto parser = ptl_parser<factory>(kw);
-    return parser.parse(pattern);
-  }
-  // static network_ptr_t
-  // from_regular_expressions(std::string pattern,
-  //                          reelay::kwargs kw = reelay::kwargs()) {
-  //   auto parser = regex_parser<factory>(kw);
-  //   return parser.parse(pattern);
-  // }
-};
-
-struct unordered_data {
-  template <typename input_t> struct monitor {
-    using factory = untimed_data_setting::factory<input_t>;
-
-    using network_t = typename factory::network_t;
-    using network_ptr_t = typename factory::network_ptr_t;
-
-    static network_ptr_t
-    from_temporal_logic(std::string pattern,
-                        reelay::kwargs kw = reelay::kwargs()) {
-      auto parser = ptl_parser<factory>(kw);
-      return parser.parse(pattern);
-    }
-  };
-};
-
-template <typename output_t> struct robustness {
-  template <typename input_t> struct monitor {
-    using factory = untimed_robustness_setting::factory<input_t, output_t>;
-
-    using network_t = typename factory::network_t;
-    using network_ptr_t = typename factory::network_ptr_t;
-
-    static network_ptr_t
-    from_temporal_logic(std::string pattern,
-                        reelay::kwargs kw = reelay::kwargs()) {
-      auto parser = ptl_parser<factory>(kw);
-      return parser.parse(pattern);
-    }
-  };
-};
-
-template <typename time_t>
+template <typename T>
 struct discrete_timed {
-  template <typename input_t>
-  struct monitor {
-    using factory = discrete_timed_setting::factory<input_t, time_t>;
+  using time_t = T;
+  using input_t = json;
+  using output_t = json;
 
-    using network_t = typename factory::network_t;
-    using network_ptr_t = typename factory::network_ptr_t;
+  using monitor_t = base_json_monitor<time_t>;
+  using monitor_ptr_t = std::shared_ptr<monitor_t>;
 
-    static network_ptr_t
-    from_temporal_logic(std::string pattern,
-                        reelay::kwargs kw = reelay::kwargs()) {
-      auto parser = ptl_parser<factory>(kw);
-      return parser.parse(pattern);
+  static monitor_ptr_t monitor(
+      const std::string &pattern, const reelay::kwargs &kw = reelay::kwargs()) {
+    auto inspector = reelay::ptl_inspector();
+    auto knowledge = inspector.inspect(pattern);
+
+    bool timed = reelay::any_cast<bool>(knowledge["timed"]);
+    bool categorical = reelay::any_cast<bool>(knowledge["has_references"]);
+
+    if (not timed and not categorical) {
+      return std::make_shared<untimed_json_monitor<time_t>>(pattern, kw);
+    } else if (timed and not categorical) {
+      return std::make_shared<discrete_timed_json_monitor<time_t>>(pattern, kw);
+    } else if (not timed and categorical) {
+      return std::make_shared<untimed_data_json_monitor<time_t>>(pattern, kw);
+    } else {
+      return std::make_shared<discrete_timed_data_json_monitor<time_t>>(pattern,
+                                                                        kw);
     }
-    // static network_ptr_t from_regular_expressions();
-  };
-
-  struct unordered_data {
-    template <typename input_t>
-    struct monitor
-    {
-      using factory = discrete_timed_data_setting::factory<input_t, time_t>;
-
-      using network_t = typename factory::network_t;
-      using network_ptr_t = typename factory::network_ptr_t;
-
-      static network_ptr_t
-      from_temporal_logic(std::string pattern,
-                          reelay::kwargs kw = reelay::kwargs())
-      {
-        auto parser = ptl_parser<factory>(kw);
-        return parser.parse(pattern);
-      }
-    };
-  };
-
-  template <typename output_t> struct robustness {
-    template <typename input_t> struct monitor {
-      using factory = 
-        discrete_timed_robustness_setting::factory<input_t, output_t, time_t>;
-
-      using network_t = typename factory::network_t;
-      using network_ptr_t = typename factory::network_ptr_t;
-
-      static network_ptr_t
-      from_temporal_logic(std::string pattern,
-                          reelay::kwargs kw = reelay::kwargs()) {
-        auto parser = ptl_parser<factory>(kw);
-        return parser.parse(pattern);
-      }
-    };
-  };
+  }
 };
 
-template <typename time_t, int option=0>
-struct dense_timed {
-  template <typename input_t>
-  struct monitor {
-    using factory = dense_timed_setting::factory<input_t, time_t, option>;
-
-    using network_t = typename factory::network_t;
-    using network_ptr_t = typename factory::network_ptr_t;
-
-    static network_ptr_t
-    from_temporal_logic(std::string pattern,
-                        reelay::kwargs kw = reelay::kwargs()) {
-      auto parser = ptl_parser<factory>(kw);
-      return parser.parse(pattern);
-    }
-
-    // static type from_regular_expressions();
-  };
-
-  struct unordered_data {
-    template <typename input_t> struct monitor {
-      using factory =
-          dense_timed_data_setting::factory<input_t, time_t, option>;
-
-      using network_t = typename factory::network_t;
-      using network_ptr_t = typename factory::network_ptr_t;
-
-      static network_ptr_t
-      from_temporal_logic(std::string pattern,
-                          reelay::kwargs kw = reelay::kwargs()) {
-        auto parser = ptl_parser<factory>(kw);
-        return parser.parse(pattern);
-      }
-    };
-  };
-
-  template <typename value_t> struct robustness {
-    template <typename input_t> struct monitor {
-      using factory =
-          dense_timed_robustness_0_setting::factory<input_t, value_t, time_t>;
-
-      using network_t = typename factory::network_t;
-      using network_ptr_t = typename factory::network_ptr_t;
-
-      static network_ptr_t
-      from_temporal_logic(std::string pattern,
-                          reelay::kwargs kw = reelay::kwargs()) {
-        auto parser = ptl_parser<factory>(kw);
-        return parser.parse(pattern);
-      }
-    };
-  };
-};
 }  // namespace reelay
