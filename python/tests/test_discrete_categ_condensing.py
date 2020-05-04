@@ -10,7 +10,7 @@ import pytest
 from reelay.monitors import discrete_monitor
 
 
-def test_discrete_categ():
+def test_discrete_categ_condensing():
 
     my_monitor = discrete_monitor(
         pattern=r"""forall[sensor].
@@ -19,7 +19,7 @@ def test_discrete_categ():
             once[:4]{sensor_id: *sensor, action: calibrated}
             """,
         semantics="boolean",
-        condense=False
+        condense=True
     )
 
     input_sequence = [
@@ -41,16 +41,16 @@ def test_discrete_categ():
         result.append(y)
 
     expected = [
-        {'value': True},
-        {'value': True},
-        {'value': True},
-        {'value': True},
-        {'value': True},
-        {'value': True},
-        {'value': False},
-        {'value': True},
-        {'value': True},
-        {'value': False}]
+        {'time': 0, 'value': True},
+        {},    # 1
+        {},    # 2
+        {},    # 3
+        {},    # 4
+        {},    # 5
+        {'time': 6, 'value': False},
+        {'time': 7, 'value': True},
+        {},    # 8
+        {'time': 9, 'value': False}]
 
     approx_expected = [pytest.approx(x, 0.001) for x in expected]
 

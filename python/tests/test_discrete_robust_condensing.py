@@ -5,16 +5,19 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 #
+import pytest
+
 from reelay.monitors import discrete_monitor
 
 
-def test_discrete_prop():
+def test_discrete_robust():
 
     my_monitor = discrete_monitor(
-        pattern=r"{speed > 13.0} since[:3] {lights_on}",
-        semantics="boolean",
-        y_name="verdict",
-        condense=False
+        pattern=r"{speed > 13.0} since[:3] {lights_on: true}",
+        semantics="robustness",
+        t_name="index",
+        y_name="rval",
+        condense=True
     )
 
     input_sequence = [
@@ -34,13 +37,15 @@ def test_discrete_prop():
         result.append(y)
 
     expected = [
-        {'verdict': False},
-        {'verdict': False},
-        {'verdict': True},
-        {'verdict': True},
-        {'verdict': True},
-        {'verdict': True},
-        {'verdict': False},
-        {'verdict': False}]
+        {'index': 0, 'rval': -float('inf')},
+        {},
+        {'index': 2, 'rval': float('inf')},
+        {'index': 3, 'rval': 0.3},
+        {},
+        {},
+        {'index': 6, 'rval': -float('inf')},
+        {}]
 
-    assert result == expected
+    approx_expected = [pytest.approx(x, 0.001) for x in expected]
+
+    assert result == approx_expected

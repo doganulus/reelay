@@ -7,52 +7,47 @@
  */
 #pragma once
 
-#include "string"
-
 #include "reelay/parser/ptl.hpp"
 #include "reelay/pybind11.hpp"
 #include "reelay/settings.hpp"
+#include "string"
 
-#include "reelay/targets/pybind11/discrete_timed_python_formatter.hpp"
+#include "reelay/targets/pybind11/condensing_python_formatter.hpp"
 
 namespace reelay {
 
-struct monitor_discrete_categ {
-
+struct monitor_discrete_robust_condensing {
   using time_t = int64_t;
+  using value_t = double;
   using input_t = pybind11::object;
   using output_t = pybind11::dict;
 
-  using factory = discrete_timed_data_setting::factory<input_t, time_t>;
+  using factory
+      = discrete_timed_robustness_setting::factory<input_t, value_t, time_t>;
 
   using network_t = typename factory::network_t;
   using network_ptr_t = typename factory::network_ptr_t;
-  
-  using formatter_t = discrete_timed_python_formatter<time_t>;
 
-  std::string name;
+  using formatter_t = condensing_python_formatter<time_t, value_t>;
 
-  data_mgr_t manager;
   network_ptr_t network;
   formatter_t formatter;
 
-  explicit monitor_discrete_categ(const std::string &pattern,
-                                  const std::string &t_str = "time",
-                                  const std::string &y_str = "value")
+  explicit monitor_discrete_robust_condensing(const std::string &pattern,
+                                              const std::string &t_str = "time",
+                                              const std::string &y_str
+                                              = "value")
       : formatter(formatter_t(t_str, y_str)) {
-    manager = std::make_shared<reelay::binding_manager>();
-    reelay::kwargs kw = {{"manager", manager}};
-
-    auto parser = ptl_parser<factory>(kw);
+    auto parser = ptl_parser<factory>();
     this->network = parser.parse(pattern);
   }
 
   output_t update(const input_t &args) {
     this->network->update(args);
-    return formatter.format((this->network->output() == manager->one()));
+    return formatter.format(network->output(), network->now());
   }
 
   time_t now() { return network->now(); }
 };
 
-} // namespace reelay
+}  // namespace reelay

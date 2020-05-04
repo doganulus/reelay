@@ -13,7 +13,7 @@
 #include "reelay/pybind11.hpp"
 #include "reelay/settings.hpp"
 
-#include "reelay/targets/pybind11/formatter_dense_timed.hpp"
+#include "reelay/targets/pybind11/dense_timed_python_formatter.hpp"
 
 namespace reelay {
 
@@ -29,7 +29,7 @@ struct monitor_dense_prop_const_int64 {
   using network_t = typename factory::network_t;
   using network_ptr_t = typename factory::network_ptr_t;
 
-  using formatter_t = formatter_dense_timed<time_t>;
+  using formatter_t = dense_timed_python_formatter<time_t>;
 
   network_ptr_t network;
   formatter_t formatter;

@@ -10,12 +10,13 @@ import pytest
 from reelay.monitors import discrete_monitor
 
 
-def test_discrete_prop():
+def test_discrete_robust():
 
     my_monitor = discrete_monitor(
         pattern=r"{speed > 13.0} since[:3] {lights_on: true}",
         semantics="robustness",
-        y_name="rval"
+        y_name="rval",
+        condense=False
     )
 
     input_sequence = [

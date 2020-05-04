@@ -13,11 +13,11 @@
 #include "reelay/pybind11.hpp"
 #include "reelay/settings.hpp"
 
-#include "reelay/targets/pybind11/discrete_timed_python_formatter.hpp"
+#include "reelay/targets/pybind11/condensing_python_formatter.hpp"
 
 namespace reelay {
 
-struct monitor_discrete_categ {
+struct monitor_discrete_categ_condensing {
 
   using time_t = int64_t;
   using input_t = pybind11::object;
@@ -28,7 +28,7 @@ struct monitor_discrete_categ {
   using network_t = typename factory::network_t;
   using network_ptr_t = typename factory::network_ptr_t;
   
-  using formatter_t = discrete_timed_python_formatter<time_t>;
+  using formatter_t = condensing_python_formatter<time_t>;
 
   std::string name;
 
@@ -36,9 +36,9 @@ struct monitor_discrete_categ {
   network_ptr_t network;
   formatter_t formatter;
 
-  explicit monitor_discrete_categ(const std::string &pattern,
-                                  const std::string &t_str = "time",
-                                  const std::string &y_str = "value")
+  explicit monitor_discrete_categ_condensing(const std::string &pattern,
+                                             const std::string &t_str = "time",
+                                             const std::string &y_str = "value")
       : formatter(formatter_t(t_str, y_str)) {
     manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs kw = {{"manager", manager}};
@@ -49,7 +49,8 @@ struct monitor_discrete_categ {
 
   output_t update(const input_t &args) {
     this->network->update(args);
-    return formatter.format((this->network->output() == manager->one()));
+    return formatter.format((this->network->output() == manager->one()),
+                            network->now());
   }
 
   time_t now() { return network->now(); }

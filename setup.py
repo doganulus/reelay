@@ -7,7 +7,7 @@ import setuptools
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 
-__version__ = '2003.0'
+__version__ = '2005.0'
 
 cxxflags = [
     '--std=c++11',          # C++11 required for manylinux2014

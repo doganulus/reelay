@@ -8,37 +8,32 @@
 #pragma once
 
 #include "string"
-
 #include "reelay/parser/ptl.hpp"
 #include "reelay/settings.hpp"
 #include "reelay/pybind11.hpp"
 
-#include "reelay/targets/pybind11/dense_timed_python_formatter.hpp"
+#include "reelay/targets/pybind11/condensing_python_formatter.hpp"
 
 namespace reelay {
 
-struct monitor_dense_prop_linear_float64 {
-
-  using time_t = double;
-  using value_t = bool;
+struct monitor_discrete_prop_condensing {
+  using time_t = int64_t;
   using input_t = pybind11::object;
-  using output_t = pybind11::list;
+  using output_t = pybind11::dict;
 
-  std::string name;
-
-  using factory = dense_timed_setting::factory<input_t, time_t, 1>;
+  using factory = discrete_timed_setting::factory<input_t, time_t>;
 
   using network_t = typename factory::network_t;
   using network_ptr_t = typename factory::network_ptr_t;
 
-  using formatter_t = dense_timed_python_formatter<time_t>;
+  using formatter_t = condensing_python_formatter<time_t>;
 
   network_ptr_t network;
   formatter_t formatter;
 
-  explicit monitor_dense_prop_linear_float64(const std::string &pattern,
-                                             const std::string t_str = "time",
-                                             const std::string y_str = "value")
+  explicit monitor_discrete_prop_condensing(const std::string &pattern,
+                                            const std::string &t_str = "time",
+                                            const std::string &y_str = "value")
       : formatter(formatter_t(t_str, y_str)) {
     auto parser = ptl_parser<factory>();
     this->network = parser.parse(pattern);
@@ -46,11 +41,10 @@ struct monitor_dense_prop_linear_float64 {
 
   output_t update(const input_t &args) {
     this->network->update(args);
-    auto result = network->output();
-    return formatter.format(result, network->previous, network->current);
+    return formatter.format(network->output(), network->now());
   }
 
-  std::pair<time_t, time_t> now() { return network->now(); }
+  time_t now() { return network->now(); }
 };
 
-} // namespace reelay
+}  // namespace reelay

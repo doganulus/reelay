@@ -13,10 +13,9 @@
 
 namespace reelay {
 
-template <typename T>
-struct formatter_dense_timed {
-
-  using time_t = T;
+template <typename TimeT>
+struct dense_timed_python_formatter {
+  using time_t = TimeT;
   using value_t = bool;
   using input_t = pybind11::object;
   using output_t = pybind11::list;
@@ -27,10 +26,10 @@ struct formatter_dense_timed {
   const std::string t_name;
   const std::string y_name;
  
-  value_t lastval = false;
+  bool lastval = false;
 
-  explicit formatter_dense_timed(const std::string t_str = "time",
-                                 const std::string y_str = "value")
+  explicit dense_timed_python_formatter(const std::string& t_str = "time",
+                                        const std::string& y_str = "value")
       : t_name(t_str), y_name(y_str) {}
 
   output_t format(const interval_set& result, time_t previous, time_t now){

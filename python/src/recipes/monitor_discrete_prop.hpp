@@ -12,11 +12,12 @@
 #include "reelay/settings.hpp"
 #include "reelay/pybind11.hpp"
 
+#include "reelay/targets/pybind11/discrete_timed_python_formatter.hpp"
+
 namespace reelay {
 
 struct monitor_discrete_prop {
-
-  using time_t  = int64_t;
+  using time_t = int64_t;
   using input_t = pybind11::object;
   using output_t = pybind11::dict;
 
@@ -25,24 +26,25 @@ struct monitor_discrete_prop {
   using network_t = typename factory::network_t;
   using network_ptr_t = typename factory::network_ptr_t;
 
-  std::string name;
+  using formatter_t = discrete_timed_python_formatter<time_t>;
 
   network_ptr_t network;
+  formatter_t formatter;
 
   explicit monitor_discrete_prop(const std::string &pattern,
-                           const std::string &output_name = "value")
-      : name(output_name) {
-
+                                 const std::string &t_str = "time",
+                                 const std::string &y_str = "value")
+      : formatter(formatter_t(t_str, y_str)) {
     auto parser = ptl_parser<factory>();
     this->network = parser.parse(pattern);
   }
 
   output_t update(const input_t &args) {
     this->network->update(args);
-    return pybind11::dict(pybind11::arg(name.c_str()) = this->network->output());
+    return formatter.format(network->output());
   }
-  
+
   time_t now() { return network->now(); }
 };
 
-} // namespace reelay
+}  // namespace reelay

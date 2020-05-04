@@ -7,4 +7,4 @@
 #
 
 # from reelay.monitors import dense_monitor
-# from reelay.discrete_monitor import discrete_monitor
+# from reelay.monitors import discrete_monitor

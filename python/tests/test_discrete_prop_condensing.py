@@ -13,8 +13,9 @@ def test_discrete_prop():
     my_monitor = discrete_monitor(
         pattern=r"{speed > 13.0} since[:3] {lights_on}",
         semantics="boolean",
+        t_name="time",
         y_name="verdict",
-        condense=False
+        condense=True
     )
 
     input_sequence = [
@@ -34,13 +35,14 @@ def test_discrete_prop():
         result.append(y)
 
     expected = [
-        {'verdict': False},
-        {'verdict': False},
-        {'verdict': True},
-        {'verdict': True},
-        {'verdict': True},
-        {'verdict': True},
-        {'verdict': False},
-        {'verdict': False}]
+        {'time': 0, 'verdict': False},
+        {},
+        {'time': 2, 'verdict': True},
+        {},
+        {},
+        {},
+        {'time': 6, 'verdict': False},
+        {}
+    ]
 
     assert result == expected
