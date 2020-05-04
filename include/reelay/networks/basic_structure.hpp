@@ -13,62 +13,62 @@
 
 namespace reelay {
 
-template <typename output_t>
+template <typename OutputT>
 struct untimed_node {
   virtual ~untimed_node() {}
-  virtual output_t output() {
+  virtual OutputT output() {
     throw std::runtime_error("Undefined output function");
   };
 };
 
-template <typename output_t, typename time_t>
+template <typename OutputT, typename TimeT>
 struct discrete_timed_node {
   virtual ~discrete_timed_node() {}
-  virtual output_t output(time_t) {
+  virtual OutputT output(TimeT) {
     throw std::runtime_error("Undefined output function");
   }
 };
 
-template <typename output_t, typename time_t>
+template <typename OutputT, typename TimeT>
 struct dense_timed_node {
   virtual ~dense_timed_node() {}
-  virtual output_t output(time_t, time_t) {
+  virtual OutputT output(TimeT, TimeT) {
     throw std::runtime_error("Undefined output function");
   }
 };
 
-template <typename input_t, typename output_t>
-struct untimed_state : untimed_node<output_t> {
+template <typename InputT, typename OutputT>
+struct untimed_state : untimed_node<OutputT> {
   virtual ~untimed_state() {}
-  virtual output_t output() override {
+  virtual OutputT output() override {
     throw std::runtime_error("Undefined output function");
   }
 
-  virtual void update(const input_t&) {
+  virtual void update(const InputT&) {
     throw std::runtime_error("Undefined update function");
   }
 };
 
-template <typename input_t, typename output_t, typename time_t>
-struct discrete_timed_state : discrete_timed_node<output_t, time_t> {
+template <typename InputT, typename OutputT, typename TimeT>
+struct discrete_timed_state : discrete_timed_node<OutputT, TimeT> {
   virtual ~discrete_timed_state() {}
-  virtual output_t output(time_t) override {
+  virtual OutputT output(TimeT) override {
     throw std::runtime_error("Undefined output function");
   }
 
-  virtual void update(const input_t&, time_t) {
+  virtual void update(const InputT&, TimeT) {
     throw std::runtime_error("Undefined update function");
   }
 };
 
-template <typename input_t, typename output_t, typename time_t>
-struct dense_timed_state : dense_timed_node<output_t, time_t> {
+template <typename InputT, typename OutputT, typename TimeT>
+struct dense_timed_state : dense_timed_node<OutputT, TimeT> {
   virtual ~dense_timed_state() {}
-  virtual output_t output(time_t, time_t) override {
+  virtual OutputT output(TimeT, TimeT) override {
     throw std::runtime_error("Undefined output function");
   }
 
-  virtual void update(const input_t&, const input_t&, time_t, time_t) {
+  virtual void update(const InputT&, const InputT&, TimeT, TimeT) {
     throw std::runtime_error("Undefined update function");
   }
 };

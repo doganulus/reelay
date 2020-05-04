@@ -12,25 +12,24 @@
 
 namespace reelay {
 
-template <typename input_t, typename output_t, typename time_t>
-struct discrete_timed_network
-    : discrete_timed_state<input_t, output_t, time_t> {
-  using time_type = time_t;
-  using input_type = input_t;
-  using output_type = output_t;
+template <typename InputT, typename OutputT, typename TimeT>
+struct discrete_timed_network : discrete_timed_state<InputT, OutputT, TimeT> {
+  using time_t = TimeT;
+  using input_t = InputT;
+  using output_t = OutputT;
 
-  using node_type = discrete_timed_node<output_t, time_t>;
-  using state_type = discrete_timed_state<input_t, output_t, time_t>;
+  using node_t = discrete_timed_node<output_t, time_t>;
+  using state_t = discrete_timed_state<input_t, output_t, time_t>;
 
   using type = discrete_timed_network<input_t, output_t, time_t>;
 
-  time_t _now = 0;
+  time_t _now = -1;
 
-  std::shared_ptr<node_type> output_node;
-  std::vector<std::shared_ptr<state_type>> states;
+  std::shared_ptr<node_t> output_node;
+  std::vector<std::shared_ptr<state_t>> states;
 
-  discrete_timed_network(std::shared_ptr<node_type> n,
-                         const std::vector<std::shared_ptr<state_type>> &ss)
+  discrete_timed_network(std::shared_ptr<node_t> n,
+                         const std::vector<std::shared_ptr<state_t>> &ss)
       : output_node(n), states(ss) {}
 
   void update(const input_t &args) {

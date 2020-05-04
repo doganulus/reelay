@@ -12,23 +12,24 @@
 
 namespace reelay {
 
-template <typename input_t, typename output_t>
-struct untimed_network : untimed_state<input_t, output_t> {
-  using input_type = input_t;
-  using output_type = output_t;
+template <typename InputT, typename OutputT, typename TimeT = int>
+struct untimed_network : untimed_state<InputT, OutputT> {
+  using time_t = TimeT;
+  using input_t = InputT;
+  using output_t = OutputT;
 
-  using node_type = untimed_node<output_t>;
-  using state_type = untimed_state<input_t, output_t>;
+  using node_t = untimed_node<output_t>;
+  using state_t = untimed_state<input_t, output_t>;
 
   using type = untimed_network<input_t, output_t>;
 
-  int64_t _now = 0; // For informative purposes
+  time_t _now = -1;  // For informative purposes
 
-  std::shared_ptr<node_type> output_node;
-  std::vector<std::shared_ptr<state_type>> states;
+  std::shared_ptr<node_t> output_node;
+  std::vector<std::shared_ptr<state_t>> states;
 
-  untimed_network(std::shared_ptr<node_type> n,
-                  const std::vector<std::shared_ptr<state_type>> &ss)
+  untimed_network(std::shared_ptr<node_t> n,
+                  const std::vector<std::shared_ptr<state_t>> &ss)
       : output_node(n), states(ss) {}
 
   void update(const input_t &args) {
@@ -39,7 +40,7 @@ struct untimed_network : untimed_state<input_t, output_t> {
   }
   output_t output() { return this->output_node->output(); }
 
-  int64_t now() { return _now; }
+  time_t now() { return _now; }
 };
 
 } // namespace reelay

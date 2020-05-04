@@ -14,12 +14,12 @@
 
 namespace reelay {
 
-template <typename X, typename Y, typename T, typename V>
-struct dense_timed_network : dense_timed_state<X, Y, T> {
-  using time_t = T;
-  using value_t = V;
-  using input_t = X;
-  using output_t = Y;
+template <typename InputT, typename OutputT, typename TimeT, typename ValueT>
+struct dense_timed_network : dense_timed_state<InputT, OutputT, TimeT> {
+  using time_t = TimeT;
+  using value_t = ValueT;
+  using input_t = InputT;
+  using output_t = OutputT;
 
   using type = dense_timed_network<input_t, output_t, time_t, value_t>;
 
