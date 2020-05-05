@@ -48,7 +48,7 @@ struct monitor_dense_prop_const_int64 {
     return formatter.format(result, network->previous, network->current);
   }
 
-  std::pair<time_t, time_t> now() { return network->now(); }
+  time_t now() { return network->now(); }
 };
 
 } // namespace reelay

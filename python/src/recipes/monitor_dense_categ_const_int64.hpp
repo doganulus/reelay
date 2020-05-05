@@ -62,7 +62,7 @@ struct monitor_dense_categ_const_int64 {
     return vresult;
   }
 
-  std::pair<time_t, time_t> now() { return network->now(); }
+  time_t now() { return network->now(); }
 };
 
 } // namespace reelay

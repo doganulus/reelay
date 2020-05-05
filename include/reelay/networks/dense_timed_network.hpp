@@ -72,9 +72,7 @@ struct dense_timed_network : dense_timed_state<InputT, OutputT, TimeT> {
            this->output();
   }
 
-  std::pair<time_t, time_t> now() {
-    return std::pair<time_t, time_t>(previous, current);
-  }
+  time_t now() { return current; }
 };
 
 } // namespace reelay
