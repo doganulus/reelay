@@ -16,22 +16,28 @@
 #include "reelay/parser/ptl.hpp"
 #include "reelay/settings.hpp"
 
+#include "reelay/targets/json/discrete_timed_json_formatter.hpp"
+
 namespace reelay {
 
-template <typename T>
-struct untimed_json_monitor : base_json_monitor<T> {
-  using time_t = T;
+template <typename TimeT,
+          class FormatterT = discrete_timed_json_formatter<TimeT>>
+struct untimed_json_monitor {
+  using time_t = TimeT;
   using input_t = json;
   using output_t = json;
 
-  using factory = discrete_timed_setting::factory<input_t, time_t>;
+  using factory = untimed_setting::factory<input_t>;
 
   using network_t = typename factory::network_t;
   using network_ptr_t = typename factory::network_ptr_t;
 
-  std::string name;
+  using formatter_t = FormatterT;
 
   network_ptr_t network;
+  formatter_t formatter = formatter_t();
+
+  untimed_json_monitor() = default;
 
   explicit untimed_json_monitor(const std::string &pattern,
                                 const reelay::kwargs &kw = reelay::kwargs()) {
@@ -39,26 +45,21 @@ struct untimed_json_monitor : base_json_monitor<T> {
     this->network = parser.parse(pattern);
 
     try {
-      name = reelay::any_cast<std::string>(kw.at("name"));
+      formatter.t_name = reelay::any_cast<std::string>(kw.at("t_name"));
     } catch (const std::out_of_range &oor) {
-      name = "value";
+    }
+
+    try {
+      formatter.y_name = reelay::any_cast<std::string>(kw.at("y_name"));
+    } catch (const std::out_of_range &oor) {
     }
   }
 
   output_t update(const input_t &args) {
     this->network->update(args);
-    reelay::json j = {{name, this->network->output()}};
-    return j;
-    // return json::object({name, this->network->output()});
+    return formatter.format(network->output());
   }
 
-  output_t update(const input_t &args, time_t now) {
-    this->network->update(args, now);
-    reelay::json j = {{name, this->network->output()}};
-    return j;
-    // return json::object({name, this->network->output()});
-  }
-
-  time_t now() { return network->now(); }
+  time_t now() { return this->network->now(); }
 };
 }  // namespace reelay

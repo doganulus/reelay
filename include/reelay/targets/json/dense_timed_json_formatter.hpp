@@ -13,9 +13,9 @@
 
 namespace reelay {
 
-template <typename T>
-struct formatter_dense_timed {
-  using time_t = T;
+template <typename TimeT>
+struct dense_timed_json_formatter {
+  using time_t = TimeT;
   using value_t = bool;
   using input_t = reelay::json;
   using output_t = std::vector<reelay::json>;
@@ -23,13 +23,13 @@ struct formatter_dense_timed {
   using interval = reelay::interval<time_t>;
   using interval_set = reelay::interval_set<time_t>;
 
-  const std::string t_name;
-  const std::string y_name;
+  std::string t_name;
+  std::string y_name;
 
   value_t lastval = false;
 
-  explicit formatter_dense_timed(const std::string t_str = "time",
-                                 const std::string y_str = "value")
+  explicit dense_timed_json_formatter(const std::string t_str = "time",
+                                         const std::string y_str = "value")
       : t_name(t_str), y_name(y_str) {}
 
   output_t format(const interval_set& result, time_t previous, time_t now) {
@@ -56,18 +56,18 @@ struct formatter_dense_timed {
     auto vresult = std::vector<reelay::json>();
 
     if (result.empty()) {
-      vresult.append(json({{t_name, previous}, {y_name, false}}));
+      vresult.push_back(json({{t_name, previous}, {y_name, false}}));
       lastval = false;
     } else {
       if (result.begin()->lower() != previous) {
-        vresult.append(json({{t_name, previous}, {y_name, false}}));
+        vresult.push_back(json({{t_name, previous}, {y_name, false}}));
         lastval = false;
       }
       for (const auto& intv : result) {
-        vresult.append(json({{t_name, intv.lower()}, {y_name, true}}));
+        vresult.push_back(json({{t_name, intv.lower()}, {y_name, true}}));
         lastval = true;
         if (intv.upper() != now) {
-          vresult.append(json({{t_name, intv.upper()}, {y_name, false}}));
+          vresult.push_back(json({{t_name, intv.upper()}, {y_name, false}}));
           lastval = false;
         }
       }
@@ -87,17 +87,17 @@ struct formatter_dense_timed {
 
     if (result.empty()) {
       if (lastval) {
-        vresult.append(json({{t_name, previous}, {y_name, false}}));
+        vresult.push_back(json({{t_name, previous}, {y_name, false}}));
         lastval = false;
       }
     } else {
       for (const auto& intv : result) {
         if (not lastval) {
-          vresult.append(json({{t_name, intv.lower()}, {y_name, true}}));
+          vresult.push_back(json({{t_name, intv.lower()}, {y_name, true}}));
           lastval = true;
         }
         if (intv.upper() != now) {
-          vresult.append(json({{t_name, intv.upper()}, {y_name, false}}));
+          vresult.push_back(json({{t_name, intv.upper()}, {y_name, false}}));
           lastval = false;
         }
       }

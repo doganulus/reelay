@@ -16,49 +16,57 @@
 #include "reelay/parser/ptl.hpp"
 #include "reelay/settings.hpp"
 
+#include "reelay/targets/json/discrete_timed_json_formatter.hpp"
+
 namespace reelay {
 
-template <typename T>
-struct discrete_timed_json_monitor : base_json_monitor<T> {
-  using time_t = T;
+template <typename TimeT,
+          class FormatterT = discrete_timed_json_formatter<TimeT>>
+struct discrete_timed_data_json_monitor {
+  using time_t = TimeT;
   using input_t = json;
   using output_t = json;
 
-  using factory = discrete_timed_setting::factory<input_t, time_t>;
+  using factory = discrete_timed_data_setting::factory<input_t, time_t>;
 
   using network_t = typename factory::network_t;
   using network_ptr_t = typename factory::network_ptr_t;
 
-  std::string name;
+  using formatter_t = FormatterT;
 
+  data_mgr_t manager;
   network_ptr_t network;
+  formatter_t formatter;
 
-  explicit discrete_timed_json_monitor(
+  std::string t_name = "time";
+  std::string y_name = "value";
+
+  discrete_timed_data_json_monitor() = default;
+
+  explicit discrete_timed_data_json_monitor(
       const std::string &pattern, const reelay::kwargs &kw = reelay::kwargs()) {
+    if (kw.find("manager") == kw.end()) {
+      manager = std::make_shared<reelay::binding_manager>();
+      reelay::kwargs kw = {{"manager", manager}};
+    } else {
+      manager = reelay::any_cast<data_mgr_t>(kw.at("manager"));
+    }
+
     auto parser = ptl_parser<factory>(kw);
     this->network = parser.parse(pattern);
 
     try {
-      name = reelay::any_cast<std::string>(kw.at("name"));
+      this->y_name = reelay::any_cast<std::string>(kw.at("name"));
     } catch (const std::out_of_range &oor) {
-      name = "value";
+      this->y_name = "value";
     }
   }
 
   output_t update(const input_t &args) {
     this->network->update(args);
-    reelay::json j = {{name, this->network->output()}};
-    return j;
-    // return json::object({name, this->network->output()});
+    return formatter.format((network->output() == manager->one()));
   }
 
-  output_t update(const input_t &args, time_t now) {
-    this->network->update(args, now);
-    reelay::json j = {{name, this->network->output()}};
-    return j;
-    // return json::object({name, this->network->output()});
-  }
-
-  time_t now() { return network->now(); }
+  time_t now() { return this->network->now(); }
 };
 }  // namespace reelay
