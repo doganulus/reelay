@@ -16,13 +16,14 @@
 #include "reelay/parser/ptl.hpp"
 #include "reelay/settings.hpp"
 
+#include "reelay/monitors/base_monitor.hpp"
 #include "reelay/targets/json/discrete_timed_json_formatter.hpp"
 
 namespace reelay {
 
 template <typename TimeT,
           class FormatterT = discrete_timed_json_formatter<TimeT>>
-struct discrete_timed_data_json_monitor {
+struct discrete_timed_data_json_monitor : base_monitor<TimeT, json, json> {
   using time_t = TimeT;
   using input_t = json;
   using output_t = json;

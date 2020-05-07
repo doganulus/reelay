@@ -16,6 +16,7 @@
 #include "reelay/parser/ptl.hpp"
 #include "reelay/settings.hpp"
 
+#include "reelay/monitors/base_monitor.hpp"
 #include "reelay/targets/json/dense_timed_robustness_json_formatter.hpp"
 
 namespace reelay {
@@ -23,7 +24,8 @@ namespace reelay {
 template <typename TimeT, typename ValueT,
           class FormatterT
           = dense_timed_robustness_json_formatter<TimeT, ValueT>>
-struct dense_timed_robustness_json_monitor {
+struct dense_timed_robustness_json_monitor
+    : base_monitor<TimeT, json, std::vector<json>> {
   using time_t = TimeT;
   using value_t = ValueT;
   using input_t = json;

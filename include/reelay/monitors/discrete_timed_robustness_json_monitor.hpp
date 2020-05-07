@@ -14,12 +14,11 @@
 #include <memory>
 #include <string>
 
-#include "boost/variant.hpp"
-
 #include "reelay/json.hpp"
 #include "reelay/monitors/json_monitors/untimed_robustness_json_monitor.hpp"
 #include "reelay/monitors/json_monitors/discrete_timed_robustness_json_monitor.hpp"
 
+#include "reelay/monitors/base_monitor.hpp"
 #include "reelay/monitors/public_interface.hpp"
 
 #include "reelay/parser/ptl.hpp"
@@ -35,12 +34,11 @@ struct discrete_timed<T>::robustness<V>::json_monitor {
   using input_t = json;
   using output_t = json;
 
-  boost::variant<untimed_robustness_json_monitor<time_t, value_t>,
-                 discrete_timed_robustness_json_monitor<time_t, value_t>>
-      _impl;
+  using base_monitor_t = base_monitor<time_t, input_t, output_t>;
+  using base_ptr_t = std::shared_ptr<base_monitor_t>;
 
-  explicit json_monitor(const std::string &pattern,
-                        const reelay::kwargs &kw = reelay::kwargs()) {
+  static base_ptr_t make(const std::string &pattern,
+                         const reelay::kwargs &kw = reelay::kwargs()) {
     auto inspector = reelay::ptl_inspector();
     auto knowledge = inspector.inspect(pattern);
 
@@ -54,43 +52,13 @@ struct discrete_timed<T>::robustness<V>::json_monitor {
     }
 
     if (not timed) {
-      _impl = untimed_robustness_json_monitor<time_t, value_t>(pattern, kw);
+      return std::make_shared<untimed_robustness_json_monitor<time_t, value_t>>(
+          pattern, kw);
     } else {
-      _impl = discrete_timed_robustness_json_monitor<time_t, value_t>(pattern,
-                                                                      kw);
+      return std::make_shared<
+          discrete_timed_robustness_json_monitor<time_t, value_t>>(pattern, kw);
     }
   }
-
-  struct visitor_update : boost::static_visitor<output_t> {
-    output_t operator()(
-        untimed_robustness_json_monitor<time_t, value_t> &monitor,
-        const input_t &object) const {
-      return monitor.update(object);
-    }
-    output_t operator()(
-        discrete_timed_robustness_json_monitor<time_t, value_t> &monitor,
-        const input_t &object) const {
-      return monitor.update(object);
-    }
-  };
-
-  struct visitor_now : boost::static_visitor<time_t> {
-    time_t operator()(untimed_robustness_json_monitor<time_t, value_t>
-                          &monitor) const {
-      return monitor.now();
-    }
-    time_t operator()(discrete_timed_robustness_json_monitor<time_t, value_t>
-                          &monitor) const {
-      return monitor.now();
-    }
-  };
-
-  output_t update(const input_t &object) {
-    return boost::apply_visitor(visitor_update{}, _impl,
-                                boost::variant<input_t>(object));
-  }
-
-  time_t now() { return boost::apply_visitor(visitor_now{}, _impl); }
 };
 
 }  // namespace reelay

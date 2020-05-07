@@ -19,6 +19,7 @@
 #include "reelay/json.hpp"
 #include "reelay/monitors/json_monitors/dense_timed_robustness_json_monitor.hpp"
 
+#include "reelay/monitors/base_monitor.hpp"
 #include "reelay/monitors/public_interface.hpp"
 
 #include "reelay/parser/ptl.hpp"
@@ -34,12 +35,13 @@ struct dense_timed<TimeT, InterpolationT>::robustness<ValueT>::json_monitor {
   using time_t = TimeT;
   using value_t = ValueT;
   using input_t = json;
-  using output_t = json;
+  using output_t = std::vector<json>;
 
-  dense_timed_robustness_json_monitor<time_t, value_t> _impl;
+  using base_monitor_t = base_monitor<time_t, input_t, output_t>;
+  using base_ptr_t = std::shared_ptr<base_monitor_t>;
 
-  explicit json_monitor(const std::string &pattern,
-                        const reelay::kwargs &kw = reelay::kwargs()) {
+  static base_ptr_t make(const std::string &pattern,
+                         const reelay::kwargs &kw = reelay::kwargs()) {
     auto inspector = reelay::ptl_inspector();
     auto knowledge = inspector.inspect(pattern);
 
@@ -47,7 +49,7 @@ struct dense_timed<TimeT, InterpolationT>::robustness<ValueT>::json_monitor {
     bool categorical = reelay::any_cast<bool>(knowledge["has_references"]);
 
     if (not categorical and InterpolationT == piecewise::CONSTANT) {
-      _impl = dense_timed_robustness_json_monitor<time_t, value_t>(pattern, kw);
+      return std::make_shared<dense_timed_robustness_json_monitor<time_t, value_t>>(pattern, kw);
     } else if (not categorical and InterpolationT == piecewise::LINEAR) {
       throw std::invalid_argument((
         "Robustness semantics is currently not available "
@@ -62,10 +64,6 @@ struct dense_timed<TimeT, InterpolationT>::robustness<ValueT>::json_monitor {
         "Unknown option for interpolation order."));
     }
   }
-
-  output_t update(const input_t &object) { return _impl.update(object); }
-
-  time_t now() { return _impl.now(); }
 };
 
 }  // namespace reelay

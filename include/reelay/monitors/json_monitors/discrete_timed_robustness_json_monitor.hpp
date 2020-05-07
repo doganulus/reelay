@@ -23,7 +23,8 @@ namespace reelay {
 
 template <typename TimeT, typename ValueT,
           class FormatterT = discrete_timed_json_formatter<TimeT, ValueT>>
-struct discrete_timed_robustness_json_monitor {
+struct discrete_timed_robustness_json_monitor
+    : base_monitor<TimeT, json, json> {
   using time_t = TimeT;
   using value_t = ValueT;
   using input_t = json;
