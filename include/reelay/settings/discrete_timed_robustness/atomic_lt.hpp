@@ -1,4 +1,4 @@
- final/*
+/*
  * Copyright (c) 2019-2020 Dogan Ulus
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
