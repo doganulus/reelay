@@ -7,7 +7,8 @@
  */
 #pragma once
 
-#include "reelay/conversions.hpp"
+// #include "reelay/conversions.hpp"
+#include "reelay/datafield.hpp"
 #include "reelay/intervals.hpp"
 #include "reelay/common.hpp"
 #include "reelay/networks/basic_structure.hpp"
@@ -39,7 +40,7 @@ struct dense_timed_network : dense_timed_state<InputT, OutputT, TimeT> {
       : output_node(n), states(ss) {}
 
   void update(const input_t &args) {
-    time_t now = reelay::timestamp<input_t, time_t>::from(args);
+    time_t now = timefield<time_t, input_t>::get_time(args);
     this->previous = this->current;
     update(this->prevargs, args, this->previous, now);
   }

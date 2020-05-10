@@ -21,9 +21,16 @@ namespace reelay {
 
 using json = nlohmann::json;
 
+template <typename T>
+struct timefield<T, json> {
+  using input_t = json;
+  inline static T get_time(const input_t &container) {
+    return container.at("time");
+  }
+};
+
 template <> struct datafield<json> {
   using input_t = json;
-  static const std::unordered_set<std::string> falsity;
 
   inline static input_t at(const input_t &container, const std::string &key) {
     return container[key];
@@ -78,14 +85,7 @@ template <> struct datafield<json> {
     return container.at(index);
   }
 
-  template <typename time_t>
-  inline static time_t timestamp(const input_t &container) {
-    return container.at("time");
-  }
-};
 
-const std::unordered_set<std::string>
-    datafield<json>::falsity = {
-        "0", "false", "False"};
+};
 
 } // namespace reelay
