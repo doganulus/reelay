@@ -17,7 +17,7 @@ namespace reelay {
 namespace untimed_setting {
 
 template <typename X>
-struct implication : public untimed_node<bool> {
+struct implication final : public untimed_node<bool> {
   using input_t = X;
   using output_t = bool;
 

@@ -17,7 +17,7 @@ namespace reelay {
 namespace untimed_robustness_setting {
 
 template <typename X, typename V>
-struct atomic_nested_any : public untimed_state<X, V> {
+struct atomic_nested_any final : public untimed_state<X, V> {
   using input_t = X;
   using output_t = V;
 

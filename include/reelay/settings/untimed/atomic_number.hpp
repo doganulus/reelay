@@ -21,7 +21,7 @@ namespace reelay {
 namespace untimed_setting {
 
 template <typename X, typename K = std::string>
-struct atomic_number : public untimed_state<X, bool> {
+struct atomic_number final : public untimed_state<X, bool> {
   using key_t = K;
   using input_t = X;
   using output_t = bool;

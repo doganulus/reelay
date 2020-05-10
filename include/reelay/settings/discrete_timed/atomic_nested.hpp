@@ -17,7 +17,7 @@ namespace reelay {
 namespace discrete_timed_setting {
 
 template <typename X, typename T>
-struct atomic_nested : public discrete_timed_state<X, bool, T> {
+struct atomic_nested final : public discrete_timed_state<X, bool, T> {
   using time_t = T;
   using input_t = X;
   using output_t = bool;

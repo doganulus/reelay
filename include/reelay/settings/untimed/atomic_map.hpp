@@ -16,8 +16,8 @@
 namespace reelay {
 namespace untimed_setting {
 
-template <typename X> 
-struct atomic_map : public untimed_state<X, bool> {
+template <typename X>
+struct atomic_map final : public untimed_state<X, bool> {
   using input_t = X;
   using output_t = bool;
 

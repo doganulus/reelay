@@ -18,7 +18,7 @@ namespace reelay {
 namespace discrete_timed_robustness_setting {
 
 template <typename X, typename V, typename T>
-struct past_sometime_bounded_half : public discrete_timed_state<X, V, T> {
+struct past_sometime_bounded_half final : public discrete_timed_state<X, V, T> {
   using time_t = T;
   using input_t = X;
   using output_t = V;

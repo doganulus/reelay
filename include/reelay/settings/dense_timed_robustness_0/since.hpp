@@ -17,7 +17,8 @@ namespace reelay {
 namespace dense_timed_robustness_0_setting {
 
 template <typename X, typename V, typename T>
-struct since : public dense_timed_state<X, robustness_interval_map<T, V>, T> {
+struct since final
+    : public dense_timed_state<X, robustness_interval_map<T, V>, T> {
   using time_t = T;
   using input_t = X;
   using value_t = V;

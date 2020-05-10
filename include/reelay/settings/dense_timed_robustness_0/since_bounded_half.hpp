@@ -17,7 +17,7 @@ namespace reelay {
 namespace dense_timed_robustness_0_setting {
 
 template <typename X, typename V, typename T>
-struct since_bounded_half
+struct since_bounded_half final
     : public dense_timed_state<X, robustness_interval_map<T, V>, T> {
   using time_t = T;
   using input_t = X;
@@ -130,7 +130,6 @@ struct since_bounded_half
            (value2 & interval::left_open(previous, now));
   }
 };
-
 
 }  // namespace dense_timed_setting
 }  // namespace reelay

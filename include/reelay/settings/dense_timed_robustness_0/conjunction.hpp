@@ -17,7 +17,8 @@ namespace reelay {
 namespace dense_timed_robustness_0_setting {
 
 template <typename X, typename V, typename T>
-struct conjunction : public dense_timed_node<robustness_interval_map<T, V>, T> {
+struct conjunction final
+    : public dense_timed_node<robustness_interval_map<T, V>, T> {
   using time_t = T;
   using input_t = X;
   using value_t = V;

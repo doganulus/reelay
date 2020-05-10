@@ -16,7 +16,7 @@ namespace reelay {
 namespace untimed_robustness_setting {
 
 template <typename X, typename V>
-struct conjunction : public untimed_node<V> {
+struct conjunction final : public untimed_node<V> {
   using input_t = X;
   using output_t = V;
 

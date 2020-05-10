@@ -17,9 +17,8 @@
 namespace reelay {
 namespace untimed_data_setting {
 
-template <typename X> 
-struct atomic_map : public untimed_state<X, data_set_t> {
-
+template <typename X>
+struct atomic_map final : public untimed_state<X, data_set_t> {
   using input_t = X;
   using output_t = data_set_t;
 

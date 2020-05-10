@@ -18,7 +18,7 @@ namespace reelay {
 namespace untimed_data_setting {
 
 template <typename X>
-struct atomic_nested : public untimed_state<X, data_set_t> {
+struct atomic_nested final : public untimed_state<X, data_set_t> {
   using input_t = X;
   using output_t = data_set_t;
 

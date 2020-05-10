@@ -17,7 +17,7 @@ namespace reelay {
 namespace untimed_setting {
 
 template <typename X>
-struct past_always : public untimed_state<X, bool> {
+struct past_always final : public untimed_state<X, bool> {
   using input_t = X;
   using output_t = bool;
 

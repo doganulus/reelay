@@ -19,7 +19,7 @@ namespace reelay {
 namespace discrete_timed_setting {
 
 template <typename X, typename T>
-struct disjunction : public discrete_timed_node<bool, T> {
+struct disjunction final : public discrete_timed_node<bool, T> {
   using time_t = T;
   using input_t = X;
   using output_t = bool;

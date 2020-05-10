@@ -21,7 +21,7 @@ namespace reelay {
 namespace discrete_timed_robustness_setting {
 
 template <typename X, typename V, typename T, typename K = std::string>
-struct atomic_eq : public discrete_timed_state<X, V, T> {
+struct atomic_eq final : public discrete_timed_state<X, V, T> {
   using key_t = K;
   using time_t = T;
   using input_t = X;

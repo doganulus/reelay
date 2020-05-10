@@ -18,7 +18,7 @@ namespace reelay {
 namespace discrete_timed_data_setting {
 
 template <typename X, typename T>
-struct atomic_nested_all : public discrete_timed_state<X, data_set_t, T> {
+struct atomic_nested_all final : public discrete_timed_state<X, data_set_t, T> {
   using time_t = T;
   using input_t = X;
   using value_t = data_set_t;

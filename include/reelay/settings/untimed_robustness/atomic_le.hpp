@@ -21,7 +21,7 @@ namespace reelay {
 namespace untimed_robustness_setting {
 
 template <typename X, typename V, typename K = std::string>
-struct atomic_le : public untimed_state<X, V> {
+struct atomic_le final : public untimed_state<X, V> {
   using key_t = K;
   using input_t = X;
   using output_t = V;

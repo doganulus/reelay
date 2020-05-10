@@ -22,7 +22,7 @@ namespace reelay {
 namespace discrete_timed_data_setting {
 
 template <typename X, typename T, typename K = std::string>
-struct atomic_lt : public discrete_timed_state<X, data_set_t, T> {
+struct atomic_lt final : public discrete_timed_state<X, data_set_t, T> {
   using key_t = K;
   using time_t = T;
   using input_t = X;

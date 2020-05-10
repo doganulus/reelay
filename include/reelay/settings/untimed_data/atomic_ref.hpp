@@ -22,7 +22,7 @@ namespace reelay {
 namespace untimed_data_setting {
 
 template <typename X, typename K = std::string>
-struct atomic_ref : public untimed_state<X, data_set_t> {
+struct atomic_ref final : public untimed_state<X, data_set_t> {
   using key_t = K;
   using input_t = X;
   using output_t = data_set_t;

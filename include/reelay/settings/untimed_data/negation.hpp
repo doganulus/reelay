@@ -15,7 +15,8 @@
 namespace reelay {
 namespace untimed_data_setting {
 
-template <typename X> struct negation : public untimed_node<data_set_t> {
+template <typename X>
+struct negation final : public untimed_node<data_set_t> {
   using input_t = X;
   using output_t = data_set_t;
 

@@ -15,7 +15,7 @@ namespace reelay {
 namespace discrete_timed_setting {
 
 template <typename X, typename T>
-struct past_always : public discrete_timed_state<X, bool, T> {
+struct past_always final : public discrete_timed_state<X, bool, T> {
   using time_t = T;
   using input_t = X;
   using output_t = bool;

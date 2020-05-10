@@ -18,7 +18,7 @@ namespace reelay {
 namespace discrete_timed_data_setting {
 
 template <typename X, typename T>
-struct past_sometime_bounded_half
+struct past_sometime_bounded_half final
     : public discrete_timed_state<X, data_set_t, T> {
   using time_t = T;
   using input_t = X;

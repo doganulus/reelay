@@ -21,7 +21,7 @@ namespace reelay {
 namespace dense_timed_setting {
 
 template <typename X, typename T, typename K = std::string>
-struct atomic_number : public dense_timed_state<X, interval_set<T>, T> {
+struct atomic_number final : public dense_timed_state<X, interval_set<T>, T> {
   using key_t = K;
   using input_t = X;
   using time_t = T;

@@ -17,7 +17,7 @@ namespace reelay {
 namespace dense_timed_setting {
 
 template <typename X, typename T>
-struct atomic_nested : public dense_timed_state<X, interval_set<T>, T> {
+struct atomic_nested final : public dense_timed_state<X, interval_set<T>, T> {
   using time_t = T;
   using input_t = X;
   using output_t = reelay::interval_set<time_t>;

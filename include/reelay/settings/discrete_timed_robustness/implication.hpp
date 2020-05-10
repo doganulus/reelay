@@ -19,7 +19,7 @@ namespace reelay {
 namespace discrete_timed_robustness_setting {
 
 template <typename X, typename V, typename T>
-struct implication : public discrete_timed_node<V, T> {
+struct implication final : public discrete_timed_node<V, T> {
   using time_t = T;
   using input_t = X;
   using output_t = V;

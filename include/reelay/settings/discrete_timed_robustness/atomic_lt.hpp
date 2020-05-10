@@ -1,4 +1,4 @@
-/*
+ final/*
  * Copyright (c) 2019-2020 Dogan Ulus
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -21,7 +21,7 @@ namespace reelay {
 namespace discrete_timed_robustness_setting {
 
 template <typename X, typename V, typename T, typename K = std::string>
-struct atomic_lt : public discrete_timed_state<X, V, T> {
+struct atomic_lt final : public discrete_timed_state<X, V, T> {
   using key_t = K;
   using time_t = T;
   using input_t = X;

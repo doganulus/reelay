@@ -17,7 +17,8 @@ namespace reelay {
 namespace dense_timed_data_setting {
 
 template <typename X, typename T>
-struct since_bounded : public dense_timed_state<X, data_interval_map<T>, T> {
+struct since_bounded final
+    : public dense_timed_state<X, data_interval_map<T>, T> {
   using time_t = T;
   using input_t = X;
   using value_t = data_set_t;
