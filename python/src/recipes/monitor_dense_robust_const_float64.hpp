@@ -13,6 +13,8 @@
 #include "reelay/settings.hpp"
 #include "reelay/pybind11.hpp"
 
+#include "reelay/targets/pybind11/dense_timed_robustness_python_formatter.hpp"
+
 namespace reelay {
 
 struct monitor_dense_robust_const_float64 {
@@ -28,37 +30,25 @@ struct monitor_dense_robust_const_float64 {
   using network_t = typename factory::network_t;
   using network_ptr_t = typename factory::network_ptr_t;
 
-  const std::string t_name;
-  const std::string y_name;
+  using formatter_t = dense_timed_robustness_python_formatter<time_t, value_t>;
 
   network_ptr_t network;
+  formatter_t formatter;
 
   value_t lastval = 0;
 
-  explicit monitor_dense_robust_const_float64(const std::string &pattern,
-                                              const std::string t_str = "time",
-                                              const std::string y_str = "value")
-      : t_name(t_str), y_name(y_str) {
+  explicit monitor_dense_robust_const_float64(
+      const std::string &pattern, const std::string t_str = "time",
+      const std::string y_str = "value")
+      : formatter(formatter_t(t_str, y_str)) {
     auto parser = ptl_parser<factory>();
     this->network = parser.parse(pattern);
   }
 
   output_t update(const input_t &args) {
-
     this->network->update(args);
-
     auto result = network->output();
-    auto vresult = pybind11::list();
-
-    for (const auto &intv : result) {
-      if (lastval != intv.second or network->current == 0) {
-        vresult.append(
-            pybind11::dict(pybind11::arg(t_name.c_str()) = intv.first.lower(),
-                           pybind11::arg(y_name.c_str()) = intv.second));
-        lastval = intv.second;
-      }
-    }
-    return vresult;
+    return formatter.format(result, network->previous, network->current);
   }
 
   time_t now() { return network->now(); }

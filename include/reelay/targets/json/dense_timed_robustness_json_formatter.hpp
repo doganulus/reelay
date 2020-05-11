@@ -32,8 +32,7 @@ struct dense_timed_robustness_json_formatter {
       const std::string t_str = "time", const std::string y_str = "value")
       : t_name(t_str), y_name(y_str) {}
 
-  output_t format(const interval_map& result,
-                  time_t previous, time_t now) {
+  output_t format(const interval_map& result, time_t previous, time_t now) {
     output_t vresult;
     for (const auto& intv : result) {
       if (lastval != intv.second or now == 0) {

@@ -31,9 +31,9 @@ struct monitor_discrete_prop {
   network_ptr_t network;
   formatter_t formatter;
 
-  explicit monitor_discrete_prop(const std::string &pattern,
-                                 const std::string &t_str = "time",
-                                 const std::string &y_str = "value")
+  explicit monitor_discrete_prop(
+      const std::string &pattern, const std::string &t_str = "time",
+      const std::string &y_str = "value")
       : formatter(formatter_t(t_str, y_str)) {
     auto parser = ptl_parser<factory>();
     this->network = parser.parse(pattern);

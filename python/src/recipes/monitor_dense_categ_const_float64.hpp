@@ -13,6 +13,8 @@
 #include "reelay/settings.hpp"
 #include "reelay/pybind11.hpp"
 
+#include "reelay/targets/pybind11/dense_timed_data_python_formatter.hpp"
+
 namespace reelay {
 
 struct monitor_dense_categ_const_float64 {
@@ -26,19 +28,18 @@ struct monitor_dense_categ_const_float64 {
   using network_t = typename factory::network_t;
   using network_ptr_t = typename factory::network_ptr_t;
 
-  const std::string t_name;
-  const std::string y_name;
+  using formatter_t = dense_timed_data_python_formatter<time_t>;
 
   data_mgr_t manager;
   network_ptr_t network;
+  formatter_t formatter;
 
   bool lastval;
 
-  explicit monitor_dense_categ_const_float64(const std::string &pattern,
-                                             const std::string t_str = "time",
-                                             const std::string y_str = "value")
-      : t_name(t_str), y_name(y_str) {
-
+  explicit monitor_dense_categ_const_float64(
+      const std::string &pattern, const std::string t_str = "time",
+      const std::string y_str = "value")
+      : formatter(formatter_t(t_str, y_str)) {
     manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs kw = {{"manager", manager}};
 
@@ -48,18 +49,9 @@ struct monitor_dense_categ_const_float64 {
 
   output_t update(const input_t &args) {
     this->network->update(args);
-
-    output_t vresult;
-    for (const auto &intv : this->network->output()) {
-      bool value = (intv.second == manager->one());
-      if (lastval != value or network->current == 0) {
-        vresult.append(pybind11::dict(
-            pybind11::arg(t_name.c_str()) = intv.first.lower(),
-            pybind11::arg(y_name.c_str()) = (intv.second == manager->one())));
-        lastval = value;
-      }
-    }
-    return vresult;
+    auto result = network->output();
+    return formatter.format(
+        manager, result, network->previous, network->current);
   }
 
   time_t now() { return network->now(); }

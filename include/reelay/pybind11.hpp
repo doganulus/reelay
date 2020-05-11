@@ -18,7 +18,6 @@
 #include "pybind11/pybind11.h"
 
 #include "reelay/datafield.hpp"
-#include "reelay/conversions.hpp"
 
 using namespace pybind11::literals;
 
@@ -26,10 +25,11 @@ namespace reelay {
 
 using pyobj = pybind11::object;
 
-template <typename time_t> struct timestamp<pybind11::object, time_t> {
-  inline static time_t
-  from(const pybind11::object &args) {
-    return args["time"].cast<time_t>();
+template <typename T>
+struct timefield<T, pybind11::object> {
+  using input_t = pybind11::object;
+  inline static T get_time(const input_t &container) {
+    return container["time"].cast<T>();
   }
 };
 

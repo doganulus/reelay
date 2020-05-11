@@ -36,9 +36,9 @@ struct monitor_discrete_categ_condensing {
   network_ptr_t network;
   formatter_t formatter;
 
-  explicit monitor_discrete_categ_condensing(const std::string &pattern,
-                                             const std::string &t_str = "time",
-                                             const std::string &y_str = "value")
+  explicit monitor_discrete_categ_condensing(
+      const std::string &pattern, const std::string &t_str = "time",
+      const std::string &y_str = "value")
       : formatter(formatter_t(t_str, y_str)) {
     manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs kw = {{"manager", manager}};
