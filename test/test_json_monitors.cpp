@@ -30,8 +30,8 @@ TEST_CASE("Discrete Timed Update") {
     sequence.push_back(input_t{{"p1", true}, {"p2", true}});
     sequence.push_back(input_t{{"p2", false}});
 
-    auto monitor
-        = reelay::discrete_timed<time_t>::json_monitor::make("{p1} since {p2}");
+    auto monitor = reelay::discrete_timed<time_t>::monitor<input_t>::make(
+        "{p1} since {p2}");
 
     auto results = std::vector<input_t>();
 
@@ -75,7 +75,7 @@ TEST_CASE("Discrete Timed Update") {
     sequence.push_back(input_t{{"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"p1", false}, {"p2", false}});
 
-    auto monitor = reelay::discrete_timed<time_t>::json_monitor::make(
+    auto monitor = reelay::discrete_timed<time_t>::monitor<input_t>::make(
         "{p1} since[2:] {p2}");
 
     auto results = std::vector<input_t>();
@@ -121,7 +121,7 @@ TEST_CASE("Discrete Timed Update") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto monitor = reelay::discrete_timed<time_t>::json_monitor::make(
+    auto monitor = reelay::discrete_timed<time_t>::monitor<input_t>::make(
         "forall[file]. {$0: close, $1: *file} implies (exists[mode]. "
         "pre(!{$0: close, $1: *file} since {$0: open, $1: *file, $2: "
         "*mode}))",
@@ -169,7 +169,7 @@ TEST_CASE("Discrete Timed Update") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto monitor = reelay::discrete_timed<time_t>::json_monitor::make(
+    auto monitor = reelay::discrete_timed<time_t>::monitor<input_t>::make(
         "forall[sensor]."
         "{sensor_id: *sensor, action: send_data}"
         "implies"
@@ -219,7 +219,7 @@ TEST_CASE("Condensing Update") {
     sequence.push_back(input_t{{"p1", true}, {"p2", true}});
     sequence.push_back(input_t{{"p2", false}});
 
-    auto monitor = reelay::condensing<time_t>::json_monitor::make("{p1} since {p2}");
+    auto monitor = reelay::condensing<time_t>::monitor<input_t>::make("{p1} since {p2}");
 
     auto results = std::vector<input_t>();
 
@@ -263,8 +263,8 @@ TEST_CASE("Condensing Update") {
     sequence.push_back(input_t{{"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"p1", false}, {"p2", false}});
 
-    auto monitor
-        = reelay::condensing<time_t>::json_monitor::make("{p1} since[2:] {p2}");
+    auto monitor = reelay::condensing<time_t>::monitor<input_t>::make(
+        "{p1} since[2:] {p2}");
 
     auto results = std::vector<input_t>();
 
@@ -309,7 +309,7 @@ TEST_CASE("Condensing Update") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto monitor = reelay::condensing<time_t>::json_monitor::make(
+    auto monitor = reelay::condensing<time_t>::monitor<input_t>::make(
         "forall[file]. {$0: close, $1: *file} implies (exists[mode]. "
         "pre(!{$0: close, $1: *file} since {$0: open, $1: *file, $2: "
         "*mode}))",
@@ -357,7 +357,7 @@ TEST_CASE("Condensing Update") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto monitor = reelay::condensing<time_t>::json_monitor::make(
+    auto monitor = reelay::condensing<time_t>::monitor<input_t>::make(
         "forall[sensor]."
         "{sensor_id: *sensor, action: send_data}"
         "implies"
@@ -411,7 +411,7 @@ TEST_CASE("Dense Timed") {
     sequence.push_back(input_t{{"time", 444}});
 
     auto monitor
-        = reelay::dense_timed<time_t>::json_monitor::make("{p1} since {p2}");
+        = reelay::dense_timed<time_t>::monitor<input_t>::make("{p1} since {p2}");
 
     auto result = std::vector<input_t>();
 
@@ -451,8 +451,8 @@ TEST_CASE("Dense Timed") {
     sequence.push_back(input_t{{"time", 315}, {"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"time", 444}});
 
-    auto monitor = reelay::dense_timed<time_t>::json_monitor
-        ::make("{p1} since[18:]{p2}");
+    auto monitor = reelay::dense_timed<time_t>::monitor<input_t>::make(
+        "{p1} since[18:]{p2}");
 
     auto result = std::vector<input_t>();
 
@@ -483,8 +483,7 @@ TEST_CASE("Dense Timed") {
     sequence.push_back(input_t{{"time", 18.0}, {"speed", 6.0}});
     sequence.push_back(input_t{{"time", 19.0}, {"speed", 14.0}});
 
-    auto monitor
-        = reelay::dense_timed<double, reelay::piecewise::LINEAR>::json_monitor::make("{speed > 12.0}");
+    auto monitor = reelay::dense_timed<double, reelay::piecewise::LINEAR>::monitor<input_t>::make("{speed > 12.0}");
 
     auto result = std::vector<input_t>();
 
@@ -536,12 +535,12 @@ TEST_CASE("Dense Timed") {
     auto manager = std::make_shared<reelay::binding_manager>();
     reelay::kwargs extra_args = {{"manager", manager}};
 
-    auto monitor = reelay::dense_timed<time_t>::json_monitor::make(
-              "forall[sensor]."
-              "{sensor_id: *sensor, action: send_data}"
-              "implies"
-              "once[:40]{sensor_id: *sensor, action : calibrated}",
-              extra_args);
+    auto monitor = reelay::dense_timed<time_t>::monitor<input_t>::make(
+        "forall[sensor]."
+        "{sensor_id: *sensor, action: send_data}"
+        "implies"
+        "once[:40]{sensor_id: *sensor, action : calibrated}",
+        extra_args);
 
     auto result = std::vector<input_t>();
 
@@ -577,7 +576,7 @@ TEST_CASE("Discrete Timed Robustness") {
     sequence.push_back(input_t{{"p1", 3.0}, {"p2", 0}});
 
     auto monitor = reelay::discrete_timed<time_t>::robustness<
-        output_t>::json_monitor::make("historically{p1}");
+        output_t>::monitor<input_t>::make("historically{p1}");
 
     auto result = std::vector<input_t>();
 
@@ -611,7 +610,7 @@ TEST_CASE("Discrete Timed Robustness") {
     sequence.push_back(input_t{{"p1", 3.0}, {"p2", 0}});
 
     auto monitor = reelay::discrete_timed<time_t>::robustness<
-        output_t>::json_monitor::make("historically[:2]{p1}");
+        output_t>::monitor<input_t>::make("historically[:2]{p1}");
 
     auto result = std::vector<input_t>();
 
@@ -645,7 +644,7 @@ TEST_CASE("Discrete Timed Robustness") {
     sequence.push_back(input_t{{"p1", 3.0}, {"p2", 0}});
 
     auto monitor
-        = reelay::condensing<time_t>::robustness<output_t>::json_monitor::make(
+        = reelay::condensing<time_t>::robustness<output_t>::monitor<input_t>::make(
             "historically{p1}");
 
     auto result = std::vector<input_t>();
@@ -679,9 +678,8 @@ TEST_CASE("Discrete Timed Robustness") {
     sequence.push_back(input_t{{"p1", 61}, {"p2", 0}});
     sequence.push_back(input_t{{"p1", 3.0}, {"p2", 0}});
 
-    auto monitor
-        = reelay::condensing<time_t>::robustness<output_t>::json_monitor::make(
-            "historically[:2]{p1}");
+    auto monitor = reelay::condensing<time_t>::robustness<
+        output_t>::monitor<input_t>::make("historically[:2]{p1}");
 
     auto result = std::vector<input_t>();
 
@@ -715,7 +713,7 @@ TEST_CASE("Discrete Timed Robustness") {
     sequence.push_back(input_t{{"time", 100}});
 
     auto monitor
-        = reelay::dense_timed<time_t>::robustness<output_t>::json_monitor::make(
+        = reelay::dense_timed<time_t>::robustness<output_t>::monitor<input_t>::make(
             "once[:24]{x}");
 
     auto result = std::vector<input_t>();

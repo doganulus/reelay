@@ -11,12 +11,12 @@
 
 namespace reelay {
 
-template <typename TimeT, typename ValueT = bool>
+template <
+    typename TimeT, typename ValueT = bool, typename OutputT = pybind11::object>
 struct condensing_python_formatter {
   using time_t = TimeT;
   using value_t = ValueT;
-  using input_t = pybind11::object;
-  using output_t = pybind11::object;
+  using output_t = OutputT;
 
   using interval = reelay::interval<time_t>;
   using interval_set = reelay::interval_set<time_t>;

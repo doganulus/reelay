@@ -31,10 +31,11 @@
 namespace reelay {
 
 template <typename TimeT, piecewise InterpolationT>
-struct dense_timed<TimeT, InterpolationT>::json_monitor {
+template <typename InputT, typename OutputT>
+struct dense_timed<TimeT, InterpolationT>::monitor {
   using time_t = TimeT;
-  using input_t = json;
-  using output_t = std::vector<json>;
+  using input_t = InputT;
+  using output_t = OutputT;
 
   using base_monitor_t = base_monitor<time_t, input_t, output_t>;
   using base_ptr_t = std::shared_ptr<base_monitor_t>;
@@ -48,11 +49,15 @@ struct dense_timed<TimeT, InterpolationT>::json_monitor {
     bool categorical = reelay::any_cast<bool>(knowledge["has_references"]);
 
     if (not categorical and InterpolationT == piecewise::CONSTANT) {
-      return std::make_shared<dense_timed_json_monitor<time_t, 0>>(pattern, kw);
+      return std::make_shared<
+          dense_timed_json_monitor<time_t, 0, input_t, output_t>>(pattern, kw);
     } else if (not categorical and InterpolationT == piecewise::LINEAR) {
-      return std::make_shared<dense_timed_json_monitor<time_t, 1>>(pattern, kw);
+      return std::make_shared<
+          dense_timed_json_monitor<time_t, 1, input_t, output_t>>(pattern, kw);
     } else if (categorical and InterpolationT == piecewise::CONSTANT) {
-      return std::make_shared<dense_timed_data_json_monitor<time_t>>(pattern, kw);
+      return std::make_shared<
+          dense_timed_data_json_monitor<time_t, input_t, output_t>>(
+          pattern, kw);
     } else if (categorical and InterpolationT == piecewise::LINEAR) {
       throw std::invalid_argument((
         "Monitoring specifications that contain data references are"

@@ -31,11 +31,12 @@ namespace reelay {
 
 template <typename TimeT, piecewise InterpolationT>
 template <typename ValueT>
-struct dense_timed<TimeT, InterpolationT>::robustness<ValueT>::json_monitor {
+template <typename InputT, typename OutputT>
+struct dense_timed<TimeT, InterpolationT>::robustness<ValueT>::monitor {
   using time_t = TimeT;
   using value_t = ValueT;
-  using input_t = json;
-  using output_t = std::vector<json>;
+  using input_t = InputT;
+  using output_t = OutputT;
 
   using base_monitor_t = base_monitor<time_t, input_t, output_t>;
   using base_ptr_t = std::shared_ptr<base_monitor_t>;
@@ -49,7 +50,8 @@ struct dense_timed<TimeT, InterpolationT>::robustness<ValueT>::json_monitor {
     bool categorical = reelay::any_cast<bool>(knowledge["has_references"]);
 
     if (not categorical and InterpolationT == piecewise::CONSTANT) {
-      return std::make_shared<dense_timed_robustness_json_monitor<time_t, value_t>>(pattern, kw);
+      return std::make_shared<dense_timed_robustness_json_monitor<
+          time_t, value_t, input_t, output_t>>(pattern, kw);
     } else if (not categorical and InterpolationT == piecewise::LINEAR) {
       throw std::invalid_argument((
         "Robustness semantics is currently not available "

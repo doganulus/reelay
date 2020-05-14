@@ -13,12 +13,11 @@
 
 namespace reelay {
 
-template <typename TimeT, typename ValueT = bool>
+template <typename TimeT, typename ValueT = bool, typename OutputT = json>
 struct discrete_timed_json_formatter {
   using time_t = TimeT;
   using value_t = ValueT;
-  using input_t = reelay::json;
-  using output_t = reelay::json;
+  using output_t = OutputT;
 
   // std::static_assert(std::is_integral<time_t>::value,
   //               "Discrete time type must be an integral type.");

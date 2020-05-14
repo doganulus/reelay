@@ -28,11 +28,12 @@
 
 namespace reelay {
 
-template <typename T>
-struct condensing<T>::json_monitor {
-  using time_t = T;
-  using input_t = json;
-  using output_t = json;
+template <typename TimeT>
+template <typename InputT, typename OutputT>
+struct condensing<TimeT>::monitor {
+  using time_t = TimeT;
+  using input_t = InputT;
+  using output_t = OutputT;
 
   using base_monitor_t = base_monitor<time_t, input_t, output_t>;
   using base_ptr_t = std::shared_ptr<base_monitor_t>;
@@ -46,13 +47,20 @@ struct condensing<T>::json_monitor {
     bool categorical = reelay::any_cast<bool>(knowledge["has_references"]);
 
     if (not timed and not categorical) {
-      return std::make_shared<untimed_condensing_json_monitor<time_t>>(pattern, kw);
+      return std::make_shared<
+          untimed_condensing_json_monitor<time_t, input_t, output_t>>(
+          pattern, kw);
     } else if (timed and not categorical) {
-      return std::make_shared<discrete_timed_condensing_json_monitor<time_t>>(pattern, kw);
+      return std::make_shared<
+          discrete_timed_condensing_json_monitor<time_t, input_t, output_t>>(
+          pattern, kw);
     } else if (not timed and categorical) {
-      return std::make_shared<untimed_data_condensing_json_monitor<time_t>>(pattern, kw);
+      return std::make_shared<
+          untimed_data_condensing_json_monitor<time_t, input_t, output_t>>(
+          pattern, kw);
     } else {
-      return std::make_shared<discrete_timed_data_condensing_json_monitor<time_t>>(pattern, kw);
+      return std::make_shared<discrete_timed_data_condensing_json_monitor<
+          time_t, input_t, output_t>>(pattern, kw);
     }
   }
 };

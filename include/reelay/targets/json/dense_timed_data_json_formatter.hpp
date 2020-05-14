@@ -13,12 +13,13 @@
 
 namespace reelay {
 
-template <typename TimeT>
+template <
+    typename TimeT, typename ValueT = bool,
+    typename OutputT = std::vector<reelay::json>>
 struct dense_timed_data_json_formatter {
   using time_t = TimeT;
-  using value_t = bool;
-  using input_t = reelay::json;
-  using output_t = std::vector<reelay::json>;
+  using value_t = ValueT;
+  using output_t = OutputT;
 
   using interval = reelay::interval<time_t>;
   using interval_map = reelay::data_interval_map<time_t>;
@@ -32,7 +33,7 @@ struct dense_timed_data_json_formatter {
                                          const std::string y_str = "value")
       : t_name(t_str), y_name(y_str) {}
 
-  output_t format(const data_mgr_t& mgr, const interval_map& result,
+  inline output_t format(const data_mgr_t& mgr, const interval_map& result,
                   time_t previous, time_t now) {
     output_t vresult;
     for (const auto& intv : result) {

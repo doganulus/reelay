@@ -13,12 +13,13 @@
 
 namespace reelay {
 
-template <typename TimeT>
+template <
+    typename TimeT, typename ValueT = bool,
+    typename OutputT = std::vector<reelay::json>>
 struct dense_timed_json_formatter {
   using time_t = TimeT;
-  using value_t = bool;
-  using input_t = reelay::json;
-  using output_t = std::vector<reelay::json>;
+  using value_t = ValueT;
+  using output_t = OutputT;
 
   using interval = reelay::interval<time_t>;
   using interval_set = reelay::interval_set<time_t>;
@@ -76,7 +77,8 @@ struct dense_timed_json_formatter {
     return vresult;
   }
 
-  output_t _format(const interval_set& result, time_t previous, time_t now) {
+  inline output_t _format(
+      const interval_set& result, time_t previous, time_t now) {
     // This code constitutes the main operation such that
     //   + do output two events per interval in the set
     //   + take care empty interval set (meaning all false)

@@ -18,36 +18,37 @@ namespace reelay {
 
 template <typename TimeT>
 struct discrete_timed {
-  
-  struct json_monitor;
+  template <typename InputT, typename OutputT = reelay::json>
+  struct monitor;
 
   template <typename ValueT>
   struct robustness {
-
-    struct json_monitor;
-
+    template <typename InputT, typename OutputT = reelay::json>
+    struct monitor;
   };
 };
 
 template <typename TimeT>
 struct condensing {
-  struct json_monitor;
+  template <typename InputT, typename OutputT = reelay::json>
+  struct monitor;
 
   template <typename ValueT>
   struct robustness {
-
-    struct json_monitor;
-
+    template <typename InputT, typename OutputT = reelay::json>
+    struct monitor;
   };
 };
 
 template <typename TimeT, piecewise InterpolationT = piecewise::CONSTANT>
 struct dense_timed {
-  struct json_monitor;
+  template <typename InputT, typename OutputT = std::vector<reelay::json>>
+  struct monitor;
 
   template <typename ValueT>
   struct robustness {
-    struct json_monitor;
+    template <typename InputT, typename OutputT = std::vector<reelay::json>>
+    struct monitor;
   };
 };
 

@@ -13,12 +13,12 @@
 
 namespace reelay {
 
-template <typename TimeT>
+template <
+    typename TimeT, typename ValueT = bool, typename OutputT = pybind11::list>
 struct dense_timed_data_python_formatter {
   using time_t = TimeT;
-  using value_t = bool;
-  using input_t = pybind11::object;
-  using output_t = pybind11::list;
+  using value_t = ValueT;
+  using output_t = OutputT;
 
   using interval = reelay::interval<time_t>;
   using interval_map = reelay::data_interval_map<time_t>;

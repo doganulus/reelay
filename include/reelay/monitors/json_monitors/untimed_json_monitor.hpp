@@ -21,12 +21,13 @@
 
 namespace reelay {
 
-template <typename TimeT,
-          class FormatterT = discrete_timed_json_formatter<TimeT>>
-struct untimed_json_monitor : base_monitor<TimeT, json, json> {
+template <
+    typename TimeT, typename InputT = reelay::json, typename OutputT = InputT,
+    class FormatterT = discrete_timed_json_formatter<TimeT, bool, OutputT>>
+struct untimed_json_monitor final : base_monitor<TimeT, InputT, OutputT> {
   using time_t = TimeT;
-  using input_t = json;
-  using output_t = json;
+  using input_t = InputT;
+  using output_t = OutputT;
 
   using factory = untimed_setting::factory<input_t>;
 

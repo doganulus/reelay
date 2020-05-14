@@ -12,12 +12,11 @@
 
 namespace reelay {
 
-template <typename TimeT, typename ValueT = bool>
+template <typename TimeT, typename ValueT = bool, typename OutputT = json>
 struct condensing_json_formatter {
   using time_t = TimeT;
   using value_t = ValueT;
-  using input_t = reelay::json;
-  using output_t = reelay::json;
+  using output_t = OutputT;
 
   value_t lastval = false;
 
@@ -28,7 +27,7 @@ struct condensing_json_formatter {
                              const std::string& y_str = "value")
       : t_name(t_str), y_name(y_str) {}
 
-  output_t format(value_t result, time_t now) {
+  inline output_t format(value_t result, time_t now) {
     if (result != lastval or now == 0) {
       lastval = result;
       return json({{t_name, now}, {y_name, result}});

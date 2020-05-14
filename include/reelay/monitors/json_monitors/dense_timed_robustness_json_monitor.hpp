@@ -21,15 +21,17 @@
 
 namespace reelay {
 
-template <typename TimeT, typename ValueT,
-          class FormatterT
-          = dense_timed_robustness_json_formatter<TimeT, ValueT>>
-struct dense_timed_robustness_json_monitor
-    : base_monitor<TimeT, json, std::vector<json>> {
+template <
+    typename TimeT, typename ValueT, typename InputT = reelay::json,
+    typename OutputT = std::vector<InputT>,
+    class FormatterT
+    = dense_timed_robustness_json_formatter<TimeT, ValueT, OutputT>>
+struct dense_timed_robustness_json_monitor final
+    : base_monitor<TimeT, InputT, OutputT> {
   using time_t = TimeT;
   using value_t = ValueT;
-  using input_t = json;
-  using output_t = std::vector<json>;
+  using input_t = InputT;
+  using output_t = OutputT;
 
   using factory = dense_timed_robustness_0_setting::factory<input_t, value_t, time_t>;
 

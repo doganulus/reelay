@@ -21,12 +21,14 @@
 
 namespace reelay {
 
-template <typename TimeT,
-          class FormatterT = discrete_timed_json_formatter<TimeT>>
-struct discrete_timed_data_json_monitor : base_monitor<TimeT, json, json> {
+template <
+    typename TimeT, typename InputT = reelay::json, typename OutputT = InputT,
+    class FormatterT = discrete_timed_json_formatter<TimeT, bool, OutputT>>
+struct discrete_timed_data_json_monitor final
+    : base_monitor<TimeT, InputT, OutputT> {
   using time_t = TimeT;
-  using input_t = json;
-  using output_t = json;
+  using input_t = InputT;
+  using output_t = OutputT;
 
   using factory = discrete_timed_data_setting::factory<input_t, time_t>;
 
@@ -38,10 +40,7 @@ struct discrete_timed_data_json_monitor : base_monitor<TimeT, json, json> {
   data_mgr_t manager;
   network_ptr_t network;
   formatter_t formatter;
-
-  std::string t_name = "time";
-  std::string y_name = "value";
-
+  
   discrete_timed_data_json_monitor() = default;
 
   explicit discrete_timed_data_json_monitor(
@@ -57,9 +56,13 @@ struct discrete_timed_data_json_monitor : base_monitor<TimeT, json, json> {
     this->network = parser.parse(pattern);
 
     try {
-      this->y_name = reelay::any_cast<std::string>(kw.at("name"));
+      formatter.t_name = reelay::any_cast<std::string>(kw.at("t_name"));
     } catch (const std::out_of_range &oor) {
-      this->y_name = "value";
+    }
+
+    try {
+      formatter.y_name = reelay::any_cast<std::string>(kw.at("y_name"));
+    } catch (const std::out_of_range &oor) {
     }
   }
 
