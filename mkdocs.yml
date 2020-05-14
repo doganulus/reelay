@@ -30,18 +30,19 @@ nav:
     - 'Use Reelay from Python' : 'gs_python.md'
 
   - User Manual: 
+    - 'Temporal Behaviors' : 'behaviors.md'
     - 'Rye Format' : 'rye.md'
     - 'C++ API' : 'cpp_api.md'
     - 'Python API' : 'python_api.md'
     - 'Benchmarking' : 'performance.md'
-    - 'Release Notes': 'release_notes.md'
 
   - Advanced Topics: 
-    - 'Time Models' : 'time_models.md'
-    - 'Temporal Logic' : 'temporal_logic.md'
-    - 'Regular Expressions' : 'regular_expressions.md'
-    - 'Sequential Networks' : 'sequential_networks.md'
-    - 'References' : 'literature.md'
+  #   - 'Time Models' : 'time_models.md'
+  #   - 'Temporal Logic' : 'temporal_logic.md'
+  #   - 'Robustness' : 'robustness.md'
+  #   - 'Regular Expressions' : 'regular_expressions.md'
+  #   - 'Sequential Networks' : 'sequential_networks.md'
+     - 'References' : 'literature.md'
 
   - About:
     - 'Author' : 'author.md'

@@ -1,31 +1,29 @@
 # Reelay Expression Format
 
-Reelay reads executable specifications written in plain text and verifies that the system does what those specifications say at runtime. To construct runtime monitors automatically, those specifications must follow some basic syntax rules, called Rye format in short.
+Reelay reads executable specifications written in plain text and verifies that the system does what those specifications say at runtime. To construct runtime monitors automatically, those specifications must follow some basic syntax rules, called Rye format for short.
 
 ## What is Rye Format?
 
-Rye format uses a set of special constructs (that is, keywords and punctuation) to describe desired system behavior over temporal data streams expressed in JSON Lines or CSV-like formats.
+Rye format uses a set of special constructs (that is, keywords and punctuation) to describe desired system behavior over temporal data streams expressed in structured data formats like multiline JSON or CSV.
 
-These constructs are divided into four categories:
+These syntactic constructs are divided into four categories:
 
 1. Atomic expressions
 2. Boolean logic expressions
 3. Temporal logic expressions
-4. Regular expressions (soon)
+4. Regular expressions (in a future release)
 
 Let's start with atomic expressions.
 
 #### Atomic Expressions
 
-Atomic expressions are the basic building blocks of Reelay expressions. Atomic expressions in Reelay come in two flavors: (1) curly-bracketed atoms `{...}` for streams of key-value pairs (JSON, CSV with header, etc.) and (2) square-bracketed atoms `[...]` for streams of list-like (CSV without header, space-delimited logs, etc.). The choice depends on the streaming format and these two flavors should not be mixed naturally. 
-
-Each atom describes a set of constraints over data elements. For example, a curly-bracketed atom is written such that
+Atomic expressions are the basic building blocks of Reelay expressions. Basic atoms use the curly-bracket syntax `{...}` and describes a set of constraints over data objects.  For example, an atomic expression such as
 
 ```rye
-{lights_on: true, speed > 20, mode: "Sport XL"}
+{lights_on: true, speed > 20.0, mode: "Sport XL"}
 ```
 
-and will be evaluated to `true` for time points `101` and `102` below over a temporal behavior given as a JSON object such that
+will be evaluated to `true` for time points `101` and `102` below over a temporal behavior given as a sequence of JSON objects such that
 
 ```json
 ...
@@ -35,55 +33,70 @@ and will be evaluated to `true` for time points `101` and `102` below over a tem
 ...
 ```
 
-Currently Reelay supports Booleans (`true`, `false`), numerical comparisons (`<`, `<=`, `>`, `>=`, `==`, `!=`), string equivalences inside curly atoms over flat data objects. The support for hierarchical (dotted) keys will be added in a future release for hierarchical data objects.
+Currently Reelay supports Booleans (`true`, `false`), numerical comparisons (`<`, `<=`, `>`, `>=`, `==`, `!=`), string equivalences inside curly atoms over data objects.
 
-Over list-like streams, we may write the same requirement,
+Non-existent or unspecified field names in data objects and their values do not change the value of the atomic expression. For example, an atomic expression such as
 
 ```rye
-[true, * > 20, "Sport XL"]
+{speed > 21.0}
 ```
 
-where the order of elements and the length must match the specification in this case except that the first element reserved for timestamp information. For example, this expression would be `true` only for the time point `101` below:
+will be evaluated to `true` for the time point `101` and false for time points `102` and  `103` regardless of the value of other fields in the objects. For the case where you require that a field exists in the object but don't care about its value, Reelay uses the asterisk (`*`) symbol to denote that any value is acceptable. For example,
 
-```csv
+```rye
+{lights_on: true, speed > 19.0, mode: *}
+```
+
+will be evaluated to `true` for time points `101`, `102`, and `103` but to `false` for a data object
+
+```json
+{"time": 104, "lights_on": true, "speed": 21.23}
+```
+
+since it does not contain any field named as `mode`.
+
+Quite often we have to deal with complex hierarchial data objects such as
+
+```json
 ...
-101, true, 21.23, "Sport XL"
-102, true, 20.01, "Sport XL", 121
-103, true, 19.12, "Sport XL"
-...
+{
+    "time": 104,  
+    "ego" : {
+        "lights_on": true,
+        "motion" : {
+            "position" : [117.2, -345.7],
+            "speed": 21.23
+        }
+    }
+}
+..
 ```
 
-Timing aspects and specification has a special focus in Reelay. Currently we exclusively use `time` field for dict-like objects and the first element of a list-like object for timestamp information. This behavior can be generalized in future releases.
-
-Reelay atomic expressions accepts `*` as a dummy placeholder for field values. For example, the last two column is ignored in the specification below. It will be evalutated to `true` for time points `101` adn `103` as it still need to match the length.
+when monitoring real-time systems. Therefore, Reelay support hierarchical atoms and uses `::` operator to specify the path of hierarchy as follows:
 
 ```rye
-[true, *, *]
+ego::motion::{speed > 21.0}
 ```
 
-For curly atoms, this construct allows you to describe the case where you require the key exist in the object but don't care about its value.
+These path will be calculated from the current namespace, and initially from the root of the main data object. Reelay also provides a limited support for array-like structures and currently allows the specification of indices using `$index` syntax such that
 
 ```rye
-{lights_on: true, speed: *, mode: *}
+ego::motion::position::{$0 > 100.0,  $1 > 0.0}
 ```
 
-Finally Reelay allows to declare categorical variable references inside atoms using `*ref_name` syntax such that 
+As usual we use zero-based indexing in our specifications.
+
+Finally Reelay allows to declare categorical variable references inside atoms using the `*ref_name` syntax such that
 
 ```rye
-{lights_on: true, speed > 20, mode: *m}
+{lights_on: true, speed > 20, mode: *myref}
 ```
 
-and
-
-```rye
-[true, speed > 20, mode: *myref]
-```
-
-This reference called `myref` than can be used elsewhere in the expression and quantified by `exists` and `forall` operators. More details regarding these operators are given in the following section.
+Then this reference called `myref` can be used elsewhere in the expression and quantified by `exists` and `forall` operators. More details regarding these operators are given in the following section of logical constructs.
 
 #### Boolean Logic Expressions
 
-This section describle Boolean logic operations over atomic Reelay expressions.
+This section describe Boolean logic operations over atomic Reelay expressions.
 we mainly use curly atoms in the examples but these constructs are equally applicable unless anything noted.
 
 ##### Negation
@@ -98,7 +111,7 @@ not {key1: value1, key2: value2}
 
 The conjuction of Reelay expressions is defined by using keywords `and` and `&&`.
 
-One can see that atomic expression syntax is a shortcut for conjunction between atomic constraints. It is true that two Reelay expressions below are functionally equivalent:
+One can see that atomic expression syntax is a shortcut for conjunction between atomic constraints. Two Reelay expressions below are functionally equivalent:
 
 ```rye
 {key1: value1, key2: value2}
@@ -110,17 +123,7 @@ and
 {key1: value1} and {key2: value2}
 ```
 
-For square atoms, however, one should be careful about lengths. Then two Reelay expressions below are functionally equivalent.
 
-```
-[value1, value2]  
-```
-
-and
-
-```
-[value1, *] and [*, value2]  
-```
 
 ##### Disjunction
 
@@ -233,18 +236,6 @@ which is true at the current time point if the variable `speed` is always less t
 ```
 
 which is true at the current time point if the variable `speed` is always less than 30 since `lights_on` is true sometime between `b` and `a` time units before now. We use the syntax `[a:]` and `[:b]` if there is no constraints on upper and lower bounds, respectively.
-
-#### Regular Expressions
-
-##### Union
-
-##### Concatenation
-
-##### Repetition
-
-##### Duration Constraints
-
-##### Intersection
 
 #### A Note regarding Operator Precedence
 
