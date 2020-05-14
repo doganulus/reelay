@@ -141,6 +141,36 @@ template <typename X, typename T, int order=0> struct factory {
       res = std::make_shared<atomic_any<input_t, time_t, std::string>>(kw);
     } else if (name == "mapping_ref") {
       res = std::make_shared<atomic_ref<input_t, time_t, std::string>>(kw);
+    } else if (name == "listing_false") {
+      res = std::make_shared<atomic_false<input_t, time_t, int>>(kw);
+    } else if (name == "listing_true") {
+      res = std::make_shared<atomic_true<input_t, time_t, int>>(kw);
+    } else if (name == "listing_string") {
+      res = std::make_shared<atomic_string<input_t, time_t, int>>(kw);
+    } else if (name == "listing_number") {
+      res = std::make_shared<atomic_number<input_t, time_t, int>>(kw);
+    } else if (name == "listing_eq") {
+      res = std::make_shared<atomic_number<input_t, time_t, int>>(kw);
+    // } else if (name == "listing_ne") {
+    // res = std::make_shared<atomic_ne<input_t, time_t, int>>(kw);
+    } else if (name == "listing_ge" and order == 0) {
+      kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1;
+      res = std::make_shared<atomic_ge_0<input_t, time_t, int>>(kw);
+    } else if (name == "listing_gt" and order == 0) {
+      kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1;
+      res = std::make_shared<atomic_gt_0<input_t, time_t, int>>(kw);
+    } else if (name == "listing_le" and order == 0) {
+      kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1;
+      res = std::make_shared<atomic_le_0<input_t, time_t, int>>(kw);
+    } else if (name == "listing_lt" and order == 0) {
+      kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1;
+      res = std::make_shared<atomic_lt_0<input_t, time_t, int>>(kw);
+    } else if (name == "listing_any") {
+      kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1;
+      res = std::make_shared<atomic_any<input_t, time_t, int>>(kw);
+    } else if (name == "listing_ref") {
+      kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1;
+      res = std::make_shared<atomic_ref<input_t, time_t, int>>(kw);
     } else if (name == "past_sometime") {
       res = std::make_shared<past_sometime<input_t, time_t>>(kw);
     } else if (name == "past_always") {

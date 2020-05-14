@@ -140,6 +140,30 @@ struct factory {
       result = std::make_shared<atomic_any<input_t, std::string>>(kw);
     } else if (name == "mapping_ref") {
       result = std::make_shared<atomic_ref<input_t, std::string>>(kw);
+    } else if (name == "listing_false") {
+      result = std::make_shared<atomic_false<input_t, int>>(kw);
+    } else if (name == "listing_true") {
+      result = std::make_shared<atomic_true<input_t, int>>(kw);
+    } else if (name == "listing_string") {
+      result = std::make_shared<atomic_string<input_t, int>>(kw);
+    } else if (name == "listing_number") {
+      result = std::make_shared<atomic_number<input_t, int>>(kw);
+    } else if (name == "listing_eq") {
+      result = std::make_shared<atomic_number<input_t, int>>(kw);
+    } else if (name == "listing_ne") {
+      result = std::make_shared<atomic_ne<input_t, int>>(kw);
+    } else if (name == "listing_ge") {
+      result = std::make_shared<atomic_ge<input_t, int>>(kw);
+    } else if (name == "listing_gt") {
+      result = std::make_shared<atomic_gt<input_t, int>>(kw);
+    } else if (name == "listing_le") {
+      result = std::make_shared<atomic_le<input_t, int>>(kw);
+    } else if (name == "listing_lt") {
+      result = std::make_shared<atomic_lt<input_t, int>>(kw);
+    } else if (name == "listing_any") {
+      result = std::make_shared<atomic_any<input_t, int>>(kw);
+    } else if (name == "listing_ref") {
+      result = std::make_shared<atomic_ref<input_t, int>>(kw);
     } else if (name == "previous") {
       result = std::make_shared<previous<input_t>>(kw);
     } else if (name == "past_sometime") {
