@@ -61,10 +61,10 @@ class get_pybind_include(object):
 
 ext_cpp_library = Extension(
     'library',
-    sources=['python/src/main.cpp',
-             'python/src/recipes/*.hpp'],
+    sources=['python/src/main.cpp'],
     include_dirs=[
         "include",
+        'python/include',
         'third_party/cudd/cudd',
         'third_party/cudd/cplusplus',
         get_pybind_include(),
