@@ -33,7 +33,7 @@ struct discrete_timed_network : discrete_timed_state<InputT, OutputT, TimeT> {
       : output_node(n), states(ss) {}
 
   void update(const input_t &args) {
-    this->_now = this->_now + 1;
+    this->_now = this->_now + time_t(1);
     this->update(args, this->_now);
   }
 

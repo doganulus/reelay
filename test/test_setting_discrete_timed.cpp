@@ -12,6 +12,8 @@
 #include "reelay/networks.hpp"
 #include "vector"
 
+using time_type = int64_t;
+
 using input_t = reelay::json;
 using function_t = std::function<bool(const input_t &)>;
 
@@ -24,7 +26,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{});
     sequence.push_back(input_t{{"x1", true}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("{x1}");
 
     auto result = std::vector<bool>();
@@ -47,7 +49,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{});
     sequence.push_back(input_t{{"x1", true}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("{x1:true}");
 
     auto result = std::vector<bool>();
@@ -70,7 +72,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{});
     sequence.push_back(input_t{{"x1", true}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("{x1:false}");
 
     auto result = std::vector<bool>();
@@ -93,7 +95,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{});
     sequence.push_back(input_t{{"x1", 5}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("{x1 > 4}");
 
     auto result = std::vector<bool>();
@@ -116,7 +118,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{});
     sequence.push_back(input_t{{"x1", 5}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("{x1 >= 4}");
 
     auto result = std::vector<bool>();
@@ -139,7 +141,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{});
     sequence.push_back(input_t{{"x1", 5}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("{x1 < 4}");
 
     auto result = std::vector<bool>();
@@ -162,7 +164,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{});
     sequence.push_back(input_t{{"x1", 5}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("{x1 <= 4}");
 
     auto result = std::vector<bool>();
@@ -185,7 +187,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{});
     sequence.push_back(input_t{{"x1", 5}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("{x1 != 4}");
 
     auto result = std::vector<bool>();
@@ -208,7 +210,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{});
     sequence.push_back(input_t{{"x1", "c"}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("{x1: a}");
 
     auto result = std::vector<bool>();
@@ -230,7 +232,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{});
     sequence.push_back(input_t{{"x1", 3}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("{x1: 3}");
 
     auto result = std::vector<bool>();
@@ -252,7 +254,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"x1", true}});
     sequence.push_back(input_t{{"x1", "3"}, {"x2", "c"}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("{x2: *}");
 
     auto result = std::vector<bool>();
@@ -280,7 +282,7 @@ TEST_CASE("Atoms") {
 
     reelay::kwargs predicates = {{"sum_x1_and_x2_gt_5", sum_x1_and_x2_gt_5}};
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("${sum_x1_and_x2_gt_5}", predicates);
 
     auto result = std::vector<bool>();
@@ -304,7 +306,7 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"x1", 5}});
     sequence.push_back(input_t{{"x1", 6}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("{x1 > 3, x1 < 5}");
 
     auto result = std::vector<bool>();
@@ -330,7 +332,7 @@ TEST_CASE("Nested Inputs") {
     sequence.push_back(input_t{{"obj", {{"flag", true}}}});
     sequence.push_back(input_t{});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("obj::{flag}");
 
     auto result = std::vector<bool>();
@@ -356,7 +358,7 @@ TEST_CASE("Nested Inputs") {
     sequence.push_back(input_t{{"obj1", {{"obj2", {{"flag2", false}}}}}});
     sequence.push_back(input_t{});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("obj1::obj2::{flag2}");
 
     auto result = std::vector<bool>();
@@ -382,7 +384,7 @@ TEST_CASE("Nested Inputs") {
   //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
 
   //   auto net1 =
-  //       reelay::detail::discrete_timed<int>::network<input_t>::from_temporal_logic(
+  //       reelay::detail::discrete_timed<time_type>::network<input_t>::from_temporal_logic(
   //           "obj1::obj2::any{a < 6}");
 
   //   auto result = std::vector<bool>();
@@ -408,7 +410,7 @@ TEST_CASE("Nested Inputs") {
   //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 0}}}}}}});
 
   //   auto net1 =
-  //       reelay::detail::discrete_timed<int>::network<input_t>::from_temporal_logic(
+  //       reelay::detail::discrete_timed<time_type>::network<input_t>::from_temporal_logic(
   //           "obj1::obj2::all{b > 1}");
 
   //   auto result = std::vector<bool>();
@@ -433,7 +435,7 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_t{{"p1", false}, {"p2", true}});
     sequence.push_back(input_t{{"p1", true}, {"p2", true}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("{p1} or {p2}");
 
     auto result = std::vector<bool>();
@@ -456,7 +458,7 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_t{{"p1", false}, {"p2", true}});
     sequence.push_back(input_t{{"p1", true}, {"p2", true}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("{p1} and {p2}");
 
     auto result = std::vector<bool>();
@@ -479,7 +481,7 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_t{{"p1", false}, {"p2", true}});
     sequence.push_back(input_t{{"p1", true}, {"p2", true}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("{p1} -> {p2}");
 
     auto result = std::vector<bool>();
@@ -500,7 +502,7 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_t{{"p1", false}});
     sequence.push_back(input_t{{"p1", true}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("not {p1}");
 
     auto result = std::vector<bool>();
@@ -525,9 +527,9 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_t{{"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"p1", false}, {"p2", true}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("pre{p1}");
-    auto net2 = reelay::detail::discrete_timed<int>::network<
+    auto net2 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("pre{p2}");
 
     auto result1 = std::vector<bool>();
@@ -555,9 +557,9 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_t{{"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"p1", true}, {"p2", false}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("historically{p1}");
-    auto net2 = reelay::detail::discrete_timed<int>::network<
+    auto net2 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("historically{p2}");
 
     auto result1 = std::vector<bool>();
@@ -585,9 +587,9 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_t{{"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"p1", false}, {"p2", false}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("once{p1}");
-    auto net2 = reelay::detail::discrete_timed<int>::network<
+    auto net2 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("once{p2}");
 
     auto result1 = std::vector<bool>();
@@ -625,7 +627,7 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_t{{"p1", true}, {"p2", true}});
     sequence.push_back(input_t{{"p1", true}, {"p2", false}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("{p1} since {p2}");
 
     auto result1 = std::vector<bool>();
@@ -658,7 +660,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"p1", false}, {"p2", false}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("once[2:4]{p2}");
 
     auto result1 = std::vector<bool>();
@@ -688,7 +690,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"p1", false}, {"p2", false}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("once[:4]{p2}");
 
     auto result1 = std::vector<bool>();
@@ -718,7 +720,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"p1", false}, {"p2", false}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("once[2:]{p2}");
 
     auto result1 = std::vector<bool>();
@@ -748,7 +750,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"p1", false}, {"p2", false}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("historically[2:4]{p1}");
 
     auto result1 = std::vector<bool>();
@@ -778,7 +780,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"p1", false}, {"p2", false}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("historically[:4]{p1}");
 
     auto result1 = std::vector<bool>();
@@ -808,7 +810,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"p1", false}, {"p2", false}});
     sequence.push_back(input_t{{"p1", false}, {"p2", false}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("historically[2:]{p1}");
 
     auto result1 = std::vector<bool>();
@@ -838,7 +840,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"p1", false}, {"p2", false}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("{p1} since[2:4] {p2}");
 
     auto result1 = std::vector<bool>();
@@ -868,7 +870,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"p1", false}, {"p2", false}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("{p1} since[:4] {p2}");
 
     auto result1 = std::vector<bool>();
@@ -898,7 +900,7 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"p1", false}, {"p2", false}});
 
-    auto net1 = reelay::detail::discrete_timed<int>::network<
+    auto net1 = reelay::detail::discrete_timed<time_type>::network<
         input_t>::from_temporal_logic("{p1} since[2:] {p2}");
 
     auto result1 = std::vector<bool>();

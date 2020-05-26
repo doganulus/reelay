@@ -1,5 +1,9 @@
 /*
- * Copyright (c) 2019-2020 Dogan Ulus
+ *                 |
+ *    __| _ \  _ \ |  _` | |   |
+ *   |    __/  __/ | (   | |   |
+ *  _|  \___|\___|_|\__,_|\__, |
+ *                         ____/    Copyright (c) 2019-2020 Dogan Ulus
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -8,4 +12,4 @@
 
 #pragma once
 
-#define REELAY_VERSION "2001_0"
+#define REELAY_VERSION "200500"

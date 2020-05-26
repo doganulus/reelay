@@ -25,7 +25,7 @@ template <typename T>
 struct timefield<T, json> {
   using input_t = json;
   inline static T get_time(const input_t &container) {
-    return container.at("time");
+    return T(container.at("time"));
   }
 };
 

@@ -38,6 +38,7 @@ template <class Setting> struct ptl_parser : ptl_grammar{
   reelay::kwargs meta;
 
   std::vector<state_ptr_t> states = std::vector<state_ptr_t>();
+  node_ptr_t output_node;
 
   explicit ptl_parser(const reelay::kwargs &mm = reelay::kwargs())
       : meta(mm) {
@@ -544,8 +545,8 @@ template <class Setting> struct ptl_parser : ptl_grammar{
       std::pair<float, float> bound = any_cast<std::pair<float, float>>(sv[0]);
       node_ptr_t child = any_cast<node_ptr_t>(sv[1]);
 
-      time_t lbound = std::get<0>(bound);
-      time_t ubound = std::get<1>(bound);
+      time_t lbound = time_t(std::get<0>(bound));
+      time_t ubound = time_t(std::get<1>(bound));
       auto args = std::vector<node_ptr_t>({child});
 
       reelay::kwargs kw = {{"args", args},
@@ -579,8 +580,8 @@ template <class Setting> struct ptl_parser : ptl_grammar{
       std::pair<float, float> bound = any_cast<std::pair<float, float>>(sv[0]);
       node_ptr_t child = any_cast<node_ptr_t>(sv[1]);
 
-      time_t lbound = std::get<0>(bound);
-      time_t ubound = std::get<1>(bound);
+      time_t lbound = time_t(std::get<0>(bound));
+      time_t ubound = time_t(std::get<1>(bound));
       auto args = std::vector<node_ptr_t>({child});
 
       reelay::kwargs kw = {{"args", args},
@@ -606,8 +607,8 @@ template <class Setting> struct ptl_parser : ptl_grammar{
             any_cast<std::pair<float, float>>(sv[1]);
         node_ptr_t right = any_cast<node_ptr_t>(sv[2]);
 
-        time_t lbound = std::get<0>(bound);
-        time_t ubound = std::get<1>(bound);
+        time_t lbound = time_t(std::get<0>(bound));
+        time_t ubound = time_t(std::get<1>(bound));
         auto args = std::vector<node_ptr_t>({left, right});
 
         reelay::kwargs kw = {{"args", args},
@@ -691,11 +692,10 @@ template <class Setting> struct ptl_parser : ptl_grammar{
   }
 
   std::shared_ptr<network_t> parse(const std::string &pattern) {
-    node_ptr_t output_func;
 
-    parser.parse(pattern.c_str(), output_func);
+    parser.parse(pattern.c_str(), output_node);
 
-    auto network = std::make_shared<network_t>(output_func, states);
+    auto network = std::make_shared<network_t>(output_node, states);
     return network;
   }
 };
