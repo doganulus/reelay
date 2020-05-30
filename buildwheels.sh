@@ -32,5 +32,5 @@ done
 chown -R ${HOST_UID}:${HOST_UID} /monitors/release
 
 # python3 -m pip install twine
-# python3 -m twine upload --repository testpypi dist/*
-# python3 -m twine upload /dist/*
+# python3 -m twine upload --repository testpypi release/*
+# python3 -m twine upload release/*

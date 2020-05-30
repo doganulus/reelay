@@ -1,11 +1,11 @@
 CC=gcc#
 CXX=g++#
 CXXFLAGS=-std=c++11 -fPIC -O2 -pthread
-CXXFLAGS_APPS=-std=c++17 -fPIC -O2 -pthread -fno-new-ttp-matching#-Wall -Wextra
+CXXFLAGS_APPS=-std=c++17 -fPIC -pthread -O3#-Wall -Wextra
 CXXFLAGS_TEST=-g -std=c++11 -fPIC -O0 -pthread --coverage -fno-inline -fno-inline-small-functions -fno-default-inline -fvisibility=hidden#-Wall -Wextra
 
 LIB_FLAGS=-lcudd
-INCLUDE_FLAGS=-I$(ROOT_DIR) -I$(ROOT_DIR)/include -I/home/ulus/anaconda3/include/python3.6m
+INCLUDE_FLAGS=-I$(ROOT_DIR) -I$(ROOT_DIR)/include -I/home/dogan/anaconda3/include/python3.7m
 
 NAME=reelay
 
@@ -50,7 +50,7 @@ benchmark: timescales rvbc2018
 timescales:
 	mkdir -p test/build
 	cd test/build && rm -rf timescales && git clone https://github.com/doganulus/timescales.git
-	cd test/build/timescales && make full
+	cd test/build/timescales && make full FLAGS="--format=json"
 
 timescales-clean:
 	rm -rf test/build/timescales
@@ -62,7 +62,9 @@ rvbc2018:
 rvbc2018-clean:
 	rm -rf test/build/benchmark-challenge-2018
 
-# apps: rymtl rystl ryjavu
+apps: 
+	mkdir -p bin
+	$(CXX) $(CXXFLAGS_APPS) apps/$(name)/*.cpp -o bin/$(name) $(INCLUDE_FLAGS) $(LIB_FLAGS)
 
 # rymtl:
 # 	mkdir -p bin
@@ -146,12 +148,17 @@ test_nested_input:
 	cd test/build && ./test_nested_input -r compact
 
 test_random:
-	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_random.cpp -o test_random $(INCLUDE_FLAGS) -L/home/ulus/anaconda3/lib -lcudd -lpython3.6m
+	cd test/build && $(CXX) $(CXXFLAGS_TEST) -std=c++11 main.o $(ROOT_DIR)/test/test_random.cpp -o test_random $(INCLUDE_FLAGS) -L/home/dogan/anaconda3/lib -lcudd -lpython3.7m
 	cd test/build && ./test_random -r compact
 
 test_json_monitors:
 	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_json_monitors.cpp -o test_json_monitors $(INCLUDE_FLAGS) -L/home/ulus/anaconda3/lib -lcudd 
 	cd test/build && ./test_json_monitors -r compact
+
+test_performance_discrete: test/timescales/discrete/multitime/*.txt
+	for batchfile in $^ ; do \
+        multitime -n 10 -b $${batchfile} >/dev/null; \
+    done
 
 # test_mtl_performance_discrete: test/timescales/discrete/multitime/*.txt
 # 	for batchfile in $^ ; do \

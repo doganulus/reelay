@@ -1,3 +1,3 @@
-bin/rymtl 'historically({r} -> (historically[:10]{p}))' test/build/timescales/fullsuite/AlwaysBR/Discrete/1M/AlwaysBR10.csv --discrete
-bin/rymtl 'historically({r} -> (historically[:100]{p}))' test/build/timescales/fullsuite/AlwaysBR/Discrete/1M/AlwaysBR100.csv --discrete
-bin/rymtl 'historically({r} -> (historically[:1000]{p}))' test/build/timescales/fullsuite/AlwaysBR/Discrete/1M/AlwaysBR1000.csv --discrete
+bin/ryjson1 -x 'historically({r} -> (historically[:10]{p}))' test/build/timescales/fullsuite/AlwaysBR/Discrete/1M/AlwaysBR10.jsonl
+bin/ryjson1 -x 'historically({r} -> (historically[:100]{p}))' test/build/timescales/fullsuite/AlwaysBR/Discrete/1M/AlwaysBR100.jsonl
+bin/ryjson1 -x 'historically({r} -> (historically[:1000]{p}))' test/build/timescales/fullsuite/AlwaysBR/Discrete/1M/AlwaysBR1000.jsonl
