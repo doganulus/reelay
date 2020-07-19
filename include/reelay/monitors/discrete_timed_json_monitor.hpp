@@ -17,8 +17,6 @@
 #include "reelay/json.hpp"
 #include "reelay/monitors/json_monitors/discrete_timed_data_json_monitor.hpp"
 #include "reelay/monitors/json_monitors/discrete_timed_json_monitor.hpp"
-#include "reelay/monitors/json_monitors/untimed_data_json_monitor.hpp"
-#include "reelay/monitors/json_monitors/untimed_json_monitor.hpp"
 
 #include "reelay/monitors/base_monitor.hpp"
 #include "reelay/monitors/public_interface.hpp"
@@ -46,15 +44,9 @@ struct discrete_timed<TimeT>::monitor {
     bool timed = reelay::any_cast<bool>(knowledge["timed"]);
     bool categorical = reelay::any_cast<bool>(knowledge["has_references"]);
 
-    if (not timed and not categorical) {
-      return std::make_shared<untimed_json_monitor<time_t, input_t, output_t>>(
-          pattern, kw);
-    } else if (timed and not categorical) {
+    if (not categorical) {
       return std::make_shared<
           discrete_timed_json_monitor<time_t, input_t, output_t>>(pattern, kw);
-    } else if (not timed and categorical) {
-      return std::make_shared<
-          untimed_data_json_monitor<time_t, input_t, output_t>>(pattern, kw);
     } else {
       return std::make_shared<
           discrete_timed_data_json_monitor<time_t, input_t, output_t>>(

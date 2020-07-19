@@ -16,7 +16,6 @@
 
 #include "reelay/json.hpp"
 #include "reelay/monitors/json_monitors/discrete_timed_robustness_condensing_json_monitor.hpp"
-#include "reelay/monitors/json_monitors/untimed_robustness_condensing_json_monitor.hpp"
 
 #include "reelay/monitors/base_monitor.hpp"
 #include "reelay/monitors/public_interface.hpp"
@@ -51,14 +50,8 @@ struct condensing<TimeT>::robustness<ValueT>::monitor {
         "Robustness semantics is not available for specifications that "
         "contains data references. "));
     }
-
-    if (not timed) {
-      return std::make_shared<untimed_robustness_condensing_json_monitor<
+    return std::make_shared<discrete_timed_robustness_condensing_json_monitor<
           time_t, value_t, input_t, output_t>>(pattern, kw);
-    } else {
-      return std::make_shared<discrete_timed_robustness_condensing_json_monitor<
-          time_t, value_t, input_t, output_t>>(pattern, kw);
-    }
   }
 };
 

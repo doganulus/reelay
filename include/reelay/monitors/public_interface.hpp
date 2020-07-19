@@ -12,6 +12,7 @@
 
 #pragma once
 
+#include "reelay/json.hpp"
 #include "reelay/constants.hpp"
 
 namespace reelay {

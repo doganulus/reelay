@@ -27,58 +27,6 @@
 namespace reelay {
 namespace detail {
 
-template <typename input_t> struct network {
-  using factory = untimed_setting::factory<input_t>;
-
-  using network_t = typename factory::network_t;
-  using network_ptr_t = typename factory::network_ptr_t;
-
-  static network_ptr_t
-  from_temporal_logic(std::string pattern,
-                      reelay::kwargs kw = reelay::kwargs()) {
-    auto parser = ptl_parser<factory>(kw);
-    return parser.parse(pattern);
-  }
-  // static network_ptr_t
-  // from_regular_expressions(std::string pattern,
-  //                          reelay::kwargs kw = reelay::kwargs()) {
-  //   auto parser = regex_parser<factory>(kw);
-  //   return parser.parse(pattern);
-  // }
-};
-
-struct unordered_data {
-  template <typename input_t> struct network {
-    using factory = untimed_data_setting::factory<input_t>;
-
-    using network_t = typename factory::network_t;
-    using network_ptr_t = typename factory::network_ptr_t;
-
-    static network_ptr_t
-    from_temporal_logic(std::string pattern,
-                        reelay::kwargs kw = reelay::kwargs()) {
-      auto parser = ptl_parser<factory>(kw);
-      return parser.parse(pattern);
-    }
-  };
-};
-
-template <typename output_t> struct robustness {
-  template <typename input_t> struct network {
-    using factory = untimed_robustness_setting::factory<input_t, output_t>;
-
-    using network_t = typename factory::network_t;
-    using network_ptr_t = typename factory::network_ptr_t;
-
-    static network_ptr_t
-    from_temporal_logic(std::string pattern,
-                        reelay::kwargs kw = reelay::kwargs()) {
-      auto parser = ptl_parser<factory>(kw);
-      return parser.parse(pattern);
-    }
-  };
-};
-
 template <typename time_t> struct discrete_timed {
   template <typename input_t> struct network {
     using factory = discrete_timed_setting::factory<input_t, time_t>;

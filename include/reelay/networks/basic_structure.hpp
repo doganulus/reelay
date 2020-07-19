@@ -13,14 +13,6 @@
 
 namespace reelay {
 
-template <typename OutputT>
-struct untimed_node {
-  virtual ~untimed_node() {}
-  virtual OutputT output() {
-    throw std::runtime_error("Undefined output function");
-  };
-};
-
 template <typename OutputT, typename TimeT>
 struct discrete_timed_node {
   virtual ~discrete_timed_node() {}
@@ -34,18 +26,6 @@ struct dense_timed_node {
   virtual ~dense_timed_node() {}
   virtual OutputT output(TimeT, TimeT) {
     throw std::runtime_error("Undefined output function");
-  }
-};
-
-template <typename InputT, typename OutputT>
-struct untimed_state : untimed_node<OutputT> {
-  virtual ~untimed_state() {}
-  virtual OutputT output() override {
-    throw std::runtime_error("Undefined output function");
-  }
-
-  virtual void update(const InputT&) {
-    throw std::runtime_error("Undefined update function");
   }
 };
 
