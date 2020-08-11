@@ -14,9 +14,7 @@
 
 #include "reelay/intervals.hpp"
 #include "reelay/networks/basic_structure.hpp"
-#include "reelay/networks/discrete_timed_network.hpp"
-
-#include "reelay/settings/discrete_timed/atomic_custom.hpp"
+//
 #include "reelay/settings/discrete_timed/atomic_any.hpp"
 #include "reelay/settings/discrete_timed/atomic_false.hpp"
 #include "reelay/settings/discrete_timed/atomic_ge.hpp"
@@ -28,11 +26,7 @@
 #include "reelay/settings/discrete_timed/atomic_prop.hpp"
 #include "reelay/settings/discrete_timed/atomic_string.hpp"
 #include "reelay/settings/discrete_timed/atomic_true.hpp"
-
 #include "reelay/settings/discrete_timed/atomic_map.hpp"
-#include "reelay/settings/discrete_timed/atomic_nested.hpp"
-#include "reelay/settings/discrete_timed/atomic_nested_all.hpp"
-#include "reelay/settings/discrete_timed/atomic_nested_any.hpp"
 
 #include "reelay/settings/discrete_timed/conjunction.hpp"
 #include "reelay/settings/discrete_timed/disjunction.hpp"
@@ -70,11 +64,9 @@ struct factory {
 
   using node_t = reelay::discrete_timed_node<output_t, time_t>;
   using state_t = reelay::discrete_timed_state<input_t, output_t, time_t>;
-  using network_t = reelay::discrete_timed_network<input_t, output_t, time_t>;
 
   using node_ptr_t = std::shared_ptr<node_t>;
   using state_ptr_t = std::shared_ptr<state_t>;
-  using network_ptr_t = std::shared_ptr<network_t>;
 
   const static output_t top = true;
   const static output_t bottom = false;
@@ -93,7 +85,7 @@ struct factory {
       result = std::make_shared<implication<input_t, time_t>>(kw);
     } else {
       throw std::invalid_argument(
-          "Unsupported operator for the untimed setting");
+          "Unsupported operator for the discrete timed setting");
     }
 
     return result;
@@ -105,12 +97,6 @@ struct factory {
 
     if (name == "atomic_map") {
       result = std::make_shared<atomic_map<input_t, time_t>>(kw);
-    } else if (name == "atomic_nested") {
-      result = std::make_shared<atomic_nested<input_t, time_t>>(kw);
-    // } else if (name == "atomic_nested_all") {
-    //   result = std::make_shared<atomic_nested_all<input_t, time_t>>(kw);
-    // } else if (name == "atomic_nested_any") {
-    //   result = std::make_shared<atomic_nested_any<input_t, time_t>>(kw);
     } else if (name == "mapping_prop") {
       result = std::make_shared<atomic_prop<input_t, time_t>>(kw);
     } else if (name == "mapping_false") {
@@ -156,8 +142,6 @@ struct factory {
       result = std::make_shared<past_always_bounded_half<input_t, time_t>>(kw);
     } else if (name == "since_bounded_half") {
       result = std::make_shared<since_bounded_half<input_t, time_t>>(kw);
-    } else if (name == "predicate") {
-      result = std::make_shared<predicate<input_t, time_t>>(kw);
     } else {
       throw std::invalid_argument(
           "Unsupported operator for the discrete timed setting");

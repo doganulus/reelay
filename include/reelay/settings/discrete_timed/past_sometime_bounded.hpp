@@ -39,6 +39,9 @@ struct past_sometime_bounded final : public discrete_timed_state<X, bool, T> {
   time_t lbound;
   time_t ubound;
 
+  past_sometime_bounded(time_t l = 0, time_t u = 0)
+      : lbound(l), ubound(u) {}
+
   past_sometime_bounded(const std::vector<node_ptr_t> &args, time_t l = 0,
                         time_t u = 0)
       : first(args[0]), lbound(l), ubound(u) {}
@@ -49,11 +52,15 @@ struct past_sometime_bounded final : public discrete_timed_state<X, bool, T> {
             reelay::any_cast<time_t>(kw.at("lbound")),
             reelay::any_cast<time_t>(kw.at("ubound"))) {}
 
-  void update(const input_t&, time_t now) {
-    if (first->output(now)) {
+  void update(bool p, time_t now) {
+    if (p) {
       value = value.add(interval::closed(now + lbound, now + ubound));
       value = value - interval_set(interval::right_open(0, now));
     }
+  }
+
+  void update(const input_t&, time_t now) {
+    update(first->output(now), now);
   }
 
   output_t output(time_t now) { return boost::icl::contains(value, now); }

@@ -8,9 +8,12 @@
 
 #pragma once
 
-#include "string"
+#include <memory>
+#include <string>
+#include <vector>
 
 #include "reelay/common.hpp"
+#include "reelay/datafield.hpp"
 #include "reelay/intervals.hpp"
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/unordered_data.hpp"

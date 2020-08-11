@@ -8,11 +8,12 @@
 
 #pragma once
 
-#include "vector"
+#include <vector>
 
 #include "reelay/common.hpp"
 #include "reelay/intervals.hpp"
 #include "reelay/networks/basic_structure.hpp"
+#include "reelay/unordered_data.hpp"
 
 namespace reelay {
 namespace discrete_timed_data_setting {

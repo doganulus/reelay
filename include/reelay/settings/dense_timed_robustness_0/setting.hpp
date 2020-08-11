@@ -13,10 +13,8 @@
 #include "string"
 
 #include "reelay/networks/basic_structure.hpp"
-#include "reelay/networks/dense_timed_network.hpp"
-
+//
 #include "reelay/settings/dense_timed_robustness_0/atomic_any.hpp"
-#include "reelay/settings/dense_timed_robustness_0/atomic_custom.hpp"
 #include "reelay/settings/dense_timed_robustness_0/atomic_false.hpp"
 #include "reelay/settings/dense_timed_robustness_0/atomic_ge_0.hpp"
 #include "reelay/settings/dense_timed_robustness_0/atomic_gt_0.hpp"
@@ -28,11 +26,7 @@
 #include "reelay/settings/dense_timed_robustness_0/atomic_prop.hpp"
 #include "reelay/settings/dense_timed_robustness_0/atomic_string.hpp"
 #include "reelay/settings/dense_timed_robustness_0/atomic_true.hpp"
-
 #include "reelay/settings/dense_timed_robustness_0/atomic_map.hpp"
-#include "reelay/settings/dense_timed_robustness_0/atomic_nested.hpp"
-// #include "reelay/settings/dense_timed_robustness_0/atomic_nested_all.hpp"
-// #include "reelay/settings/dense_timed_robustness_0/atomic_nested_any.hpp"
 
 #include "reelay/settings/dense_timed_robustness_0/conjunction.hpp"
 #include "reelay/settings/dense_timed_robustness_0/disjunction.hpp"
@@ -69,10 +63,6 @@ template <typename X, typename V, typename T> struct factory {
   using node_ptr_t = std::shared_ptr<node_t>;
   using state_ptr_t = std::shared_ptr<state_t>;
 
-  using network_t =
-      reelay::dense_timed_network<input_t, output_t, time_t, value_t>;
-  using network_ptr_t = std::shared_ptr<network_t>;
-
   using function_t =
       std::function<output_t(const input_t &, const input_t &, time_t, time_t)>;
 
@@ -90,7 +80,7 @@ template <typename X, typename V, typename T> struct factory {
       result = std::make_shared<implication<input_t, value_t, time_t>>(kw);
     } else {
       throw std::invalid_argument(
-          "Unsupported operator for the untimed setting");
+          "Unsupported operator for the dense timed robustness setting");
     }
 
     return result;
@@ -102,14 +92,6 @@ template <typename X, typename V, typename T> struct factory {
 
     if (name == "atomic_map") {
       result = std::make_shared<atomic_map<input_t, value_t, time_t>>(kw);
-    } else if (name == "atomic_nested") {
-      result = std::make_shared<atomic_nested<input_t, value_t, time_t>>(kw);
-    // } else if (name == "atomic_nested_all") {
-    //   result =
-    //       std::make_shared<atomic_nested_all<input_t, value_t, time_t>>(kw);
-    // } else if (name == "atomic_nested_any") {
-    //   result =
-    //       std::make_shared<atomic_nested_any<input_t, value_t, time_t>>(kw);
     } else if (name == "mapping_prop") {
       result = std::make_shared<atomic_prop<input_t, value_t, time_t>>(kw);
     } else if (name == "mapping_false") {
@@ -120,10 +102,6 @@ template <typename X, typename V, typename T> struct factory {
       result = std::make_shared<atomic_string<input_t, value_t, time_t>>(kw);
     } else if (name == "mapping_number") {
       result = std::make_shared<atomic_number<input_t, value_t, time_t>>(kw);
-    } else if (name == "mapping_eq") {
-      // result = std::make_shared<atomic_eq<input_t, value_t, time_t>>(kw);
-    } else if (name == "mapping_ne") {
-      // result = std::make_shared<atomic_ne<input_t, value_t, time_t>>(kw);
     } else if (name == "mapping_ge") {
       result = std::make_shared<atomic_ge_0<input_t, value_t, time_t>>(kw);
     } else if (name == "mapping_gt") {
@@ -158,8 +136,6 @@ template <typename X, typename V, typename T> struct factory {
     } else if (name == "since_bounded_half") {
       result =
           std::make_shared<since_bounded_half<input_t, value_t, time_t>>(kw);
-    } else if (name == "predicate") {
-      result = std::make_shared<predicate<input_t, value_t, time_t>>(kw);
     } else {
       throw std::invalid_argument(
           "Unsupported operator for the untimed setting");

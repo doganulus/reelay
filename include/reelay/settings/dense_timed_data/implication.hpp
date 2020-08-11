@@ -8,10 +8,13 @@
 
 #pragma once
 
-#include "vector"
+#include <memory>
+#include <vector>
 
+#include "reelay/common.hpp"
 #include "reelay/intervals.hpp"
 #include "reelay/networks/basic_structure.hpp"
+#include "reelay/unordered_data.hpp"
 
 namespace reelay {
 namespace dense_timed_data_setting {

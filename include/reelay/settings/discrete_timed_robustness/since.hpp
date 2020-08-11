@@ -9,6 +9,7 @@
 #pragma once
 
 #include "reelay/common.hpp"
+#include "reelay/intervals.hpp"
 #include "reelay/networks/basic_structure.hpp"
 
 namespace reelay {
