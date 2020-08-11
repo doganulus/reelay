@@ -15,29 +15,30 @@
 #include "reelay/intervals.hpp"
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/parser/ptl.hpp"
-#include "reelay/settings/discrete_timed/setting.hpp"
+#include "reelay/settings/discrete_timed_robustness/setting.hpp"
 //
 #include "reelay/options.hpp"
 
 namespace reelay {
 
-template <typename T, typename X>
-struct discrete_timed_network final : public discrete_timed_state<X, bool, T> {
-  using time_t = T;
-  using value_t = bool;
+template <typename T, typename V, typename X>
+struct discrete_timed_robustness_network final
+    : public discrete_timed_state<X, V, T> {
   using input_t = X;
-  using output_t = bool;
+  using time_t = T;
+  using value_t = V;
+  using output_t = V;
 
-  using type = discrete_timed_network<time_t, input_t>;
-  using factory = discrete_timed_setting::factory<input_t, time_t>;
+  using type = discrete_timed_robustness_network<time_t, value_t, input_t>;
 
-  using node_t = discrete_timed_node<output_t, time_t>;
-  using state_t = discrete_timed_state<input_t, output_t, time_t>;
+  using node_t = reelay::discrete_timed_node<value_t, time_t>;
+  using state_t = reelay::discrete_timed_state<input_t, value_t, time_t>;
 
   using node_ptr_t = std::shared_ptr<node_t>;
   using state_ptr_t = std::shared_ptr<state_t>;
 
-  using setting_t = discrete_timed_setting::factory<input_t, time_t>;
+  using setting_t
+      = discrete_timed_robustness_setting::factory<input_t, value_t, time_t>;
   using options_t = basic_options;
 
   node_ptr_t root;
@@ -45,14 +46,14 @@ struct discrete_timed_network final : public discrete_timed_state<X, bool, T> {
 
   time_t now = -1;
 
-  discrete_timed_network(
+  discrete_timed_robustness_network(
       const node_ptr_t &n, const std::vector<state_ptr_t> &ss)
       : root(n), states(ss) {}
 
-  discrete_timed_network(
+  discrete_timed_robustness_network(
       const node_ptr_t &n, const std::vector<state_ptr_t> &ss,
       const options_t &options)
-      : discrete_timed_network(n, ss) {}
+      : discrete_timed_robustness_network(n, ss) {}
 
   void update(const input_t &args, time_t tn) override {
     for (const auto &state : this->states) {

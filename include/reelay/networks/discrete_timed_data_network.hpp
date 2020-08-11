@@ -15,21 +15,22 @@
 #include "reelay/intervals.hpp"
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/parser/ptl.hpp"
-#include "reelay/settings/discrete_timed/setting.hpp"
+#include "reelay/settings/discrete_timed_data/setting.hpp"
+#include "reelay/unordered_data.hpp"
 //
 #include "reelay/options.hpp"
 
 namespace reelay {
 
 template <typename T, typename X>
-struct discrete_timed_network final : public discrete_timed_state<X, bool, T> {
+struct discrete_timed_data_network final
+    : public discrete_timed_state<X, data_set_t, T> {
   using time_t = T;
-  using value_t = bool;
   using input_t = X;
-  using output_t = bool;
+  using value_t = data_set_t;
+  using output_t = data_set_t;
 
-  using type = discrete_timed_network<time_t, input_t>;
-  using factory = discrete_timed_setting::factory<input_t, time_t>;
+  using type = discrete_timed_data_network<time_t, input_t>;
 
   using node_t = discrete_timed_node<output_t, time_t>;
   using state_t = discrete_timed_state<input_t, output_t, time_t>;
@@ -37,22 +38,23 @@ struct discrete_timed_network final : public discrete_timed_state<X, bool, T> {
   using node_ptr_t = std::shared_ptr<node_t>;
   using state_ptr_t = std::shared_ptr<state_t>;
 
-  using setting_t = discrete_timed_setting::factory<input_t, time_t>;
+  using setting_t = discrete_timed_data_setting::factory<input_t, time_t>;
   using options_t = basic_options;
 
+  data_mgr_t manager;
   node_ptr_t root;
   std::vector<state_ptr_t> states;
 
   time_t now = -1;
 
-  discrete_timed_network(
+  discrete_timed_data_network(const data_mgr_t mgr, 
       const node_ptr_t &n, const std::vector<state_ptr_t> &ss)
-      : root(n), states(ss) {}
+      : manager(mgr), root(n), states(ss) {}
 
-  discrete_timed_network(
+  discrete_timed_data_network(
       const node_ptr_t &n, const std::vector<state_ptr_t> &ss,
       const options_t &options)
-      : discrete_timed_network(n, ss) {}
+      : discrete_timed_data_network(options.get_data_manager(), n, ss) {}
 
   void update(const input_t &args, time_t tn) override {
     for (const auto &state : this->states) {
@@ -76,7 +78,12 @@ struct discrete_timed_network final : public discrete_timed_state<X, bool, T> {
 
   static type make(
       const std::string &pattern, const options_t &options = options_t()) {
-    auto parser = ptl_parser<type>();
+    //
+    // Workaround until new parser
+    auto manager = options.get_data_manager();
+    kwargs kw = {{"manager", manager}};
+
+    auto parser = ptl_parser<type>(kw);
     return parser.parse(pattern, options);
   }
 };

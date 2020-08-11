@@ -15,34 +15,37 @@
 #include "reelay/intervals.hpp"
 #include "reelay/networks/basic_structure.hpp"
 #include "reelay/parser/ptl.hpp"
-#include "reelay/settings/dense_timed/setting.hpp"
+#include "reelay/settings/dense_timed_data/setting.hpp"
+#include "reelay/unordered_data.hpp"
 //
 #include "reelay/options.hpp"
 
 namespace reelay {
 
 template <typename T, typename X>
-struct dense_timed_network final : public dense_timed_state<X, interval_set<T>, T> {
+struct dense_timed_data_network final
+    : public dense_timed_state<X, data_interval_map<T>, T> {
   using time_t = T;
-  using value_t = bool;
-  using base_t = reelay::interval_set<time_t>;
+  using value_t = data_set_t;
+  using base_t = reelay::data_interval_map<time_t>;
   using input_t = X;
   using output_t = base_t;
 
-  using type = dense_timed_network<time_t, input_t>;
+  using type = dense_timed_data_network<time_t, input_t>;
 
-  using interval = reelay::interval<time_t>;
-  using interval_set = reelay::interval_set<time_t>;
-
-  using node_t = reelay::dense_timed_node<output_t, time_t>;
-  using state_t = reelay::dense_timed_state<input_t, output_t, time_t>;
+  using node_t = dense_timed_node<output_t, time_t>;
+  using state_t = dense_timed_state<input_t, output_t, time_t>;
 
   using node_ptr_t = std::shared_ptr<node_t>;
   using state_ptr_t = std::shared_ptr<state_t>;
 
-  using setting_t = dense_timed_setting::factory<input_t, time_t>;
+  using interval = reelay::interval<time_t>;
+  using interval_map = reelay::data_interval_map<time_t>;
+
+  using setting_t = dense_timed_data_setting::factory<input_t, time_t>;
   using options_t = basic_options;
 
+  data_mgr_t manager;
   node_ptr_t root;
   std::vector<state_ptr_t> states;
 
@@ -51,13 +54,15 @@ struct dense_timed_network final : public dense_timed_state<X, interval_set<T>, 
   time_t previous = 0;  // Time Zero
   time_t current = 0;   // Time Zero
 
-  dense_timed_network(const node_ptr_t &n, const std::vector<state_ptr_t> &ss)
-      : root(n), states(ss) {}
+  dense_timed_data_network(
+      const data_mgr_t mgr, const node_ptr_t &n,
+      const std::vector<state_ptr_t> &ss)
+      : manager(mgr), root(n), states(ss) {}
 
-  dense_timed_network(
+  dense_timed_data_network(
       const node_ptr_t &n, const std::vector<state_ptr_t> &ss,
       const options_t &options)
-      : dense_timed_network(n, ss) {}
+      : dense_timed_data_network(options.get_data_manager(), n, ss) {}
 
   void update(const input_t &pargs, const input_t &args, time_t tp, time_t tn)
       override {
@@ -89,12 +94,8 @@ struct dense_timed_network final : public dense_timed_state<X, interval_set<T>, 
       const std::string &pattern, const options_t &options = options_t()) {
     //
     // Workaround until new parser
-    kwargs kw;
-    if (options.get_interpolation() == piecewise::constant) {
-      kw["order"] = 0;
-    } else if (options.get_interpolation() == piecewise::linear) {
-      kw["order"] = 1;
-    }
+    auto manager = options.get_data_manager();
+    kwargs kw = {{"manager", manager}};
 
     auto parser = ptl_parser<type>(kw);
     return parser.parse(pattern, options);
