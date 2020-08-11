@@ -60,6 +60,11 @@ struct basic_options {
     return *this;
   }
 
+  basic_options& with_condensing(bool flag) {
+    condensing = flag;
+    return *this;
+  }
+
   basic_options& enable_condensing() {
     condensing = true;
     return *this;
@@ -231,6 +236,11 @@ struct discrete_monitor_options {
     return *this;
   }
 
+  discrete_monitor_options& with_condensing(bool flag) {
+    options.with_condensing(flag);
+    return *this;
+  }
+
   discrete_monitor_options& enable_condensing() {
     options.enable_condensing();
     return *this;
@@ -279,6 +289,11 @@ struct discrete_robustness_monitor_options {
   discrete_robustness_monitor_options& with_value_field_name(
       const std::string& name) {
     options.with_value_field_name(name);
+    return *this;
+  }
+
+  discrete_robustness_monitor_options& with_condensing(bool flag) {
+    options.with_condensing(flag);
     return *this;
   }
 

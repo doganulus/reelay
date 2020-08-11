@@ -67,15 +67,15 @@ std::vector<std::string> expand_glob(const std::string& glob_str) {
   return filenames;
 }
 
-template <class MonitorT>
-inline void discrete_timed_process_json_file(MonitorT monitor, const std::string& filename) {
+template <typename X, typename Y>
+void discrete_timed_processing(reelay::monitor<X, Y>& monitor, const std::string& filename) {
   int stdout_line_count = 0;
   simdjson::dom::parser reader;
   std::ofstream output_file(filename + ".ryl");
   std::cout << "Processing " + filename << std::endl;
   std::cout << "---" << std::endl;
   for (simdjson::dom::element doc : reader.load_many(filename)) {
-    reelay::json result = monitor->update(doc);
+    reelay::json result = monitor.update(doc);
     if (not result.empty()) {
       if (stdout_line_count < 5) {
         std::cout << result << std::endl;
@@ -85,25 +85,25 @@ inline void discrete_timed_process_json_file(MonitorT monitor, const std::string
         stdout_line_count++;
       }
       output_file << result << std::endl;
-    };
+    }
   }
-  if (stdout_line_count < 5){
+  if (stdout_line_count < 5) {
     std::cout << "---" << std::endl;
   }
   std::cout << "Full output written to " + filename + ".ryl" << std::endl;
 }
 
-template <class MonitorT>
-inline void dense_timed_process_json_file(MonitorT monitor, const std::string& filename) {
+template<typename X, typename Y>
+void dense_timed_processing(reelay::monitor<X, Y>& monitor, const std::string& filename) {
   int stdout_line_count = 0;
   simdjson::dom::parser reader;
   std::ofstream output_file(filename + ".ryl");
   std::cout << "Processing " + filename << std::endl;
   std::cout << "---" << std::endl;
   for (simdjson::dom::element doc : reader.load_many(filename)) {
-    reelay::json result = monitor->update(doc);
+    reelay::json result = monitor.update(doc);
     if (not result.empty()) {
-      for(const auto& item: result){
+      for (const auto& item : result) {
         if (stdout_line_count < 5) {
           std::cout << item << std::endl;
           stdout_line_count++;
@@ -127,6 +127,9 @@ int main(int argc, char** argv) {
 
   using namespace reelay;
 
+  //defaults
+
+  // argparser
   args::ArgumentParser parser(
       "Reelay Command Line Interface",
       "Further information: https://github.com/doganulus/reelay");
@@ -168,9 +171,6 @@ int main(int argc, char** argv) {
   args::Flag flinear(ginterp, "fl", "with -vf, use piecewise linear interpolation",
                 {'l', "pwl"});
 
-  args::ValueFlag<double> fperiod(
-      gsetting, "NUM", "with -v, use NUM as the sampling period",
-      {"period"});
   args::Flag fno_condense(gsetting, "fno-condense",
                           "with -x, disable dense output", {'z', "no-condense"});
 
@@ -188,6 +188,9 @@ int main(int argc, char** argv) {
 
   args::CompletionFlag completion(parser, {"complete"});
 
+
+
+
   try {
     parser.ParseCLI(argc, argv);
   } catch (const args::Completion& e) {
@@ -202,6 +205,36 @@ int main(int argc, char** argv) {
     return 1;
   }
 
+  // Choices
+  bool use_discrete = args::get(fdiscrete);
+  bool use_dense = args::get(fdense);
+
+  bool use_boolean = args::get(fboolean);
+  bool use_robustness = args::get(frobustness);
+
+  bool use_integer = args::get(fint);
+  bool use_floating = args::get(ffloat);
+
+  bool use_constant = args::get(fconstant);
+  bool use_linear = args::get(flinear);
+
+  // Apply defaults
+  if (not use_discrete and not use_dense) {
+    use_discrete = true;
+  }
+
+  if (not use_boolean and not use_robustness) {
+    use_boolean = true;
+  }
+
+  if (not use_integer and not use_floating) {
+    use_integer = true;
+  }
+
+  if (not use_constant and not use_linear) {
+    use_constant = true;
+  }
+
   // Glob Expansion
   auto filenames = std::vector<std::string>();
   for (const auto& p : args::get(paths)) {
@@ -210,69 +243,81 @@ int main(int argc, char** argv) {
   }
 
   using input_t = simdjson::dom::element;
+  using output_t = reelay::json;
 
-  reelay::kwargs extra_args
-      = {{"t_name", args::get(t_name)}, {"y_name", args::get(y_name)}};
+  auto monitor = reelay::monitor<input_t, output_t>();
 
-  if (fdiscrete) {
-    std::shared_ptr<base_monitor<int64_t, input_t, json>> m;
+  if (use_discrete and use_boolean) {  // -xb -xbz
+    auto opts = reelay::discrete_timed<intmax_t>::monitor<
+                    input_t, output_t>::options()
+                    .with_time_field_name(args::get(t_name))
+                    .with_value_field_name(args::get(y_name))
+                    .with_condensing(not args::get(fno_condense));
 
-    if (frobustness and fno_condense) {
-      m = discrete_timed<int64_t>::robustness<double>::monitor<input_t>::make(
-          args::get(spec), extra_args);
-    } else if (frobustness and not fno_condense) {
-      m = condensing<int64_t>::robustness<double>::monitor<input_t>::make(
-          args::get(spec), extra_args);
-    } else if (not frobustness and fno_condense) {
-      m = discrete_timed<int64_t>::monitor<input_t>::make(
-          args::get(spec), extra_args);
-    } else {
-      m = condensing<int64_t>::monitor<input_t>::make(
-          args::get(spec), extra_args);
-    }
+    monitor = reelay::make_monitor(args::get(spec), opts);
 
+  } else if (use_discrete and use_robustness) {  // -xr -xrz
+    auto opts = reelay::discrete_timed<intmax_t>::robustness<double>::monitor<
+                    input_t, output_t>::options()
+                    .with_time_field_name(args::get(t_name))
+                    .with_value_field_name(args::get(y_name))
+                    .with_condensing(not args::get(fno_condense));
+
+    monitor = reelay::make_monitor(args::get(spec), opts);
+
+  } else if (use_dense and use_boolean and use_integer) {  // -vbi
+    auto opts = reelay::dense_timed<intmax_t>::monitor<
+                    input_t, output_t>::options()
+                    .with_time_field_name(args::get(t_name))
+                    .with_value_field_name(args::get(y_name));
+
+    monitor = reelay::make_monitor(args::get(spec), opts);
+  } else if (
+      use_dense and use_boolean and use_floating and use_constant) {  // -vbf
+                                                                      // -vbfk
+    auto opts
+        = reelay::dense_timed<double>::monitor<input_t, output_t>::options()
+              .with_time_field_name(args::get(t_name))
+              .with_value_field_name(args::get(y_name))
+              .with_interpolation(reelay::piecewise::constant);
+
+    monitor = reelay::make_monitor(args::get(spec), opts);
+
+  } else if (
+      use_dense and use_boolean and use_floating and use_linear) {  // -vbfl
+    auto opts
+        = reelay::dense_timed<double>::monitor<input_t, output_t>::options()
+              .with_time_field_name(args::get(t_name))
+              .with_value_field_name(args::get(y_name))
+              .with_interpolation(reelay::piecewise::linear);
+
+    monitor = reelay::make_monitor(args::get(spec), opts);
+
+  } else if (use_dense and use_robustness and use_integer) {  // -vri
+    auto opts = reelay::dense_timed<intmax_t>::robustness<double>::monitor<
+                    input_t, output_t>::options()
+                    .with_time_field_name(args::get(t_name))
+                    .with_value_field_name(args::get(y_name));
+
+    monitor = reelay::make_monitor(args::get(spec), opts);
+  } else if (use_dense and use_robustness and use_floating) {  // -vrf
+    auto opts = reelay::dense_timed<double>::robustness<double>::monitor<
+                    input_t, output_t>::options()
+                    .with_time_field_name(args::get(t_name))
+                    .with_value_field_name(args::get(y_name));
+
+    monitor = reelay::make_monitor(args::get(spec), opts);
+  } else {
+    throw std::invalid_argument("Unsupported flag combination");
+  }
+
+  if (use_discrete) {
     for (const auto& filename : filenames) {
-      rycli::discrete_timed_process_json_file<decltype(m)>(m, filename);
+      rycli::discrete_timed_processing(monitor, filename);
     }
-  } else if (ffloat) {  // fdense and ffloat
-    std::shared_ptr<base_monitor<double, input_t, std::vector<json>>> m;
-
-    if (frobustness and flinear) {
-      throw std::invalid_argument(
-          ("Linear interpolation under robustness semantics not supported"));
-    } else if (frobustness and not flinear) {
-      m = reelay::dense_timed<double, piecewise::CONSTANT>::robustness<
-          double>::monitor<input_t>::make(args::get(spec), extra_args);
-    } else if (not frobustness and flinear) {
-      m = reelay::dense_timed<double, piecewise::LINEAR>::monitor<
-          input_t>::make(args::get(spec), extra_args);
-    } else {  // not frobustness and not flinear
-      m = reelay::dense_timed<double, piecewise::CONSTANT>::monitor<
-          input_t>::make(args::get(spec), extra_args);
-    }
-
+  } else {
     for (const auto& filename : filenames) {
-      rycli::dense_timed_process_json_file<decltype(m)>(m, filename);
-    }
-  } else {  // fdense and fint
-    std::shared_ptr<base_monitor<int64_t, input_t, std::vector<json>>> m;
-
-    if (frobustness and flinear) {
-      throw std::invalid_argument((
-          "Integer time type and linear interpolation does not work together"));
-    } else if (frobustness and not flinear) {
-      m = reelay::dense_timed<int64_t, piecewise::CONSTANT>::robustness<
-          double>::monitor<input_t>::make(args::get(spec), extra_args);
-    } else if (not frobustness and flinear) {
-      throw std::invalid_argument((
-          "Integer time type and linear interpolation does not work together"));
-    } else {  // not frobustness and not flinear
-      m = reelay::dense_timed<int64_t, piecewise::CONSTANT>::monitor<
-          input_t>::make(args::get(spec), extra_args);
-    }
-
-    for (const auto& filename : filenames) {
-      rycli::dense_timed_process_json_file<decltype(m)>(m, filename);
+      rycli::dense_timed_processing(monitor, filename);
     }
   }
 

@@ -27,6 +27,7 @@ struct monitor {
     return pimpl->update(obj);
   }
 
+  monitor() {}
   monitor(std::shared_ptr<impl_type> pointer) : pimpl(pointer) {}
   monitor(const json& e) : errors(e) {}
 
