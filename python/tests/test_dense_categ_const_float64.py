@@ -19,8 +19,7 @@ def test_dense_categ_const_float64():
             once[:40]{sensor_id: *sensor, action: calibrated}
             """,
         semantics="boolean",
-        piecewise='constant',
-        timetype="float64"
+        piecewise='constant'
     )
 
     input_sequence = [

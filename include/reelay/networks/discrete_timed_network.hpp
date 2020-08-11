@@ -8,46 +8,77 @@
 
 #pragma once
 
+#include "functional"
+#include "memory"
+#include "string"
+//
+#include "reelay/intervals.hpp"
 #include "reelay/networks/basic_structure.hpp"
+#include "reelay/parser/ptl.hpp"
+#include "reelay/settings/discrete_timed/setting.hpp"
+//
+#include "reelay/options.hpp"
 
 namespace reelay {
 
-template <typename InputT, typename OutputT, typename TimeT>
-struct discrete_timed_network : discrete_timed_state<InputT, OutputT, TimeT> {
-  using time_t = TimeT;
-  using input_t = InputT;
-  using output_t = OutputT;
+template <typename T, typename X>
+struct discrete_timed_network final : public discrete_timed_state<X, bool, T> {
+  using time_t = T;
+  using value_t = bool;
+  using input_t = X;
+  using output_t = bool;
+
+  using type = discrete_timed_network<time_t, input_t>;
+  using factory = discrete_timed_setting::factory<input_t, time_t>;
 
   using node_t = discrete_timed_node<output_t, time_t>;
   using state_t = discrete_timed_state<input_t, output_t, time_t>;
 
-  using type = discrete_timed_network<input_t, output_t, time_t>;
+  using node_ptr_t = std::shared_ptr<node_t>;
+  using state_ptr_t = std::shared_ptr<state_t>;
 
-  time_t _now = -1;
+  using setting_t = discrete_timed_setting::factory<input_t, time_t>;
+  using options_t = basic_options;
 
-  std::shared_ptr<node_t> output_node;
-  std::vector<std::shared_ptr<state_t>> states;
+  node_ptr_t root;
+  std::vector<state_ptr_t> states;
 
-  discrete_timed_network(std::shared_ptr<node_t> n,
-                         const std::vector<std::shared_ptr<state_t>> &ss)
-      : output_node(n), states(ss) {}
+  time_t now = -1;
 
-  void update(const input_t &args) {
-    this->_now = this->_now + time_t(1);
-    this->update(args, this->_now);
-  }
+  discrete_timed_network(
+      const node_ptr_t &n, const std::vector<state_ptr_t> &ss)
+      : root(n), states(ss) {}
 
-  void update(const input_t &args, time_t now) {
+  discrete_timed_network(
+      const node_ptr_t &n, const std::vector<state_ptr_t> &ss,
+      const options_t &options)
+      : discrete_timed_network(n, ss) {}
+
+  void update(const input_t &args, time_t tn) override {
     for (const auto &state : this->states) {
-      state->update(args, now);
+      state->update(args, tn);
     }
   }
 
-  output_t output() { return this->output(this->_now); }
-  
-  output_t output(time_t now) { return this->output_node->output(now);}
+  output_t output(time_t tn) override {
+    return root->output(tn);
+  }
 
-  time_t now() { return _now; }
+  output_t update(const input_t &args) {
+    now = now + time_t(1);
+    this->update(args, now);
+    return root->output(now);
+  }
+
+  output_t output() {
+    return output(now);
+  }
+
+  static type make(
+      const std::string &pattern, const options_t &options = options_t()) {
+    auto parser = ptl_parser<type>();
+    return parser.parse(pattern, options);
+  }
 };
 
-} // namespace reelay
+}  // namespace reelay

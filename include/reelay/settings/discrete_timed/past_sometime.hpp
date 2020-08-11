@@ -10,7 +10,6 @@
 
 #include "reelay/common.hpp"
 #include "reelay/networks/basic_structure.hpp"
-#include "reelay/networks/untimed_network.hpp"
 
 namespace reelay {
 namespace discrete_timed_setting {

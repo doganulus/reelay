@@ -13,26 +13,21 @@
 #include "string"
 
 #include "reelay/networks/basic_structure.hpp"
-#include "reelay/networks/dense_timed_network.hpp"
-
+//
 #include "reelay/settings/dense_timed_data/atomic_any.hpp"
 #include "reelay/settings/dense_timed_data/atomic_false.hpp"
 #include "reelay/settings/dense_timed_data/atomic_ge_0.hpp"
 #include "reelay/settings/dense_timed_data/atomic_gt_0.hpp"
 #include "reelay/settings/dense_timed_data/atomic_le_0.hpp"
 #include "reelay/settings/dense_timed_data/atomic_lt_0.hpp"
-// #include "reelay/settings/dense_timed_data/atomic_ne_fwd.hpp"
-// #include "reelay/settings/dense_timed_data/atomic_eq_fwd.hpp"
+// #include "reelay/settings/dense_timed_data/atomic_ne.hpp"
+// #include "reelay/settings/dense_timed_data/atomic_eq.hpp"
 #include "reelay/settings/dense_timed_data/atomic_number.hpp"
 #include "reelay/settings/dense_timed_data/atomic_prop.hpp"
 #include "reelay/settings/dense_timed_data/atomic_ref.hpp"
 #include "reelay/settings/dense_timed_data/atomic_string.hpp"
 #include "reelay/settings/dense_timed_data/atomic_true.hpp"
-
 #include "reelay/settings/dense_timed_data/atomic_map.hpp"
-#include "reelay/settings/dense_timed_data/atomic_nested.hpp"
-// #include "reelay/settings/dense_timed_data/atomic_nested_all.hpp"
-// #include "reelay/settings/dense_timed_data/atomic_nested_any.hpp"
 
 #include "reelay/settings/dense_timed_data/exists.hpp"
 #include "reelay/settings/dense_timed_data/forall.hpp"
@@ -71,11 +66,7 @@ template <typename X, typename T, int order=0> struct factory {
 
   using interval = reelay::interval<time_t>;
   using interval_map = reelay::data_interval_map<time_t>;
-
-  using network_t =
-      reelay::dense_timed_network<input_t, output_t, time_t, value_t>;
-  using network_ptr_t = std::shared_ptr<network_t>;
-
+  
   using function_t =
       std::function<output_t(const input_t &, const input_t &, time_t, time_t)>;
 
@@ -97,7 +88,7 @@ template <typename X, typename T, int order=0> struct factory {
       result = std::make_shared<forall<input_t, time_t>>(kw);
     } else {
       throw std::invalid_argument(
-          "Unsupported operator for the untimed setting");
+          "Unsupported operator for the dense timed data setting");
     }
 
     return result;
@@ -109,12 +100,6 @@ template <typename X, typename T, int order=0> struct factory {
 
     if (name == "atomic_map") {
       res = std::make_shared<atomic_map<input_t, time_t>>(kw);
-    } else if (name == "atomic_nested") {
-      res = std::make_shared<atomic_nested<input_t, time_t>>(kw);
-    // } else if (name == "atomic_nested_all") {
-    //   res = std::make_shared<atomic_nested_all<input_t, time_t>>(kw);
-    // } else if (name == "atomic_nested_any") {
-    //   res = std::make_shared<atomic_nested_any<input_t, time_t>>(kw);
     } else if (name == "mapping_prop") {
       res = std::make_shared<atomic_prop<input_t, time_t, std::string>>(kw);
     } else if (name == "mapping_false") {
@@ -127,8 +112,6 @@ template <typename X, typename T, int order=0> struct factory {
       res = std::make_shared<atomic_number<input_t, time_t, std::string>>(kw);
     } else if (name == "mapping_eq") {
       res = std::make_shared<atomic_number<input_t, time_t, std::string>>(kw);
-    // } else if (name == "mapping_ne") {
-    //   res = std::make_shared<atomic_ne<input_t, time_t, std::string>>(kw);
     } else if (name == "mapping_ge" and order == 0) {
       res = std::make_shared<atomic_ge_0<input_t, time_t, std::string>>(kw);
     } else if (name == "mapping_gt" and order == 0) {
@@ -151,8 +134,6 @@ template <typename X, typename T, int order=0> struct factory {
       res = std::make_shared<atomic_number<input_t, time_t, int>>(kw);
     } else if (name == "listing_eq") {
       res = std::make_shared<atomic_number<input_t, time_t, int>>(kw);
-    // } else if (name == "listing_ne") {
-    // res = std::make_shared<atomic_ne<input_t, time_t, int>>(kw);
     } else if (name == "listing_ge" and order == 0) {
       kw["key"] = reelay::any_cast<int>(kw.at("key")) + 1;
       res = std::make_shared<atomic_ge_0<input_t, time_t, int>>(kw);
@@ -189,11 +170,9 @@ template <typename X, typename T, int order=0> struct factory {
       res = std::make_shared<past_always_bounded_half<input_t, time_t>>(kw);
     } else if (name == "since_bounded_half") {
       res = std::make_shared<since_bounded_half<input_t, time_t>>(kw);
-      // } else if (name == "predicate") {
-      //   res = std::make_shared<predicate<input_t, time_t>>(kw);
     } else {
       throw std::invalid_argument(
-          "Unsupported operator for the untimed setting");
+          "Unsupported operator for the dense timed data setting");
     }
 
     return res;

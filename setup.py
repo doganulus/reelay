@@ -7,7 +7,7 @@ import setuptools
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 
-__version__ = '2005.0'
+__version__ = '2008.0'
 
 cxxflags = [
     '--std=c++11',          # C++11 required for manylinux2014
@@ -64,7 +64,6 @@ ext_cpp_library = Extension(
     sources=['python/src/main.cpp'],
     include_dirs=[
         "include",
-        'python/include',
         'third_party/cudd/cudd',
         'third_party/cudd/cplusplus',
         get_pybind_include(),

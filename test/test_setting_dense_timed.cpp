@@ -5,15 +5,17 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include "iostream"
-#include "vector"
-
+#include <iostream>
+#include <vector>
+//
 #include "catch.hpp"
-
+//
 #include "reelay/common.hpp"
 #include "reelay/intervals.hpp"
-#include "reelay/networks.hpp"
 #include "reelay/json.hpp"
+//
+#include "reelay/networks/dense_timed_network.hpp"
+#include "reelay/options.hpp"
 
 using time_type = double;
 using input_t = reelay::json;
@@ -34,14 +36,13 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 5.2}, {"x1", true}});
     sequence.push_back(input_t{{"time", 5.5}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("{x1}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("{x1}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -63,14 +64,13 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 5.2}, {"x1", true}});
     sequence.push_back(input_t{{"time", 5.5}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("{x1:*}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("{x1:*}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -93,14 +93,13 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 5.2}, {"x1", true}});
     sequence.push_back(input_t{{"time", 5.5}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("{x1: true}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("{x1: true}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -122,14 +121,13 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 5.2}, {"x1", true}});
     sequence.push_back(input_t{{"time", 5.5}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("{x1: false}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("{x1: false}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -150,14 +148,13 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 5.2}, {"x1", "veritas"}});
     sequence.push_back(input_t{{"time", 5.5}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("{x1: veritas}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("{x1: veritas}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -179,14 +176,13 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 5.2}, {"x1", "lorem ipsum"}});
     sequence.push_back(input_t{{"time", 5.5}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("{x1: 'lorem ipsum'}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("{x1: 'lorem ipsum'}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -208,14 +204,13 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 5.2}, {"x1", 12.5}});
     sequence.push_back(input_t{{"time", 5.5}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("{x1: 12.5}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("{x1: 12.5}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -234,14 +229,13 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 3.5}, {"x1", 4}});
     sequence.push_back(input_t{{"time", 4}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("{x1 < 4}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("{x1 < 4}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -260,14 +254,13 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 3.5}, {"x1", 4}});
     sequence.push_back(input_t{{"time", 4}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("{x1 <= 4}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("{x1 <= 4}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -287,14 +280,13 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 3.5}, {"x1", 4}});
     sequence.push_back(input_t{{"time", 4}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("{x1 > 4}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("{x1 > 4}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -313,14 +305,13 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 3.5}, {"x1", 4}});
     sequence.push_back(input_t{{"time", 4}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("{x1 >= 4}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("{x1 >= 4}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -339,14 +330,13 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 3.5}, {"x1", 4}});
     sequence.push_back(input_t{{"time", 4}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("{x1 > 3.5, x1 < 4.5}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("{x1 > 3.5, x1 < 4.5}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -374,14 +364,17 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 14}, {"x1", 0}});
     sequence.push_back(input_t{{"time", 15}, {"x1", -2}});
 
-    auto net1 = reelay::detail::dense_timed<time_type, 1>::network<
-        input_t>::from_temporal_logic("{x1 < 0}");
+    auto opts = reelay::basic_options().with_interpolation(
+        reelay::piecewise::linear);
+
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make(
+        "{x1 < 0}", opts);
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -411,14 +404,17 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 14}, {"x1", 0}});
     sequence.push_back(input_t{{"time", 15}, {"x1", -2}});
 
-    auto net1 = reelay::detail::dense_timed<time_type, 1>::network<
-        input_t>::from_temporal_logic("{x1 <= 0}");
+    auto opts
+        = reelay::basic_options().with_interpolation(reelay::piecewise::linear);
+
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make(
+        "{x1 <= 0}", opts);
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -448,14 +444,17 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 14}, {"x1", 0}});
     sequence.push_back(input_t{{"time", 15}, {"x1", -2}});
 
-    auto net1 = reelay::detail::dense_timed<time_type, 1>::network<
-        input_t>::from_temporal_logic("{x1 > 0}");
+    auto opts
+        = reelay::basic_options().with_interpolation(reelay::piecewise::linear);
+
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make(
+        "{x1 > 0}", opts);
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -484,14 +483,17 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_t{{"time", 14}, {"x1", 0}});
     sequence.push_back(input_t{{"time", 15}, {"x1", -2}});
 
-    auto net1 = reelay::detail::dense_timed<time_type, 1>::network<
-        input_t>::from_temporal_logic("{x1 >= 0}");
+    auto opts
+        = reelay::basic_options().with_interpolation(reelay::piecewise::linear);
+
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make(
+        "{x1 >= 0}", opts);
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -500,124 +502,6 @@ TEST_CASE("Atoms") {
 
     CHECK(result1 == expected1);
   }
-}
-
-TEST_CASE("Nested Inputs") {
-
-  SECTION("Deep Object") {
-    std::vector<input_t> sequence = std::vector<input_t>();
-
-    sequence.push_back(input_t{{"time", 0}, {"obj", {{"flag", false}}}});
-    sequence.push_back(input_t{{"time", 10}, {"obj", {{"flag", false}}}});
-    sequence.push_back(input_t{{"time", 20}});
-    sequence.push_back(input_t{{"time", 30}, {"obj", {{"flag", true}}}});
-    sequence.push_back(input_t{{"time", 40}});
-
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("obj::{flag}");
-
-    auto result = interval_set();
-
-    for (const auto &s : sequence) {
-      net1->update(s);
-      result = result | net1->output();
-    }
-
-    auto expected = interval_set();
-    expected.add(interval::left_open(30, 40));
-
-    CHECK(result == expected);
-  }
-
-  SECTION("Deep Object 2") {
-    std::vector<input_t> sequence = std::vector<input_t>();
-
-    sequence.push_back(
-        input_t{{"time", 0},
-                {"obj1", {{"obj2", {{"flag1", false}, {"flag2", false}}}}}});
-    sequence.push_back(
-        input_t{{"time", 10},
-                {"obj1", {{"obj2", {{"flag1", false}, {"flag2", true}}}}}});
-    sequence.push_back(input_t{{"time", 20}});
-    sequence.push_back(
-        input_t{{"time", 30}, {"obj1", {{"obj2", {{"flag2", false}}}}}});
-    sequence.push_back(input_t{{"time", 40}});
-
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("obj1::obj2::{flag2}");
-
-    auto result = interval_set();
-
-    for (const auto &s : sequence) {
-      net1->update(s);
-      result = result | net1->output();
-    }
-
-    auto expected = interval_set();
-    expected.add(interval::left_open(10, 30));
-
-    CHECK(result == expected);
-  }
-
-  // SECTION("Deep List Any") {
-  //   std::vector<input_t> sequence = std::vector<input_t>();
-
-  //   sequence.push_back(input_t{
-  //       {"time", 0},
-  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 9}, {"b", 2}}}}}}});
-  //   sequence.push_back(input_t{
-  //       {"time", 10},
-  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
-  //   sequence.push_back(input_t{
-  //       {"time", 20},
-  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
-  //   sequence.push_back(input_t{{"time", 40}});
-
-  //   auto net1 = reelay::detail::dense_timed<time_type>::network<
-  //       input_t>::from_temporal_logic("obj1::obj2::any{a < 6}");
-
-  //   auto result = interval_set();
-
-  //   for (const auto &s : sequence) {
-  //     net1->update(s);
-  //     result = result | net1->output();
-  //   }
-
-  //   auto expected = interval_set();
-  //   expected.add(interval::left_open(10, 40));
-
-  //   CHECK(result == expected);
-  // }
-
-  // SECTION("Deep List All") {
-  //   std::vector<input_t> sequence = std::vector<input_t>();
-
-  //   sequence.push_back(input_t{
-  //       {"time", 0},
-  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 9}, {"b", 2}}}}}}});
-  //   sequence.push_back(input_t{
-  //       {"time", 10},
-  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 2}}}}}}});
-  //   sequence.push_back(input_t{
-  //       {"time", 20},
-  //       {"obj1", {{"obj2", {{{"a", 7}, {"b", 3}}, {{"a", 5}, {"b", 0}}}}}}});
-  //   sequence.push_back(input_t{{"time", 40}});
-
-  //   auto net1 = reelay::detail::dense_timed<time_type>::network<
-  //       input_t>::from_temporal_logic("obj1::obj2::all{b > 1}");
-
-  //   auto result = interval_set();
-
-  //   for (const auto &s : sequence) {
-  //     net1->update(s);
-  //     result = result | net1->output();
-  //   }
-
-  //   auto expected = interval_set();
-  //   expected.add(interval::left_open(0, 20));
-
-  //   CHECK(result == expected);
-  // }
 }
 
 TEST_CASE("Boolean Operations") {
@@ -632,14 +516,13 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_t{{"time", 30}, {"p1", true}, {"p2", true}});
     sequence.push_back(input_t{{"time", 40}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("{p1} or {p2}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("{p1} or {p2}");
 
     auto result = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result = result | net1->output();
+      net1.update(s);
+      result = result | net1.output();
     }
 
     auto expected = interval_set();
@@ -658,14 +541,13 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_t{{"time", 30}, {"p1", true}, {"p2", true}});
     sequence.push_back(input_t{{"time", 40}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("{p1} and {p2}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("{p1} and {p2}");
 
     auto result = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result = result | net1->output();
+      net1.update(s);
+      result = result | net1.output();
     }
 
     auto expected = interval_set();
@@ -684,14 +566,13 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_t{{"time", 30}, {"p1", true}, {"p2", true}});
     sequence.push_back(input_t{{"time", 40}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("{p1} -> {p2}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("{p1} -> {p2}");
 
     auto result = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result = result | net1->output();
+      net1.update(s);
+      result = result | net1.output();
     }
 
     auto expected = interval_set();
@@ -709,14 +590,13 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_t{{"time", 10}, {"p1", true}});
     sequence.push_back(input_t{{"time", 20}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("not{p1}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("not{p1}");
 
     auto result = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result = result | net1->output();
+      net1.update(s);
+      result = result | net1.output();
     }
 
     auto expected = interval_set();
@@ -741,14 +621,13 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_t{{"time", 90}, {"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"time", 120}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("historically{p1}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("historically{p1}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -771,14 +650,13 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_t{{"time", 115}, {"p1", false}, {"p2", false}});
     sequence.push_back(input_t{{"time", 125}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("once{p1}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("once{p1}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -808,14 +686,13 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_t{{"time", 315}, {"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"time", 444}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("{p1} since {p2}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("{p1} since {p2}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -849,16 +726,15 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", 444}});
 
     // auto net1 =
-    // reelay::detail::dense_timed<time_type>::network<input_t>::from_temporal_logic("not
+    // reelay::detail::dense_timed<time_type>::network<input_t>::make("not
     // (p1 since [12:24] not p2)");
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("historically[12:24]{p2}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("historically[12:24]{p2}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -891,16 +767,15 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", 444}});
 
     // auto net1 =
-    // reelay::detail::dense_timed<time_type>::network<input_t>::from_temporal_logic("not
+    // reelay::detail::dense_timed<time_type>::network<input_t>::make("not
     // (p1 since [12:24] not p2)");
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("historically[0:24]{p2}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("historically[0:24]{p2}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -932,16 +807,15 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", 444}});
 
     // auto net1 =
-    // reelay::detail::dense_timed<time_type>::network<input_t>::from_temporal_logic("not
+    // reelay::detail::dense_timed<time_type>::network<input_t>::make("not
     // (p1 since [12:24] not p2)");
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("historically[12:]{p2}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("historically[12:]{p2}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -971,14 +845,13 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", 315}, {"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"time", 444}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("once[12:24]{p2}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("once[12:24]{p2}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -1011,16 +884,15 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", 315}, {"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"time", 444}});
     // auto net1 =
-    // reelay::detail::dense_timed<time_type>::network<input_t>::from_temporal_logic("p1
+    // reelay::detail::dense_timed<time_type>::network<input_t>::make("p1
     // since [12:24] p2");
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("once[:24]{p2}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("once[:24]{p2}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -1054,16 +926,15 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", 444}});
 
     // auto net1 =
-    // reelay::detail::dense_timed<time_type>::network<input_t>::from_temporal_logic("p1
+    // reelay::detail::dense_timed<time_type>::network<input_t>::make("p1
     // since [12:24] p2");
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("once[12:]{p2}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("once[12:]{p2}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();
@@ -1093,14 +964,13 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", 315}, {"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"time", 444}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("{p1} since[18:24]{p2}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("{p1} since[18:24]{p2}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set(interval::left_open(133, 180));
@@ -1129,14 +999,13 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", 315}, {"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"time", 444}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("{p1} since[:24]{p2}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("{p1} since[:24]{p2}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set(interval::left_open(115, 180));
@@ -1165,14 +1034,13 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", 315}, {"p1", true}, {"p2", false}});
     sequence.push_back(input_t{{"time", 444}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("{p1} since[18:]{p2}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("{p1} since[18:]{p2}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set(interval::left_open(133, 201));
@@ -1201,14 +1069,13 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_t{{"time", 315}, {"p1", true}});
     sequence.push_back(input_t{{"time", 444}});
 
-    auto net1 = reelay::detail::dense_timed<time_type>::network<
-        input_t>::from_temporal_logic("!{p1} since[10:20] {p1}");
+    auto net1 = reelay::dense_timed_network<time_type, input_t>::make("!{p1} since[10:20] {p1}");
 
     auto result1 = interval_set();
 
     for (const auto &s : sequence) {
-      net1->update(s);
-      result1 = result1 | net1->output();
+      net1.update(s);
+      result1 = result1 | net1.output();
     }
 
     auto expected1 = interval_set();

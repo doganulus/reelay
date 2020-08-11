@@ -40,6 +40,9 @@ struct since_bounded final : public discrete_timed_state<X, bool, T> {
   time_t lbound;
   time_t ubound;
 
+  since_bounded(time_t l = 0, time_t u = 0)
+      : lbound(l), ubound(u) {}
+
   since_bounded(const std::vector<node_ptr_t> &args, time_t l=0, time_t u=0)
       : first(args[0]), second(args[1]), lbound(l), ubound(u) {}
 
@@ -48,13 +51,17 @@ struct since_bounded final : public discrete_timed_state<X, bool, T> {
                       reelay::any_cast<time_t>(kw.at("lbound")),
                       reelay::any_cast<time_t>(kw.at("ubound"))) {}
 
-  void update(const input_t&, time_t now) {
-    if (first->output(now) and second->output(now)) {
+  inline void update(const input_t&, time_t now) {
+    update(first->output(now), second->output(now), now);
+  }
+
+  inline void update(bool p1, bool p2, time_t now) {
+    if (p1 and p2) {
       value = value.add(interval::closed(now + lbound, now + ubound));
       value = value - interval_set(interval::right_open(0, now));
-    } else if (not first->output(now) and second->output(now)) {
+    } else if (not p1 and p2) {
       value = interval_set(interval::closed(now + lbound, now + ubound));
-    } else if (first->output(now) and not second->output(now)) {
+    } else if (p1 and not p2) {
       // Laziness -- No need to update
       // state = state - interval_set(interval::right_open(0, t.now));
     } else {
