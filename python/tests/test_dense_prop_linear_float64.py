@@ -15,8 +15,8 @@ def test_dense_prop_const_int64():
     my_monitor = dense_monitor(
         pattern="{speed > 12.0}",
         semantics="boolean",
-        piecewise='linear',
-        timetype="float64")
+        piecewise='linear'
+    )
 
     input_sequence = [
         dict(time=0.0, speed=3.0),
