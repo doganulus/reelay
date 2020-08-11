@@ -8,9 +8,9 @@
 
 #pragma once
 
-#include "memory"
-#include "string"
-#include "functional"
+#include <memory>
+#include <string>
+#include <unordered_map>
 
 #include "cudd.h"
 #include "cuddObj.hh"
