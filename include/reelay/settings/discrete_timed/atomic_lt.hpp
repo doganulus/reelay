@@ -33,7 +33,7 @@ struct atomic_lt final : public discrete_timed_state<X, bool, T> {
   bool value = false;
 
   explicit atomic_lt(const key_t &k, const std::string &c)
-      : key(k), constant(boost::lexical_cast<double>(c)) {}
+      : key(k), constant(std::stod(c)) {}
 
   explicit atomic_lt(const kwargs &kw)
       : atomic_lt(reelay::any_cast<key_t>(kw.at("key")),

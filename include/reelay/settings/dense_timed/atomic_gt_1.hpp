@@ -44,7 +44,7 @@ struct atomic_gt_1 final : public dense_timed_state<X, interval_set<T>, T> {
   double y0 = 0;
 
   explicit atomic_gt_1(const key_t &k, const std::string &c)
-      : key(k), constant(boost::lexical_cast<double>(c)) {}
+      : key(k), constant(std::stod(c)) {}
 
   explicit atomic_gt_1(const kwargs &kw)
       : atomic_gt_1(reelay::any_cast<key_t>(kw.at("key")),

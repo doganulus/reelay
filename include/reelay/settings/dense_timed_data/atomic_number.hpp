@@ -44,7 +44,7 @@ struct atomic_number final
 
   explicit atomic_number(const data_mgr_t &mgr, const key_t &k,
                          const std::string &c_str)
-      : manager(mgr), key(k), constant(boost::lexical_cast<double>(c_str)) {}
+      : manager(mgr), key(k), constant(std::stod(c_str)) {}
 
   explicit atomic_number(const kwargs &kw)
       : atomic_number(reelay::any_cast<data_mgr_t>(kw.at("manager")),

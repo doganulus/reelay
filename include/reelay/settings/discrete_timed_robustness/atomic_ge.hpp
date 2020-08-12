@@ -33,7 +33,7 @@ struct atomic_ge final : public discrete_timed_state<X, V, T> {
   output_t value = -reelay::infinity<output_t>::value();
 
   explicit atomic_ge(const key_t &k, const std::string &c)
-      : key(k), constant(boost::lexical_cast<double>(c)) {}
+      : key(k), constant(std::stod(c)) {}
 
   explicit atomic_ge(const kwargs &kw)
       : atomic_ge(reelay::any_cast<key_t>(kw.at("key")),

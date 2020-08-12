@@ -33,7 +33,7 @@ struct atomic_ne final : public discrete_timed_state<X, bool, T> {
   bool value = false;
 
   explicit atomic_ne(const key_t &k, const std::string &c_str)
-      : key(k), constant(boost::lexical_cast<double>(c_str)) {}
+      : key(k), constant(std::stod(c_str)) {}
 
   explicit atomic_ne(const kwargs &kw)
       : atomic_ne(reelay::any_cast<key_t>(kw.at("key")),

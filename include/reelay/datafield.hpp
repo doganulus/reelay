@@ -17,9 +17,6 @@
 #include "vector"
 
 
-#include "boost/lexical_cast.hpp"
-
-
 namespace reelay {
 
 template <typename time_t, typename input_t>
@@ -50,12 +47,12 @@ template <> struct datafield<std::unordered_map<std::string, std::string>> {
 
   inline static int as_integer(const input_t &container,
                                const std::string &key) {
-    return boost::lexical_cast<int>(container.at(key));
+    return std::stoi(container.at(key));
   }
 
   inline static double as_floating(const input_t &container,
                                    const std::string &key) {
-    return boost::lexical_cast<double>(container.at(key));
+    return std::stod(container.at(key));
   }
 
   inline static std::string as_string(const input_t &container,

@@ -37,7 +37,7 @@ struct atomic_ge final : public discrete_timed_state<X, data_set_t, T> {
   explicit atomic_ge(const data_mgr_t &mgr, const key_t &k,
                       const std::string &c)
       : manager(mgr), value(mgr->zero()), key(k),
-        constant(boost::lexical_cast<double>(c)) {}
+        constant(std::stod(c)) {}
 
   explicit atomic_ge(const kwargs &kw)
       : atomic_ge(reelay::any_cast<data_mgr_t>(kw.at("manager")),

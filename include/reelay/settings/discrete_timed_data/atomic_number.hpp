@@ -36,7 +36,7 @@ struct atomic_number final : public discrete_timed_state<X, data_set_t, T> {
   explicit atomic_number(const data_mgr_t &mgr, const key_t &k,
                          const std::string &c_str)
       : manager(mgr), value(mgr->zero()), key(k),
-        constant(boost::lexical_cast<double>(c_str)) {}
+        constant(std::stod(c_str)) {}
 
   explicit atomic_number(const kwargs &kw)
       : atomic_number(reelay::any_cast<data_mgr_t>(kw.at("manager")),

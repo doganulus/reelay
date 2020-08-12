@@ -33,7 +33,7 @@ struct atomic_eq final : public discrete_timed_state<X, V, T> {
   output_t value = -reelay::infinity<output_t>::value();
 
   explicit atomic_eq(const key_t &k, const std::string &c_str)
-      : key(k), constant(boost::lexical_cast<double>(c_str)) {}
+      : key(k), constant(std::stod(c_str)) {}
 
   explicit atomic_eq(const kwargs &kw)
       : atomic_eq(reelay::any_cast<key_t>(kw.at("key")),
