@@ -1,33 +1,25 @@
-FROM ubuntu:18.04
-RUN apt-get -qq update
+FROM alpine AS builder
 
-# Install Dependecies
-RUN apt-get install -qqy uuid-dev 
-RUN apt-get install -qqy git 
-RUN apt-get install -qqy gcc
-RUN apt-get install -qqy g++
-RUN apt-get install -qqy make
-RUN apt-get install -qqy autoconf automake autotools-dev
-RUN apt-get install -qqy libboost-all-dev 
-RUN apt-get install -qqy libgmp-dev
+RUN apk add --no-cache git g++ make
+RUN apk add --no-cache autoconf automake
+RUN apk add --no-cache boost-dev
 
-# Install Reelay
+# Get Reelay
 WORKDIR /home
-RUN git clone https://github.com/doganulus/reelay
+RUN git clone https://github.com/doganulus/reelay --recurse-submodules
 WORKDIR /home/reelay
 
 # Build CUDD dependency
 RUN make cudd
 RUN make cudd-install
-RUN ldconfig
 
-# Install Reelay
-RUN make install
+# Make the app
+RUN g++ -std=c++14 -fPIC -pthread -O3 apps/ryjson1/*.cpp -o ryjson1 -Iinclude -lcudd
 
-# Build Apps
-# RUN make apps
-# RUN make apps-install
+# Main image
+FROM alpine
 
-WORKDIR /home
+RUN apk add --no-cache libstdc++
 
-ENTRYPOINT /bin/bash
+COPY --from=builder /usr/local/lib/libcudd* /usr/local/lib/
+COPY --from=builder /home/reelay/ryjson1 /usr/local/bin/
