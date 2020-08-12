@@ -1,11 +1,11 @@
 CC=gcc#
 CXX=g++#
 CXXFLAGS=-std=c++11 -fPIC -O2 -pthread
-CXXFLAGS_APPS=-std=c++17 -fPIC -pthread -O3#-Wall -Wextra
+CXXFLAGS_APPS=-std=c++14 -fPIC -pthread -O3#-Wall -Wextra
 CXXFLAGS_TEST=-g -std=c++11 -fPIC -O0 -pthread --coverage -fno-inline -fno-inline-small-functions -fno-default-inline -fvisibility=hidden#-Wall -Wextra
 
 LIB_FLAGS=-lcudd
-INCLUDE_FLAGS=-I$(ROOT_DIR) -I$(ROOT_DIR)/include -I/home/dogan/anaconda3/include/python3.7m
+INCLUDE_FLAGS=-I$(ROOT_DIR) -I$(ROOT_DIR)/include
 
 NAME=reelay
 
@@ -66,6 +66,9 @@ apps:
 	mkdir -p bin
 	$(CXX) $(CXXFLAGS_APPS) apps/$(name)/*.cpp -o bin/$(name) $(INCLUDE_FLAGS) $(LIB_FLAGS)
 
+apps-install:
+	cp -a ./bin /usr/local/bin
+
 test_csvparser:
 	mkdir -p bin/csvparser
 	$(CXX) $(CXXFLAGS) apps/csvparser/basic.cpp -o bin/csvparser/csvparser_basic $(INCLUDE_FLAGS)
@@ -105,17 +108,9 @@ test_dense_timed_robustness_0:
 	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_setting_dense_timed_robustness_0.cpp -o test_setting_dense_timed_robustness_0 -I$(ROOT_DIR)/include
 	cd test/build && ./test_setting_dense_timed_robustness_0 -r compact
 
-test_untimed_regular:
-	cd test/build && $(CXX) $(CXXFLAGS_TEST) main.o $(ROOT_DIR)/test/test_setting_untimed_regular.cpp -o test_setting_untimed_regular -I$(ROOT_DIR)/include
-	cd test/build && ./test_setting_untimed_regular -r compact
-
 test_monitors:
 	cd test/build && $(CXX) $(CXXFLAGS_TEST) -std=c++11 main.o $(ROOT_DIR)/test/test_monitors.cpp -o test_monitors $(INCLUDE_FLAGS) -L/home/dogan/anaconda3/lib -lcudd 
 	cd test/build && ./test_monitors -r compact
-
-test_monitor_options:
-	cd test/build && $(CXX) $(CXXFLAGS_TEST) -std=c++11 main.o $(ROOT_DIR)/test/test_monitor_options.cpp -o test_monitor_options $(INCLUDE_FLAGS) -L/home/dogan/anaconda3/lib -lcudd 
-	cd test/build && ./test_monitor_options -r compact
 
 test_random:
 	cd test/build && $(CXX) $(CXXFLAGS_TEST) -std=c++11 main.o $(ROOT_DIR)/test/test_random.cpp -o test_random $(INCLUDE_FLAGS) -L/home/dogan/anaconda3/lib -lcudd -lpython3.7m
@@ -125,17 +120,7 @@ test_performance_discrete: test/timescales/discrete/multitime/*.txt
 	for batchfile in $^ ; do \
         multitime -n 10 -b $${batchfile} >/dev/null; \
     done
-
-# test_mtl_performance_discrete: test/timescales/discrete/multitime/*.txt
-# 	for batchfile in $^ ; do \
-#         multitime -n 10 -b $${batchfile} ; \
-#     done
-
-# test_qtl_performance_discrete: test/dejavu/*.txt
-# 	for batchfile in $^ ; do \
-#         multitime -n 10 -b $${batchfile} ; \
-#     done
-
+		
 python: 
 	pip install .
 

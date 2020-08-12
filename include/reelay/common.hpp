@@ -11,9 +11,6 @@
 #include <string>
 #include <unordered_map>
 
-#include "boost/any.hpp"
-#include "boost/lexical_cast.hpp"
-
 #define PEGLIB_USE_STD_ANY 0
 #include "reelay/third_party/cpp-peglib/peglib.h"
 

@@ -44,7 +44,7 @@ struct atomic_gt_0 final
 
   explicit atomic_gt_0(const data_mgr_t &mgr, const key_t &k,
                        const std::string &c)
-      : manager(mgr), key(k), constant(boost::lexical_cast<double>(c)) {}
+      : manager(mgr), key(k), constant(std::stod(c)) {}
 
   explicit atomic_gt_0(const kwargs &kw)
       : atomic_gt_0(reelay::any_cast<data_mgr_t>(kw.at("manager")),

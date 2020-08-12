@@ -41,7 +41,7 @@ struct atomic_lt_0 final : public dense_timed_state<X, interval_set<T>, T> {
   double constant;
 
   explicit atomic_lt_0(const key_t &k, const std::string &c)
-      : key(k), constant(boost::lexical_cast<double>(c)) {}
+      : key(k), constant(std::stod(c)) {}
 
   explicit atomic_lt_0(const kwargs &kw)
       : atomic_lt_0(reelay::any_cast<key_t>(kw.at("key")),
