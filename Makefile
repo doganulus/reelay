@@ -121,6 +121,16 @@ test_performance_discrete: test/timescales/discrete/multitime/*.txt
         multitime -n 10 -b $${batchfile} >/dev/null; \
     done
 		
+test_performance_dense10: test/timescales/dense10/multitime/*.txt
+	for batchfile in $^ ; do \
+        multitime -n 10 -b $${batchfile} >/dev/null; \
+    done
+
+test_performance_dense100: test/timescales/dense100/multitime/*.txt
+	for batchfile in $^ ; do \
+        multitime -n 10 -b $${batchfile} >/dev/null; \
+    done
+
 python: 
 	pip install .
 

@@ -1,0 +1,3 @@
+bin/ryjson1 -v 'historically((once[:10]{q}) -> ({p} since {q}))' test/build/timescales/fullsuite/AlwaysAQ/Dense100/1M/AlwaysAQ10.jsonl
+bin/ryjson1 -v 'historically((once[:100]{q}) -> ({p} since {q}))' test/build/timescales/fullsuite/AlwaysAQ/Dense100/1M/AlwaysAQ100.jsonl
+bin/ryjson1 -v 'historically((once[:1000]{q}) -> ({p} since {q}))' test/build/timescales/fullsuite/AlwaysAQ/Dense100/1M/AlwaysAQ1000.jsonl 

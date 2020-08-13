@@ -1,0 +1,3 @@
+bin/ryjson1 -v 'historically({r} -> (historically[:10](not{p})))' test/build/timescales/fullsuite/AbsentBR/Dense100/1M/AbsentBR10.jsonl
+bin/ryjson1 -v 'historically({r} -> (historically[:100](not{p})))' test/build/timescales/fullsuite/AbsentBR/Dense100/1M/AbsentBR100.jsonl 
+bin/ryjson1 -v 'historically({r} -> (historically[:1000](not{p})))' test/build/timescales/fullsuite/AbsentBR/Dense100/1M/AbsentBR1000.jsonl 
