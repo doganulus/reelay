@@ -43,6 +43,10 @@ struct dense_timed_data_monitor final
     return formatter.format(result, network.previous, network.current);
   }
 
+  output_type now() override {
+    return formatter.now(network.current);
+  }
+
   static type make(const std::string &pattern, const basic_options &options) {
     auto mgr = options.get_data_manager();
     auto net = network_t::make(pattern, options);

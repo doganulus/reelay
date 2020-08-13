@@ -37,6 +37,10 @@ struct discrete_timed_formatter<TimeT, ValueT, json, true> {
       : discrete_timed_formatter(
           options.get_time_field_name(), options.get_value_field_name()) {}
 
+  inline output_t now(time_t now) {
+    return json({{t_name, now}});
+  }
+
   inline output_t format(value_t result, time_t now) {
     if (result != lastval or now == 0) {
       lastval = result;

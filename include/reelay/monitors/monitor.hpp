@@ -23,24 +23,18 @@ struct monitor {
   using type = monitor<input_type, output_type>;
   using impl_type = abstract_monitor<input_type, output_type>;
 
+  output_type now() {
+    return pimpl->now();
+  }
+
   output_type update(const input_type& obj) {
     return pimpl->update(obj);
   }
 
   monitor() {}
   monitor(std::shared_ptr<impl_type> pointer) : pimpl(pointer) {}
-  monitor(const json& e) : errors(e) {}
-
-  bool has_errors(){
-    return not errors.empty();
-  }
-
-  json get_errors(){
-    return errors;
-  }
 
  private:
-  json errors;
   std::shared_ptr<impl_type> pimpl;
 };
 

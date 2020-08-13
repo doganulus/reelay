@@ -19,6 +19,7 @@ struct abstract_monitor {
 
   virtual ~abstract_monitor() {}
   virtual output_type update(const input_type& obj) = 0;
+  virtual output_type now() = 0;
   // virtual json get(const std::string& attribute) = 0;
 };
 
