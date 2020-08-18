@@ -7,12 +7,12 @@
 #
 import pytest
 
-from reelay.monitors import discrete_monitor
+from reelay import discrete_timed_monitor
 
 
 def test_discrete_categ():
 
-    my_monitor = discrete_monitor(
+    my_monitor = discrete_timed_monitor(
         pattern=r"""forall[sensor].
             {sensor_id: *sensor, action: send_data}
                 implies

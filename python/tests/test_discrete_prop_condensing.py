@@ -5,12 +5,12 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 #
-from reelay.monitors import discrete_monitor
+from reelay import discrete_timed_monitor
 
 
 def test_discrete_prop():
 
-    my_monitor = discrete_monitor(
+    my_monitor = discrete_timed_monitor(
         pattern=r"{speed > 13.0} since[:3] {lights_on}",
         semantics="boolean",
         t_name="time",

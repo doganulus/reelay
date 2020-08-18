@@ -7,12 +7,12 @@
 #
 import pytest
 
-from reelay.monitors import dense_monitor
+from reelay import dense_timed_monitor
 
 
 def test_dense_robust_const_float64():
 
-    my_monitor = dense_monitor(
+    my_monitor = dense_timed_monitor(
         pattern=r"{speed > 130} since[:40] {lights_on: true}",
         semantics="robustness",
         piecewise='constant'
