@@ -1,13 +1,18 @@
 # Running Reelay in a Docker container
-This document is designed for people who want to run `reelay` apps without installing all the dependencies on your machine. 
 
-First, pull the latest docker image and run it in a container by typing:
+This document is for people who want to try Reelay apps using a Docker container. If you haven't Docker engine installed on your machice, please follow the original instructions [here](https://docs.docker.com/get-docker/).
 
-    docker pull doganulus/reelay
-    docker run -it doganulus/reelay
+When Docker engine is installed, pull the latest docker image of Reelay and run it in a container by typing:
 
-Then you can run `reelay` apps inside the container. For example,
+```
+docker pull doganulus/reelay
+docker run -it doganulus/reelay
+```
 
-    rymtl '{p1} since[18:24] {p2}' reelay/apps/mtl/examples/2.csv --verbose 1
+Then, inside the container, you can run the app `ryjson1` that provides a command-line interface for Reelay monitors that checks multi-line JSON logs against Rye specifications. For example,
 
-Note that you can install Docker engine on Ubuntu by following instructions from [here](https://docs.docker.com/install/linux/docker-ce/ubuntu/) if you don't have it already.
+```
+ryjson1 -x '{p1} since[18:24] {p2}' examples.jsonl
+```
+
+Please also check `ryjson1 --help` for further information on other flags and general usage.

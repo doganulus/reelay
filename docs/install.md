@@ -26,7 +26,7 @@ For MacOS (assuming homebrew installed):
 
     brew install boost
 
-Note that we mainly develop Reelay on Ubuntu 18.04 therefore it's the most tested environment among these environments. For Windows machines, we suggest installing Reelay on Ubuntu 18.04 on Windows Subsystem for Linux (WSL).
+Note that we mainly develop Reelay on Ubuntu 20.04 therefore it's the most tested environment among these environments. For Windows machines, we suggest installing Reelay on Ubuntu on Windows Subsystem for Linux (WSL).
 
 ### 3) CUDD Library (only for C++ users)
 
