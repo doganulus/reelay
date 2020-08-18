@@ -47,6 +47,10 @@ struct discrete_timed_data_monitor final
       const data_mgr_t mgr, const network_t &n, const formatter_t &f)
       : manager(mgr), network(n), formatter(f) {}
 
+  output_type now() override {
+    return formatter.now(network.now);
+  }
+
   output_type update(const input_type &args) override {
     auto result = network.update(args);
     return formatter.format(result != manager->zero(), network.now);

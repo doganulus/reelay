@@ -11,7 +11,7 @@ These syntactic constructs are divided into four categories:
 1. Atomic expressions
 2. Boolean logic expressions
 3. Temporal logic expressions
-4. Regular expressions (in a future release)
+4. Regular expressions (in future releases)
 
 Let's start with atomic expressions.
 
@@ -55,7 +55,7 @@ will be evaluated to `true` for time points `101`, `102`, and `103` but to `fals
 
 since it does not contain any field named as `mode`.
 
-Quite often we have to deal with complex hierarchial data objects such as
+<!-- Quite often we have to deal with complex hierarchial data objects such as
 
 ```json
 ...
@@ -82,9 +82,9 @@ These path will be calculated from the current namespace, and initially from the
 
 ```rye
 ego::motion::position::{$0 > 100.0,  $1 > 0.0}
-```
+``` -->
 
-As usual we use zero-based indexing in our specifications.
+<!-- As usual we can use zero-based indexing in our specifications. -->
 
 Finally Reelay allows to declare categorical variable references inside atoms using the `*ref_name` syntax such that
 

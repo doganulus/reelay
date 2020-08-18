@@ -34,6 +34,10 @@ struct discrete_timed_formatter<TimeT, ValueT, pybind11::object, false> {
   explicit discrete_timed_formatter(const basic_options& options)
       : discrete_timed_formatter(
           options.get_time_field_name(), options.get_value_field_name()) {}
+          
+  inline output_t now(time_t now) {
+    return pybind11::dict(pybind11::arg(t_name.c_str()) = now);
+  }
 
   output_t format(value_t result, time_t now) {
     return pybind11::dict(pybind11::arg(y_name.c_str()) = result);

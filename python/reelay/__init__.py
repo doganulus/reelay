@@ -6,5 +6,5 @@
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 #
 
-# from reelay.monitors import dense_monitor
-# from reelay.monitors import discrete_monitor
+from reelay.dense_timed_monitor import dense_timed_monitor
+from reelay.discrete_timed_monitor import discrete_timed_monitor

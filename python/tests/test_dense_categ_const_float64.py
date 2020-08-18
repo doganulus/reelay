@@ -7,12 +7,12 @@
 #
 import pytest
 
-from reelay.monitors import dense_monitor
+from reelay import dense_timed_monitor
 
 
 def test_dense_categ_const_float64():
 
-    my_monitor = dense_monitor(
+    my_monitor = dense_timed_monitor(
         pattern=r"""forall[sensor].
             {sensor_id: *sensor, action: send_data}
                 implies

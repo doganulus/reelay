@@ -1,0 +1,3 @@
+bin/ryjson1 -v 'historically(({r} && !{q} && once{q}) -> ((once[:10]({p} or {q})) since {q}))' test/build/timescales/fullsuite/RecurBQR/Dense100/1M/RecurBQR10.jsonl
+bin/ryjson1 -v 'historically(({r} && !{q} && once{q}) -> ((once[:100]({p} or {q})) since {q}))' test/build/timescales/fullsuite/RecurBQR/Dense100/1M/RecurBQR100.jsonl
+bin/ryjson1 -v 'historically(({r} && !{q} && once{q}) -> ((once[:1000]({p} or {q})) since {q}))' test/build/timescales/fullsuite/RecurBQR/Dense100/1M/RecurBQR1000.jsonl

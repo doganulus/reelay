@@ -62,23 +62,20 @@ rvbc2018:
 rvbc2018-clean:
 	rm -rf test/build/benchmark-challenge-2018
 
-apps: 
+app: 
 	mkdir -p bin
 	$(CXX) $(CXXFLAGS_APPS) apps/$(name)/*.cpp -o bin/$(name) $(INCLUDE_FLAGS) $(LIB_FLAGS)
+
+ryjson1:
+	mkdir -p bin
+	$(CXX) $(CXXFLAGS_APPS) apps/ryjson1/*.cpp -o bin/ryjson1 $(INCLUDE_FLAGS) $(LIB_FLAGS)
+
+apps: ryjson1
 
 apps-install:
 	cp -a ./bin /usr/local/bin
 
-test_csvparser:
-	mkdir -p bin/csvparser
-	$(CXX) $(CXXFLAGS) apps/csvparser/basic.cpp -o bin/csvparser/csvparser_basic $(INCLUDE_FLAGS)
-	$(CXX) $(CXXFLAGS) apps/csvparser/fast.cpp -o bin/csvparser/csvparser_fast $(INCLUDE_FLAGS)
-	$(CXX) $(CXXFLAGS) apps/csvparser/modern.cpp -o bin/csvparser/csvparser_modern $(INCLUDE_FLAGS)
-	multitime -n 10 bin/csvparser/csvparser_basic build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv
-	multitime -n 10 bin/csvparser/csvparser_fast build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv
-	multitime -n 10 bin/csvparser/csvparser_modern build/timescales/fullsuite/AlwaysBQR/Discrete/1M/AlwaysBQR1000.csv
-
-test: test_main test_discrete_timed test_dense_timed test_discrete_timed_robustness test_dense_timed_robustness_0 test_discrete_timed_data test_dense_timed_data coverage
+test: test_main test_discrete_timed test_dense_timed test_discrete_timed_robustness test_dense_timed_robustness_0 test_discrete_timed_data test_dense_timed_data test_monitors coverage
 
 test_main:
 	mkdir -p test/build
@@ -121,6 +118,20 @@ test_performance_discrete: test/timescales/discrete/multitime/*.txt
         multitime -n 10 -b $${batchfile} >/dev/null; \
     done
 		
+test_performance_dense10: test/timescales/dense10/multitime/*.txt
+	for batchfile in $^ ; do \
+        multitime -n 10 -b $${batchfile} >/dev/null; \
+    done
+
+test_performance_dense100: test/timescales/dense100/multitime/*.txt
+	for batchfile in $^ ; do \
+        multitime -n 10 -b $${batchfile} >/dev/null; \
+    done
+
+tutorial:
+	$(CXX) $(CXXFLAGS) apps/tutorial/door_open_warning/cpp/dense_tutorial_main.cpp -o apps/tutorial/door_open_warning/cpp/dense_tutorial $(INCLUDE_FLAGS) $(LIB_FLAGS)
+	$(CXX) $(CXXFLAGS) apps/tutorial/door_open_warning/cpp/discrete_tutorial_main.cpp -o apps/tutorial/door_open_warning/cpp/discrete_tutorial $(INCLUDE_FLAGS) $(LIB_FLAGS)
+
 python: 
 	pip install .
 
@@ -128,13 +139,6 @@ python-pypi-upload:
 	python setup.py sdist bdist_wheel
 	twine check dist/*
 	twine upload dist/*
-
-python-develop: 
-	sudo make uninstall && sudo make install
-	cd python && pip install .
-
-main: 
-	$(CXX) $(CXXFLAGS) $(FILE) -o bin/main $(INCLUDE_FLAGS) $(LIB_FLAGS) && bin/main $(EXTRA)
 
 coverage:
 	cd test/build && gcov -p -s .. -o . test_setting_discrete_timed.cpp test_setting_dense_timed.cpp test_setting_discrete_timed_robustness.cpp test_setting_dense_timed_robustness.cpp test_setting_discrete_timed_data.cpp test_setting_dense_timed_data.cpp test_monitors.cpp

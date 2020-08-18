@@ -1,0 +1,3 @@
+bin/ryjson1 -v 'historically(once[:10]{p})' test/build/timescales/fullsuite/RecurGLB/Dense100/1M/RecurGLB10.jsonl
+bin/ryjson1 -v 'historically(once[:100]{p})' test/build/timescales/fullsuite/RecurGLB/Dense100/1M/RecurGLB100.jsonl
+bin/ryjson1 -v 'historically(once[:1000]{p})' test/build/timescales/fullsuite/RecurGLB/Dense100/1M/RecurGLB1000.jsonl

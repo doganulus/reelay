@@ -49,23 +49,16 @@ struct discrete_timed_monitor final : public abstract_monitor<InputT, OutputT> {
     auto result = network.update(args);
     return formatter.format(result, network.now);
   }
-  
+
+  output_type now() override {
+    return formatter.now(network.now);
+  }
+
   static type make(const std::string &pattern, const basic_options &options) {
     auto net = network_t::make(pattern, options);
     auto formatter = formatter_t(options);
     return type(net, formatter);
   }
-
-  // static type make(
-  //     const std::string &pattern, const std::string &tname,
-  //     const std::string &yname) {
-  //   auto options
-  //       = basic_options().with_time_field_name(tname).with_value_field_name(
-  //           yname);
-  //   auto net = network_t::make(pattern, options);
-  //   auto formatter = formatter_t(options);
-  //   return type(net, formatter);
-  // }
 
   static std::shared_ptr<type> make_shared(
       const std::string &pattern, const basic_options &options) {

@@ -7,12 +7,12 @@
 #
 import pytest
 
-from reelay.monitors import discrete_monitor
+from reelay import discrete_timed_monitor
 
 
 def test_discrete_robust():
 
-    my_monitor = discrete_monitor(
+    my_monitor = discrete_timed_monitor(
         pattern=r"{speed > 13.0} since[:3] {lights_on: true}",
         semantics="robustness",
         y_name="rval",

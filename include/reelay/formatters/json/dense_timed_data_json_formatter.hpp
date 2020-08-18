@@ -43,6 +43,10 @@ struct dense_timed_data_formatter<TimeT, bool, json> {
           options.get_data_manager(), options.get_time_field_name(),
           options.get_value_field_name()) {}
 
+  inline output_t now(time_t now) {
+    return json({{t_name, now}});
+  }
+
   inline output_t format(const interval_map& result,
                   time_t previous, time_t now) {
     output_t vresult;

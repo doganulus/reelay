@@ -37,6 +37,10 @@ struct dense_timed_formatter<TimeT, ValueT, pybind11::object> {
       : dense_timed_formatter(
           options.get_time_field_name(), options.get_value_field_name()) {}
 
+  inline output_t now(time_t now) {
+    return pybind11::dict(pybind11::arg(t_name.c_str()) = now);
+  }
+
   output_t format(const interval_set& result, time_t previous, time_t now){
     if (now == 0) {
       return _init_0(result, previous, now);

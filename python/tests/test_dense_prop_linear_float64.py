@@ -7,12 +7,12 @@
 #
 import pytest
 
-from reelay.monitors import dense_monitor
+from reelay import dense_timed_monitor
 
 
 def test_dense_prop_const_int64():
 
-    my_monitor = dense_monitor(
+    my_monitor = dense_timed_monitor(
         pattern="{speed > 12.0}",
         semantics="boolean",
         piecewise='linear'

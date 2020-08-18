@@ -38,6 +38,10 @@ struct dense_timed_formatter<TimeT, bool, json> {
       : dense_timed_formatter(
           options.get_time_field_name(), options.get_value_field_name()) {}
 
+  inline output_t now(time_t now) {
+    return json({{t_name, now}});
+  }
+
   output_t format(const interval_set& result, time_t previous, time_t now) {
     if (now == 0) {
       return _init_0(result, previous, now);
