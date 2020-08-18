@@ -1,0 +1,5 @@
+{"time": 0, "door_open": false, "dow_suppressed": false, "door_open_warning": false}
+{"time": 1, "door_open": true, "dow_suppressed": false, "door_open_warning": false}
+{"time": 6, "door_open": true, "dow_suppressed": false, "door_open_warning": true}
+{"time": 7, "door_open": true, "dow_suppressed": true, "door_open_warning": false}
+{"time": 8}
