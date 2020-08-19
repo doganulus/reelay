@@ -32,8 +32,8 @@ nav:
   - User Manual: 
     - 'Temporal Behaviors' : 'behaviors.md'
     - 'Rye Format' : 'rye.md'
-    - 'C++ API' : 'cpp_api.md'
-    - 'Python API' : 'python_api.md'
+    # - 'C++ API' : 'cpp_api.md'
+    # - 'Python API' : 'python_api.md'
     - 'Benchmarking' : 'performance.md'
 
   - Advanced Topics: 
