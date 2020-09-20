@@ -22,7 +22,7 @@
 namespace reelay {
 
 template <typename T, typename X>
-struct discrete_timed_network final : public discrete_timed_state<X, bool, T> {
+struct discrete_timed_network : public discrete_timed_state<X, bool, T> {
   using time_t = T;
   using value_t = bool;
   using input_t = X;
@@ -45,39 +45,41 @@ struct discrete_timed_network final : public discrete_timed_state<X, bool, T> {
 
   time_t now = -1;
 
-  discrete_timed_network(
-      const node_ptr_t &n, const std::vector<state_ptr_t> &ss)
+  discrete_timed_network(const node_ptr_t& n,
+                         const std::vector<state_ptr_t>& ss)
       : root(n), states(ss) {}
 
-  discrete_timed_network(
-      const node_ptr_t &n, const std::vector<state_ptr_t> &ss,
-      const options_t &options)
+  discrete_timed_network(const node_ptr_t& n,
+                         const std::vector<state_ptr_t>& ss,
+                         const options_t& options)
       : discrete_timed_network(n, ss) {}
 
-  void update(const input_t &args, time_t tn) override {
-    for (const auto &state : this->states) {
+  void update(const input_t& args, time_t tn) override {
+    for (const auto& state : this->states) {
       state->update(args, tn);
     }
   }
 
-  output_t output(time_t tn) override {
-    return root->output(tn);
-  }
+  output_t output(time_t tn) override { return root->output(tn); }
 
-  output_t update(const input_t &args) {
+  output_t update(const input_t& args) {
     now = now + time_t(1);
     this->update(args, now);
     return root->output(now);
   }
 
-  output_t output() {
-    return output(now);
-  }
+  output_t output() { return output(now); }
 
-  static type make(
-      const std::string &pattern, const options_t &options = options_t()) {
+  static type make(const std::string& pattern,
+                   const options_t& options = options_t()) {
     auto parser = ptl_parser<type>();
     return parser.parse(pattern, options);
+  }
+
+  static std::shared_ptr<type> make_shared(
+      const std::string& pattern, const options_t& options = options_t()) {
+    auto parser = ptl_parser<type>();
+    return parser.make_shared(pattern, options);
   }
 };
 

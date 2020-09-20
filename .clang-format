@@ -11,7 +11,7 @@ IncludeCategories:
   Priority: 1
 - Regex: '^<.*/.*'
   Priority: 2
-- Regex: '^\"scalr'
+- Regex: '^\"reelay'
   Priority: 3
 - Regex: '^\"third_party'
   Priority: 4

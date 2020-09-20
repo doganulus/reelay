@@ -23,7 +23,7 @@
 namespace reelay {
 
 template <typename T, typename V, typename X>
-struct dense_timed_robustness_0_network final
+struct dense_timed_robustness_0_network
     : public dense_timed_state<X, robustness_interval_map<T, V>, T> {
   using time_t = T;
   using value_t = V;
@@ -93,6 +93,12 @@ struct dense_timed_robustness_0_network final
       const std::string &pattern, const options_t &options = options_t()) {
     auto parser = ptl_parser<type>();
     return parser.parse(pattern, options);
+  }
+  
+  static std::shared_ptr<type> make_shared(
+      const std::string &pattern, const options_t &options = options_t()) {
+    auto parser = ptl_parser<type>();
+    return parser.make_shared(pattern, options);
   }
 };
 

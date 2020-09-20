@@ -35,14 +35,18 @@ struct timefield<T, std::unordered_map<std::string, std::string>> {
 
 template <> struct datafield<std::unordered_map<std::string, std::string>> {
   using input_t = std::unordered_map<std::string, std::string>;
-  static const std::unordered_set<std::string> falsity;
+
+  static std::unordered_set<std::string>& falsity(){
+    static std::unordered_set<std::string> f = {"0", "false", "False"};
+    return f;
+  }
 
   inline static bool contains(const input_t &container, const std::string &key) {
     return container.find(key) != container.end();
   }
 
   inline static bool as_bool(const input_t &container, const std::string &key) {
-    return falsity.find(container.at(key)) == falsity.end();
+    return falsity().find(container.at(key)) == falsity().end();
   }
 
   inline static int as_integer(const input_t &container,
@@ -82,9 +86,5 @@ template <> struct datafield<std::unordered_map<std::string, std::string>> {
     throw std::runtime_error("");
   }
 };
-
-const std::unordered_set<std::string>
-    datafield<std::unordered_map<std::string, std::string>>::falsity = {
-        "0", "false", "False"};
 
 } // namespace reelay

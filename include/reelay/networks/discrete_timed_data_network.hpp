@@ -23,7 +23,7 @@
 namespace reelay {
 
 template <typename T, typename X>
-struct discrete_timed_data_network final
+struct discrete_timed_data_network
     : public discrete_timed_state<X, data_set_t, T> {
   using time_t = T;
   using input_t = X;
@@ -86,6 +86,17 @@ struct discrete_timed_data_network final
     auto parser = ptl_parser<type>(kw);
     return parser.parse(pattern, options);
   }
-};
+  
+  static std::shared_ptr<type> make_shared(
+      const std::string &pattern, const options_t &options = options_t()) {
+    //
+    // Workaround until new parser
+    auto manager = options.get_data_manager();
+    kwargs kw = {{"manager", manager}};
 
+    auto parser = ptl_parser<type>(kw);
+    return parser.make_shared(pattern, options);
+  }
+
+};
 }  // namespace reelay
