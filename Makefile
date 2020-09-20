@@ -1,7 +1,7 @@
 CC=gcc#
 CXX=g++#
 CXXFLAGS=-std=c++11 -fPIC -O2 -pthread
-CXXFLAGS_APPS=-std=c++14 -fPIC -pthread -O3#-Wall -Wextra
+CXXFLAGS_APPS=-std=c++17 -fPIC -pthread -O2 -s -DNDEBUG#-Wall -Wextra
 CXXFLAGS_TEST=-g -std=c++11 -fPIC -O0 -pthread --coverage -fno-inline -fno-inline-small-functions -fno-default-inline -fvisibility=hidden#-Wall -Wextra
 
 LIB_FLAGS=-lcudd
@@ -64,7 +64,7 @@ rvbc2018-clean:
 
 app: 
 	mkdir -p bin
-	$(CXX) $(CXXFLAGS_APPS) apps/$(name)/*.cpp -o bin/$(name) $(INCLUDE_FLAGS) $(LIB_FLAGS)
+	$(CXX) $(CXXFLAGS_APPS) apps/$(name)/*.cpp -o bin/$(name) $(INCLUDE_FLAGS) -Iapps/$(name) $(LIB_FLAGS)
 
 ryjson1:
 	mkdir -p bin
