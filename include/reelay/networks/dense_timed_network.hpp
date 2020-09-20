@@ -22,7 +22,7 @@
 namespace reelay {
 
 template <typename T, typename X>
-struct dense_timed_network final : public dense_timed_state<X, interval_set<T>, T> {
+struct dense_timed_network : public dense_timed_state<X, interval_set<T>, T> {
   using time_t = T;
   using value_t = bool;
   using base_t = reelay::interval_set<time_t>;
@@ -98,6 +98,20 @@ struct dense_timed_network final : public dense_timed_state<X, interval_set<T>, 
 
     auto parser = ptl_parser<type>(kw);
     return parser.parse(pattern, options);
+  }
+  
+  static std::shared_ptr<type> make_shared(
+      const std::string &pattern, const options_t &options = options_t()) {
+    
+    kwargs kw;
+    if (options.get_interpolation() == piecewise::constant) {
+      kw["order"] = 0;
+    } else if (options.get_interpolation() == piecewise::linear) {
+      kw["order"] = 1;
+    }
+    
+    auto parser = ptl_parser<type>();
+    return parser.make_shared(pattern, options);
   }
 };
 

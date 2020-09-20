@@ -22,7 +22,7 @@
 namespace reelay {
 
 template <typename T, typename V, typename X>
-struct discrete_timed_robustness_network final
+struct discrete_timed_robustness_network
     : public discrete_timed_state<X, V, T> {
   using input_t = X;
   using time_t = T;
@@ -79,6 +79,12 @@ struct discrete_timed_robustness_network final
       const std::string &pattern, const options_t &options = options_t()) {
     auto parser = ptl_parser<type>();
     return parser.parse(pattern, options);
+  }
+  
+  static std::shared_ptr<type> make_shared(
+      const std::string &pattern, const options_t &options = options_t()) {
+    auto parser = ptl_parser<type>();
+    return parser.make_shared(pattern, options);
   }
 };
 

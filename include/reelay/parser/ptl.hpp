@@ -698,6 +698,12 @@ template <class NetworkT> struct ptl_parser : ptl_grammar{
     parser.parse(pattern.c_str(), root);
     return network_t(root, states, options);
   }
+  
+  std::shared_ptr<network_t> make_shared(const std::string &pattern, const options_t& options = options_t()) {
+    node_ptr_t root;
+    parser.parse(pattern.c_str(), root);
+    return std::make_shared<network_t>(root, states, options);
+  }
 
 };
 

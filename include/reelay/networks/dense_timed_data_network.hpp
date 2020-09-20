@@ -23,7 +23,7 @@
 namespace reelay {
 
 template <typename T, typename X>
-struct dense_timed_data_network final
+struct dense_timed_data_network
     : public dense_timed_state<X, data_interval_map<T>, T> {
   using time_t = T;
   using value_t = data_set_t;
@@ -99,6 +99,17 @@ struct dense_timed_data_network final
 
     auto parser = ptl_parser<type>(kw);
     return parser.parse(pattern, options);
+  }
+  
+  static std::shared_ptr<type> make_shared(
+      const std::string &pattern, const options_t &options = options_t()) {
+    //
+    // Workaround until new parser
+    auto manager = options.get_data_manager();
+    kwargs kw = {{"manager", manager}};
+
+    auto parser = ptl_parser<type>(kw);
+    return parser.make_shared(pattern, options);
   }
 };
 
