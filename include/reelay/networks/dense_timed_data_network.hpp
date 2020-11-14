@@ -71,6 +71,8 @@ struct dense_timed_data_network
     }
   }
 
+  time_t now() const { return current; }
+
   output_t output(time_t tp, time_t tn) override {
     return root->output(tp, tn);
   }

@@ -53,6 +53,8 @@ struct dense_timed_robustness_0_network
   time_t previous = 0;  // Time Zero
   time_t current = 0;   // Time Zero
 
+  time_t now() const { return current; }
+
   dense_timed_robustness_0_network(
       const node_ptr_t &n, const std::vector<state_ptr_t> &ss)
       : root(n), states(ss) {}
