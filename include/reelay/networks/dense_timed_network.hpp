@@ -59,6 +59,8 @@ struct dense_timed_network : public dense_timed_state<X, interval_set<T>, T> {
       const options_t &options)
       : dense_timed_network(n, ss) {}
 
+  time_t now() const { return current; }
+
   void update(const input_t &pargs, const input_t &args, time_t tp, time_t tn)
       override {
     for (const auto &state : this->states) {

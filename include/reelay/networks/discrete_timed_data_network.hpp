@@ -45,7 +45,8 @@ struct discrete_timed_data_network
   node_ptr_t root;
   std::vector<state_ptr_t> states;
 
-  time_t now = -1;
+  time_t current = -1;
+
 
   discrete_timed_data_network(const data_mgr_t mgr, 
       const node_ptr_t &n, const std::vector<state_ptr_t> &ss)
@@ -55,6 +56,8 @@ struct discrete_timed_data_network
       const node_ptr_t &n, const std::vector<state_ptr_t> &ss,
       const options_t &options)
       : discrete_timed_data_network(options.get_data_manager(), n, ss) {}
+
+  time_t now() const { return current; }
 
   void update(const input_t &args, time_t tn) override {
     for (const auto &state : this->states) {
@@ -67,14 +70,12 @@ struct discrete_timed_data_network
   }
 
   output_t update(const input_t &args) {
-    now = now + time_t(1);
-    this->update(args, now);
-    return root->output(now);
+    current = current + time_t(1);
+    this->update(args, current);
+    return root->output(current);
   }
 
-  output_t output() {
-    return output(now);
-  }
+  output_t output() { return output(current); }
 
   static type make(
       const std::string &pattern, const options_t &options = options_t()) {

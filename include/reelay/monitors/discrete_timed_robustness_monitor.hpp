@@ -45,12 +45,12 @@ struct discrete_timed_robustness_monitor final
       : network(n), formatter(f) {}
 
   output_type now() override {
-    return formatter.now(network.now);
+    return formatter.now(network.now());
   }
 
   output_type update(const input_type &args) override {
     auto result = network.update(args);
-    return formatter.format(result, network.now);
+    return formatter.format(result, network.now());
   }
   
   static type make(const std::string &pattern, const basic_options &options) {

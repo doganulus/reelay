@@ -1,3 +1,6 @@
+#ifndef REELAY_MONITORS_DISCRETE_TIMED_DATA_MONITOR_HPP
+#define REELAY_MONITORS_DISCRETE_TIMED_DATA_MONITOR_HPP
+
 /*
  * Copyright (c) 2019-2020 Dogan Ulus
  *
@@ -9,6 +12,7 @@
 
 #include <memory>
 #include <string>
+#include <utility>
 
 #include "reelay/formatters/formatter.hpp"
 #include "reelay/monitors/abstract_monitor.hpp"
@@ -44,16 +48,16 @@ struct discrete_timed_data_monitor final
   discrete_timed_data_monitor() = default;
 
   explicit discrete_timed_data_monitor(
-      const data_mgr_t mgr, const network_t &n, const formatter_t &f)
-      : manager(mgr), network(n), formatter(f) {}
+      data_mgr_t  mgr, const network_t &n, const formatter_t &f)
+      : manager(std::move(mgr)), network(n), formatter(f) {}
 
   output_type now() override {
-    return formatter.now(network.now);
+    return formatter.now(network.now());
   }
 
   output_type update(const input_type &args) override {
     auto result = network.update(args);
-    return formatter.format(result != manager->zero(), network.now);
+    return formatter.format(result != manager->zero(), network.now());
   }
   
   static type make(const std::string &pattern, const basic_options &options) {
@@ -77,3 +81,4 @@ struct discrete_timed_data_monitor final
   formatter_t formatter;
 };
 }  // namespace reelay
+#endif

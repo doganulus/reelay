@@ -22,7 +22,7 @@ template <typename T>
 struct timefield<T, simdjson::dom::element> {
   using input_t = simdjson::dom::element;
   inline static T get_time(const input_t &container) {
-    return container.at("time");
+    return container.at_key("time");
   }
 };
 

@@ -55,37 +55,6 @@ will be evaluated to `true` for time points `101`, `102`, and `103` but to `fals
 
 since it does not contain any field named as `mode`.
 
-<!-- Quite often we have to deal with complex hierarchial data objects such as
-
-```json
-...
-{
-    "time": 104,  
-    "ego" : {
-        "lights_on": true,
-        "motion" : {
-            "position" : [117.2, -345.7],
-            "speed": 21.23
-        }
-    }
-}
-..
-```
-
-when monitoring real-time systems. Therefore, Reelay support hierarchical atoms and uses `::` operator to specify the path of hierarchy as follows:
-
-```rye
-ego::motion::{speed > 21.0}
-```
-
-These path will be calculated from the current namespace, and initially from the root of the main data object. Reelay also provides a limited support for array-like structures and currently allows the specification of indices using `$index` syntax such that
-
-```rye
-ego::motion::position::{$0 > 100.0,  $1 > 0.0}
-``` -->
-
-<!-- As usual we can use zero-based indexing in our specifications. -->
-
 Finally Reelay allows to declare categorical variable references inside atoms using the `*ref_name` syntax such that
 
 ```rye
