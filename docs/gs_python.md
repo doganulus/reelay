@@ -13,7 +13,7 @@ We import Reelay monitors as follows:
 import reelay
 ```
 
-The package consists of two constructs `discrete_time_monitor` and `dense_timed_monitor`. Normally you would select discrete timed model if you work on discrete time behaviors and dense timed model if dense time behaviors. This choice depends on on your system and needs. If you haven't already, please check the documentation on [discrete and dense time behaviors](docs/behaviors.md) before proceeding.
+The package consists of two constructs `discrete_time_monitor` and `dense_timed_monitor`. Normally you would select discrete timed model if you work on discrete time behaviors and dense timed model if dense time behaviors. This choice depends on on your system and needs. If you haven't already, please check the documentation on [discrete and dense time behaviors](behaviors.md) before proceeding.
 
 ## Check Requirements over Discrete Time Behaviors
 
