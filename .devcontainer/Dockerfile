@@ -1,0 +1,48 @@
+FROM ubuntu:22.04
+
+ENV CMAKE_GENERATOR=Ninja
+
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y install \
+    sudo \
+    git \
+    build-essential \
+    tar curl wget zip unzip gnupg2 \
+    cmake \
+    ninja-build \
+    python3-pip \
+    python-is-python3 \
+    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* 
+
+RUN git clone -j$(nproc) --recursive --depth 1 --branch boost-1.81.0 https://github.com/boostorg/boost.git /tmp/boost \
+    && cd /tmp/boost \
+    && ./bootstrap.sh --prefix=/usr/local --without-libraries=python \
+    && ./b2 -j$(nproc) install \
+    && cd / && rm -rf /tmp/boost
+
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y install \
+    automake \
+    autotools-dev \
+    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* 
+
+RUN python -m pip install --upgrade pip && pip install "pybind11[global]"
+
+RUN git clone https://github.com/doganulus/cudd.git /tmp/cudd \
+    && cd /tmp/cudd \
+    && ./configure && aclocal && autoconf \
+    && ./configure --enable-silent-rules --enable-shared --enable-obj \
+    && make && make install \
+    && cd / && rm -rf /tmp/cudd
+
+# Add a container user (good practice)
+RUN groupadd reelay -g 1000 \
+    && useradd -ms /bin/bash reelay -g 1000 -u 1000 \
+    && printf "reelay:reelay" | chpasswd \
+    && printf "reelay ALL= NOPASSWD: ALL\\n" >> /etc/sudoers
+
+USER reelay
+
+ENV PATH "/home/reelay/.local/bin:${PATH}"
+
+RUN python -m pip install black gcovr

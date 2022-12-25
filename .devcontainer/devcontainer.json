@@ -1,0 +1,12 @@
+{
+    "name": "Reelay",
+    "dockerFile": "Dockerfile",
+    "context": "..",
+    "remoteUser": "reelay",
+    "customizations": {
+        "vscode": {
+            "settings": {},
+            "extensions": []
+        }
+    }
+}
