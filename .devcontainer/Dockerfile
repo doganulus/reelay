@@ -1,4 +1,4 @@
-FROM ghcr.io/doganulus/devel:latest
+FROM ghcr.io/doganulus/reelay-devel:latest
 
 # Add a container user (good practice)
 RUN groupadd reelay -g 1000 \
@@ -10,4 +10,4 @@ USER reelay
 
 ENV PATH "/home/reelay/.local/bin:${PATH}"
 
-RUN python -m pip install black gcovr
+RUN python -m pip install black gcovr cmake-format
