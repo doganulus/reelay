@@ -13,26 +13,26 @@
 
 namespace reelay {
 
-template <typename OutputT, typename TimeT>
+template<typename OutputT, typename TimeT>
 struct discrete_timed_node {
   virtual ~discrete_timed_node() {}
   virtual OutputT output(TimeT) = 0;
 };
 
-template <typename OutputT, typename TimeT>
+template<typename OutputT, typename TimeT>
 struct dense_timed_node {
   virtual ~dense_timed_node() {}
   virtual OutputT output(TimeT, TimeT) = 0;
 };
 
-template <typename InputT, typename OutputT, typename TimeT>
+template<typename InputT, typename OutputT, typename TimeT>
 struct discrete_timed_state : discrete_timed_node<OutputT, TimeT> {
   virtual ~discrete_timed_state() {}
   virtual OutputT output(TimeT) override = 0;
   virtual void update(const InputT&, TimeT) = 0;
 };
 
-template <typename InputT, typename OutputT, typename TimeT>
+template<typename InputT, typename OutputT, typename TimeT>
 struct dense_timed_state : dense_timed_node<OutputT, TimeT> {
   virtual ~dense_timed_state() {}
   virtual OutputT output(TimeT, TimeT) override = 0;

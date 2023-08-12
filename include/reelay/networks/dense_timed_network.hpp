@@ -21,7 +21,7 @@
 
 namespace reelay {
 
-template <typename T, typename X>
+template<typename T, typename X>
 struct dense_timed_network : public dense_timed_state<X, interval_set<T>, T> {
   using time_t = T;
   using value_t = bool;
@@ -51,28 +51,39 @@ struct dense_timed_network : public dense_timed_state<X, interval_set<T>, T> {
   time_t previous = 0;  // Time Zero
   time_t current = 0;   // Time Zero
 
-  dense_timed_network(const node_ptr_t &n, const std::vector<state_ptr_t> &ss)
-      : root(n), states(ss) {}
+  dense_timed_network(const node_ptr_t& n, const std::vector<state_ptr_t>& ss)
+      : root(n), states(ss)
+  {
+  }
 
   dense_timed_network(
-      const node_ptr_t &n, const std::vector<state_ptr_t> &ss,
-      const options_t &options)
-      : dense_timed_network(n, ss) {}
+    const node_ptr_t& n,
+    const std::vector<state_ptr_t>& ss,
+    const options_t& options)
+      : dense_timed_network(n, ss)
+  {
+  }
 
-  time_t now() const { return current; }
+  time_t now() const
+  {
+    return current;
+  }
 
-  void update(const input_t &pargs, const input_t &args, time_t tp, time_t tn)
-      override {
-    for (const auto &state : this->states) {
+  void update(
+    const input_t& pargs, const input_t& args, time_t tp, time_t tn) override
+  {
+    for(const auto& state : this->states) {
       state->update(pargs, args, tp, tn);
     }
   }
 
-  output_t output(time_t tp, time_t tn) override {
+  output_t output(time_t tp, time_t tn) override
+  {
     return root->output(tp, tn);
   }
 
-  output_t update(const input_t &args) {
+  output_t update(const input_t& args)
+  {
     previous = current;
     current = timefield<time_t, input_t>::get_time(args);
 
@@ -83,35 +94,39 @@ struct dense_timed_network : public dense_timed_state<X, interval_set<T>, T> {
     return this->output(previous, current);
   }
 
-  output_t output() {
+  output_t output()
+  {
     return output(previous, current);
   }
 
   static type make(
-      const std::string &pattern, const options_t &options = options_t()) {
+    const std::string& pattern, const options_t& options = options_t())
+  {
     //
     // Workaround until new parser
     kwargs kw;
-    if (options.get_interpolation() == piecewise::constant) {
+    if(options.get_interpolation() == piecewise::constant) {
       kw["order"] = 0;
-    } else if (options.get_interpolation() == piecewise::linear) {
+    }
+    else if(options.get_interpolation() == piecewise::linear) {
       kw["order"] = 1;
     }
 
     auto parser = ptl_parser<type>(kw);
     return parser.parse(pattern, options);
   }
-  
+
   static std::shared_ptr<type> make_shared(
-      const std::string &pattern, const options_t &options = options_t()) {
-    
+    const std::string& pattern, const options_t& options = options_t())
+  {
     kwargs kw;
-    if (options.get_interpolation() == piecewise::constant) {
+    if(options.get_interpolation() == piecewise::constant) {
       kw["order"] = 0;
-    } else if (options.get_interpolation() == piecewise::linear) {
+    }
+    else if(options.get_interpolation() == piecewise::linear) {
       kw["order"] = 1;
     }
-    
+
     auto parser = ptl_parser<type>();
     return parser.make_shared(pattern, options);
   }
