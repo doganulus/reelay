@@ -1,4 +1,4 @@
-name: Build DeepOps provisioning image
+name: Build Reelay development image
 on:
   workflow_dispatch:
   push:
