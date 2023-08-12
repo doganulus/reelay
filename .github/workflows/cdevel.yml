@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - .devcontainer/Dockerfile
+      - docker/devel/Dockerfile
       - .github/workflows/cdevel.yml # Self-trigger
 
 env:
@@ -32,8 +32,7 @@ jobs:
       - name: Build and push image
         uses: docker/build-push-action@v4
         with:
-          context: .
-          file: .devcontainer/Dockerfile
+          context: docker/devel
           build-args: |
             VERSION=${{ env.VERSION }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
