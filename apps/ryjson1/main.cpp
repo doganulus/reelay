@@ -9,36 +9,32 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <glob.h>    // glob(), globfree()
-#include <string.h>  // memset()
-
 #include <fstream>
+#include <glob.h>  // glob(), globfree()
 #include <iostream>
 #include <memory>
 #include <stdexcept>
+#include <string.h>  // memset()
 #include <string>
 #include <vector>
 
 #include "reelay/json.hpp"
 #include "reelay/monitors.hpp"
 
-#include "third_party/simdjson/simdjson.h"
-#include "third_party/simdjson/simdjson.cpp"
 #include "third_party/taywee/args.hpp"
 
+#include "simdjson.h"
 #include "simdjson_adapter.hpp"
 
 namespace rycli {
 
 std::vector<std::string> expand_glob(const std::string& glob_str) {
-
   // glob struct resides on the stack
   glob_t glob_result;
   memset(&glob_result, 0, sizeof(glob_result));
 
   // do the glob operation
-  int return_value
-      = glob(glob_str.c_str(), GLOB_TILDE, NULL, &glob_result);
+  int return_value = glob(glob_str.c_str(), GLOB_TILDE, NULL, &glob_result);
 
   // glob() error handling
   // Info: http://man7.org/linux/man-pages/man3/glob.3.html
@@ -68,7 +64,8 @@ std::vector<std::string> expand_glob(const std::string& glob_str) {
 }
 
 template <typename X, typename Y>
-void discrete_timed_processing(reelay::monitor<X, Y>& monitor, const std::string& filename) {
+void discrete_timed_processing(reelay::monitor<X, Y>& monitor,
+                               const std::string& filename) {
   int stdout_line_count = 0;
   simdjson::dom::parser reader;
   std::ofstream output_file(filename + ".ryl");
@@ -93,8 +90,9 @@ void discrete_timed_processing(reelay::monitor<X, Y>& monitor, const std::string
   std::cout << "Full output written to " + filename + ".ryl" << std::endl;
 }
 
-template<typename X, typename Y>
-void dense_timed_processing(reelay::monitor<X, Y>& monitor, const std::string& filename) {
+template <typename X, typename Y>
+void dense_timed_processing(reelay::monitor<X, Y>& monitor,
+                            const std::string& filename) {
   int stdout_line_count = 0;
   simdjson::dom::parser reader;
   std::ofstream output_file(filename + ".ryl");
@@ -124,10 +122,9 @@ void dense_timed_processing(reelay::monitor<X, Y>& monitor, const std::string& f
 }  // namespace rycli
 
 int main(int argc, char** argv) {
-
   using namespace reelay;
 
-  //defaults
+  // defaults
 
   // argparser
   args::ArgumentParser parser(
@@ -145,51 +142,52 @@ int main(int argc, char** argv) {
   args::Group gmodel(gsetting, "Time model:", args::Group::Validators::Xor,
                      args::Options::Global);
   args::Flag fdense(gmodel, "fv", "Use dense time model (default)",
-                {'v', "dense"});
+                    {'v', "dense"});
   args::Flag fdiscrete(gmodel, "fx", "Use discrete time model",
-                {'x', "discrete"});
+                       {'x', "discrete"});
 
   args::Group gdtype(gsetting, "Time datatype:", args::Group::Validators::Xor,
                      args::Options::Global);
   args::Flag fint(gdtype, "fi", "Use int64 as time type (default)",
-                {'i', "itime"});
+                  {'i', "itime"});
   args::Flag ffloat(gdtype, "ff", "with -v, use float64 as time type",
-                {'f', "ftime"});
+                    {'f', "ftime"});
 
   args::Group gsemantics(gsetting, "Value model:", args::Group::Validators::Xor,
                          args::Options::Global);
-  args::Flag fboolean(
-      gsemantics, "fb", "Use boolean semantics", {'b', "boolean"});
-  args::Flag frobustness(
-      gsemantics, "fr", "Use robustness semantics", {'r', "robustness"});
+  args::Flag fboolean(gsemantics, "fb", "Use boolean semantics",
+                      {'b', "boolean"});
+  args::Flag frobustness(gsemantics, "fr", "Use robustness semantics",
+                         {'r', "robustness"});
 
   args::Group ginterp(gsetting, "Interpolation:", args::Group::Validators::Xor,
                       args::Options::Global);
-  args::Flag fconstant(ginterp, "fk",
-                "with -v, use piecewise constant interpolation (default)",
-                {'k', "pwc"});
-  args::Flag flinear(ginterp, "fl", "with -vf, use piecewise linear interpolation",
-                {'l', "pwl"});
+  args::Flag fconstant(
+      ginterp, "fk", "with -v, use piecewise constant interpolation (default)",
+      {'k', "pwc"});
+  args::Flag flinear(ginterp, "fl",
+                     "with -vf, use piecewise linear interpolation",
+                     {'l', "pwl"});
 
   args::Flag fno_condense(gsetting, "fno-condense",
-                          "with -x, disable dense output", {'z', "no-condense"});
+                          "with -x, disable dense output",
+                          {'z', "no-condense"});
 
   args::Group gioctrl(parser, "Input/Output Control");
   args::Group gformat(gioctrl,
                       "Input File Format:", args::Group::Validators::Xor,
                       args::Options::Global);
 
-  args::ValueFlag<std::string> t_name(
-      gioctrl, "STRING", "Use STRING as the name of time field", {"tname"}, "time");
-  args::ValueFlag<std::string> y_name(
-      gioctrl, "STRING", "use STRING as the name of output field", {"yname"}, "value");
+  args::ValueFlag<std::string> t_name(gioctrl, "STRING",
+                                      "Use STRING as the name of time field",
+                                      {"tname"}, "time");
+  args::ValueFlag<std::string> y_name(gioctrl, "STRING",
+                                      "use STRING as the name of output field",
+                                      {"yname"}, "value");
 
   args::HelpFlag help(parser, "help", "Display this help menu", {'h', "help"});
 
   args::CompletionFlag completion(parser, {"complete"});
-
-
-
 
   try {
     parser.ParseCLI(argc, argv);
@@ -248,11 +246,11 @@ int main(int argc, char** argv) {
   auto monitor = reelay::monitor<input_t, output_t>();
 
   if (use_discrete and use_boolean) {  // -xb -xbz
-    auto opts = reelay::discrete_timed<intmax_t>::monitor<
-                    input_t, output_t>::options()
-                    .with_time_field_name(args::get(t_name))
-                    .with_value_field_name(args::get(y_name))
-                    .with_condensing(not args::get(fno_condense));
+    auto opts =
+        reelay::discrete_timed<intmax_t>::monitor<input_t, output_t>::options()
+            .with_time_field_name(args::get(t_name))
+            .with_value_field_name(args::get(y_name))
+            .with_condensing(not args::get(fno_condense));
 
     monitor = reelay::make_monitor(args::get(spec), opts);
 
@@ -266,30 +264,30 @@ int main(int argc, char** argv) {
     monitor = reelay::make_monitor(args::get(spec), opts);
 
   } else if (use_dense and use_boolean and use_integer) {  // -vbi
-    auto opts = reelay::dense_timed<intmax_t>::monitor<
-                    input_t, output_t>::options()
-                    .with_time_field_name(args::get(t_name))
-                    .with_value_field_name(args::get(y_name));
+    auto opts =
+        reelay::dense_timed<intmax_t>::monitor<input_t, output_t>::options()
+            .with_time_field_name(args::get(t_name))
+            .with_value_field_name(args::get(y_name));
 
     monitor = reelay::make_monitor(args::get(spec), opts);
-  } else if (
-      use_dense and use_boolean and use_floating and use_constant) {  // -vbf
-                                                                      // -vbfk
-    auto opts
-        = reelay::dense_timed<double>::monitor<input_t, output_t>::options()
-              .with_time_field_name(args::get(t_name))
-              .with_value_field_name(args::get(y_name))
-              .with_interpolation(reelay::piecewise::constant);
+  } else if (use_dense and use_boolean and use_floating and
+             use_constant) {  // -vbf
+                              // -vbfk
+    auto opts =
+        reelay::dense_timed<double>::monitor<input_t, output_t>::options()
+            .with_time_field_name(args::get(t_name))
+            .with_value_field_name(args::get(y_name))
+            .with_interpolation(reelay::piecewise::constant);
 
     monitor = reelay::make_monitor(args::get(spec), opts);
 
-  } else if (
-      use_dense and use_boolean and use_floating and use_linear) {  // -vbfl
-    auto opts
-        = reelay::dense_timed<double>::monitor<input_t, output_t>::options()
-              .with_time_field_name(args::get(t_name))
-              .with_value_field_name(args::get(y_name))
-              .with_interpolation(reelay::piecewise::linear);
+  } else if (use_dense and use_boolean and use_floating and
+             use_linear) {  // -vbfl
+    auto opts =
+        reelay::dense_timed<double>::monitor<input_t, output_t>::options()
+            .with_time_field_name(args::get(t_name))
+            .with_value_field_name(args::get(y_name))
+            .with_interpolation(reelay::piecewise::linear);
 
     monitor = reelay::make_monitor(args::get(spec), opts);
 
