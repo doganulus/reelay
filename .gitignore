@@ -1,3 +1,9 @@
+# compile_commands.json
+**/compile_commands.json
+
+# clangd background index
+.cache/clangd
+
 # Prerequisites
 *.d
 

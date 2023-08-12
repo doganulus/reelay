@@ -1,17 +1,60 @@
 ---
-Language: Cpp
 BasedOnStyle: Google
+Language: Cpp
+Standard: c++17
 
-DerivePointerAlignment: false
-PointerAlignment: Left
+AlignAfterOpenBracket: AlwaysBreak
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: Empty
+AllowShortLoopsOnASingleLine: false
+
+AlwaysBreakTemplateDeclarations: Yes
+AlwaysBreakBeforeMultilineStrings: true
+
+BinPackArguments: false
+BinPackParameters: false
+BreakBeforeBraces: Stroustrup
+BreakConstructorInitializers: BeforeColon
+
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+ContinuationIndentWidth: 2
+
+FixNamespaceComments: true
 
 IncludeBlocks: Regroup
 IncludeCategories:
-- Regex: '^<[^/]*>'
-  Priority: 1
-- Regex: '^<.*/.*'
-  Priority: 2
-- Regex: '^\"reelay'
-  Priority: 3
-- Regex: '^\"third_party'
-  Priority: 4
+  - Regex: '^"(reelay)/'
+    Priority: 1
+    CaseSensitive: true
+  - Regex: '^((<|")(boost|catch2)/)'
+    Priority: 2
+    CaseSensitive: true
+  - Regex: "<[a-zA-Z][a-zA-Z0-9_]+>"
+    Priority: 3
+  - Regex: ".*"
+    Priority: 4
+
+SpaceAfterTemplateKeyword: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCpp11BracedList: false
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeParens: Never
+SpaceBeforeSquareBrackets: false
+SpaceInEmptyBlock: false
+SpaceInEmptyParentheses: false
+SpacesInAngles: false
+SpacesInCStyleCastParentheses: false
+SpacesInConditionalStatement: false
+SpacesInContainerLiterals: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+
+DerivePointerAlignment: false
+PointerAlignment: Left
+ReflowComments: true
+
+UseTab: Never

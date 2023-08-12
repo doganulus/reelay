@@ -1,0 +1,35 @@
+Checks: >-
+  bugprone-*,
+  -bugprone-easily-swappable-parameters,
+  cppcoreguidelines-slicing,
+  cppcoreguidelines-special-member-functions,
+  llvm-*,
+  misc-*,
+  -misc-no-recursion,
+  -misc-non-private-member-variables-in-classes,
+  -misc-unused-alias-decls,
+  modernize-*,
+  -modernize-concat-nested-namespaces,
+  -modernize-use-trailing-return-type,
+  -modernize-macro-to-enum,
+  performance-*,
+  readability-*,
+  -readability-avoid-const-params-in-decls,
+  -readability-magic-numbers,
+  -readability-identifier-length,
+  -readability-redundant-access-specifiers
+
+CheckOptions:
+  - { key: modernize-use-nodiscard.ReplacementString, value: REELAY_NODISCARD }
+  - { key: modernize-use-noexcept.ReplacementString, value: REELAY_NOEXCEPT }
+  - { key: readability-identifier-naming.ClassCase, value: lower_case }
+  - { key: readability-identifier-naming.MethodCase, value: lower_case }
+  - { key: readability-identifier-naming.FunctionCase, value: lower_case }
+  - { key: readability-identifier-naming.ParameterCase, value: lower_case }
+  - { key: readability-identifier-naming.StructCase, value: lower_case }
+  - { key: readability-identifier-naming.VariableCase, value: lower_case }
+  - { key: readability-identifier-naming.AbstractClassPrefix, value: abstract }
+
+WarningsAsErrors: "*"
+
+HeaderFilterRegex: "reelay/[^f].*"
