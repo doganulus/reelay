@@ -1,6 +1,29 @@
 cmake_minimum_required(VERSION 3.22)
 
-project("reelay" CXX)
+file(READ
+     "${CMAKE_SOURCE_DIR}/include/reelay/version.hpp"
+     ver
+)
+
+string(REGEX MATCH
+             "VERSION_MAJOR ([0-9]*)"
+             _
+             ${ver}
+)
+set(ver_major ${CMAKE_MATCH_1})
+
+string(REGEX MATCH
+             "VERSION_MINOR ([0-9]*)"
+             _
+             ${ver}
+)
+set(ver_minor ${CMAKE_MATCH_1})
+
+project("reelay"
+        LANGUAGES CXX
+        VERSION "${ver_major}.${ver_minor}"
+)
+message("Reelay version: ${ver_major}.${ver_minor}")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -10,6 +33,7 @@ set(CMAKE_CXX_FLAGS_COVERAGE "-O0 --coverage")
 
 set(ENABLE_TESTS ON)
 set(BUILD_REELAY_APPS ON)
+set(BUILD_PYTHON_BINDINGS ON)
 
 include(GNUInstallDirs)
 
@@ -49,6 +73,8 @@ target_include_directories(
 target_link_libraries(reelay INTERFACE ${cudd_static})
 
 install(TARGETS reelay LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
+
+add_subdirectory(src)
 
 if(ENABLE_TESTS)
   enable_testing()
