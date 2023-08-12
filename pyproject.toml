@@ -1,0 +1,70 @@
+[project]
+classifiers = [
+  'Development Status :: 4 - Beta',
+  'Intended Audience :: Developers',
+  'Intended Audience :: Science/Research',
+  'Topic :: Scientific/Engineering',
+  'Topic :: Scientific/Engineering :: Mathematics',
+  'Topic :: Software Development :: Testing',
+  'License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)',
+  'Programming Language :: Python :: 3',
+]
+keywords = ["reactive", "automata", "monitoring", "testing", "runtime"]
+name = "reelay"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { "file" = "LICENSE" }
+authors = [{ "name" = "Dogan Ulus", "email" = "doganulus@gmail.com" }]
+urls = { "Documentation" = "https://doganulus.github.io/reelay" }
+dependencies = []
+dynamic = ["version", "description"]
+
+[project.scripts]
+add = "pybind11_project.add:main"
+
+[build-system]
+requires = ["py-build-cmake~=0.1.8", "pybind11"]
+build-backend = "py_build_cmake.build"
+
+[tool.py-build-cmake.module]
+name = "reelay"
+directory = "python"
+
+[tool.py-build-cmake.sdist]
+include = [
+  "README.md",
+  "CMakeLists.txt",
+  "include/*",
+  "src/*",
+  "python/*",
+  "LICENSE",
+]
+exclude = []
+
+[tool.py-build-cmake.cmake]
+minimum_version = "3.22"
+build_type = "Release"
+source_path = "."
+build_path = "/tmp/reelay/build"
+args = ["-Wdev"]
+build_args = ["-j"]
+build_tool_args = []
+install_args = ["--verbose"]
+install_components = ["python_modules"]
+env = {}
+
+[tool.py-build-cmake.cmake.options]
+"CMAKE_EXPORT_COMPILE_COMMANDS:BOOL" = "ON"
+"BUILD_PYTHON_BINDINGS:BOOL" = "ON"
+"ENABLE_TESTS:BOOL" = "OFF"
+
+[tool.py-build-cmake.linux.cmake] # Linux-specific options
+generator = "Ninja Multi-Config"
+config = ["Debug", "Release"]
+
+options = { "CMAKE_DEBUG_POSTFIX" = "_d" }
+env = { "CMAKE_PREFIX_PATH" = "${HOME}/.local" }
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["test"]
