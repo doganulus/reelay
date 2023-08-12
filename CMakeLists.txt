@@ -1,28 +1,17 @@
 cmake_minimum_required(VERSION 3.22)
 
-file(READ
-     "${CMAKE_SOURCE_DIR}/include/reelay/version.hpp"
-     ver
-)
+file(READ "${CMAKE_SOURCE_DIR}/include/reelay/version.hpp" ver)
 
-string(REGEX MATCH
-             "VERSION_MAJOR ([0-9]*)"
-             _
-             ${ver}
-)
+string(REGEX MATCH "VERSION_MAJOR ([0-9]*)" _ ${ver})
 set(ver_major ${CMAKE_MATCH_1})
 
-string(REGEX MATCH
-             "VERSION_MINOR ([0-9]*)"
-             _
-             ${ver}
-)
+string(REGEX MATCH "VERSION_MINOR ([0-9]*)" _ ${ver})
 set(ver_minor ${CMAKE_MATCH_1})
 
-project("reelay"
-        LANGUAGES CXX
-        VERSION "${ver_major}.${ver_minor}"
-)
+project(
+  "reelay"
+  LANGUAGES CXX
+  VERSION "${ver_major}.${ver_minor}")
 message("Reelay version: ${ver_major}.${ver_minor}")
 
 set(CMAKE_CXX_STANDARD 17)
@@ -38,37 +27,20 @@ option(BUILD_PYTHON_BINDINGS OFF)
 include(GNUInstallDirs)
 
 add_library(reelay INTERFACE)
-add_library(
-  reelay::reelay
-  ALIAS
-  reelay
-)
+add_library(reelay::reelay ALIAS reelay)
 
 find_package(
-  Boost
-  1.82.0
-  REQUIRED
+  Boost 1.82.0 REQUIRED
   # COMPONENTS json
-)
+  )
 
-# find_library(
-#   boost_json_static
-#   NAMES libboost_json.a
-#         REQUIRED
-#         NO_CACHE
-# )
-find_library(
-  cudd_static
-  NAMES libcudd.a
-        REQUIRED
-        NO_CACHE
-)
+# find_library( boost_json_static NAMES libboost_json.a REQUIRED NO_CACHE )
+find_library(cudd_static NAMES libcudd.a REQUIRED NO_CACHE)
 
 # reelay-core
 target_include_directories(
   reelay INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-                   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>/include
-)
+                   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>/include)
 
 target_link_libraries(reelay INTERFACE ${cudd_static})
 
