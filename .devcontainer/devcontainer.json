@@ -7,15 +7,17 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "EditorConfig.EditorConfig",
-        "llvm-vs-code-extensions.vscode-clangd",
-        "cheshirekow.cmake-format",
-        "esbenp.prettier-vscode",
-        "ms-azuretools.vscode-docker",
-        "github.vscode-github-actions",
-        "GitHub.copilot",
-        "ms-vscode.cmake-tools"
-      ],
+		"EditorConfig.EditorConfig",
+		"llvm-vs-code-extensions.vscode-clangd",
+		"cheshirekow.cmake-format",
+		"esbenp.prettier-vscode",
+		"ms-azuretools.vscode-docker",
+		"github.vscode-github-actions",
+		"GitHub.copilot",
+		"ms-vscode.cmake-tools",
+		"ms-python.python",
+		"tamasfe.even-better-toml"
+	],
       "settings": {
         "clangd.arguments": [
           "--background-index",
