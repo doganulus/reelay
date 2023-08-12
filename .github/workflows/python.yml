@@ -3,41 +3,33 @@ name: python
 on:
   push:
     paths:
-    - 'setup.py'
-    - 'python/**'
-    - 'include/reelay/**'
-    - '.github/workflows/python.yml' # Self-trigger
+      - "pyproject.toml"
+      - "python/**"
+      - "include/reelay/**"
+      - ".github/workflows/python.yml" # Self-trigger
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: ghcr.io/doganulus/reelay-devel
+
     strategy:
       matrix:
-        python-version: ['3.5', '3.6', '3.7', '3.8']
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
     steps:
-    - uses: actions/checkout@v1
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Install Reelay dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y cmake
-        sudo apt-get install -y libboost-all-dev
+      - name: Setup Python version
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    - name: Setup Python version
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Build Reelay Python package
+        run: pip install .
 
-    - name: Get submodules
-      run: |
-        git submodule init 
-        git submodule update 
+      - name: Install test dependencies
+        run: pip install pytest
 
-    - name: Build Reelay Python package
-      run: pip install .
-
-    - name: Install test dependencies
-      run: pip install pytest
-
-    - name: Run tests
-      run: pytest python/tests
+      - name: Run tests
+        run: pytest python/tests
