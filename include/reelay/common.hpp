@@ -18,9 +18,10 @@ namespace reelay {
 
 using any = peg::any;
 
-template <typename T, typename... Args>
-inline auto any_cast(Args &&... args)
-    -> decltype(peg::any_cast<T>(std::forward<Args>(args)...)) {
+template<typename T, typename... Args>
+inline auto any_cast(Args&&... args)
+  -> decltype(peg::any_cast<T>(std::forward<Args>(args)...))
+{
   return peg::any_cast<T>(std::forward<Args>(args)...);
 }
 

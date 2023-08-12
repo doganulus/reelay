@@ -1,8 +1,8 @@
 /*
- *                 |             
- *    __| _ \  _ \ |  _` | |   | 
- *   |    __/  __/ | (   | |   | 
- *  _|  \___|\___|_|\__,_|\__, | 
+ *                 |
+ *    __| _ \  _ \ |  _` | |   |
+ *   |    __/  __/ | (   | |   |
+ *  _|  \___|\___|_|\__,_|\__, |
  *                         ____/    Copyright (c) 2019-2020 Dogan Ulus
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -12,80 +12,91 @@
 
 #pragma once
 
-#include "unordered_set"
-
 #include "reelay/datafield.hpp"
 #include "reelay/third_party/nlohmann/json.hpp"
+
+#include <string>
+#include <unordered_set>
 
 namespace reelay {
 
 using json = nlohmann::json;
 
-template <typename T>
+template<typename T>
 struct timefield<T, json> {
   using input_t = json;
-  inline static T get_time(const input_t &container) {
+  inline static T get_time(const input_t& container)
+  {
     return T(container.at("time"));
   }
 };
 
-template <> struct datafield<json> {
+template<>
+struct datafield<json> {
   using input_t = json;
 
-  inline static input_t at(const input_t &container, const std::string &key) {
+  inline static input_t at(const input_t& container, const std::string& key)
+  {
     return container[key];
   }
 
-  inline static input_t at(const input_t &container, std::size_t index) {
+  inline static input_t at(const input_t& container, std::size_t index)
+  {
     return container[index];
   }
 
-  inline static bool contains(const input_t &container, const std::string &key){
+  inline static bool contains(const input_t& container, const std::string& key)
+  {
     return container.find(key) != container.end();
   }
 
-  inline static bool as_bool(const input_t &container, const std::string &key) {
+  inline static bool as_bool(const input_t& container, const std::string& key)
+  {
     return container.at(key);
   }
 
-  inline static int as_integer(const input_t &container,
-                                  const std::string &key) {
+  inline static int as_integer(const input_t& container, const std::string& key)
+  {
     return container.at(key);
   }
 
-  inline static double as_floating(const input_t &container,
-                                  const std::string &key) {
+  inline static double as_floating(
+    const input_t& container, const std::string& key)
+  {
     return container.at(key);
   }
 
-  inline static std::string as_string(const input_t &container,
-                                      const std::string &key) {
+  inline static std::string as_string(
+    const input_t& container, const std::string& key)
+  {
     return container.at(key);
   }
 
-  inline static bool contains(const input_t &container, std::size_t index) {
+  inline static bool contains(const input_t& container, std::size_t index)
+  {
     return index < container.size();
   }
 
-  inline static bool as_bool(const input_t &container, std::size_t index) {
+  inline static bool as_bool(const input_t& container, std::size_t index)
+  {
     return container.at(index);
   }
 
-  inline static int as_integer(const input_t &container, std::size_t index) {
+  inline static int as_integer(const input_t& container, std::size_t index)
+  {
     return container.at(index);
   }
 
-  inline static double as_floating(const input_t &container,
-                                   std::size_t index) {
+  inline static double as_floating(const input_t& container, std::size_t index)
+  {
     return container.at(index);
   }
 
-  inline static std::string as_string(const input_t &container,
-                                      std::size_t index) {
+  inline static std::string as_string(
+    const input_t& container, std::size_t index)
+  {
     return container.at(index);
   }
-
-
 };
 
-} // namespace reelay
+}  // namespace reelay

@@ -15,8 +15,10 @@
 #include "cudd.h"
 #include "cuddObj.hh"
 
-template <> struct std::hash<BDD> {
-  std::size_t operator()(const BDD &k) const {
+template<>
+struct std::hash<BDD> {
+  std::size_t operator()(const BDD& k) const
+  {
     return std::hash<DdNode*>{}(k.getNode());
   }
 };
@@ -29,7 +31,6 @@ using data_mgr_t = std::shared_ptr<binding_manager>;
 using data_set_t = BDD;
 
 struct binding_manager {
-
   using set_t = BDD;
   using mgr_t = Cudd;
 
@@ -46,13 +47,20 @@ struct binding_manager {
     std::unordered_map<set_t, V> values = {};
     std::unordered_map<V, set_t> slots = {};
 
-    variable_t(){}
+    variable_t() = default;
 
-    variable_t(const mgr_t &mgr, const std::vector<set_t> &vars)
-        : one(mgr.bddOne()), cube(mgr.computeCube(vars)), empty_slots(~cube),
-          bddvars(vars) {}
+    variable_t(const mgr_t& mgr, const std::vector<set_t>& vars)
+        : one(mgr.bddOne()),
+          cube(mgr.computeCube(vars)),
+          empty_slots(~cube),
+          bddvars(vars)
+    {
+    }
 
-    std::size_t size(){return bddvars.size();}
+    std::size_t size()
+    {
+      return bddvars.size();
+    }
 
     // set_t assign(const V &value) {
     //   if (slots.find(value) != slots.end()) {
@@ -65,8 +73,9 @@ struct binding_manager {
     //   return slot;
     // }
 
-    set_t assign(const V &value) {
-      if (slots.find(value) != slots.end()) {
+    set_t assign(const V& value)
+    {
+      if(slots.find(value) != slots.end()) {
         return slots[value];
       }
       auto slot = make_minterm_of(n);
@@ -76,14 +85,16 @@ struct binding_manager {
       return slot;
     }
 
-    set_t make_minterm_of(std::size_t n) {
-      std::size_t k = n; 
+    set_t make_minterm_of(std::size_t n)
+    {
+      std::size_t k = n;
       set_t c = one;
 
-      for(std::size_t i = 0; i < bddvars.size(); i++){
-        if (k % 2 != 0) {
+      for(std::size_t i = 0; i < bddvars.size(); i++) {
+        if(k % 2 != 0) {
           c *= bddvars[i];
-        } else {
+        }
+        else {
           c *= ~bddvars[i];
         }
         k /= 2;
@@ -91,21 +102,24 @@ struct binding_manager {
       return c;
     }
 
-    set_t erase(const V &value) {
+    set_t erase(const V& value)
+    {
       auto slot = slots[value];
       values.erase(slot);
       slots.erase(value);
       return slot;
     }
 
-    V erase(const set_t &slot) {
+    V erase(const set_t& slot)
+    {
       auto value = values[slot];
       slots.erase(value);
       values.erase(slot);
       return value;
     }
 
-    set_t get_used_slots(const set_t &data_set) {
+    set_t get_used_slots(const set_t& data_set)
+    {
       auto used_slots = data_set.ExistAbstract(other_cubes) *
                         (~data_set).ExistAbstract(other_cubes);
       return used_slots;
@@ -116,27 +130,36 @@ struct binding_manager {
 
   std::unordered_map<std::string, variable_t<std::string>> variables = {};
 
-  binding_manager() {
+  binding_manager()
+  {
     cudd = Cudd(0, 0);
     cudd.AutodynDisable();
   }
 
-  set_t one() { return cudd.bddOne(); }
-  set_t zero() { return cudd.bddZero(); }
+  set_t one() const
+  {
+    return cudd.bddOne();
+  }
+  set_t zero() const
+  {
+    return cudd.bddZero();
+  }
 
-  void add_variable(std::string name, std::size_t nbits=20) {
-    if (variables.find(name) == variables.end()) {
+  void add_variable(std::string name, std::size_t nbits = 20)
+  {
+    if(variables.find(name) == variables.end()) {
       std::vector<set_t> bddvars = {};
-      for (std::size_t i = 0; i < nbits; i++) {
+      for(std::size_t i = 0; i < nbits; i++) {
         bddvars.push_back(cudd.bddVar());
       }
       variables[name] = variable_t<std::string>(cudd, bddvars);
     }
   }
 
-  set_t assign(std::string name, std::string value) {
+  set_t assign(std::string name, std::string value)
+  {
     return variables[name].assign(value);
   }
 };
 
-} // namespace reelay
+}  // namespace reelay
