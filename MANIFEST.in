@@ -1,4 +1,0 @@
-include LICENSE
-graft include
-graft python/include
-graft third_party
