@@ -1,33 +1,33 @@
-name: docs
+name: Docs
 
 on:
   push:
     paths:
-    - 'mkdocs.yml'
-    - 'docs/**'
-    - '.github/workflows/docs.yml' # Self-trigger
+      - "mkdocs.yml"
+      - "docs/**"
+      - ".github/workflows/docs.yml" # Self-trigger
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+      - uses: actions/checkout@v1
 
-    - name: Setup Python 3.6
-      uses: actions/setup-python@v1
-      with:
-        python-version: '3.6'
+      - name: Setup Python 3.6
+        uses: actions/setup-python@v1
+        with:
+          python-version: "3.6"
 
-    - name: Install dependencies
-      run: |
-        python3 -m pip install --upgrade pip
-        python3 -m pip install mkdocs mkdocs-material mkdocs-minify-plugin
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install mkdocs mkdocs-material mkdocs-minify-plugin
 
-    - run: mkdocs build
+      - run: mkdocs build
 
-    - name: Deploy documentation
-      uses: peaceiris/actions-gh-pages@v2.5.0
-      env:
-        ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-        PUBLISH_BRANCH: gh-pages
-        PUBLISH_DIR: ./site
+      - name: Deploy documentation
+        uses: peaceiris/actions-gh-pages@v2.5.0
+        env:
+          ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: ./site
