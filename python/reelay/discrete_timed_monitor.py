@@ -6,7 +6,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 #
-from reelay import _pybind11_module as module
+from reelay import _pybind11_module as rym
 
 
 class discrete_timed_monitor(object):
@@ -18,32 +18,32 @@ class discrete_timed_monitor(object):
                 condense=True,
                 ):
 
-        inspection = reelay.module.inspect(pattern)
+        inspection = rym.inspect(pattern)
         has_references = inspection['has_references']
 
-        options = reelay.module.monitor_options(
+        options = rym.monitor_options(
             t_name, y_name, condense, True)
 
         if not has_references and semantics == "boolean":
             if condense:
-                return reelay.module.condensing_monitor.make(
+                return rym.condensing_monitor.make(
                     pattern, options)
             else:
-                return reelay.module.discrete_monitor.make(
+                return rym.discrete_monitor.make(
                     pattern, options)
         elif not has_references and semantics == "robustness":
             if condense:
-                return reelay.module.condensing_robustness_monitor.make(
+                return rym.condensing_robustness_monitor.make(
                     pattern, options)
             else:
-                return reelay.module.discrete_robustness_monitor.make(
+                return rym.discrete_robustness_monitor.make(
                     pattern, options)
         elif has_references and semantics == "boolean":
             if condense:
-                return reelay.module.condensing_data_monitor.make(
+                return rym.condensing_data_monitor.make(
                     pattern, options)
             else:
-                return reelay.module.discrete_data_monitor.make(
+                return rym.discrete_data_monitor.make(
                     pattern, options)
         elif has_references and semantics == "robustness":
             raise AttributeError((

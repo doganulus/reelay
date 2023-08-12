@@ -6,7 +6,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 #
-from reelay import _pybind11_module as module
+from reelay import _pybind11_module as rym
 
 
 class dense_timed_monitor(object):
@@ -18,21 +18,21 @@ class dense_timed_monitor(object):
                 y_name="value",        # any unique identifier
                 ):
 
-        inspection = reelay.module.inspect(pattern)
+        inspection = rym.inspect(pattern)
         has_references = inspection['has_references']
 
-        options = reelay.module.monitor_options(
+        options = rym.monitor_options(
             t_name, y_name, piecewise, True)
 
         if not has_references and semantics == "boolean":
             if piecewise == "constant" or piecewise == "linear":
-                return reelay.module.dense_monitor.make(pattern, options)
+                return rym.dense_monitor.make(pattern, options)
             else:
                 raise AttributeError(
                     "piecewise must be either 'constant' or 'linear'.")
         elif not has_references and semantics == "robustness":
             if piecewise == "constant":
-                return reelay.module.dense_robustness_monitor.make(
+                return rym.dense_robustness_monitor.make(
                     pattern, options)
             elif piecewise == "linear":
                 raise AttributeError((
@@ -44,7 +44,7 @@ class dense_timed_monitor(object):
                     "piecewise must be either 'constant' or 'linear'.")
         elif has_references and semantics == "boolean":
             if piecewise == "constant":
-                return reelay.module.dense_data_monitor.make(pattern, options)
+                return rym.dense_data_monitor.make(pattern, options)
             elif piecewise == "linear":
                 raise AttributeError((
                     "Piecewise linear interpolation is not available for "
