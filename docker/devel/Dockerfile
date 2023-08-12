@@ -12,6 +12,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
       cmake \
       ninja-build \
       python3-pip \
+      python3-venv \
       python-is-python3 \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
@@ -58,4 +59,5 @@ RUN git clone --depth 1 --branch v3.2.2 https://github.com/lemire/simdjson.git /
 RUN python -m pip install --upgrade pip \
     && pip install \
       gcovr \
+      py-build-cmake \
       "pybind11[global]"
