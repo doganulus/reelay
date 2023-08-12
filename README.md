@@ -1,6 +1,10 @@
 # Reelay Monitors
 
-![tests](https://github.com/doganulus/reelay/actions/workflows/tests/badge.svg)![python](https://github.com/doganulus/reelay/actions/workflows/python/badge.svg)![docs](https://github.com/doganulus/reelay/actions/workflows/docs/badge.svg)[![Coverage](https://coveralls.io/repos/github/doganulus/reelay/badge.svg?branch=main)](https://coveralls.io/github/doganulus/reelay?branch=main)[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9493a2a1ed2b47e6a0cfdcf6a68cd9b8)](https://www.codacy.com/manual/doganulus/reelay?utm_source=github.com&utm_medium=referral&utm_content=doganulus/reelay&utm_campaign=Badge_Grade)
+[![Tests](https://github.com/doganulus/reelay/actions/workflows/tests.yml/badge.svg)](https://github.com/doganulus/reelay/actions/workflows/tests.yml)
+[![Python](https://github.com/doganulus/reelay/actions/workflows/python.yml/badge.svg)](https://github.com/doganulus/reelay/actions/workflows/python.yml)
+[![Docs](https://github.com/doganulus/reelay/actions/workflows/docs.yml/badge.svg)](https://github.com/doganulus/reelay/actions/workflows/docs.yml)
+[![Coverage](https://coveralls.io/repos/github/doganulus/reelay/badge.svg?branch=main)](https://coveralls.io/github/doganulus/reelay?branch=main)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9493a2a1ed2b47e6a0cfdcf6a68cd9b8)](https://www.codacy.com/manual/doganulus/reelay?utm_source=github.com&utm_medium=referral&utm_content=doganulus/reelay&utm_campaign=Badge_Grade)
 
 Reelay is a header-only C++ library and set of tools for system-level verification and testing of real-time systems. Reelay implements state-of-the-art [runtime verification](https://en.wikipedia.org/wiki/Runtime_verification) techniques to construct runtime monitors that check temporal behaviors of the system against system-level requirements. Hence, Reelay can be used to enhance rigorous systems engineering practices by formalizing and automating the assessment phase.
 
