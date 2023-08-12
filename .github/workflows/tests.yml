@@ -10,7 +10,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: ghcr.io/doganulus/reelay-devel
+    container:
+      image: ghcr.io/doganulus/reelay-devel
+      options: --user root
 
     steps:
       - name: Check out the repository
