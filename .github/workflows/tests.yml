@@ -13,12 +13,8 @@ jobs:
     container: ghcr.io/doganulus/reelay-devel
 
     steps:
-      - name: Test
-        run: make test
+      - name: Check out the repository
+        uses: actions/checkout@v3
 
-      - name: Publish to Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          name: Reelay unit tests
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: test/build/lcov.info
+      - name: Run unit tests
+        run: make test
