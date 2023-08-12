@@ -1,0 +1,23 @@
+name: Run unit tests
+
+on:
+  push:
+    paths:
+      - "include/reelay/**"
+      - ".github/workflows/library.yml" # Self-trigger
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: ghcr.io/doganulus/reelay-devel
+
+    steps:
+      - name: Test
+        run: make test
+
+      - name: Publish to Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          name: Reelay unit tests
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: test/build/lcov.info
