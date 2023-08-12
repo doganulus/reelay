@@ -1,12 +1,38 @@
 {
-    "name": "Reelay",
-    "dockerFile": "Dockerfile",
-    "context": "..",
-    "remoteUser": "reelay",
-    "customizations": {
-        "vscode": {
-            "settings": {},
-            "extensions": []
-        }
+  "name": "Reelay",
+  "dockerFile": "Dockerfile",
+  "context": "..",
+  "remoteUser": "reelay",
+  "postCreateCommand": "make configure",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "EditorConfig.EditorConfig",
+        "llvm-vs-code-extensions.vscode-clangd",
+        "cheshirekow.cmake-format",
+        "esbenp.prettier-vscode",
+        "ms-azuretools.vscode-docker",
+        "github.vscode-github-actions",
+        "GitHub.copilot",
+        "ms-vscode.cmake-tools"
+      ],
+      "settings": {
+        "clangd.arguments": [
+          "--background-index",
+          "--completion-style=bundled",
+          "--header-insertion=iwyu",
+          "--header-insertion-decorators",
+          "--clang-tidy",
+          "--all-scopes-completion",
+          "--compile-commands-dir=/tmp/reelay/build"
+        ],
+        "gcovViewer.buildDirectories": ["/tmp/reelay/build"],
+        "gcovViewer.highlightMissedLines": true,
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": true,
+        "docker.languageserver.formatter.ignoreMultilineInstructions": true
+      },
+      "recommendations": ["github.vscode-github-actions", "github.copilot"]
     }
+  }
 }
