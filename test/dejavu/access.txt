@@ -1,3 +1,0 @@
-bin/ryjavu 'forall[user,file]. [access, *user, *file] implies (![logout, *user] since [login, *user] and ![close, *file] since [open, *file])' test/build/benchmark-challenge-2018/Open/DejaVu/property1-access/log-10k.csv
-bin/ryjavu 'forall[user,file]. [access, *user, *file] implies (![logout, *user] since [login, *user] and ![close, *file] since [open, *file])' test/build/benchmark-challenge-2018/Open/DejaVu/property1-access/log-100k.csv
-bin/ryjavu 'forall[user,file]. [access, *user, *file] implies (![logout, *user] since [login, *user] and ![close, *file] since [open, *file])' test/build/benchmark-challenge-2018/Open/DejaVu/property1-access/log-1000k.csv

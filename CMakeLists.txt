@@ -14,23 +14,45 @@ set(BUILD_REELAY_APPS ON)
 include(GNUInstallDirs)
 
 add_library(reelay INTERFACE)
-add_library(reelay::reelay ALIAS reelay)
+add_library(
+  reelay::reelay
+  ALIAS
+  reelay
+)
 
-find_library(boost_json_static NAMES libboost_json.a REQUIRED NO_CACHE)
-find_library(cudd_static NAMES libcudd.a REQUIRED NO_CACHE)
+find_package(
+  Boost
+  1.82.0
+  REQUIRED
+  # COMPONENTS json
+)
+
+# find_library(
+#   boost_json_static
+#   NAMES libboost_json.a
+#         REQUIRED
+#         NO_CACHE
+# )
+find_library(
+  cudd_static
+  NAMES libcudd.a
+        REQUIRED
+        NO_CACHE
+)
 
 # reelay-core
 target_include_directories(
   reelay INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-                   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>/include)
+                   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>/include
+)
 
 target_link_libraries(reelay INTERFACE ${cudd_static})
 
 install(TARGETS reelay LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
 
 if(ENABLE_TESTS)
-  add_subdirectory(tests)
   enable_testing()
+  add_subdirectory(tests)
 endif()
 
 if(BUILD_REELAY_APPS)

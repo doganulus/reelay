@@ -1,3 +1,0 @@
-bin/ryjavu 'forall[file]. [close, *file] implies (exists[mode]. pre(![close, *file] since [open, *file, *mode]))' test/build/benchmark-challenge-2018/Open/DejaVu/property2-file/log-10k.csv
-bin/ryjavu 'forall[file]. [close, *file] implies (exists[mode]. pre(![close, *file] since [open, *file, *mode]))' test/build/benchmark-challenge-2018/Open/DejaVu/property2-file/log-100k.csv
-bin/ryjavu 'forall[file]. [close, *file] implies (exists[mode]. pre(![close, *file] since [open, *file, *mode]))' test/build/benchmark-challenge-2018/Open/DejaVu/property2-file/log-1000k.csv

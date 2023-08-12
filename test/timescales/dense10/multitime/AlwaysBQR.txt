@@ -1,3 +1,0 @@
-bin/ryjson1 -v 'historically(({r} && !{q} && once{q}) -> ({p} since[3:10] {q}))' test/build/timescales/fullsuite/AlwaysBQR/Dense10/1M/AlwaysBQR10.jsonl
-bin/ryjson1 -v 'historically(({r} && !{q} && once{q}) -> ({p} since[30:100] {q}))' test/build/timescales/fullsuite/AlwaysBQR/Dense10/1M/AlwaysBQR100.jsonl
-bin/ryjson1 -v 'historically(({r} && !{q} && once{q}) -> ({p} since[300:1000] {q}))' test/build/timescales/fullsuite/AlwaysBQR/Dense10/1M/AlwaysBQR1000.jsonl

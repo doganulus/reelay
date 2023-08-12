@@ -1,3 +1,0 @@
-bin/ryjson1 -x 'historically({r} && !{q} && once{q}) -> ((not{p}) since[3:10] {q})' test/build/timescales/fullsuite/AbsentBQR/Discrete/1M/AbsentBQR10.jsonl 
-bin/ryjson1 -x 'historically({r} && !{q} && once{q}) -> ((not{p}) since[30:100] {q})' test/build/timescales/fullsuite/AbsentBQR/Discrete/1M/AbsentBQR100.jsonl 
-bin/ryjson1 -x 'historically({r} && !{q} && once{q}) -> ((not{p}) since[300:1000] {q})' test/build/timescales/fullsuite/AbsentBQR/Discrete/1M/AbsentBQR1000.jsonl 

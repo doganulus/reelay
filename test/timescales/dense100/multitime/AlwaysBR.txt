@@ -1,3 +1,0 @@
-bin/ryjson1 -v 'historically({r} -> (historically[:10]{p}))' test/build/timescales/fullsuite/AlwaysBR/Dense100/1M/AlwaysBR10.jsonl
-bin/ryjson1 -v 'historically({r} -> (historically[:100]{p}))' test/build/timescales/fullsuite/AlwaysBR/Dense100/1M/AlwaysBR100.jsonl
-bin/ryjson1 -v 'historically({r} -> (historically[:1000]{p}))' test/build/timescales/fullsuite/AlwaysBR/Dense100/1M/AlwaysBR1000.jsonl

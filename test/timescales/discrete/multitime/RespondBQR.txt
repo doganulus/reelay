@@ -1,3 +1,0 @@
-bin/ryjson1 -x 'historically(({r} && !{q} && once{q}) -> ( (({s} -> once[3:10]{p}) and not((not {s}) since[10:] {p})) since {q}))' test/build/timescales/fullsuite/RespondBQR/Discrete/1M/RespondBQR10.jsonl
-bin/ryjson1 -x 'historically(({r} && !{q} && once{q}) -> ( (({s} -> once[30:100]{p}) and not((not {s}) since[100:] {p})) since {q}))' test/build/timescales/fullsuite/RespondBQR/Discrete/1M/RespondBQR100.jsonl
-bin/ryjson1 -x 'historically(({r} && !{q} && once{q}) -> ( (({s} -> once[300:1000]{p}) and not((not {s}) since[1000:] {p})) since {q}))' test/build/timescales/fullsuite/RespondBQR/Discrete/1M/RespondBQR1000.jsonl

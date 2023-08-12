@@ -1,3 +1,0 @@
-bin/ryjson1 -x 'historically((once[:10]{q}) -> ((not{p}) since {q}))' test/build/timescales/fullsuite/AbsentAQ/Discrete/1M/AbsentAQ10.jsonl
-bin/ryjson1 -x 'historically((once[:100]{q}) -> ((not{p}) since {q}))' test/build/timescales/fullsuite/AbsentAQ/Discrete/1M/AbsentAQ100.jsonl
-bin/ryjson1 -x 'historically((once[:1000]{q}) -> ((not{p} ) since {q}))' test/build/timescales/fullsuite/AbsentAQ/Discrete/1M/AbsentAQ1000.jsonl

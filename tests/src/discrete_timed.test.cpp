@@ -5,273 +5,286 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <iostream>
-#include <vector>
-//
-#include "catch.hpp"
-//
-#include "reelay/common.hpp"
 #include "reelay/json.hpp"
-//
 #include "reelay/networks/discrete_timed_network.hpp"
-#include "reelay/options.hpp"
+
+#include <catch2/catch_test_macros.hpp>
+
+#include <iostream>
+#include <string>
+#include <vector>
 
 using time_type = int64_t;
 using input_type = reelay::json;
 
-TEST_CASE("Atoms") {
-  SECTION("AtomicProposition") {
+TEST_CASE(  // NOLINT(readability-function-cognitive-complexity)
+  "Discrete Timed Atoms",
+  "[discrete_timed]")
+{
+  SECTION("AtomicProposition")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x1", false}});
     sequence.push_back(input_type{{"x1", false}});
-    sequence.push_back(input_type{});
+    sequence.emplace_back(input_type{});
     sequence.push_back(input_type{{"x1", true}});
 
-    auto net1
-        = reelay::discrete_timed_network<time_type, input_type>::make("{x1}");
+    auto net1 =
+      reelay::discrete_timed_network<time_type, input_type>::make("{x1}");
 
     auto result = std::vector<bool>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
 
-    auto expected = std::vector<bool>({0, 0, 0, 1});
+    auto expected = std::vector<bool>({false, false, false, true});
 
     CHECK(result == expected);
   }
 
-  SECTION("AtomicTrue") {
+  SECTION("AtomicTrue")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x1", false}});
     sequence.push_back(input_type{{"x1", false}});
-    sequence.push_back(input_type{});
+    sequence.emplace_back(input_type{});
     sequence.push_back(input_type{{"x1", true}});
 
-    auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "{x1:true}");
+    auto net1 =
+      reelay::discrete_timed_network<time_type, input_type>::make("{x1:true}");
 
     auto result = std::vector<bool>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
 
-    auto expected = std::vector<bool>({0, 0, 0, 1});
+    auto expected = std::vector<bool>({false, false, false, true});
 
     CHECK(result == expected);
   }
 
-  SECTION("AtomicFalse") {
+  SECTION("AtomicFalse")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x1", false}});
     sequence.push_back(input_type{{"x1", false}});
-    sequence.push_back(input_type{});
+    sequence.emplace_back(input_type{});
     sequence.push_back(input_type{{"x1", true}});
 
-    auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "{x1:false}");
+    auto net1 =
+      reelay::discrete_timed_network<time_type, input_type>::make("{x1:false}");
 
     auto result = std::vector<bool>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
 
-    auto expected = std::vector<bool>({1, 1, 1, 0});
+    auto expected = std::vector<bool>({true, true, true, false});
 
     CHECK(result == expected);
   }
 
-  SECTION("GreaterThan") {
+  SECTION("GreaterThan")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x1", 3}});
     sequence.push_back(input_type{{"x1", 4}});
-    sequence.push_back(input_type{});
+    sequence.emplace_back(input_type{});
     sequence.push_back(input_type{{"x1", 5}});
 
-    auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "{x1 > 4}");
+    auto net1 =
+      reelay::discrete_timed_network<time_type, input_type>::make("{x1 > 4}");
 
     auto result = std::vector<bool>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
 
-    auto expected = std::vector<bool>({0, 0, 0, 1});
+    auto expected = std::vector<bool>({false, false, false, true});
 
     CHECK(result == expected);
   }
 
-  SECTION("GreaterEqual") {
+  SECTION("GreaterEqual")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x1", 3}});
     sequence.push_back(input_type{{"x1", 4}});
-    sequence.push_back(input_type{});
+    sequence.emplace_back(input_type{});
     sequence.push_back(input_type{{"x1", 5}});
 
-    auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "{x1 >= 4}");
+    auto net1 =
+      reelay::discrete_timed_network<time_type, input_type>::make("{x1 >= 4}");
 
     auto result = std::vector<bool>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
 
-    auto expected = std::vector<bool>({0, 1, 1, 1});
+    auto expected = std::vector<bool>({false, true, true, true});
 
     CHECK(result == expected);
   }
 
-  SECTION("LessThan") {
+  SECTION("LessThan")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x1", 3}});
     sequence.push_back(input_type{{"x1", 4}});
-    sequence.push_back(input_type{});
+    sequence.emplace_back(input_type{});
     sequence.push_back(input_type{{"x1", 5}});
 
-    auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "{x1 < 4}");
+    auto net1 =
+      reelay::discrete_timed_network<time_type, input_type>::make("{x1 < 4}");
 
     auto result = std::vector<bool>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
 
-    auto expected = std::vector<bool>({1, 0, 0, 0});
+    auto expected = std::vector<bool>({true, false, false, false});
 
     CHECK(result == expected);
   }
 
-  SECTION("LessEqual") {
+  SECTION("LessEqual")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x1", 3}});
     sequence.push_back(input_type{{"x1", 4}});
-    sequence.push_back(input_type{});
+    sequence.emplace_back(input_type{});
     sequence.push_back(input_type{{"x1", 5}});
 
-    auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "{x1 <= 4}");
+    auto net1 =
+      reelay::discrete_timed_network<time_type, input_type>::make("{x1 <= 4}");
 
     auto result = std::vector<bool>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
 
-    auto expected = std::vector<bool>({1, 1, 1, 0});
+    auto expected = std::vector<bool>({true, true, true, false});
 
     CHECK(result == expected);
   }
 
-  SECTION("AtomicNotEqual") {
+  SECTION("AtomicNotEqual")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x1", 3}});
     sequence.push_back(input_type{{"x1", 4}});
-    sequence.push_back(input_type{});
+    sequence.emplace_back(input_type{});
     sequence.push_back(input_type{{"x1", 5}});
 
-    auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "{x1 != 4}");
+    auto net1 =
+      reelay::discrete_timed_network<time_type, input_type>::make("{x1 != 4}");
 
     auto result = std::vector<bool>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
 
-    auto expected = std::vector<bool>({1, 0, 0, 1});
+    auto expected = std::vector<bool>({true, false, false, true});
 
     CHECK(result == expected);
   }
 
-  SECTION("AtomicSimpleString") {
+  SECTION("AtomicSimpleString")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x1", "a"}});
     sequence.push_back(input_type{{"x1", "b"}});
-    sequence.push_back(input_type{});
+    sequence.emplace_back(input_type{});
     sequence.push_back(input_type{{"x1", "c"}});
 
-    auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "{x1: a}");
+    auto net1 =
+      reelay::discrete_timed_network<time_type, input_type>::make("{x1: a}");
 
     auto result = std::vector<bool>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
 
-    auto expected = std::vector<bool>({1, 0, 0, 0});
+    auto expected = std::vector<bool>({true, false, false, false});
 
     CHECK(result == expected);
   }
-  SECTION("AtomicNumber") {
+  SECTION("AtomicNumber")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x1", 3}});
     sequence.push_back(input_type{{"x1", 1}});
-    sequence.push_back(input_type{});
+    sequence.emplace_back(input_type{});
     sequence.push_back(input_type{{"x1", 3}});
 
-    auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "{x1: 3}");
+    auto net1 =
+      reelay::discrete_timed_network<time_type, input_type>::make("{x1: 3}");
 
     auto result = std::vector<bool>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
 
-    auto expected = std::vector<bool>({1, 0, 0, 1});
+    auto expected = std::vector<bool>({true, false, false, true});
 
     CHECK(result == expected);
   }
 
-  SECTION("AtomicAny") {
+  SECTION("AtomicAny")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
-    sequence.push_back(input_type{{"x1", "3"}, {"x2", "a"}});
-    sequence.push_back(input_type{{"x1", true}});
-    sequence.push_back(input_type{{"x1", "3"}, {"x2", "c"}});
+    sequence.push_back({{"x1", "3"}, {"x2", "a"}});
+    sequence.push_back({{"x1", "1"}});
+    sequence.push_back({{"x1", "3"}, {"x2", "c"}});
 
-    auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "{x2: *}");
+    auto net1 =
+      reelay::discrete_timed_network<time_type, input_type>::make("{x2: *}");
 
     auto result = std::vector<bool>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
 
-    auto expected = std::vector<bool>({1, 0, 1});
+    auto expected = std::vector<bool>({true, false, true});
 
     CHECK(result == expected);
   }
 
-  SECTION("Record Double Comparison") {
+  SECTION("Record Double Comparison")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x1", 2}});
@@ -281,23 +294,27 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_type{{"x1", 6}});
 
     auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "{x1 > 3, x1 < 5}");
+      "{x1 > 3, x1 < 5}");
 
     auto result = std::vector<bool>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
 
-    auto expected = std::vector<bool>({0, 0, 1, 0, 0});
+    auto expected = std::vector<bool>({false, false, true, false, false});
 
     CHECK(result == expected);
   }
 }
 
-TEST_CASE("Boolean Operations") {
-  SECTION("Disjunction") {
+TEST_CASE(  // NOLINT(readability-function-cognitive-complexity)
+  "Discrete Timed Boolean Operations",
+  "[discrete_timed]")
+{
+  SECTION("Disjunction")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
@@ -306,21 +323,22 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_type{{"p1", true}, {"p2", true}});
 
     auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "{p1} or {p2}");
+      "{p1} or {p2}");
 
     auto result = std::vector<bool>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
 
-    auto expected = std::vector<bool>({0, 1, 1, 1});
+    auto expected = std::vector<bool>({false, true, true, true});
 
     CHECK(result == expected);
   }
 
-  SECTION("Conjuction") {
+  SECTION("Conjunction")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
@@ -329,21 +347,22 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_type{{"p1", true}, {"p2", true}});
 
     auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "{p1} and {p2}");
+      "{p1} and {p2}");
 
     auto result = std::vector<bool>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
 
-    auto expected = std::vector<bool>({0, 0, 0, 1});
+    auto expected = std::vector<bool>({false, false, false, true});
 
     CHECK(result == expected);
   }
 
-  SECTION("Implication") {
+  SECTION("Implication")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
@@ -352,44 +371,49 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_type{{"p1", true}, {"p2", true}});
 
     auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "{p1} -> {p2}");
+      "{p1} -> {p2}");
 
     auto result = std::vector<bool>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
 
-    auto expected = std::vector<bool>({1, 0, 1, 1});
+    auto expected = std::vector<bool>({true, false, true, true});
 
     CHECK(result == expected);
   }
 
-  SECTION("Negation") {
+  SECTION("Negation")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"p1", false}});
     sequence.push_back(input_type{{"p1", true}});
 
-    auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "not {p1}");
+    auto net1 =
+      reelay::discrete_timed_network<time_type, input_type>::make("not {p1}");
 
     auto result = std::vector<bool>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
 
-    auto expected = std::vector<bool>({1, 0});
+    auto expected = std::vector<bool>({true, false});
 
     CHECK(result == expected);
   }
 }
 
-TEST_CASE("Untimed Temporal Operations") {
-  SECTION("Previous") {
+TEST_CASE(  // NOLINT(readability-function-cognitive-complexity)
+  "Discrete Timed Temporal Operations (Untimed)",
+  "[discrete_timed]")
+{
+  SECTION("Previous")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"p1", true}, {"p2", false}});
@@ -397,29 +421,30 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_type{{"p1", true}, {"p2", false}});
     sequence.push_back(input_type{{"p1", false}, {"p2", true}});
 
-    auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "pre{p1}");
-    auto net2 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "pre{p2}");
+    auto net1 =
+      reelay::discrete_timed_network<time_type, input_type>::make("pre{p1}");
+    auto net2 =
+      reelay::discrete_timed_network<time_type, input_type>::make("pre{p2}");
 
     auto result1 = std::vector<bool>();
     auto result2 = std::vector<bool>();
 
-    for (const auto &s : sequence) {
+    for(const auto& s : sequence) {
       net1.update(s);
       net2.update(s);
       result1.push_back(net1.output());
       result2.push_back(net2.output());
     }
 
-    auto expected1 = std::vector<bool>({0, 1, 0, 1});
-    auto expected2 = std::vector<bool>({0, 0, 1, 0});
+    auto expected1 = std::vector<bool>({false, true, false, true});
+    auto expected2 = std::vector<bool>({false, false, true, false});
 
     CHECK(result1 == expected1);
     CHECK(result2 == expected2);
   }
 
-  SECTION("Past Always") {
+  SECTION("Past Always")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"p1", true}, {"p2", true}});
@@ -428,28 +453,29 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_type{{"p1", true}, {"p2", false}});
 
     auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "historically{p1}");
+      "historically{p1}");
     auto net2 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "historically{p2}");
+      "historically{p2}");
 
     auto result1 = std::vector<bool>();
     auto result2 = std::vector<bool>();
 
-    for (const auto &s : sequence) {
+    for(const auto& s : sequence) {
       net1.update(s);
       net2.update(s);
       result1.push_back(net1.output());
       result2.push_back(net2.output());
     }
 
-    auto expected1 = std::vector<bool>({1, 1, 1, 1});
-    auto expected2 = std::vector<bool>({1, 1, 0, 0});
+    auto expected1 = std::vector<bool>({true, true, true, true});
+    auto expected2 = std::vector<bool>({true, true, false, false});
 
     CHECK(result1 == expected1);
     CHECK(result2 == expected2);
   }
 
-  SECTION("Past Sometime") {
+  SECTION("Past Sometime")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
@@ -457,29 +483,30 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_type{{"p1", true}, {"p2", false}});
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
 
-    auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "once{p1}");
-    auto net2 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "once{p2}");
+    auto net1 =
+      reelay::discrete_timed_network<time_type, input_type>::make("once{p1}");
+    auto net2 =
+      reelay::discrete_timed_network<time_type, input_type>::make("once{p2}");
 
     auto result1 = std::vector<bool>();
     auto result2 = std::vector<bool>();
 
-    for (const auto &s : sequence) {
+    for(const auto& s : sequence) {
       net1.update(s);
       net2.update(s);
       result1.push_back(net1.output());
       result2.push_back(net2.output());
     }
 
-    auto expected1 = std::vector<bool>({0, 0, 1, 1});
-    auto expected2 = std::vector<bool>({0, 0, 0, 0});
+    auto expected1 = std::vector<bool>({false, false, true, true});
+    auto expected2 = std::vector<bool>({false, false, false, false});
 
     CHECK(result1 == expected1);
     CHECK(result2 == expected2);
   }
 
-  SECTION("Since") {
+  SECTION("Since")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
@@ -498,24 +525,41 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_type{{"p1", true}, {"p2", false}});
 
     auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "{p1} since {p2}");
+      "{p1} since {p2}");
 
     auto result1 = std::vector<bool>();
 
-    for (const auto &s : sequence) {
+    for(const auto& s : sequence) {
       net1.update(s);
       result1.push_back(net1.output());
     }
 
-    auto expected1
-        = std::vector<bool>({0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1});
+    auto expected1 = std::vector<bool>(
+      {false,
+       true,
+       true,
+       true,
+       true,
+       false,
+       false,
+       true,
+       true,
+       true,
+       false,
+       false,
+       true,
+       true});
 
     CHECK(result1 == expected1);
   }
 }
 
-TEST_CASE("Timed Temporal Operations") {
-  SECTION("Timed Once") {
+TEST_CASE(  // NOLINT(readability-function-cognitive-complexity)
+  "Discrete Timed Timed Temporal Operations (Bounded)",
+  "[discrete_timed]")
+{
+  SECTION("Timed Once")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
@@ -531,21 +575,23 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
 
     auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "once[2:4]{p2}");
+      "once[2:4]{p2}");
 
     auto result1 = std::vector<bool>();
 
-    for (const auto &s : sequence) {
+    for(const auto& s : sequence) {
       net1.update(s);
       result1.push_back(net1.output());
     }
 
-    auto expected1 = std::vector<bool>({0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1});
+    auto expected1 = std::vector<bool>(
+      {false, false, false, true, true, true, false, false, false, true, true});
 
     CHECK(result1 == expected1);
   }
 
-  SECTION("Timed Once Zero") {
+  SECTION("Timed Once Zero")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
@@ -561,21 +607,23 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
 
     auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "once[:4]{p2}");
+      "once[:4]{p2}");
 
     auto result1 = std::vector<bool>();
 
-    for (const auto &s : sequence) {
+    for(const auto& s : sequence) {
       net1.update(s);
       result1.push_back(net1.output());
     }
 
-    auto expected1 = std::vector<bool>({0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1});
+    auto expected1 = std::vector<bool>(
+      {false, true, true, true, true, true, false, true, true, true, true});
 
     CHECK(result1 == expected1);
   }
 
-  SECTION("Timed Once Inf") {
+  SECTION("Timed Once Inf")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
@@ -591,21 +639,23 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
 
     auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "once[2:]{p2}");
+      "once[2:]{p2}");
 
     auto result1 = std::vector<bool>();
 
-    for (const auto &s : sequence) {
+    for(const auto& s : sequence) {
       net1.update(s);
       result1.push_back(net1.output());
     }
 
-    auto expected1 = std::vector<bool>({0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1});
+    auto expected1 = std::vector<bool>(
+      {false, false, false, true, true, true, true, true, true, true, true});
 
     CHECK(result1 == expected1);
   }
 
-  SECTION("Timed Always") {
+  SECTION("Timed Always")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
@@ -621,21 +671,23 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
 
     auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "historically[2:4]{p1}");
+      "historically[2:4]{p1}");
 
     auto result1 = std::vector<bool>();
 
-    for (const auto &s : sequence) {
+    for(const auto& s : sequence) {
       net1.update(s);
       result1.push_back(net1.output());
     }
 
-    auto expected1 = std::vector<bool>({1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1});
+    auto expected1 = std::vector<bool>(
+      {true, true, false, false, false, true, true, true, true, true, true});
 
     CHECK(result1 == expected1);
   }
 
-  SECTION("Timed Always Zero") {
+  SECTION("Timed Always Zero")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
@@ -651,21 +703,23 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
 
     auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "historically[:4]{p1}");
+      "historically[:4]{p1}");
 
     auto result1 = std::vector<bool>();
 
-    for (const auto &s : sequence) {
+    for(const auto& s : sequence) {
       net1.update(s);
       result1.push_back(net1.output());
     }
 
-    auto expected1 = std::vector<bool>({0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0});
+    auto expected1 = std::vector<bool>(
+      {false, false, false, false, false, true, true, true, true, true, false});
 
     CHECK(result1 == expected1);
   }
 
-  SECTION("Timed Always Inf") {
+  SECTION("Timed Always Inf")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"p1", true}, {"p2", false}});
@@ -681,21 +735,23 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
 
     auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "historically[2:]{p1}");
+      "historically[2:]{p1}");
 
     auto result1 = std::vector<bool>();
 
-    for (const auto &s : sequence) {
+    for(const auto& s : sequence) {
       net1.update(s);
       result1.push_back(net1.output());
     }
 
-    auto expected1 = std::vector<bool>({1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0});
+    auto expected1 = std::vector<bool>(
+      {true, true, true, true, true, true, true, true, true, true, false});
 
     CHECK(result1 == expected1);
   }
 
-  SECTION("Timed Since") {
+  SECTION("Timed Since")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
@@ -711,21 +767,33 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
 
     auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "{p1} since[2:4] {p2}");
+      "{p1} since[2:4] {p2}");
 
     auto result1 = std::vector<bool>();
 
-    for (const auto &s : sequence) {
+    for(const auto& s : sequence) {
       net1.update(s);
       result1.push_back(net1.output());
     }
 
-    auto expected1 = std::vector<bool>({0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0});
+    auto expected1 = std::vector<bool>(
+      {false,
+       false,
+       false,
+       true,
+       true,
+       true,
+       false,
+       false,
+       false,
+       true,
+       false});
 
     CHECK(result1 == expected1);
   }
 
-  SECTION("Timed Since Zero") {
+  SECTION("Timed Since Zero")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
@@ -741,21 +809,23 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
 
     auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "{p1} since[:4] {p2}");
+      "{p1} since[:4] {p2}");
 
     auto result1 = std::vector<bool>();
 
-    for (const auto &s : sequence) {
+    for(const auto& s : sequence) {
       net1.update(s);
       result1.push_back(net1.output());
     }
 
-    auto expected1 = std::vector<bool>({0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0});
+    auto expected1 = std::vector<bool>(
+      {false, true, true, true, true, true, false, true, true, true, false});
 
     CHECK(result1 == expected1);
   }
 
-  SECTION("Timed Since Inf") {
+  SECTION("Timed Since Inf")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
@@ -771,16 +841,17 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_type{{"p1", false}, {"p2", false}});
 
     auto net1 = reelay::discrete_timed_network<time_type, input_type>::make(
-        "{p1} since[2:] {p2}");
+      "{p1} since[2:] {p2}");
 
     auto result1 = std::vector<bool>();
 
-    for (const auto &s : sequence) {
+    for(const auto& s : sequence) {
       net1.update(s);
       result1.push_back(net1.output());
     }
 
-    auto expected1 = std::vector<bool>({0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0});
+    auto expected1 = std::vector<bool>(
+      {false, false, false, true, true, true, true, true, true, true, false});
 
     CHECK(result1 == expected1);
   }

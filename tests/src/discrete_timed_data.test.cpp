@@ -5,38 +5,41 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <iostream>
-#include <vector>
-
-#include "catch.hpp"
-//
-#include "reelay/common.hpp"
 #include "reelay/json.hpp"
-//
 #include "reelay/networks/discrete_timed_data_network.hpp"
 #include "reelay/options.hpp"
+
+#include <catch2/catch_test_macros.hpp>
+
+#include <iostream>
+#include <vector>
 
 using input_type = reelay::json;
 using time_type = int64_t;
 
-TEST_CASE("Atoms") {
+TEST_CASE(  // NOLINT(readability-function-cognitive-complexity)
+  "Discrete Timed Data Atoms",
+  "[discrete_timed_data]")
+{
   auto manager = std::make_shared<reelay::binding_manager>();
   auto opts = reelay::basic_options().with_data_manager(manager);
 
-  SECTION("AtomicProposition") {
+  SECTION("AtomicProposition")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x", true}});
     sequence.push_back(input_type{{"x", false}});
-    sequence.push_back(input_type{});
+    sequence.emplace_back(input_type{});
     sequence.push_back(input_type{{"x", true}});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "{x}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -48,20 +51,22 @@ TEST_CASE("Atoms") {
     CHECK(result == expected);
   }
 
-  SECTION("AtomicTrue") {
+  SECTION("AtomicTrue")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x", true}});
     sequence.push_back(input_type{{"x", false}});
-    sequence.push_back(input_type{});
+    sequence.emplace_back(input_type{});
     sequence.push_back(input_type{{"x", true}});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "{x: true}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -73,20 +78,22 @@ TEST_CASE("Atoms") {
     CHECK(result == expected);
   }
 
-  SECTION("AtomicFalse") {
+  SECTION("AtomicFalse")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x", true}});
     sequence.push_back(input_type{{"x", false}});
-    sequence.push_back(input_type{});
+    sequence.emplace_back(input_type{});
     sequence.push_back(input_type{{"x", true}});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "{x: false}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -98,20 +105,22 @@ TEST_CASE("Atoms") {
     CHECK(result == expected);
   }
 
-  SECTION("AtomicString") {
+  SECTION("AtomicString")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x", "a"}});
     sequence.push_back(input_type{{"x", "b"}});
-    sequence.push_back(input_type{});
+    sequence.emplace_back(input_type{});
     sequence.push_back(input_type{{"x", "c"}});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "{x: b}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -123,20 +132,22 @@ TEST_CASE("Atoms") {
     CHECK(result == expected);
   }
 
-  SECTION("AtomicNumber") {
+  SECTION("AtomicNumber")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x", 1}});
     sequence.push_back(input_type{{"x", 2}});
-    sequence.push_back(input_type{});
+    sequence.emplace_back(input_type{});
     sequence.push_back(input_type{{"x", 3}});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "{x: 2}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -148,20 +159,22 @@ TEST_CASE("Atoms") {
     CHECK(result == expected);
   }
 
-  SECTION("GreaterThan") {
+  SECTION("GreaterThan")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x", 1}});
     sequence.push_back(input_type{{"x", 2}});
-    sequence.push_back(input_type{});
+    sequence.emplace_back(input_type{});
     sequence.push_back(input_type{{"x", 3}});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "{x > 2}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -173,20 +186,22 @@ TEST_CASE("Atoms") {
     CHECK(result == expected);
   }
 
-  SECTION("GreaterEqual") {
+  SECTION("GreaterEqual")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x", 1}});
     sequence.push_back(input_type{{"x", 2}});
-    sequence.push_back(input_type{});
+    sequence.emplace_back(input_type{});
     sequence.push_back(input_type{{"x", 3}});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "{x >= 2}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -198,20 +213,22 @@ TEST_CASE("Atoms") {
     CHECK(result == expected);
   }
 
-  SECTION("LessThan") {
+  SECTION("LessThan")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x", 1}});
     sequence.push_back(input_type{{"x", 2}});
-    sequence.push_back(input_type{});
+    sequence.emplace_back(input_type{});
     sequence.push_back(input_type{{"x", 3}});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "{x < 2}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -223,20 +240,22 @@ TEST_CASE("Atoms") {
     CHECK(result == expected);
   }
 
-  SECTION("LessEqual") {
+  SECTION("LessEqual")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x", 1}});
     sequence.push_back(input_type{{"x", 2}});
-    sequence.push_back(input_type{});
+    sequence.emplace_back(input_type{});
     sequence.push_back(input_type{{"x", 3}});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "{x <= 2}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -248,20 +267,22 @@ TEST_CASE("Atoms") {
     CHECK(result == expected);
   }
 
-  SECTION("Equal") {
+  SECTION("Equal")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x", 1}});
     sequence.push_back(input_type{{"x", 2}});
-    sequence.push_back(input_type{});
+    sequence.emplace_back(input_type{});
     sequence.push_back(input_type{{"x", 3}});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "{x == 2}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -273,20 +294,22 @@ TEST_CASE("Atoms") {
     CHECK(result == expected);
   }
 
-  SECTION("NotEqual") {
+  SECTION("NotEqual")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x", 1}});
     sequence.push_back(input_type{{"x", 2}});
-    sequence.push_back(input_type{});
+    sequence.emplace_back(input_type{});
     sequence.push_back(input_type{{"x", 3}});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "{x != 2}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -298,19 +321,21 @@ TEST_CASE("Atoms") {
     CHECK(result == expected);
   }
 
-  SECTION("AtomicAny") {
+  SECTION("AtomicAny")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{{"x", "1"}});
     sequence.push_back(input_type{{"y", "2"}});
     sequence.push_back(input_type{{"x", "3"}});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "{x: *}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -322,7 +347,8 @@ TEST_CASE("Atoms") {
     CHECK(result == expected);
   }
 
-  SECTION("List Proposition 0") {
+  SECTION("List Proposition 0")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"access", "alice", "wonderland"});
@@ -331,12 +357,13 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_type{"logout", "alice"});
     sequence.push_back(input_type{"tritiny", "bob", "humpie", "dumpie"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "{$0: access, $1: bob, $2: white_rabbit}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -348,7 +375,8 @@ TEST_CASE("Atoms") {
     CHECK(result == expected);
   }
 
-  SECTION("List Proposition 1") {
+  SECTION("List Proposition 1")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"access", "alice", "wonderland"});
@@ -357,12 +385,13 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_type{"logout", "alice"});
     sequence.push_back(input_type{"tritiny", "bob", "humpie", "dumpie"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "{$0: access, $1: alice}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -374,7 +403,8 @@ TEST_CASE("Atoms") {
     CHECK(result == expected);
   }
 
-  SECTION("List Proposition 3") {
+  SECTION("List Proposition 3")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"access", "alice", "wonderland"});
@@ -383,12 +413,13 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_type{"logout", "alice"});
     sequence.push_back(input_type{"meet", "bob", "humpty", "dumpty"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "{$0: *, $1: alice, $2: *}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -400,7 +431,8 @@ TEST_CASE("Atoms") {
     CHECK(result == expected);
   }
 
-  SECTION("List Proposition 4") {
+  SECTION("List Proposition 4")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"access", "alice", "wonderland"});
@@ -409,12 +441,13 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_type{"logout", "charlotte"});
     sequence.push_back(input_type{"meet", "bob", "humpty", "dumpty"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "{$0: *event, $1: alice,  $2: *}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -428,7 +461,8 @@ TEST_CASE("Atoms") {
     CHECK(result == expected);
   }
 
-  SECTION("List Proposition 5") {
+  SECTION("List Proposition 5")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"access", "alice", "wonderland"});
@@ -437,12 +471,13 @@ TEST_CASE("Atoms") {
     sequence.push_back(input_type{"logout", "alice"});
     sequence.push_back(input_type{"meet", "bob", "humpty", "dumpty"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "{$0: access, $1: *user, $2: *file}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -450,40 +485,42 @@ TEST_CASE("Atoms") {
     auto t = manager->one();
     auto f = manager->zero();
 
-    auto alice_in_wonderland = manager->assign("user", "alice")
-                               * manager->assign("file", "wonderland");
+    auto alice_in_wonderland =
+      manager->assign("user", "alice") * manager->assign("file", "wonderland");
 
-    auto bobs_white_rabbit = manager->assign("user", "bob")
-                             * manager->assign("file", "white_rabbit");
+    auto bobs_white_rabbit =
+      manager->assign("user", "bob") * manager->assign("file", "white_rabbit");
 
-    auto alice_feed_your_head = manager->assign("user", "alice")
-                                * manager->assign("file", "feed_your_head");
+    auto alice_feed_your_head = manager->assign("user", "alice") *
+                                manager->assign("file", "feed_your_head");
 
     auto expected = std::vector<reelay::data_set_t>(
-        {alice_in_wonderland, bobs_white_rabbit, alice_feed_your_head, f, f});
+      {alice_in_wonderland, bobs_white_rabbit, alice_feed_your_head, f, f});
 
     CHECK(result == expected);
   }
 
-  SECTION("Record Proposition 0") {
+  SECTION("Record Proposition 0")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{
-        {"event", "access"}, {"user", "alice"}, {"file", "wonderland"}});
+      {"event", "access"}, {"user", "alice"}, {"file", "wonderland"}});
     sequence.push_back(input_type{
-        {"event", "access"}, {"user", "alice"}, {"file", "feed_your_head"}});
+      {"event", "access"}, {"user", "alice"}, {"file", "feed_your_head"}});
     sequence.push_back(input_type{
-        {"event", "access"},
-        {"user", "alice"},
-        {"file", "wonderland"},
-        {"version", "v2"}});
+      {"event", "access"},
+      {"user", "alice"},
+      {"file", "wonderland"},
+      {"version", "v2"}});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
-            "{event: access, user: alice, file: wonderland}", opts);
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
+        "{event: access, user: alice, file: wonderland}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -495,22 +532,24 @@ TEST_CASE("Atoms") {
     CHECK(result == expected);
   }
 
-  SECTION("Record Proposition 1") {
+  SECTION("Record Proposition 1")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{
-        {"event", "access"}, {"user", "alice"}, {"file", "wonderland"}});
+      {"event", "access"}, {"user", "alice"}, {"file", "wonderland"}});
     sequence.push_back(input_type{
-        {"event", "access"}, {"user", "bob"}, {"file", "feed_your_head"}});
+      {"event", "access"}, {"user", "bob"}, {"file", "feed_your_head"}});
     sequence.push_back(input_type{
-        {"event", "access"}, {"user", "charlotte"}, {"file", "wonderland"}});
+      {"event", "access"}, {"user", "charlotte"}, {"file", "wonderland"}});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
-            "{event: access, user: *name, file: wonderland}", opts);
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
+        "{event: access, user: *name, file: wonderland}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -525,23 +564,25 @@ TEST_CASE("Atoms") {
     CHECK(result == expected);
   }
 
-  SECTION("Record Proposition 1") {
+  SECTION("Record Proposition 1")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{
-        {"event", "access"}, {"user", "alice"}, {"file", "wonderland"}});
+      {"event", "access"}, {"user", "alice"}, {"file", "wonderland"}});
     sequence.push_back(input_type{
-        {"event", "access"}, {"user", "bob"}, {"file", "feed_your_head"}});
+      {"event", "access"}, {"user", "bob"}, {"file", "feed_your_head"}});
     sequence.push_back(input_type{
-        {"event", "access"}, {"user", "charlotte"}, {"file", "wonderland"}});
+      {"event", "access"}, {"user", "charlotte"}, {"file", "wonderland"}});
     sequence.push_back(input_type{{"event", "access"}, {"user", "charlotte"}});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "{event: access, user: *name, file:*}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -558,11 +599,15 @@ TEST_CASE("Atoms") {
   }
 }
 
-TEST_CASE("Boolean Operations") {
+TEST_CASE(  // NOLINT(readability-function-cognitive-complexity)
+  "Discrete Timed Data Boolean Operations",
+  "[discrete_timed_data]")
+{
   auto manager = std::make_shared<reelay::binding_manager>();
   auto opts = reelay::basic_options().with_data_manager(manager);
 
-  SECTION("Negation") {
+  SECTION("Negation")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"access", "alice", "wonderland"});
@@ -571,12 +616,13 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_type{"logout", "alice"});
     sequence.push_back(input_type{"meet", "bob", "humpty", "dumpty"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "!{$0: access, $1: alice, $2: *}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -589,7 +635,8 @@ TEST_CASE("Boolean Operations") {
     CHECK(result == expected);
   }
 
-  SECTION("Conjunction") {
+  SECTION("Conjunction")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"access", "alice", "wonderland"});
@@ -598,14 +645,15 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_type{"logout", "alice"});
     sequence.push_back(input_type{"meet", "bob", "humpty", "dumpty"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
-            "{$0: *event, $1: alice, $2: *file} and "
-            "{$0: access, $1: *user, $2: wonderland}",
-            opts);
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
+        "{$0: *event, $1: alice, $2: *file} and "
+        "{$0: access, $1: *user, $2: wonderland}",
+        opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -613,17 +661,18 @@ TEST_CASE("Boolean Operations") {
     auto t = manager->one();
     auto f = manager->zero();
 
-    auto alice_in_wonderland = manager->assign("event", "access")
-                               * manager->assign("user", "alice")
-                               * manager->assign("file", "wonderland");
+    auto alice_in_wonderland = manager->assign("event", "access") *
+                               manager->assign("user", "alice") *
+                               manager->assign("file", "wonderland");
 
-    auto expected
-        = std::vector<reelay::data_set_t>({alice_in_wonderland, f, f, f, f});
+    auto expected =
+      std::vector<reelay::data_set_t>({alice_in_wonderland, f, f, f, f});
 
     CHECK(result == expected);
   }
 
-  SECTION("Disjunction") {
+  SECTION("Disjunction")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"access", "alice", "wonderland"});
@@ -632,14 +681,15 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_type{"logout", "charlotte"});
     sequence.push_back(input_type{"meet", "bob", "humpty", "dumpty"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
-            "{$0: *event, $1: alice, $2: *file} or "
-            "{$0: access, $1: *user, $2: wonderland}",
-            opts);
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
+        "{$0: *event, $1: alice, $2: *file} or "
+        "{$0: access, $1: *user, $2: wonderland}",
+        opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -647,19 +697,20 @@ TEST_CASE("Boolean Operations") {
     auto t = manager->one();
     auto f = manager->zero();
 
-    auto datum1 = (manager->assign("event", "access")
-                   * manager->assign("file", "wonderland"))
-                  + manager->assign("user", "alice");
+    auto datum1 = (manager->assign("event", "access") *
+                   manager->assign("file", "wonderland")) +
+                  manager->assign("user", "alice");
 
-    auto datum3 = manager->assign("event", "access")
-                  * manager->assign("file", "feed_your_head");
+    auto datum3 = manager->assign("event", "access") *
+                  manager->assign("file", "feed_your_head");
 
     auto expected = std::vector<reelay::data_set_t>({datum1, f, datum3, f, f});
 
     CHECK(result == expected);
   }
 
-  SECTION("Implication") {
+  SECTION("Implication")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"access", "alice", "wonderland"});
@@ -668,14 +719,15 @@ TEST_CASE("Boolean Operations") {
     sequence.push_back(input_type{"logout", "charlotte"});
     sequence.push_back(input_type{"meet", "bob", "humpty", "dumpty"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
-            "!{$0: *event, $1: alice, $2: *file} implies "
-            "{$0: access, $1: *user, $2: wonderland}",
-            opts);
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
+        "!{$0: *event, $1: alice, $2: *file} implies "
+        "{$0: access, $1: *user, $2: wonderland}",
+        opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -683,12 +735,12 @@ TEST_CASE("Boolean Operations") {
     auto t = manager->one();
     auto f = manager->zero();
 
-    auto datum1 = (manager->assign("event", "access")
-                   * manager->assign("file", "wonderland"))
-                  + manager->assign("user", "alice");
+    auto datum1 = (manager->assign("event", "access") *
+                   manager->assign("file", "wonderland")) +
+                  manager->assign("user", "alice");
 
-    auto datum3 = manager->assign("event", "access")
-                  * manager->assign("file", "feed_your_head");
+    auto datum3 = manager->assign("event", "access") *
+                  manager->assign("file", "feed_your_head");
 
     auto expected = std::vector<reelay::data_set_t>({datum1, f, datum3, f, f});
 
@@ -696,11 +748,15 @@ TEST_CASE("Boolean Operations") {
   }
 }
 
-TEST_CASE("Untimed Temporal Operations") {
+TEST_CASE(  // NOLINT(readability-function-cognitive-complexity)
+  "Discrete Timed Data Temporal Operations (Untimed)",
+  "[discrete_timed_data]")
+{
   auto manager = std::make_shared<reelay::binding_manager>();
   auto opts = reelay::basic_options().with_data_manager(manager);
 
-  SECTION("Previous") {
+  SECTION("Previous")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"open", "1"});
@@ -708,12 +764,13 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_type{"close", "2"});
     sequence.push_back(input_type{"close", "2"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "pre{$0: open,  $1: *}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -726,7 +783,8 @@ TEST_CASE("Untimed Temporal Operations") {
     CHECK(result == expected);
   }
 
-  SECTION("Once") {
+  SECTION("Once")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"open", "a"});
@@ -734,12 +792,13 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_type{"close", "c"});
     sequence.push_back(input_type{"close", "a"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "once{$0: open, $1: c}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -752,7 +811,8 @@ TEST_CASE("Untimed Temporal Operations") {
     CHECK(result == expected);
   }
 
-  SECTION("Historically") {
+  SECTION("Historically")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"is_open", "a"});
@@ -760,12 +820,13 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_type{"is_open", "a"});
     sequence.push_back(input_type{"close", "a"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "historically{$0: is_open, $1: a}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -778,7 +839,8 @@ TEST_CASE("Untimed Temporal Operations") {
     CHECK(result == expected);
   }
 
-  SECTION("Since") {
+  SECTION("Since")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"open", "a"});
@@ -787,12 +849,13 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_type{"is_open", "a"});
     sequence.push_back(input_type{"is_open", "b"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
-            "{$0: is_open, $1: a} since {$0: open, $1: a}", opts);
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
+        "{$0: is_open, $1: a} since {$0: open, $1: a}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -805,7 +868,8 @@ TEST_CASE("Untimed Temporal Operations") {
     CHECK(result == expected);
   }
 
-  SECTION("Existential Quantification") {
+  SECTION("Existential Quantification")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"access", "alice", "wonderland"});
@@ -814,12 +878,13 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_type{"logout", "charlotte"});
     sequence.push_back(input_type{"meet", "bob", "humpty", "dumpty"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
-            "exists[event]. {$0: *event, $1: alice, $2: *file}", opts);
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
+        "exists[event]. {$0: *event, $1: alice, $2: *file}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -835,7 +900,8 @@ TEST_CASE("Untimed Temporal Operations") {
     CHECK(result == expected);
   }
 
-  SECTION("Universal Quantification") {
+  SECTION("Universal Quantification")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"access", "alice", "wonderland"});
@@ -844,12 +910,13 @@ TEST_CASE("Untimed Temporal Operations") {
     sequence.push_back(input_type{"logout", "charlotte"});
     sequence.push_back(input_type{"meet", "bob", "humpty", "dumpty"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
-            "not(forall[event].(!{$0: *event, $1: alice, $2: *file}))", opts);
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
+        "not(forall[event].(!{$0: *event, $1: alice, $2: *file}))", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -866,11 +933,15 @@ TEST_CASE("Untimed Temporal Operations") {
   }
 }
 
-TEST_CASE("Timed Temporal Operations") {
+TEST_CASE(  // NOLINT(readability-function-cognitive-complexity)
+  "Discrete Timed Data Temporal Operations (Bounded)",
+  "[discrete_timed_data]")
+{
   auto manager = std::make_shared<reelay::binding_manager>();
   auto opts = reelay::basic_options().with_data_manager(manager);
-  
-  SECTION("Timed Once") {
+
+  SECTION("Timed Once")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"open", "a"});
@@ -881,12 +952,13 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_type{"close", "a"});
     sequence.push_back(input_type{"close", "c"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "once[2:4]{$0: open, $1: c}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -899,7 +971,8 @@ TEST_CASE("Timed Temporal Operations") {
     CHECK(result == expected);
   }
 
-  SECTION("Timed Once") {
+  SECTION("Timed Once")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"open", "a"});
@@ -910,12 +983,13 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_type{"close", "a"});
     sequence.push_back(input_type{"close", "c"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "once[:4]{$0: open, $1: c}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -928,7 +1002,8 @@ TEST_CASE("Timed Temporal Operations") {
     CHECK(result == expected);
   }
 
-  SECTION("Timed Once") {
+  SECTION("Timed Once")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"open", "a"});
@@ -939,12 +1014,13 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_type{"close", "a"});
     sequence.push_back(input_type{"close", "c"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "once[2:]{$0: open, $1: c}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -957,7 +1033,8 @@ TEST_CASE("Timed Temporal Operations") {
     CHECK(result == expected);
   }
 
-  SECTION("Timed Historically") {
+  SECTION("Timed Historically")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"is_open", "b"});
@@ -968,12 +1045,13 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_type{"is_open", "a"});
     sequence.push_back(input_type{"close", "a"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "historically[:4]{$0:is_open, $1:a}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -986,7 +1064,8 @@ TEST_CASE("Timed Temporal Operations") {
     CHECK(result == expected);
   }
 
-  SECTION("Timed Historically") {
+  SECTION("Timed Historically")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"is_open", "b"});
@@ -999,12 +1078,13 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_type{"close", "a"});
     sequence.push_back(input_type{"close", "a"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "historically[2:4]{$0:is_open, $1:a}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -1012,13 +1092,14 @@ TEST_CASE("Timed Temporal Operations") {
     auto t = manager->one();
     auto f = manager->zero();
 
-    auto expected
-        = std::vector<reelay::data_set_t>({f, f, f, f, f, t, t, t, f});
+    auto expected =
+      std::vector<reelay::data_set_t>({f, f, f, f, f, t, t, t, f});
 
     CHECK(result == expected);
   }
 
-  SECTION("Timed Historically") {
+  SECTION("Timed Historically")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"is_open", "a"});
@@ -1030,12 +1111,13 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_type{"close", "a"});
     sequence.push_back(input_type{"close", "a"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
         "historically[2:]{$0:is_open, $1:a}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -1048,7 +1130,8 @@ TEST_CASE("Timed Temporal Operations") {
     CHECK(result == expected);
   }
 
-  SECTION("Timed Since") {
+  SECTION("Timed Since")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"open", "a"});
@@ -1060,12 +1143,13 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_type{"is_open", "a"});
     sequence.push_back(input_type{"is_open", "b"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
-            "{$0:is_open, $1:a} since[2:4] {$0: open, $1: a}", opts);
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
+        "{$0:is_open, $1:a} since[2:4] {$0: open, $1: a}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -1078,7 +1162,8 @@ TEST_CASE("Timed Temporal Operations") {
     CHECK(result == expected);
   }
 
-  SECTION("Timed Since") {
+  SECTION("Timed Since")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"open", "a"});
@@ -1090,12 +1175,13 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_type{"is_open", "a"});
     sequence.push_back(input_type{"is_open", "b"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
-            "{$0:is_open, $1:a} since[:4] {$0: open, $1: a}", opts);
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
+        "{$0:is_open, $1:a} since[:4] {$0: open, $1: a}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
@@ -1108,7 +1194,8 @@ TEST_CASE("Timed Temporal Operations") {
     CHECK(result == expected);
   }
 
-  SECTION("Timed Since") {
+  SECTION("Timed Since")
+  {
     std::vector<input_type> sequence = std::vector<input_type>();
 
     sequence.push_back(input_type{"open", "a"});
@@ -1120,12 +1207,13 @@ TEST_CASE("Timed Temporal Operations") {
     sequence.push_back(input_type{"is_open", "a"});
     sequence.push_back(input_type{"is_open", "b"});
 
-    auto net1 = reelay::discrete_timed_data_network<time_type, input_type>::make(
-            "{$0:is_open, $1:a} since[2:] {$0: open, $1: a}", opts);
+    auto net1 =
+      reelay::discrete_timed_data_network<time_type, input_type>::make(
+        "{$0:is_open, $1:a} since[2:] {$0: open, $1: a}", opts);
 
     auto result = std::vector<reelay::data_set_t>();
 
-    for (const auto &row : sequence) {
+    for(const auto& row : sequence) {
       net1.update(row);
       result.push_back(net1.output());
     }
