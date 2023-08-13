@@ -63,3 +63,9 @@ generator = "Ninja Multi-Config"
 config = ["Debug", "Release"]
 
 options = { "CMAKE_DEBUG_POSTFIX" = "_d" }
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q"
+testpaths = ["python/tests"]
+cache_dir = "/tmp/reelay/.pytest_cache"

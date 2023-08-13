@@ -31,5 +31,6 @@ jobs:
       - name: Install test dependencies
         run: pip install pytest
 
+      # Configure in pyproject.toml
       - name: Run tests
-        run: pytest python/tests
+        run: pytest
