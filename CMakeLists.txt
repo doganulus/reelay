@@ -37,9 +37,9 @@ else()
   message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 endif()
 
-option(BUILD_TESTS ON)
-option(BUILD_REELAY_APPS ON)
-option(BUILD_PYTHON_BINDINGS OFF)
+option(BUILD_TESTS "Build the C++ unit tests" ON)
+option(BUILD_REELAY_APPS "Build Reelay Apps" ON)
+option(BUILD_PYTHON_BINDINGS "Build Python bindings" OFF)
 
 include(GNUInstallDirs)
 
