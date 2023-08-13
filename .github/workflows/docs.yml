@@ -35,7 +35,7 @@ jobs:
       - name: Install MkDocs and Material for MkDocs
         run: pip install mkdocs[i18n] mkdocs-material
       - name: Install requirements
-        run: pip install -r ./requirements.txt
+        run: pip install -r docs/requirements.txt
       - name: Setup caching
         uses: actions/cache@v3
         with:
