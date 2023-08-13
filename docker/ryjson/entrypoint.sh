@@ -7,4 +7,4 @@ set -e
 # chmod +x ${1}
 
 # Execute the command
-exec ryjson ${@}
+exec ryjson "${@}"
