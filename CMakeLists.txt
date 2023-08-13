@@ -20,10 +20,22 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_FLAGS_COVERAGE "-O0 --coverage")
 
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE "Release")
-endif(NOT CMAKE_BUILD_TYPE)
-message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "Setting build type to 'Release' as none was specified.")
+  set(CMAKE_BUILD_TYPE
+      "Release"
+      CACHE STRING "Choose the type of build." FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property(
+    CACHE CMAKE_BUILD_TYPE
+    PROPERTY STRINGS
+             "Debug"
+             "Release"
+             "MinSizeRel"
+             "RelWithDebInfo")
+else()
+  message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+endif()
 
 option(BUILD_TESTS ON)
 option(BUILD_REELAY_APPS ON)
