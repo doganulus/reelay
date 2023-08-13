@@ -12,13 +12,18 @@ project(
   "reelay"
   LANGUAGES CXX
   VERSION "${ver_major}.${ver_minor}")
-message("Reelay version: ${ver_major}.${ver_minor}")
+message(STATUS "Reelay version: ${ver_major}.${ver_minor}")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_FLAGS_COVERAGE "-O0 --coverage")
+
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE "Release")
+endif(NOT CMAKE_BUILD_TYPE)
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 option(BUILD_TESTS ON)
 option(BUILD_REELAY_APPS ON)
