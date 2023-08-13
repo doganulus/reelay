@@ -54,9 +54,9 @@ install_components = ["python_modules"]
 env = {}
 
 [tool.py-build-cmake.cmake.options]
-"CMAKE_EXPORT_COMPILE_COMMANDS:BOOL" = "ON"
+"BUILD_TESTS:BOOL" = "OFF"
+"BUILD_REELAY_APPS:BOOL" = "OFF"
 "BUILD_PYTHON_BINDINGS:BOOL" = "ON"
-"ENABLE_TESTS:BOOL" = "OFF"
 
 [tool.py-build-cmake.linux.cmake] # Linux-specific options
 generator = "Ninja Multi-Config"

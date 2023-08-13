@@ -20,7 +20,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_FLAGS_COVERAGE "-O0 --coverage")
 
-option(ENABLE_TESTS ON)
+option(BUILD_TESTS ON)
 option(BUILD_REELAY_APPS ON)
 option(BUILD_PYTHON_BINDINGS OFF)
 
@@ -48,7 +48,7 @@ install(TARGETS reelay LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
 
 add_subdirectory(src)
 
-if(ENABLE_TESTS)
+if(BUILD_TESTS)
   enable_testing()
   add_subdirectory(tests)
 endif()
