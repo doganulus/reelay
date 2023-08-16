@@ -277,14 +277,16 @@ int main(int argc, char** argv)
   using input_t = simdjson::dom::element;
   using output_t = reelay::json;
 
+  auto manager = std::make_shared<reelay::binding_manager>();
   auto monitor = reelay::monitor<input_t, output_t>();
 
-  if(use_discrete and use_boolean) {  // -xb -xbz
+  if(use_discrete and use_boolean) {  // -x -xb -xbz
     auto opts =
       reelay::discrete_timed<intmax_t>::monitor<input_t, output_t>::options()
         .with_time_field_name(args::get(t_name))
         .with_value_field_name(args::get(y_name))
-        .with_condensing(not args::get(fno_condense));
+        .with_condensing(not args::get(fno_condense))
+        .with_data_manager(manager);
 
     monitor = reelay::make_monitor(args::get(spec), opts);
   }
@@ -301,7 +303,8 @@ int main(int argc, char** argv)
     auto opts =
       reelay::dense_timed<intmax_t>::monitor<input_t, output_t>::options()
         .with_time_field_name(args::get(t_name))
-        .with_value_field_name(args::get(y_name));
+        .with_value_field_name(args::get(y_name))
+        .with_data_manager(manager);
 
     monitor = reelay::make_monitor(args::get(spec), opts);
   }
@@ -312,7 +315,8 @@ int main(int argc, char** argv)
       reelay::dense_timed<double>::monitor<input_t, output_t>::options()
         .with_time_field_name(args::get(t_name))
         .with_value_field_name(args::get(y_name))
-        .with_interpolation(reelay::piecewise::constant);
+        .with_interpolation(reelay::piecewise::constant)
+        .with_data_manager(manager);
 
     monitor = reelay::make_monitor(args::get(spec), opts);
   }
@@ -321,7 +325,8 @@ int main(int argc, char** argv)
       reelay::dense_timed<double>::monitor<input_t, output_t>::options()
         .with_time_field_name(args::get(t_name))
         .with_value_field_name(args::get(y_name))
-        .with_interpolation(reelay::piecewise::linear);
+        .with_interpolation(reelay::piecewise::linear)
+        .with_data_manager(manager);
 
     monitor = reelay::make_monitor(args::get(spec), opts);
   }
