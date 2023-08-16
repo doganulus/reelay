@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - docker/ryjson/Dockerfile
+      - apps/ryjson1/**
       - .github/workflows/cryjson.yml # Self-trigger
 
 env:
