@@ -9,6 +9,7 @@
 #include "reelay/json.hpp"
 #include "reelay/monitors.hpp"
 
+#include <cstring>  // memset()
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -19,8 +20,7 @@
 #include "simdjson.h"
 #include "simdjson_adapter.hpp"
 #include "third_party/taywee/args.hpp"
-#include <glob.h>    // glob(), globfree()
-#include <string.h>  // memset()
+#include <glob.h>  // glob(), globfree()
 
 namespace rycli {
 
@@ -41,7 +41,8 @@ std::vector<std::string> expand_glob(const std::string& glob_str)
     ss << "glob() encountered a read error" << std::endl;
     throw std::runtime_error(ss.str());
   }
-  else if(return_value == GLOB_NOSPACE) {
+
+  if(return_value == GLOB_NOSPACE) {
     globfree(&glob_result);
     std::stringstream ss;
     ss << "glob() running out of memory" << std::endl;
