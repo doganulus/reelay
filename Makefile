@@ -1,7 +1,7 @@
-WORKSPACE = $(PWD)
-BUILD_DIRECTORY = /tmp/$(basename $(notdir ${WORKSPACE}))/build
+WORKSPACE := ${PWD}
+BUILD_DIRECTORY := /tmp/$(basename $(notdir ${WORKSPACE}))/build
 
-.PHONY: all configure build test
+.PHONY: all configure build test cbuild cryjson
 
 configure:
 	cmake -S $(WORKSPACE) -B $(BUILD_DIRECTORY)
@@ -12,4 +12,11 @@ build: configure
 test: build
 	ctest --test-dir $(BUILD_DIRECTORY) --output-on-failure
 
-all: build
+install: build
+	cmake --build $(BUILD_DIRECTORY) --target install
+
+cdevel:
+	docker build -t ghcr.io/doganulus/reelay:devel docker/devel
+
+cryjson:
+	docker build -t ghcr.io/doganulus/reelay:ryjson docker/ryjson
