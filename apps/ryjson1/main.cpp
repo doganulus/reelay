@@ -283,7 +283,7 @@ int main(int argc, char** argv)
 
   if(use_discrete and use_boolean) {  // -x -xb -xbz
     auto opts =
-      reelay::discrete_timed<intmax_t>::monitor<input_t, output_t>::options()
+      reelay::discrete_timed<int64_t>::monitor<input_t, output_t>::options()
         .with_time_field_name(args::get(t_name))
         .with_value_field_name(args::get(y_name))
         .with_condensing(not args::get(fno_condense))
@@ -292,7 +292,7 @@ int main(int argc, char** argv)
     monitor = reelay::make_monitor(args::get(spec), opts);
   }
   else if(use_discrete and use_robustness) {  // -xr -xrz
-    auto opts = reelay::discrete_timed<intmax_t>::robustness<
+    auto opts = reelay::discrete_timed<int64_t>::robustness<
                   double>::monitor<input_t, output_t>::options()
                   .with_time_field_name(args::get(t_name))
                   .with_value_field_name(args::get(y_name))
@@ -302,7 +302,7 @@ int main(int argc, char** argv)
   }
   else if(use_dense and use_boolean and use_integer) {  // -vbi
     auto opts =
-      reelay::dense_timed<intmax_t>::monitor<input_t, output_t>::options()
+      reelay::dense_timed<int64_t>::monitor<input_t, output_t>::options()
         .with_time_field_name(args::get(t_name))
         .with_value_field_name(args::get(y_name))
         .with_data_manager(manager);
@@ -332,7 +332,7 @@ int main(int argc, char** argv)
     monitor = reelay::make_monitor(args::get(spec), opts);
   }
   else if(use_dense and use_robustness and use_integer) {  // -vri
-    auto opts = reelay::dense_timed<intmax_t>::robustness<
+    auto opts = reelay::dense_timed<int64_t>::robustness<
                   double>::monitor<input_t, output_t>::options()
                   .with_time_field_name(args::get(t_name))
                   .with_value_field_name(args::get(y_name));
