@@ -31,11 +31,12 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build and push image
         uses: docker/build-push-action@v4
         with:
           context: docker/devel
-          platforms: linux/amd64,linux/arm64,darwin
+          platforms: linux/amd64,linux/arm64
           build-args: |
             VERSION=${{ env.VERSION }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
