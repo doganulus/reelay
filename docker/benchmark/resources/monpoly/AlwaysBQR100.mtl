@@ -1,0 +1,1 @@
+PAST_ALWAYS(( r() AND (NOT q()) AND ONCE q()) IMPLIES ( p() SINCE[30,100]  q()))

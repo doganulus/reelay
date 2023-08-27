@@ -20,3 +20,7 @@ cdevel:
 
 cryjson:
 	docker build -t ghcr.io/doganulus/reelay:ryjson docker/ryjson
+
+cbenchmark:
+	docker build -t ghcr.io/doganulus/reelay-benchmark:latest docker/benchmark
+
