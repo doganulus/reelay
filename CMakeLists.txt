@@ -60,9 +60,19 @@ target_link_libraries(reelay INTERFACE ${cudd_static})
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/ DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
 install(
   TARGETS reelay
+  EXPORT reelay-config
   RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
   ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+
+export(
+  TARGETS reelay
+  NAMESPACE reelay::
+  FILE "${CMAKE_CURRENT_BINARY_DIR}/reelay-config.cmake")
+install(
+  EXPORT reelay-config
+  DESTINATION "${CMAKE_INSTALL_DATADIR}/reelay/cmake"
+  NAMESPACE reelay::)
 
 add_subdirectory(src)
 
