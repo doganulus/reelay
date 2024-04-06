@@ -1,1 +1,0 @@
-PAST_ALWAYS(( r() AND (NOT q()) AND ONCE q()) IMPLIES ( (( s() IMPLIES ONCE[3,10] p()) AND NOT((NOT  s()) SINCE[10,*]  p())) SINCE  q()))

@@ -1,1 +1,0 @@
-PAST_ALWAYS( r() AND (NOT q()) AND ONCE q()) IMPLIES ((NOT p()) SINCE[300,1000]  q())

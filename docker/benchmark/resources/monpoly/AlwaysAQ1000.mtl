@@ -1,1 +1,0 @@
-PAST_ALWAYS((ONCE[0,1000] q()) IMPLIES ( p() SINCE  q()))

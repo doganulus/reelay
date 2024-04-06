@@ -1,1 +1,0 @@
-PAST_ALWAYS(( s() IMPLIES ONCE[3,10] p()) AND NOT((NOT  s()) SINCE[10,*]  p()))
