@@ -46,22 +46,23 @@ include(GNUInstallDirs)
 add_library(reelay INTERFACE)
 add_library(reelay::reelay ALIAS reelay)
 
-find_package(
-  Boost 1.82.0 REQUIRED
-  # COMPONENTS json
-  )
+find_package(Boost 1.82.0 REQUIRED)
 
-# find_library( boost_json_static NAMES libboost_json.a REQUIRED NO_CACHE )
 find_library(cudd_static NAMES libcudd.a REQUIRED NO_CACHE)
 
 # reelay-core
 target_include_directories(
-  reelay INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-                   $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>/include)
+  reelay INTERFACE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>/include/
+                   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 target_link_libraries(reelay INTERFACE ${cudd_static})
 
-install(TARGETS reelay LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/ DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+install(
+  TARGETS reelay
+  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}")
 
 add_subdirectory(src)
 
