@@ -52,7 +52,7 @@ find_library(cudd_static NAMES libcudd.a REQUIRED NO_CACHE)
 
 # reelay-core
 target_include_directories(
-  reelay INTERFACE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}>/include/
+  reelay INTERFACE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/>
                    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 target_link_libraries(reelay INTERFACE ${cudd_static})
