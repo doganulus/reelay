@@ -2,10 +2,10 @@ cmake_minimum_required(VERSION 3.22)
 
 file(READ "${CMAKE_SOURCE_DIR}/include/reelay/version.hpp" ver)
 
-string(REGEX MATCH "VERSION_MAJOR ([0-9]*)" _ ${ver})
+string(REGEX MATCH "REELAY_VERSION_MAJOR ([0-9]*)" _ ${ver})
 set(ver_major ${CMAKE_MATCH_1})
 
-string(REGEX MATCH "VERSION_MINOR ([0-9]*)" _ ${ver})
+string(REGEX MATCH "REELAY_VERSION_MINOR ([0-9]*)" _ ${ver})
 set(ver_minor ${CMAKE_MATCH_1})
 
 project(
