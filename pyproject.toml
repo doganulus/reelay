@@ -59,8 +59,8 @@ env = {}
 "BUILD_PYTHON_BINDINGS:BOOL" = "ON"
 
 [tool.py-build-cmake.linux.cmake] # Linux-specific options
-generator = "Ninja Multi-Config"
-config = ["Debug", "Release"]
+generator = "Ninja"
+config = ["Release"]
 
 options = { "CMAKE_DEBUG_POSTFIX" = "_d" }
 

@@ -1,5 +1,5 @@
 WORKSPACE := ${PWD}
-BUILD_DIRECTORY := /tmp/$(basename $(notdir ${WORKSPACE}))/build
+BUILD_DIRECTORY := /tmp/build/$(basename $(notdir ${WORKSPACE}))
 
 .PHONY: all configure build test cbuild cryjson
 
@@ -24,3 +24,5 @@ cryjson:
 cbenchmark:
 	docker build -t ghcr.io/doganulus/reelay-benchmark:latest docker/benchmark
 
+clean:
+	rm -rf $(BUILD_DIRECTORY)
