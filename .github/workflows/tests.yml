@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - "include/reelay/**"
+      - "CMakeLists.txt"
       - ".github/workflows/tests.yml" # Self-trigger
 
 jobs:
