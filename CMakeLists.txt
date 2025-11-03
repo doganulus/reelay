@@ -41,15 +41,33 @@ option(BUILD_TESTS "Build the C++ unit tests" ON)
 option(BUILD_REELAY_APPS "Build Reelay Apps" OFF)
 option(BUILD_PYTHON_BINDINGS "Build Python bindings" OFF)
 
+set(REELAY_BOOST_VERSION "1.89.0" CACHE STRING "Fetch Boost version")
+
 include(GNUInstallDirs)
+include(FetchContent)
+include(cmake/CPM.cmake)
 
 add_library(reelay INTERFACE)
 add_library(reelay::reelay ALIAS reelay)
 
 find_package(Threads REQUIRED)
-find_package(Boost 1.82.0 REQUIRED CONFIG)
 
-include(FetchContent)
+CPMAddPackage(
+  NAME Boost
+  VERSION ${REELAY_BOOST_VERSION}
+  URL https://github.com/boostorg/boost/releases/download/boost-${REELAY_BOOST_VERSION}/boost-${REELAY_BOOST_VERSION}-cmake.tar.gz
+  OPTIONS 
+    "BOOST_USE_STATIC_LIBS=ON"
+)
+
+# set(Boost_USE_STATIC_LIBS TRUE)
+# FetchContent_Declare(
+#   Boost
+#   URL https://github.com/boostorg/boost/releases/download/boost-${REELAY_BOOST_VERSION}/boost-${REELAY_BOOST_VERSION}-cmake.tar.gz
+#   DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+# )
+# FetchContent_MakeAvailable(Boost)
+
 FetchContent_Declare(
   cudd
   GIT_REPOSITORY https://github.com/cuddorg/cudd.git
