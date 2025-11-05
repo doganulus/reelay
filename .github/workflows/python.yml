@@ -7,7 +7,6 @@ on:
       - "python/**"
       - "include/reelay/**"
       - ".github/workflows/python.yml" # Self-trigger
-  pull_request:
 
 jobs:
   build:

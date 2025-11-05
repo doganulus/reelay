@@ -56,7 +56,7 @@ CPMAddPackage(
   NAME Boost
   VERSION ${REELAY_BOOST_VERSION}
   URL https://github.com/boostorg/boost/releases/download/boost-${REELAY_BOOST_VERSION}/boost-${REELAY_BOOST_VERSION}-cmake.tar.gz
-  OPTIONS 
+  OPTIONS
     "BOOST_USE_STATIC_LIBS=ON"
 )
 
@@ -69,32 +69,27 @@ CPMAddPackage(
 # FetchContent_MakeAvailable(Boost)
 
 FetchContent_Declare(
-  cudd
+  Cudd
   GIT_REPOSITORY https://github.com/cuddorg/cudd.git
   GIT_TAG        4.0.0
   SYSTEM
   EXCLUDE_FROM_ALL
 )
-FetchContent_MakeAvailable(cudd)
-
-# Define a target for CUDD manually (if it doesn't export one)
-if(NOT TARGET cudd)
-  add_library(cudd STATIC IMPORTED GLOBAL)
-  # Assume it’s built under cudd_SOURCE_DIR
-  set_target_properties(cudd PROPERTIES
-    IMPORTED_LOCATION ${cudd_BINARY_DIR}/libcudd.a
-    INTERFACE_INCLUDE_DIRECTORIES
-      "${cudd_SOURCE_DIR}/cudd;${cudd_SOURCE_DIR}/cplusplus"
-  )
-endif()
+FetchContent_MakeAvailable(Cudd)
 
 # reelay-core
 target_include_directories(
-  reelay INTERFACE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/>
-                   $<BUILD_INTERFACE:${cudd_SOURCE_DIR}/include/cudd/>
-                   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+  reelay INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
 
-target_link_libraries(reelay INTERFACE Threads::Threads cudd::cudd)
+target_link_libraries(
+  reelay INTERFACE
+    Boost::icl
+    Cudd::cudd
+    Threads::Threads
+)
 
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/ DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
 install(

@@ -12,7 +12,7 @@
 #include "boost/icl/interval_map.hpp"
 #include "boost/icl/interval_set.hpp"
 
-#include "cuddObj.hh"
+#include "cudd/cudd.hpp"
 
 namespace boost {
 namespace icl {

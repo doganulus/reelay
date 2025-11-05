@@ -1,10 +1,12 @@
 WORKSPACE := ${PWD}
 BUILD_DIRECTORY := /tmp/build/$(basename $(notdir ${WORKSPACE}))
 
-.PHONY: all configure build test cbuild cryjson
+.PHONY: default configure build test cbuild cryjson
+
+default: build
 
 configure:
-	cmake -S $(WORKSPACE) -B $(BUILD_DIRECTORY)
+	cmake -S $(WORKSPACE) -B $(BUILD_DIRECTORY) -DBUILD_TESTS=ON
 
 build: configure
 	cmake --build $(BUILD_DIRECTORY)
