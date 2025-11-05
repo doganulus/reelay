@@ -20,7 +20,7 @@ jobs:
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v2
         with:
-          cmake-version: '3.22.x'
+          cmake-version: '3.31'
 
       - name: Configure CMake
         run: cmake -B build -S . -DREELAY_BUILD_TESTS=ON
