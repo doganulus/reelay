@@ -6,7 +6,7 @@ BUILD_DIRECTORY := /tmp/build/$(basename $(notdir ${WORKSPACE}))
 default: build
 
 configure:
-	cmake -S $(WORKSPACE) -B $(BUILD_DIRECTORY) -DBUILD_TESTS=ON
+	cmake -S $(WORKSPACE) -B $(BUILD_DIRECTORY) -DREELAY_BUILD_TESTS=ON
 
 build: configure
 	cmake --build $(BUILD_DIRECTORY)

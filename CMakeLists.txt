@@ -37,9 +37,9 @@ else()
   message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 endif()
 
-option(BUILD_TESTS "Build the C++ unit tests" ON)
-option(BUILD_REELAY_APPS "Build Reelay Apps" OFF)
-option(BUILD_PYTHON_BINDINGS "Build Python bindings" OFF)
+option(REELAY_BUILD_TESTS "Build the C++ unit tests" OFF)
+option(REELAY_BUILD_APPS "Build Reelay Apps" OFF)
+option(REELAY_BUILD_PYTHON_BINDINGS "Build Python bindings" OFF)
 
 set(REELAY_BOOST_VERSION "1.89.0" CACHE STRING "Fetch Boost version")
 
@@ -112,12 +112,12 @@ install(
 
 add_subdirectory(src)
 
-if(BUILD_TESTS)
+if(REELAY_BUILD_TESTS)
   enable_testing()
   add_subdirectory(tests)
 endif()
 
-if(BUILD_REELAY_APPS)
+if(REELAY_BUILD_APPS)
   message(STATUS "Building Reelay apps...")
   add_subdirectory(apps)
 endif()

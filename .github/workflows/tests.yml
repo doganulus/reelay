@@ -23,7 +23,7 @@ jobs:
           cmake-version: '3.22.x'
 
       - name: Configure CMake
-        run: cmake -B build -S .
+        run: cmake -B build -S . -DREELAY_BUILD_TESTS=ON
 
       - name: Build
         run: cmake --build build
