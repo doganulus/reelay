@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.26)
 
 file(READ "${CMAKE_SOURCE_DIR}/include/reelay/version.hpp" ver)
 
@@ -41,41 +41,32 @@ option(REELAY_BUILD_TESTS "Build the C++ unit tests" OFF)
 option(REELAY_BUILD_APPS "Build Reelay Apps" OFF)
 option(REELAY_BUILD_PYTHON_BINDINGS "Build Python bindings" OFF)
 
-set(REELAY_BOOST_VERSION "1.89.0" CACHE STRING "Fetch Boost version")
-
 include(GNUInstallDirs)
 include(FetchContent)
-include(cmake/CPM.cmake)
 
 add_library(reelay INTERFACE)
 add_library(reelay::reelay ALIAS reelay)
 
+# Dependencies
 find_package(Threads REQUIRED)
 
-CPMAddPackage(
-  NAME Boost
-  VERSION ${REELAY_BOOST_VERSION}
-  URL https://github.com/boostorg/boost/releases/download/boost-${REELAY_BOOST_VERSION}/boost-${REELAY_BOOST_VERSION}-cmake.tar.gz
-  OPTIONS
-    "BOOST_USE_STATIC_LIBS=ON"
+set(BOOST_INCLUDE_LIBRARIES icl)
+set(BOOST_USE_STATIC_LIBS TRUE)
+FetchContent_Declare(
+  Boost
+  URL https://github.com/boostorg/boost/releases/download/boost-1.89.0/boost-1.89.0-cmake.tar.gz
+  DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+  FIND_PACKAGE_ARGS 1.82.0 CONFIG
 )
-
-# set(Boost_USE_STATIC_LIBS TRUE)
-# FetchContent_Declare(
-#   Boost
-#   URL https://github.com/boostorg/boost/releases/download/boost-${REELAY_BOOST_VERSION}/boost-${REELAY_BOOST_VERSION}-cmake.tar.gz
-#   DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-# )
-# FetchContent_MakeAvailable(Boost)
+FetchContent_MakeAvailable(Boost)
 
 FetchContent_Declare(
-  Cudd
+  cudd
   GIT_REPOSITORY https://github.com/cuddorg/cudd.git
   GIT_TAG        4.0.0
-  SYSTEM
-  EXCLUDE_FROM_ALL
+  FIND_PACKAGE_ARGS 4.0.0 CONFIG
 )
-FetchContent_MakeAvailable(Cudd)
+FetchContent_MakeAvailable(cudd)
 
 # reelay-core
 target_include_directories(
@@ -85,30 +76,25 @@ target_include_directories(
 )
 
 target_link_libraries(
-  reelay INTERFACE
-    Boost::icl
-    Cudd::cudd
-    Threads::Threads
+  reelay INTERFACE Boost::icl cudd::cudd Threads::Threads
 )
 
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/ DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+
 install(
   TARGETS reelay
-  EXPORT reelay-config
+  EXPORT reelayConfig
   RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}")
-
-# export(
-#   TARGETS reelay
-#   NAMESPACE reelay::
-#   FILE "${CMAKE_CURRENT_BINARY_DIR}/reelay-config.cmake")
+  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+)
 
 # install(
-#  EXPORT reelay-config
-#  DESTINATION "${CMAKE_INSTALL_DATADIR}/reelay/cmake"
-#  NAMESPACE reelay::
-#)
+#   EXPORT reelayConfig
+#   NAMESPACE reelay::
+#   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/reelay
+# )
 
 add_subdirectory(src)
 
