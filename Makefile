@@ -1,7 +1,7 @@
 WORKSPACE := ${PWD}
 BUILD_DIRECTORY := /tmp/build/$(basename $(notdir ${WORKSPACE}))
 
-.PHONY: default configure build test
+.PHONY: default configure build test apps
 
 default: build
 
@@ -16,8 +16,13 @@ test:
 	cmake --build $(BUILD_DIRECTORY)
 	ctest --test-dir $(BUILD_DIRECTORY) --output-on-failure
 
+apps:
+	cmake -S $(WORKSPACE) -B $(BUILD_DIRECTORY) -DREELAY_BUILD_APPS=ON
+	cmake --build $(BUILD_DIRECTORY)
+
 install: build
 	cmake --build $(BUILD_DIRECTORY) --target install
 
 clean:
 	rm -rf $(BUILD_DIRECTORY)
+
