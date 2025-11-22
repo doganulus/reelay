@@ -1,49 +1,47 @@
-FROM docker.io/library/almalinux:8
+FROM docker.io/library/ubuntu:24.04
 ARG TARGETARCH TARGETOS TARGETPLATFORM TARGETVARIANT
 
-RUN dnf install -y \
-      dnf-plugins-core \
-      dnf-plugin-config-manager \
-      epel-release \
-      && \
-    dnf config-manager --enable powertools && \
-    dnf install -y \
+RUN apt-get update && \
+    apt-get install -y \
       curl \
       wget \
       unzip \
+      gnupg2 \
       git \
       make \
       cmake \
       ninja-build \
       diffutils \
       patch \
+      && \
+    apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && \
+    apt-get install -y \
       clang \
       clangd \
-      clang-analyzer \
-      clang-tools-extra \
+      clang-tidy \
+      clang-format \
+      clang-tools \
+      catch2 \
       lcov \
       valgrind \
       && \
-    dnf clean all
+    apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
 
-RUN dnf install -y \
-      python3.12 \
-      python3.12-pip \
-      python3.12-setuptools \
-      python3.12-devel \
+RUN apt-get update && \
+    apt-get install -y \
+      python3 \
+      python3-pip \
+      python3-setuptools \
+      python3-dev \
+      python-is-python3 \
       && \
-    dnf clean all
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN git clone --depth 1 --branch v3.11.0 https://github.com/catchorg/Catch2.git /tmp/catch2 && \
-    cmake -S/tmp/catch2 -B/tmp/catch2/build \
-      -DBUILD_TESTING=OFF \
-      -DCATCH_INSTALL_DOCS=OFF \
-      && \
-    cmake --build /tmp/catch2/build/ --target install -j$(nproc) && \
-    rm -rf /tmp/catch2
-
-RUN pip3 install --no-cache --upgrade pip setuptools && \
-    pip3 install --no-cache \
+RUN pip3 install --no-cache --break-system-packages \
       cmake-format \
       pytest
-
