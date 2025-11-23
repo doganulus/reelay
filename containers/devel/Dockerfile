@@ -1,4 +1,4 @@
-FROM docker.io/library/ubuntu:24.04
+FROM docker.io/library/ubuntu:24.04 AS reelay-builder
 ARG TARGETARCH TARGETOS TARGETPLATFORM TARGETVARIANT
 
 RUN apt-get update && \
@@ -46,3 +46,6 @@ RUN apt-get update && \
 RUN pip3 install --no-cache --break-system-packages \
       cmake-format \
       pytest
+
+FROM docker.io/library/ubuntu:24.04 AS reelay-devel
+ARG TARGETARCH TARGETOS TARGETPLATFORM TARGETVARIANT

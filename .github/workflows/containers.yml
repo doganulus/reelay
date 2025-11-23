@@ -38,7 +38,7 @@ jobs:
         run: |
           echo "PODMAN_ARCH=$(podman info --format='{{.Host.Arch}}')" >> $GITHUB_ENV
           echo "PLATFORM=$(podman info --format='{{.Version.OsArch}}' | sed 's/\//-/g')" >> $GITHUB_ENV
-          echo "REELAY_VERSION=$(date +'%Y%m%d')" >> $GITHUB_ENV
+          echo "REELAY_VERSION=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
       - name: Log in to the GitHub Container registry
         uses: redhat-actions/podman-login@v1
@@ -64,7 +64,7 @@ jobs:
           extra-args: |
             --target reelay-builder
           containerfiles: |
-            ./containers/reelay-devel/Dockerfile
+            ./containers/devel/Dockerfile
 
       - name: Build devel container image
         id: build-devel
