@@ -1,9 +1,6 @@
 name: Container Build
 on:
   push:
-    paths:
-      - containers/reelay-devel/**
-      - .github/workflows/buildah-build-devel.yml # Self-trigger
   workflow_dispatch:
 
 env:
