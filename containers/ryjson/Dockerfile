@@ -1,14 +1,17 @@
-FROM ubuntu:24.04 as ryjson-prebuilt
+FROM ghcr.io/doganulus/reelay:ryjson-builder as ryjson-prebuilt
 
 RUN git clone https://github.com/doganulus/reelay.git /tmp/reelay \
       --depth 1 \
-      --branch main \
-    && cmake -S/tmp/reelay -B/tmp/reelay/build \
+      --branch ${REELAY_VERSION}
+      && \
+    cmake -S/tmp/reelay -B/tmp/reelay/build \
       -DCMAKE_BUILD_TYPE=Release \
       -DBUILD_REELAY_APPS=ON \
       -DBUILD_TESTS=OFF \
-    && cmake --build /tmp/reelay/build/ --target install -j$(nproc) \
-    && rm -rf /tmp/reelay
+      && \
+    cmake --build /tmp/reelay/build -j$(nproc) && \
+    cmake --install /tmp/reelay/build && \
+    rm -rf /tmp/reelay
 
 FROM ubuntu:24.04 as ryjson
 ARG TARGETARCH TARGETOS TARGETPLATFORM TARGETVARIANT
