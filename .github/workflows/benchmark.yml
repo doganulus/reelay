@@ -40,7 +40,7 @@ jobs:
         run: |
           cmake -S . -B build -DREELAY_BUILD_APPS=ON
           cmake --build build
-          cmake --install build --prefix install
+          sudo cmake --install build
 
       - name: Run Timescales benchmarks
         run: bash benchmarks/ryjson-benchmark.sh benchmarks/data
