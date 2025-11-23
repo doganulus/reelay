@@ -13,6 +13,7 @@ RUN apt-get update && \
       ninja-build \
       diffutils \
       patch \
+      hyperfine \
       && \
     apt-get clean && \
   rm -rf /var/lib/apt/lists/*

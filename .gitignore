@@ -43,6 +43,7 @@
 # Directories
 /bin/*
 /build/*
+/benchmarks/data
 
 # GCC coverage testing tool files
 

@@ -18,7 +18,8 @@ test:
 
 apps:
 	cmake -S $(WORKSPACE) -B $(BUILD_DIRECTORY) -DREELAY_BUILD_APPS=ON
-	cmake --build $(BUILD_DIRECTORY)
+	cmake --build $(BUILD_DIRECTORY) --target ryjson
+	cmake --install $(BUILD_DIRECTORY)
 
 install: build
 	cmake --build $(BUILD_DIRECTORY) --target install

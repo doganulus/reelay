@@ -32,3 +32,18 @@ jobs:
       - name: Generate Timescales benchmarks
         run: |
           timescales-generate-large --failing-end --output-dir ./data
+
+      - name: Build ryjson application
+        run: |
+          cmake -S . -B build -DREELAY_BUILD_APPS=ON
+          cmake --build build
+          cmake --install build --prefix install
+
+      - name: Run Timescales benchmarks
+        run: bash benchmarks/ryjson-benchmark.sh benchmarks/data
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results-${{ github.run_id }}
+          path: benchmarks/data/*.results.json
