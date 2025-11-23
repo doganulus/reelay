@@ -101,7 +101,7 @@ jobs:
             ./containers/ryjson/Dockerfile
 
       - name: Push to GitHub Container Repository
-        if: github.ref == 'refs/heads/main'
+        # if: github.ref == 'refs/heads/main'
         id: push-builder-ghcr
         uses: redhat-actions/push-to-registry@v2
         with:
@@ -111,7 +111,7 @@ jobs:
           digestfile: ${{ runner.temp }}/digest-reelay-builder-${{ env.REELAY_VERSION }}-${{ env.PLATFORM }}
 
       - name: Push to GitHub Container Repository
-        if: github.ref == 'refs/heads/main'
+        # if: github.ref == 'refs/heads/main'
         id: push-devel-ghcr
         uses: redhat-actions/push-to-registry@v2
         with:
@@ -121,7 +121,7 @@ jobs:
           digestfile: ${{ runner.temp }}/digest-reelay-devel-${{ env.REELAY_VERSION }}-${{ env.PLATFORM }}
 
       - name: Push to GitHub Container Repository
-        if: github.ref == 'refs/heads/main'
+        # if: github.ref == 'refs/heads/main'
         id: push-runtime-ghcr
         uses: redhat-actions/push-to-registry@v2
         with:
