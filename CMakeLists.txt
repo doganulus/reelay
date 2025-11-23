@@ -25,10 +25,13 @@ set(version_major ${CMAKE_MATCH_1})
 string(REGEX MATCH "REELAY_VERSION_MINOR ([0-9]*)" _ ${version_file})
 set(version_minor ${CMAKE_MATCH_1})
 
+string(REGEX MATCH "REELAY_VERSION_PATCH ([0-9]*)" _ ${version_file})
+set(version_patch ${CMAKE_MATCH_1})
+
 project(
   "reelay"
   LANGUAGES CXX
-  VERSION "${version_major}.${version_minor}")
+  VERSION "${version_major}.${version_minor}.${version_patch}")
 message(STATUS "Building Reelay version: ${PROJECT_VERSION}")
 
 set(CMAKE_CXX_STANDARD 17)
