@@ -20,6 +20,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install hyperfine
+        run: sudo apt-get update && sudo apt-get install -y hyperfine
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -33,7 +36,7 @@ jobs:
         run: |
           timescales-generate-large --failing-end --output-dir ./data
 
-      - name: Build ryjson application
+      - name: Build and install ryjson application
         run: |
           cmake -S . -B build -DREELAY_BUILD_APPS=ON
           cmake --build build
