@@ -28,3 +28,7 @@ jobs:
       - name: Install Timescales benchmarking tool
         run: |
           pip install git+https://github.com/doganulus/timescales.git
+
+      - name: Generate Timescales benchmarks
+        run: |
+          timescales-generate-large --failing-end --output-dir ./data

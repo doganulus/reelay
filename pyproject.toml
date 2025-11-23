@@ -69,3 +69,6 @@ minversion = "7.0"
 addopts = "-ra -q"
 testpaths = ["python/tests"]
 cache_dir = "/tmp/reelay/.pytest_cache"
+
+[tool.cibuildwheel]
+skip = "cp314t-*"
