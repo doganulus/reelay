@@ -3,7 +3,7 @@ ARG REELAY_VERSION=main
 ARG REELAY_IMAGE_REGISTRY=localhost
 ARG REELAY_IMAGE_REGISTRY_REMOTE=${REELAY_IMAGE_REGISTRY}
 
-FROM ghcr.io/doganulus/reelay:${REELAY_VERSION}-builder as ryjson-prebuilt
+FROM reelay:${REELAY_VERSION}-builder as ryjson-prebuilt
 
 RUN git clone https://github.com/doganulus/reelay.git /tmp/reelay \
       --depth 1 \
