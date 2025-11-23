@@ -1,7 +1,7 @@
 #
 # docker build -t ghcr.io/doganulus/reelay:ryjson docker/ryjson
 #
-FROM ghcr.io/doganulus/reelay-devel:latest as builder
+FROM ubuntu:24.04 as builder
 
 RUN git clone https://github.com/doganulus/reelay.git /tmp/reelay \
       --depth 1 \
@@ -13,10 +13,8 @@ RUN git clone https://github.com/doganulus/reelay.git /tmp/reelay \
     && cmake --build /tmp/reelay/build/ --target install -j$(nproc) \
     && rm -rf /tmp/reelay
 
-#
-# docker run --rm -v $(pwd):/app ghcr.io/doganulus/reelay:ryjson
-#
-FROM debian:12
+FROM ubuntu:24.04
+ARG TARGETARCH TARGETOS TARGETPLATFORM TARGETVARIANT
 
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install \
