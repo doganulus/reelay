@@ -10,9 +10,7 @@ RUN git clone https://github.com/doganulus/reelay.git /tmp/reelay --no-checkout 
     git fetch --depth 1 origin "${REELAY_VERSION}" && \
     git checkout "${REELAY_VERSION}" && \
     cmake -S/tmp/reelay -B/tmp/reelay/build \
-      -DCMAKE_BUILD_TYPE=Release \
-      -DBUILD_REELAY_APPS=ON \
-      -DBUILD_TESTS=OFF \
+      -DREELAY_BUILD_APPS=ON \
       && \
     cmake --build /tmp/reelay/build -j$(nproc) && \
     cmake --install /tmp/reelay/build && \
