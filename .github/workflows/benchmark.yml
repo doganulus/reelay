@@ -34,7 +34,7 @@ jobs:
 
       - name: Generate Timescales benchmarks
         run: |
-          timescales-generate-large --failing-end --output-dir ./data
+          timescales-generate-large --failing-end --output-dir benchmarks/data
 
       - name: Build and install ryjson application
         run: |
