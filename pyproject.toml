@@ -22,6 +22,11 @@ dynamic = ["version", "description"]
 [project.scripts]
 add = "pybind11_project.add:main"
 
+[project.optional-dependencies]
+devel = [
+  "pytest"
+]
+
 [build-system]
 requires = ["py-build-cmake~=0.1.8", "pybind11"]
 build-backend = "py_build_cmake.build"
