@@ -144,7 +144,7 @@ jobs:
     name: Merge container images
     runs-on: ubuntu-24.04
     needs: buildah-build
-    if: github.ref == 'refs/heads/main' && always()
+    # if: github.ref == 'refs/heads/main' && always()
     steps:
       # - run: mkdir -p $TMPDIR
       - name: Download digests
@@ -163,10 +163,18 @@ jobs:
 
       - name: Prepare environment variables
         run: |
-          if [ "${{ env.REELAY_VERSION }}" == "latest" ]; then
-            echo "REELAY_VERSION=$(date +'%Y%m%d')" >> $GITHUB_ENV
+          echo "REELAY_VERSION=$(git rev-parse HEAD)" >> $GITHUB_ENV
+
+          tag=$(curl -s "https://api.github.com/repos/$repo/releases/latest" | jq -r '.tag_name')
+          ref_info=$(curl -s "https://api.github.com/repos/$repo/git/ref/tags/$tag")
+          obj_type=$(echo "$ref_info" | jq -r '.object.type')
+          tag_sha=$(echo "$ref_info" | jq -r '.object.sha')
+          if [ "$obj_type" = "commit" ]; then
+            commit_sha="$tag_sha"
+          else
+            commit_sha=$(curl -s "https://api.github.com/repos/$repo/git/tags/$tag_sha" | jq -r '.object.sha')
           fi
-          echo "REELAY_LATEST_VERSION=$(date +'%Y%m%d')" >> $GITHUB_ENV
+          echo "REELAY_LATEST_VERSION=$commit_sha" >> "$GITHUB_ENV"
 
       - name: Create and push manifest list for reelay-builder
         run: |
