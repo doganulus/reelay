@@ -32,7 +32,7 @@ jobs:
         run: sudo apt-get install podman buildah jq
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Prepare environment variables
         run: |
@@ -146,7 +146,9 @@ jobs:
     needs: buildah-build
     # if: github.ref == 'refs/heads/main' && always()
     steps:
-      # - run: mkdir -p $TMPDIR
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
       - name: Download digests
         uses: actions/download-artifact@v4
         with:
