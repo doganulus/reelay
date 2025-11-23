@@ -131,7 +131,7 @@ jobs:
           digestfile: ${{ runner.temp }}/digest-ryjson-${{ env.REELAY_VERSION }}-${{ env.PLATFORM }}
 
       - name: Upload digests
-        if: github.ref == 'refs/heads/main'
+        # if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v4
         with:
           name: digest-reelay-${{ env.REELAY_VERSION }}-${{ env.PLATFORM }}
