@@ -1,4 +1,9 @@
-FROM ghcr.io/doganulus/reelay:ryjson-builder as ryjson-prebuilt
+ARG REELAY_VERSION=main
+
+ARG REELAY_IMAGE_REGISTRY=localhost
+ARG REELAY_IMAGE_REGISTRY_REMOTE=${REELAY_IMAGE_REGISTRY}
+
+FROM ghcr.io/doganulus/reelay:${REELAY_VERSION}-builder as ryjson-prebuilt
 
 RUN git clone https://github.com/doganulus/reelay.git /tmp/reelay \
       --depth 1 \
@@ -15,6 +20,9 @@ RUN git clone https://github.com/doganulus/reelay.git /tmp/reelay \
 
 FROM ubuntu:24.04 as ryjson
 ARG TARGETARCH TARGETOS TARGETPLATFORM TARGETVARIANT
+
+ARG REELAY_VERSION
+ENV REELAY_VERSION=${REELAY_VERSION}
 
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install \
