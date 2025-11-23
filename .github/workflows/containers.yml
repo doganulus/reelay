@@ -87,7 +87,7 @@ jobs:
         id: build-ryjson
         uses: redhat-actions/buildah-build@v2
         with:
-          context: ./containers/ryjson
+          context: ./containers
           image: ryjson
           tags: ${{ env.REELAY_VERSION }} ${{ env.REELAY_VERSION }}-${{ env.PODMAN_ARCH }}
           layers: true
