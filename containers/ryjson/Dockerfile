@@ -3,12 +3,12 @@ ARG REELAY_VERSION=main
 ARG REELAY_IMAGE_REGISTRY=localhost
 ARG REELAY_IMAGE_REGISTRY_REMOTE=${REELAY_IMAGE_REGISTRY}
 
-FROM reelay:${REELAY_VERSION}-builder as ryjson-prebuilt
+FROM ${REELAY_IMAGE_REGISTRY}/reelay:${REELAY_VERSION}-builder as ryjson-prebuilt
 
-RUN git clone https://github.com/doganulus/reelay.git /tmp/reelay \
-      --depth 1 \
-      --branch ${REELAY_VERSION}
-      && \
+RUN git clone https://github.com/doganulus/reelay.git /tmp/reelay --no-checkout && \
+    cd /tmp/reelay && \
+    git fetch --depth 1 origin "${REELAY_VERSION}" && \
+    git checkout "${REELAY_VERSION}" && \
     cmake -S/tmp/reelay -B/tmp/reelay/build \
       -DCMAKE_BUILD_TYPE=Release \
       -DBUILD_REELAY_APPS=ON \
