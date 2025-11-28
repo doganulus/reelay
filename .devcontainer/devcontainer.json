@@ -2,7 +2,8 @@
   "name": "Reelay",
   "build": {
     "dockerfile": "../containers/devel/Dockerfile",
-    "context": "../containers"
+    "context": "../containers",
+    "target": "reelay-devel"
   },
   "postCreateCommand": "make configure",
   "customizations": {
