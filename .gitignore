@@ -1,3 +1,6 @@
+# virtualenv
+.venv/
+
 # compile_commands.json
 **/compile_commands.json
 
@@ -40,6 +43,7 @@
 # Directories
 /bin/*
 /build/*
+/benchmarks/data
 
 # GCC coverage testing tool files
 

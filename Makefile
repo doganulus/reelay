@@ -1,7 +1,9 @@
 WORKSPACE := ${PWD}
-BUILD_DIRECTORY := /tmp/$(basename $(notdir ${WORKSPACE}))/build
+BUILD_DIRECTORY := /tmp/build/$(basename $(notdir ${WORKSPACE}))
 
-.PHONY: all configure build test cbuild cryjson
+.PHONY: default configure build test apps
+
+default: build
 
 configure:
 	cmake -S $(WORKSPACE) -B $(BUILD_DIRECTORY)
@@ -9,18 +11,19 @@ configure:
 build: configure
 	cmake --build $(BUILD_DIRECTORY)
 
-test: build
+test:
+	cmake -S $(WORKSPACE) -B $(BUILD_DIRECTORY) -DREELAY_BUILD_TESTS=ON
+	cmake --build $(BUILD_DIRECTORY)
 	ctest --test-dir $(BUILD_DIRECTORY) --output-on-failure
 
+apps:
+	cmake -S $(WORKSPACE) -B $(BUILD_DIRECTORY) -DREELAY_BUILD_APPS=ON
+	cmake --build $(BUILD_DIRECTORY) --target ryjson
+	cmake --install $(BUILD_DIRECTORY)
+
 install: build
-	cmake --build $(BUILD_DIRECTORY) --target install
+	cmake --install $(BUILD_DIRECTORY)
 
-cdevel:
-	docker build -t ghcr.io/doganulus/reelay:devel docker/devel
-
-cryjson:
-	docker build -t ghcr.io/doganulus/reelay:ryjson docker/ryjson
-
-cbenchmark:
-	docker build -t ghcr.io/doganulus/reelay-benchmark:latest docker/benchmark
+clean:
+	rm -rf $(BUILD_DIRECTORY)
 

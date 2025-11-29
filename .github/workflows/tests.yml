@@ -1,19 +1,29 @@
 name: Tests
 
 on:
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
-  push:
-    paths:
-      - "include/reelay/**"
-      - ".github/workflows/tests.yml" # Self-trigger
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: ghcr.io/doganulus/reelay-devel
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build catch2
+
+      - name: Configure CMake
+        run: cmake -B build -S . -DREELAY_BUILD_TESTS=ON
+
+      - name: Build
+        run: cmake --build build
+
       - name: Run unit tests
-        run: make test
+        run: ctest --test-dir build --output-on-failure

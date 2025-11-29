@@ -1,0 +1,33 @@
+name: Build
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: cibw-wheels-${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, ubuntu-24.04-arm]
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}-${{ strategy.job-index }}
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+
+      - name: Install cibuildwheel
+        run: python -m pip install cibuildwheel
+
+      - name: Build wheels
+        run: python -m cibuildwheel --output-dir wheelhouse
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
+          path: ./wheelhouse/*.whl

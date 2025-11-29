@@ -1,4 +1,11 @@
-find_package(SIMDJSON REQUIRED)
+include(FetchContent)
+
+fetchcontent_declare(
+  simdjson
+  GIT_REPOSITORY https://github.com/simdjson/simdjson.git
+  GIT_TAG v4.2.2
+  EXCLUDE_FROM_ALL)
+fetchcontent_makeavailable(simdjson)
 
 add_executable(ryjson)
 

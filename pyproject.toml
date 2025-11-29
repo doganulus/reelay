@@ -22,6 +22,11 @@ dynamic = ["version", "description"]
 [project.scripts]
 add = "pybind11_project.add:main"
 
+[project.optional-dependencies]
+devel = [
+  "pytest"
+]
+
 [build-system]
 requires = ["py-build-cmake~=0.1.8", "pybind11"]
 build-backend = "py_build_cmake.build"
@@ -42,7 +47,7 @@ include = [
 exclude = []
 
 [tool.py-build-cmake.cmake]
-minimum_version = "3.22"
+minimum_version = "3.26"
 build_type = "Release"
 source_path = "."
 build_path = "/tmp/reelay/build"
@@ -54,13 +59,13 @@ install_components = ["python_modules"]
 env = {}
 
 [tool.py-build-cmake.cmake.options]
-"BUILD_TESTS:BOOL" = "OFF"
-"BUILD_REELAY_APPS:BOOL" = "OFF"
-"BUILD_PYTHON_BINDINGS:BOOL" = "ON"
+"REELAY_BUILD_TESTS:BOOL" = "OFF"
+"REELAY_BUILD_APPS:BOOL" = "OFF"
+"REELAY_BUILD_PYTHON_BINDINGS:BOOL" = "ON"
 
 [tool.py-build-cmake.linux.cmake] # Linux-specific options
-generator = "Ninja Multi-Config"
-config = ["Debug", "Release"]
+generator = "Ninja"
+config = ["Release"]
 
 options = { "CMAKE_DEBUG_POSTFIX" = "_d" }
 
@@ -69,3 +74,12 @@ minversion = "7.0"
 addopts = "-ra -q"
 testpaths = ["python/tests"]
 cache_dir = "/tmp/reelay/.pytest_cache"
+
+[tool.cibuildwheel]
+container-engine = "podman"
+manylinux-x86_64-image = "manylinux_2_28"
+manylinux-aarch64-image = "manylinux_2_28"
+skip = "cp314t-*"
+test-command = "pytest"
+test-requires = ["pytest"]
+test-sources = ["python/tests"]

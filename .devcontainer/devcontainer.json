@@ -1,23 +1,24 @@
 {
   "name": "Reelay",
-  "dockerFile": "Dockerfile",
-  "context": "..",
-  "remoteUser": "reelay",
+  "build": {
+    "dockerfile": "../containers/devel/Dockerfile",
+    "context": "../containers",
+    "target": "reelay-devel"
+  },
   "postCreateCommand": "make configure",
   "customizations": {
     "vscode": {
       "extensions": [
-		"EditorConfig.EditorConfig",
-		"llvm-vs-code-extensions.vscode-clangd",
-		"cheshirekow.cmake-format",
-		"esbenp.prettier-vscode",
-		"ms-azuretools.vscode-docker",
-		"github.vscode-github-actions",
-		"GitHub.copilot",
-		"ms-vscode.cmake-tools",
-		"ms-python.python",
-		"tamasfe.even-better-toml"
-	],
+        "EditorConfig.EditorConfig",
+        "llvm-vs-code-extensions.vscode-clangd",
+        "cheshirekow.cmake-format",
+        "esbenp.prettier-vscode",
+        "github.vscode-github-actions",
+        "GitHub.copilot",
+        "ms-vscode.cmake-tools",
+        "ms-python.python",
+        "ms-azuretools.vscode-containers"
+      ],
       "settings": {
         "clangd.arguments": [
           "--background-index",
@@ -28,13 +29,9 @@
           "--all-scopes-completion",
           "--compile-commands-dir=/tmp/reelay/build"
         ],
-        "gcovViewer.buildDirectories": ["/tmp/reelay/build"],
-        "gcovViewer.highlightMissedLines": true,
         "editor.formatOnSave": true,
-        "editor.formatOnPaste": true,
-        "docker.languageserver.formatter.ignoreMultilineInstructions": true
-      },
-      "recommendations": ["github.vscode-github-actions", "github.copilot"]
+        "editor.formatOnPaste": true
+      }
     }
   }
 }

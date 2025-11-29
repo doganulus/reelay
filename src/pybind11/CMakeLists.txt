@@ -11,19 +11,27 @@ if(DEFINED PY_BUILD_CMAKE_PACKAGE_VERSION)
   endif()
 endif()
 
-include(cmake/QueryPythonForPybind11.cmake)
-find_pybind11_python_first()
+# include(cmake/QueryPythonForPybind11.cmake)
+# find_pybind11_python_first()
 
 # Find the Python development files
 find_package(Python3 REQUIRED COMPONENTS Development.Module)
 
 # pybind11 is header-only, so finding a native version is fine
-find_package(
-  pybind11
-  ${ARGN}
-  REQUIRED
-  CONFIG
-  CMAKE_FIND_ROOT_PATH_BOTH)
+# find_package(
+#   pybind11
+#   ${ARGN}
+#   REQUIRED
+#   CONFIG
+#   CMAKE_FIND_ROOT_PATH_BOTH)
+
+include(FetchContent)
+FetchContent_Declare(
+    pybind11
+    GIT_REPOSITORY https://github.com/pybind/pybind11
+    GIT_TAG        v3.0.1
+)
+FetchContent_MakeAvailable(pybind11)
 
 # Compile the example Python module
 pybind11_add_module(_pybind11_module MODULE "main.cpp")
@@ -51,4 +59,5 @@ install(
   TARGETS _pybind11_module
   EXCLUDE_FROM_ALL
   COMPONENT python_modules
-  DESTINATION ${PY_BUILD_CMAKE_MODULE_NAME})
+  DESTINATION ${PY_BUILD_CMAKE_MODULE_NAME}
+)
