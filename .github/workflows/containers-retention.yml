@@ -1,0 +1,34 @@
+name: Retention
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 12 * * 0"
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    name: Github Container Registry Retention Policy
+    steps:
+      - name: Clean up old Reelay images
+        uses: snok/container-retention-policy@v3.0.1
+        with:
+          account: ${{ github.repository_owner }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          image-names: reelay ryjson
+          image-tags: "!latest*"
+          cut-off: 2w
+          dry-run: false
+
+      - name: Clean up untagged Reelay images
+        uses: snok/container-retention-policy@v3.0.1
+        with:
+          account: ${{ github.repository_owner }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          image-names: reelay ryjson
+          tag-selection: untagged
+          cut-off: 1h
+          dry-run: false
