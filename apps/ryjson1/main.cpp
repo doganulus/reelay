@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2023 Dogan Ulus
+ * Copyright (c) 2019-2025 Dogan Ulus
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -9,6 +9,7 @@
 #include "reelay/json.hpp"
 #include "reelay/monitors.hpp"
 
+#include <array>
 #include <cstring>  // memset()
 #include <fstream>
 #include <iostream>
@@ -20,47 +21,8 @@
 #include "simdjson.h"
 #include "simdjson_adapter.hpp"
 #include <argp.h>
-#include <glob.h>  // glob(), globfree()
 
 namespace rycli {
-
-std::vector<std::string> expand_glob(const std::string& glob_str)
-{
-  // glob struct resides on the stack
-  glob_t glob_result;
-  memset(&glob_result, 0, sizeof(glob_result));
-
-  // do the glob operation
-  int return_value = glob(glob_str.c_str(), GLOB_TILDE, nullptr, &glob_result);
-
-  // glob() error handling
-  // Info: http://man7.org/linux/man-pages/man3/glob.3.html
-  if(return_value == GLOB_ABORTED) {
-    globfree(&glob_result);
-    std::stringstream ss;
-    ss << "glob() encountered a read error" << std::endl;
-    throw std::runtime_error(ss.str());
-  }
-
-  if(return_value == GLOB_NOSPACE) {
-    globfree(&glob_result);
-    std::stringstream ss;
-    ss << "glob() running out of memory" << std::endl;
-    throw std::runtime_error(ss.str());
-  }
-
-  // collect all the filenames into a std::list<std::string>
-  std::vector<std::string> filenames;
-  for(size_t i = 0; i < glob_result.gl_pathc; ++i) {
-    filenames.emplace_back(glob_result.gl_pathv[i]);
-  }
-
-  // cleanup
-  globfree(&glob_result);
-
-  // done
-  return filenames;
-}
 
 template<typename X, typename Y>
 void discrete_timed_processing(
@@ -162,29 +124,39 @@ struct arguments {
   std::string yname = "value";
 };
 
-static struct argp_option options[] = {
-  {"dense", OPT_DENSE, 0, 0, "Use dense time model (default)", 0},
-  {"discrete", OPT_DISCRETE, 0, 0, "Use discrete time model", 0},
-  {"itime", OPT_ITIME, 0, 0, "Use int64 as time type (default)", 0},
-  {"ftime", OPT_FTIME, 0, 0, "with -v, use float64 as time type", 0},
-  {"boolean", OPT_BOOLEAN, 0, 0, "Use boolean semantics", 0},
-  {"robustness", OPT_ROBUSTNESS, 0, 0, "Use robustness semantics", 0},
-  {"pwc",
-   OPT_PWC,
-   0,
-   0,
-   "with -v, use piecewise constant interpolation (default)",
-   0},
-  {"pwl", OPT_PWL, 0, 0, "with -vf, use piecewise linear interpolation", 0},
-  {"no-condense", OPT_NO_CONDENSE, 0, 0, "with -x, disable dense output", 0},
-  {"tname", OPT_TNAME, "STRING", 0, "Use STRING as the name of time field", 0},
-  {"yname",
-   OPT_YNAME,
-   "STRING",
-   0,
-   "Use STRING as the name of output field",
-   0},
-  {0}};
+static std::array<struct argp_option, 12> options = {
+  {{"dense", OPT_DENSE, nullptr, 0, "Use dense time model (default)", 0},
+   {"discrete", OPT_DISCRETE, nullptr, 0, "Use discrete time model", 0},
+   {"itime", OPT_ITIME, nullptr, 0, "Use int64 as time type (default)", 0},
+   {"ftime", OPT_FTIME, nullptr, 0, "with -v, use float64 as time type", 0},
+   {"boolean", OPT_BOOLEAN, nullptr, 0, "Use boolean semantics", 0},
+   {"robustness", OPT_ROBUSTNESS, nullptr, 0, "Use robustness semantics", 0},
+   {"pwc",
+    OPT_PWC,
+    nullptr,
+    0,
+    "with -v, use piecewise constant interpolation (default)",
+    0},
+   {"pwl",
+    OPT_PWL,
+    nullptr,
+    0,
+    "with -vf, use piecewise linear interpolation",
+    0},
+   {"no-condense",
+    OPT_NO_CONDENSE,
+    nullptr,
+    0,
+    "with -x, disable dense output",
+    0},
+   {"tname", OPT_TNAME, "STRING", 0, "Use STRING as the name of time field", 0},
+   {"yname",
+    OPT_YNAME,
+    "STRING",
+    0,
+    "Use STRING as the name of output field",
+    0},
+   {nullptr}}};
 
 static error_t parse_opt(int key, char* arg, struct argp_state* state)
 {
@@ -241,15 +213,14 @@ static error_t parse_opt(int key, char* arg, struct argp_state* state)
   }
   return 0;
 }
-
-static struct argp argp = {options, parse_opt, args_doc, doc};
+static struct argp argp = {options.data(), parse_opt, args_doc, doc};
 
 int main(int argc, char** argv)
 {
   using namespace reelay;
 
   struct arguments arguments;
-  argp_parse(&argp, argc, argv, 0, 0, &arguments);
+  argp_parse(&argp, argc, argv, 0, nullptr, &arguments);
 
   using input_t = simdjson::dom::element;
   using output_t = reelay::json;
@@ -265,20 +236,17 @@ int main(int argc, char** argv)
   bool use_linear = arguments.pwl;
 
   // Apply defaults
-  if(!use_discrete && !use_dense)
+  if(!use_discrete && !use_dense) {
     use_discrete = true;
-  if(!use_boolean && !use_robustness)
+  }
+  if(!use_boolean && !use_robustness) {
     use_boolean = true;
-  if(!use_integer && !use_floating)
+  }
+  if(!use_integer && !use_floating) {
     use_integer = true;
-  if(!use_constant && !use_linear)
+  }
+  if(!use_constant && !use_linear) {
     use_constant = true;
-
-  // Glob Expansion
-  auto filenames = std::vector<std::string>();
-  for(const auto& p : arguments.files) {
-    std::vector<std::string> expanded = rycli::expand_glob(p);
-    filenames.insert(filenames.end(), expanded.begin(), expanded.end());
   }
 
   using input_t = simdjson::dom::element;
@@ -350,12 +318,12 @@ int main(int argc, char** argv)
   }
 
   if(use_discrete) {
-    for(const auto& filename : filenames) {
+    for(const auto& filename : arguments.files) {
       rycli::discrete_timed_processing(monitor, filename);
     }
   }
   else {
-    for(const auto& filename : filenames) {
+    for(const auto& filename : arguments.files) {
       rycli::dense_timed_processing(monitor, filename);
     }
   }
