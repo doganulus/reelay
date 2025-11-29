@@ -82,3 +82,4 @@ manylinux-aarch64-image = "manylinux_2_28"
 skip = "cp314t-*"
 test-command = "pytest"
 test-requires = ["pytest"]
+test-sources = ["python/tests"]
