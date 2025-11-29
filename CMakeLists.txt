@@ -40,6 +40,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_FLAGS_COVERAGE "-O0 --coverage")
 
+option(REELAY_INSTALL "Install Reelay" ON)
 option(REELAY_BUILD_TESTS "Build the C++ unit tests" OFF)
 option(REELAY_BUILD_APPS "Build Reelay Apps" OFF)
 option(REELAY_BUILD_PYTHON_BINDINGS "Build Python bindings" OFF)
@@ -80,22 +81,8 @@ target_include_directories(
   reelay INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>
                    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-target_link_libraries(reelay INTERFACE Boost::icl cudd::cudd Threads::Threads)
-
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/ DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
-
-install(
-  TARGETS reelay
-  EXPORT reelayConfig
-  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
-  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
-
-# install( EXPORT reelayConfig NAMESPACE reelay:: DESTINATION
-# ${CMAKE_INSTALL_LIBDIR}/cmake/reelay )
-
-add_subdirectory(src)
+target_link_libraries(reelay INTERFACE $<BUILD_INTERFACE:Boost::icl>
+                                       $<BUILD_INTERFACE:cudd::cudd> Threads::Threads)
 
 if(REELAY_BUILD_TESTS)
   enable_testing()
@@ -105,6 +92,14 @@ endif()
 if(REELAY_BUILD_APPS)
   message(STATUS "Building Reelay apps...")
   add_subdirectory(apps)
+endif()
+
+if(REELAY_BUILD_PYTHON_BINDINGS)
+  add_subdirectory(src/pybind11)
+endif()
+
+if(REELAY_INSTALL)
+  include(cmake/install.cmake)
 endif()
 
 if(PROJECT_IS_TOP_LEVEL AND UNIX)

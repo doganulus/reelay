@@ -16,7 +16,8 @@
         "github.vscode-github-actions",
         "GitHub.copilot",
         "ms-vscode.cmake-tools",
-        "ms-python.python"
+        "ms-python.python",
+        "ms-azuretools.vscode-containers"
       ],
       "settings": {
         "clangd.arguments": [

@@ -22,7 +22,7 @@ apps:
 	cmake --install $(BUILD_DIRECTORY)
 
 install: build
-	cmake --build $(BUILD_DIRECTORY) --target install
+	cmake --install $(BUILD_DIRECTORY)
 
 clean:
 	rm -rf $(BUILD_DIRECTORY)
