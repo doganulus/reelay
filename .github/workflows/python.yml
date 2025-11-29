@@ -1,12 +1,10 @@
 name: Python Build and Test
 
 on:
-  push:
-    paths:
-      - "pyproject.toml"
-      - "python/**"
-      - "include/reelay/**"
-      - ".github/workflows/python.yml" # Self-trigger
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build:
