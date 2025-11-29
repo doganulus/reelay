@@ -76,4 +76,8 @@ testpaths = ["python/tests"]
 cache_dir = "/tmp/reelay/.pytest_cache"
 
 [tool.cibuildwheel]
+container-engine = "podman"
+manylinux-x86_64-image = "manylinux_2_28"
+manylinux-aarch64-image = "manylinux_2_28"
 skip = "cp314t-*"
+test-command = "pytest {project}/tests"
