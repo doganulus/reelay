@@ -83,8 +83,8 @@ cache_dir = "/tmp/reelay/.pytest_cache"
 
 [tool.cibuildwheel]
 container-engine = "podman"
-manylinux-x86_64-image = "manylinux_2_28"
-manylinux-aarch64-image = "manylinux_2_28"
+manylinux-x86_64-image = "manylinux2014"
+manylinux-aarch64-image = "manylinux2014"
 skip = ["cp314t-*", "*-musllinux_*"]
 test-command = "pytest"
 test-requires = ["pytest"]
