@@ -26,6 +26,14 @@ add = "pybind11_project.add:main"
 devel = [
   "pytest"
 ]
+docs = [
+  "mkdocs",
+  "mkdocs-material",
+  "mkdocs-material-extensions",
+  "mkdocs-minify-plugin",
+  "mkdocs-redirects",
+  "mkdocs-git-revision-date-localized-plugin"
+]
 
 [build-system]
 requires = ["py-build-cmake~=0.1.8", "pybind11"]

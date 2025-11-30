@@ -1,7 +1,7 @@
 site_name: Reelay
 repo_url: https://github.com/doganulus/reelay
 docs_dir: docs
-edit_uri: 'edit/master/docs/'
+edit_uri: "edit/master/docs/"
 theme:
   name: material
   include_search_page: false
@@ -16,37 +16,36 @@ theme:
   favicon: assets/logo_diamond_black.png
   logo: assets/logo_diamond.png
 
-
 nav:
-  - Home: 'index.md'
+  - Home: "index.md"
 
-  - Install:
-    - 'From Source' : 'install.md'
-    - 'Docker Image' : 'docker.md'
+  - Install: "install.md"
+
+  - Containers: "containers.md"
 
   - Get Started:
-    - 'Tutorial: Introduction' : 'gs_intro.md'
-    - 'Use Reelay from C++' : 'gs_cpp.md'
-    - 'Use Reelay from Python' : 'gs_python.md'
+      - "Tutorial: Introduction": "gs_intro.md"
+      - "Use Reelay from C++": "gs_cpp.md"
+      - "Use Reelay from Python": "gs_python.md"
 
-  - User Manual: 
-    - 'Temporal Behaviors' : 'behaviors.md'
-    - 'Rye Format' : 'rye.md'
-    # - 'C++ API' : 'cpp_api.md'
-    # - 'Python API' : 'python_api.md'
-    - 'Benchmarking' : 'performance.md'
+  - User Manual:
+      - "Temporal Behaviors": "behaviors.md"
+      - "Rye Format": "rye.md"
+      # - 'C++ API' : 'cpp_api.md'
+      # - 'Python API' : 'python_api.md'
+      - "Benchmarking": "performance.md"
 
-  - Advanced Topics: 
-  #   - 'Time Models' : 'time_models.md'
-  #   - 'Temporal Logic' : 'temporal_logic.md'
-  #   - 'Robustness' : 'robustness.md'
-  #   - 'Regular Expressions' : 'regular_expressions.md'
-  #   - 'Sequential Networks' : 'sequential_networks.md'
-     - 'References' : 'literature.md'
+  - Advanced Topics:
+      #   - 'Time Models' : 'time_models.md'
+      #   - 'Temporal Logic' : 'temporal_logic.md'
+      #   - 'Robustness' : 'robustness.md'
+      #   - 'Regular Expressions' : 'regular_expressions.md'
+      #   - 'Sequential Networks' : 'sequential_networks.md'
+      - "References": "literature.md"
 
   - About:
-    - 'Author' : 'author.md'
-    - 'License' : 'license.md'
+      - "Author": "author.md"
+      - "License": "license.md"
 
 markdown_extensions:
   - attr_list
@@ -59,5 +58,4 @@ plugins:
   - search
   - minify:
       minify_html: true
-
-google_analytics: ['UA-153753179-1', 'auto']
+# google_analytics: ['UA-153753179-1', 'auto']
