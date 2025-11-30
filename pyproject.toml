@@ -1,6 +1,6 @@
 [project]
 name = "reelay"
-version = "25.0.0rc4"
+version = "25.0.0rc5"
 description = "Reelay: A runtime verification library for real-time systems"
 readme = "README.md"
 requires-python = ">=3.8"
