@@ -6,12 +6,31 @@ on:
   workflow_dispatch:
 
 jobs:
+  verify_version:
+    name: Verify tag matches pyproject version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Check tag and project version alignment
+        env:
+          TAG_REF: ${{ github.ref_name }}
+        run: |
+          echo "Git tag ref: $TAG_REF"
+          FILE_VERSION=$(grep '^version =' pyproject.toml | head -1 | cut -d '"' -f2)
+          echo "pyproject.toml version: $FILE_VERSION"
+          if [ "$FILE_VERSION" != "$TAG_REF" ]; then
+            echo "Error: tag ($TAG_REF) does not match pyproject version ($FILE_VERSION)" >&2
+            exit 1
+          fi
+          echo "Success: tag matches project version ($FILE_VERSION)"
+
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-24.04, ubuntu-24.04-arm]
+    needs: verify_version
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}-${{ strategy.job-index }}
       cancel-in-progress: true
@@ -37,6 +56,7 @@ jobs:
   build_sdist:
     name: Build source distribution
     runs-on: ubuntu-latest
+    needs: verify_version
 
     steps:
       - uses: actions/checkout@v5
@@ -74,3 +94,4 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           verbose: true
+          repository-url: https://test.pypi.org/legacy/
