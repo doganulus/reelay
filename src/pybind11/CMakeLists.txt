@@ -4,7 +4,7 @@ message(STATUS "Python version: ${PY_BUILD_CMAKE_PACKAGE_VERSION}")
 # Make sure that the Python and CMake versions match)
 if(DEFINED PY_BUILD_CMAKE_PACKAGE_VERSION)
   if(NOT "${PY_BUILD_CMAKE_PACKAGE_VERSION}" MATCHES
-     "^${PROJECT_VERSION}(?:(a|b|rc)\d+)?(?:\.post\d+)?(?:\.dev\d+)?$")
+     "^${PROJECT_VERSION}(?:(?:a|b|rc)[0-9]+)?(?:\\.post[0-9]+)?(?:\\.dev[0-9]+)?$")
     message(FATAL_ERROR "Version number does not match "
                         "(${PROJECT_VERSION} - ${PY_BUILD_CMAKE_PACKAGE_VERSION}).")
   endif()
