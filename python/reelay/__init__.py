@@ -9,7 +9,6 @@
 """
 Python bindings for Reelay C++ library
 """
-__version__ = '25.0.0'
 
 from .dense_timed_monitor import dense_timed_monitor
 from .discrete_timed_monitor import discrete_timed_monitor

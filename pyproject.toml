@@ -1,6 +1,7 @@
 [project]
 name = "reelay"
-dynamic = ["version", "description"]
+version = "25.0.0-rc2"
+description = "Reelay: A runtime verification library for real-time systems"
 readme = "README.md"
 requires-python = ">=3.8"
 license = { file = "LICENSE" }
