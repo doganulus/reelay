@@ -27,3 +27,5 @@ install: build
 clean:
 	rm -rf $(BUILD_DIRECTORY)
 
+docs:
+	mkdocs serve

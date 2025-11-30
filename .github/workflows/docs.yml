@@ -25,11 +25,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup Pages
-        uses: actions/configure-pages@v2
+        uses: actions/configure-pages@v4
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
       - name: Install MkDocs and Material for MkDocs
@@ -37,23 +37,24 @@ jobs:
       - name: Install requirements
         run: pip install -r docs/requirements.txt
       - name: Setup caching
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           key: ${{ github.sha }}
           path: .cache
-      - name: Build site (_site directory name is used for Jekyll compatiblity)
+      - name: Build site (_site directory name is used for Jekyll compatibility)
         run: mkdocs build --config-file ./mkdocs.yml --site-dir ./_site
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
 
   # Deployment job
   deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4

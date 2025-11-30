@@ -6,7 +6,7 @@ Source files for this tutorial can be found [here](https://github.com/doganulus/
 
 ## Reelay Monitors
 
-The core component of Reelay is a header-only template library for C++ and can be included as follows. 
+The core component of Reelay is a header-only template library for C++ and can be included as follows.
 
 ```cpp
 #include "reelay/monitors.hpp"
@@ -17,7 +17,7 @@ In this tutorial we use `options` and `make_monitor` constructs to configure and
 1. Discrete timed model
 2. Dense timed model
 
-Normally you would select discrete timed model if you work on discrete time behaviors and dense timed model if dense time behaviors. This choice depends on on your system and needs. If you haven't already, please check the documentation on [discrete and dense time behaviors](docs/behaviors.md) before proceeding.
+Normally you would select discrete timed model if you work on discrete time behaviors and dense timed model if dense time behaviors. This choice depends on on your system and needs. If you haven't already, please check the documentation on [discrete and dense time behaviors](behaviors.md) before proceeding.
 
 ## Check Requirements over Discrete Time Behaviors
 
@@ -41,7 +41,7 @@ std::string pattern = "(historically[0:5]{door_open} and not {dow_suppressed}) -
 auto my_monitor_1 = reelay::make_monitor(pattern, opts);
 ```
 
-Note that you can use the same `opts` to make different monitors with the same configuration. THen we can execute each monitor using `update` methods that accepts a single `input_t` objects. For example, if we are reading a JSON Lines logfile (opened as `input_file`), we check the logfile line-by-line as follows: 
+Note that you can use the same `opts` to make different monitors with the same configuration. THen we can execute each monitor using `update` methods that accepts a single `input_t` objects. For example, if we are reading a JSON Lines logfile (opened as `input_file`), we check the logfile line-by-line as follows:
 
 ```cpp
 for (std::string line; std::getline(input_file, line);) {
@@ -79,8 +79,9 @@ Here we used `dense_timed<time_type>` construct to denote we want a dense timed 
 std::string pattern = "(historically[0:5]{door_open} and not {dow_suppressed}) -> {door_open_warning}";
 auto my_monitor_1 = reelay::make_monitor(pattern, opts);
 ```
-The execution also works similar way; however, now notice that the output is a `json::array` in particular. This is due to the verdict can change multiple times between two updates as we progress in time at arbitrary amounts in dense timed model. 
-	In other words, our monitors outputs all changes between the last time and current time point. And if nothing changes the outputs would be just empty. Below is an example execution for dense timed monitors.  
+
+The execution also works similar way; however, now notice that the output is a `json::array` in particular. This is due to the verdict can change multiple times between two updates as we progress in time at arbitrary amounts in dense timed model.
+In other words, our monitors outputs all changes between the last time and current time point. And if nothing changes the outputs would be just empty. Below is an example execution for dense timed monitors.
 
 ```cpp
 for (std::string line; std::getline(input_file, line);) {
