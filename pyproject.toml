@@ -23,16 +23,14 @@ dynamic = ["version", "description"]
 add = "pybind11_project.add:main"
 
 [project.optional-dependencies]
-devel = [
-  "pytest"
-]
+devel = ["pytest"]
 docs = [
   "mkdocs",
   "mkdocs-material",
   "mkdocs-material-extensions",
   "mkdocs-minify-plugin",
   "mkdocs-redirects",
-  "mkdocs-git-revision-date-localized-plugin"
+  "mkdocs-git-revision-date-localized-plugin",
 ]
 
 [build-system]
