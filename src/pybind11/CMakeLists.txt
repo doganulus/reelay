@@ -1,9 +1,10 @@
 message(STATUS "Reelay version: ${PROJECT_VERSION}")
 message(STATUS "Python version: ${PY_BUILD_CMAKE_PACKAGE_VERSION}")
 
-# Make sure that the Python and CMake versions match
+# Make sure that the Python and CMake versions match)
 if(DEFINED PY_BUILD_CMAKE_PACKAGE_VERSION)
-  if(NOT "${PY_BUILD_CMAKE_PACKAGE_VERSION}" MATCHES "^${PROJECT_VERSION}([.+-].*)?$")
+  if(NOT "${PY_BUILD_CMAKE_PACKAGE_VERSION}" MATCHES
+     "^${PROJECT_VERSION}(?:(a|b|rc)\d+)?(?:\.post\d+)?(?:\.dev\d+)?$")
     message(FATAL_ERROR "Version number does not match "
                         "(${PROJECT_VERSION} - ${PY_BUILD_CMAKE_PACKAGE_VERSION}).")
   endif()
