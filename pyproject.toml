@@ -1,42 +1,41 @@
 [project]
-classifiers = [
-  'Development Status :: 4 - Beta',
-  'Intended Audience :: Developers',
-  'Intended Audience :: Science/Research',
-  'Topic :: Scientific/Engineering',
-  'Topic :: Scientific/Engineering :: Mathematics',
-  'Topic :: Software Development :: Testing',
-  'License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)',
-  'Programming Language :: Python :: 3',
-]
-keywords = ["reactive", "automata", "monitoring", "testing", "runtime"]
 name = "reelay"
+version = "25.0.0rc2"
+description = "Reelay: A runtime verification library for real-time systems"
 readme = "README.md"
 requires-python = ">=3.8"
-license = { "file" = "LICENSE" }
-authors = [{ "name" = "Dogan Ulus", "email" = "doganulus@gmail.com" }]
-urls = { "Documentation" = "https://doganulus.github.io/reelay" }
+license = { file = "LICENSE" }
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Scientific/Engineering :: Mathematics",
+  "Topic :: Software Development :: Testing",
+  "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+  "Programming Language :: Python :: 3",
+]
+keywords = ["reactive", "automata", "monitoring", "testing", "runtime"]
+authors = [{ name = "Dogan Ulus", email = "doganulus@gmail.com" }]
+urls = { Documentation = "https://doganulus.github.io/reelay" }
 dependencies = []
-dynamic = ["version", "description"]
 
 [project.scripts]
 add = "pybind11_project.add:main"
 
 [project.optional-dependencies]
-devel = [
-  "pytest"
-]
+devel = ["pytest"]
 docs = [
   "mkdocs",
   "mkdocs-material",
   "mkdocs-material-extensions",
   "mkdocs-minify-plugin",
   "mkdocs-redirects",
-  "mkdocs-git-revision-date-localized-plugin"
+  "mkdocs-git-revision-date-localized-plugin",
 ]
 
 [build-system]
-requires = ["py-build-cmake~=0.1.8", "pybind11"]
+requires = ["setuptools>=61", "py-build-cmake>=0.5.0", "pybind11"]
 build-backend = "py_build_cmake.build"
 
 [tool.py-build-cmake.module]
@@ -71,11 +70,10 @@ env = {}
 "REELAY_BUILD_APPS:BOOL" = "OFF"
 "REELAY_BUILD_PYTHON_BINDINGS:BOOL" = "ON"
 
-[tool.py-build-cmake.linux.cmake] # Linux-specific options
+[tool.py-build-cmake.linux.cmake]
 generator = "Ninja"
 config = ["Release"]
-
-options = { "CMAKE_DEBUG_POSTFIX" = "_d" }
+options = { CMAKE_DEBUG_POSTFIX = "_d" }
 
 [tool.pytest.ini_options]
 minversion = "7.0"
@@ -85,9 +83,9 @@ cache_dir = "/tmp/reelay/.pytest_cache"
 
 [tool.cibuildwheel]
 container-engine = "podman"
-manylinux-x86_64-image = "manylinux_2_28"
-manylinux-aarch64-image = "manylinux_2_28"
-skip = "cp314t-*"
+manylinux-x86_64-image = "manylinux2014"
+manylinux-aarch64-image = "manylinux2014"
+skip = ["cp314t-*", "*-musllinux_*"]
 test-command = "pytest"
 test-requires = ["pytest"]
 test-sources = ["python/tests"]

@@ -17,7 +17,8 @@
         "GitHub.copilot",
         "ms-vscode.cmake-tools",
         "ms-python.python",
-        "ms-azuretools.vscode-containers"
+        "ms-azuretools.vscode-containers",
+        "tamasfe.even-better-toml"
       ],
       "settings": {
         "clangd.arguments": [
