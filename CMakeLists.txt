@@ -91,7 +91,8 @@ endif()
 
 if(REELAY_BUILD_APPS)
   message(STATUS "Building Reelay apps...")
-  add_subdirectory(apps)
+  add_subdirectory(apps/rybinx)
+  add_subdirectory(apps/ryjson1)
 endif()
 
 if(REELAY_BUILD_PYTHON_BINDINGS)
