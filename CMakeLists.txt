@@ -81,7 +81,7 @@ target_include_directories(
   reelay INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>
                    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-target_link_libraries(reelay INTERFACE $<BUILD_INTERFACE:Boost::icl>
+target_link_libraries(reelay INTERFACE $<BUILD_INTERFACE:Boost::boost>
                                        $<BUILD_INTERFACE:cudd::cudd> Threads::Threads)
 
 if(REELAY_BUILD_TESTS)
