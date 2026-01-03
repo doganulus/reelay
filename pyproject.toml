@@ -21,7 +21,7 @@ urls = { Documentation = "https://doganulus.github.io/reelay" }
 dependencies = []
 
 [project.scripts]
-add = "pybind11_project.add:main"
+ryjson-python = "reelay.app:main"
 
 [project.optional-dependencies]
 devel = ["pytest"]
